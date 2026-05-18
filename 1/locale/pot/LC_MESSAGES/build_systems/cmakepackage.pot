@@ -1,0 +1,493 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../build_systems/cmakepackage.rst:-1
+msgid ""
+"Learn how to package software that uses the CMake build system with Spack, "
+"covering common practices and customization options for CMake-based packages."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:13
+msgid "CMake"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:15
+msgid ""
+"Like Autotools, CMake is a widely-used build-script generator. Designed by "
+"Kitware, CMake is the most popular build system for new C, C++, and Fortran "
+"projects, and many older projects are switching to it as well."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:18
+msgid ""
+"Unlike Autotools, CMake can generate build scripts for builders other than "
+"Make: Ninja, Visual Studio, etc. It is therefore cross-platform, whereas "
+"Autotools is Unix-only."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:22
+msgid "Phases"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:24
+msgid ""
+"The ``CMakeBuilder`` and ``CMakePackage`` base classes come with the "
+"following phases:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:26
+msgid "``cmake`` - generate the Makefile"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:27
+msgid "``build`` - build the package"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:28
+msgid "``install`` - install the package"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:30
+msgid "By default, these phases run:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:32
+msgid ""
+"$ mkdir spack-build\n"
+"$ cd spack-build\n"
+"$ cmake .. -DCMAKE_INSTALL_PREFIX=/path/to/installation/prefix\n"
+"$ make\n"
+"$ make test  # optional\n"
+"$ make install"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:42
+msgid ""
+"A few more flags are passed to ``cmake`` by default, including flags for "
+"setting the build type and flags for locating dependencies. Of course, you "
+"may need to add a few arguments yourself."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:46
+msgid "Important files"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:48
+msgid ""
+"A CMake-based package can be identified by the presence of a ``CMakeLists."
+"txt`` file. This file defines the build flags that can be passed to the "
+"CMake invocation, as well as linking instructions. If you are familiar with "
+"CMake, it can prove very useful for determining dependencies and dependency "
+"version requirements."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:52
+msgid "One thing to look for is the ``cmake_minimum_required`` function:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:54
+msgid "cmake_minimum_required(VERSION 2.8.12)"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:59
+msgid ""
+"This means that CMake 2.8.12 is the earliest release that will work. You "
+"should specify this in a ``depends_on`` statement."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:62
+msgid ""
+"CMake-based packages may also contain ``CMakeLists.txt`` in subdirectories. "
+"This modularization helps to manage complex builds in a hierarchical "
+"fashion. Sometimes these nested ``CMakeLists.txt`` require additional "
+"dependencies not mentioned in the top-level file."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:66
+msgid ""
+"There's also usually a ``cmake`` or ``CMake`` directory containing "
+"additional macros, find scripts, etc. These may prove useful in determining "
+"dependency version requirements."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:70
+msgid "Build system dependencies"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:72
+msgid ""
+"Every package that uses the CMake build system requires a ``cmake`` "
+"dependency. Since this is always the case, the ``CMakePackage`` base class "
+"already contains:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:75
+msgid "depends_on(\"cmake\", type=\"build\")"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:80
+msgid ""
+"If you need to specify a particular version requirement, you can override "
+"this in your package:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:82
+msgid "depends_on(\"cmake@2.8.12:\", type=\"build\")"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:88
+msgid "Finding cmake flags"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:90
+msgid ""
+"To get a list of valid flags that can be passed to ``cmake``, run the "
+"following command in the directory that contains ``CMakeLists.txt``:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:92
+msgid "$ cmake . -LAH"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:97
+msgid ""
+"CMake will start by checking for compilers and dependencies. Eventually it "
+"will begin to list build options. You'll notice that most of the build "
+"options at the top are prefixed with ``CMAKE_``. You can safely ignore most "
+"of these options as Spack already sets them for you. This includes flags "
+"needed to locate dependencies, RPATH libraries, set the installation "
+"directory, and set the build type."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:103
+msgid ""
+"The rest of the flags are the ones you should consider adding to your "
+"package. They often include flags to enable/disable support for certain "
+"features and locate specific dependencies. One thing you'll notice that "
+"makes CMake different from Autotools is that CMake has an understanding of "
+"build flag hierarchy. That is, certain flags will not display unless their "
+"parent flag has been selected. For example, flags to specify the ``lib`` and "
+"``include`` directories for a package might not appear unless CMake found "
+"the dependency it was looking for. You may need to manually specify certain "
+"flags to explore the full depth of supported build flags, or check the "
+"``CMakeLists.txt`` yourself."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:113
+msgid "Adding flags to cmake"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:115
+msgid ""
+"To add additional flags to the ``cmake`` call, simply override the "
+"``cmake_args`` function. The following example defines values for the flags "
+"``WHATEVER``, ``ENABLE_BROKEN_FEATURE``, ``DETECT_HDF5``, and ``THREADS`` "
+"with and without the :meth:`~spack_repo.builtin.build_systems.cmake."
+"CMakeBuilder.define` and :meth:`~spack_repo.builtin.build_systems.cmake."
+"CMakeBuilder.define_from_variant` helper functions:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:118
+msgid ""
+"def cmake_args(self):\n"
+"    args = [\n"
+"        \"-DWHATEVER:STRING=somevalue\",\n"
+"        self.define(\"ENABLE_BROKEN_FEATURE\", False),\n"
+"        self.define_from_variant(\"DETECT_HDF5\", \"hdf5\"),\n"
+"        self.define_from_variant(\"THREADS\"),  # True if +threads\n"
+"    ]\n"
+"\n"
+"    return args"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:130
+msgid ""
+"Spack supports CMake defines from conditional variants too. Whenever the "
+"condition on the variant is not met, ``define_from_variant()`` will simply "
+"return an empty string, and CMake simply ignores the empty command line "
+"argument. For example, the following"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:134
+msgid ""
+"variant(\"example\", default=True, when=\"@2.0:\")\n"
+"\n"
+"\n"
+"def cmake_args(self):\n"
+"    return [self.define_from_variant(\"EXAMPLE\", \"example\")]"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:142
+msgid ""
+"will generate ``'cmake' '-DEXAMPLE=ON' ...`` when `@2.0: +example` is met, "
+"but will result in ``'cmake' '' ...`` when the spec version is below ``2.0``."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:145
+msgid "CMake arguments provided by Spack"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:147
+msgid "The following default arguments are controlled by Spack:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:151
+msgid "``CMAKE_INSTALL_PREFIX``"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:153
+msgid "Is set to the package's install directory."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:157
+msgid "``CMAKE_PREFIX_PATH``"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:159
+msgid ""
+"CMake finds dependencies through calls to ``find_package()``, "
+"``find_program()``, ``find_library()``, ``find_file()``, and "
+"``find_path()``, which use a list of search paths from "
+"``CMAKE_PREFIX_PATH``. Spack sets this variable to a list of prefixes of the "
+"spec's transitive dependencies."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:162
+msgid ""
+"For troubleshooting cases where CMake fails to find a dependency, add the "
+"``--debug-find`` flag to ``cmake_args``."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:165
+msgid "``CMAKE_BUILD_TYPE``"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:167
+msgid ""
+"Every CMake-based package accepts a ``-DCMAKE_BUILD_TYPE`` flag to dictate "
+"which level of optimization to use. In order to ensure uniformity across "
+"packages, the ``CMakePackage`` base class adds a variant to control this:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:170
+msgid ""
+"variant(\n"
+"    \"build_type\",\n"
+"    default=\"RelWithDebInfo\",\n"
+"    description=\"CMake build type\",\n"
+"    values=(\"Debug\", \"Release\", \"RelWithDebInfo\", \"MinSizeRel\"),\n"
+")"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:179
+msgid ""
+"However, not every CMake package accepts all four of these options. Grep the "
+"``CMakeLists.txt`` file to see if the default values are missing or "
+"replaced. For example, the `dealii <https://github.com/spack/spack-packages/"
+"blob/develop/repos/spack_repo/builtin/packages/dealii/package.py>`_ package "
+"overrides the default variant with:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:183
+msgid ""
+"variant(\n"
+"    \"build_type\",\n"
+"    default=\"DebugRelease\",\n"
+"    description=\"The build type to build\",\n"
+"    values=(\"Debug\", \"Release\", \"DebugRelease\"),\n"
+")"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:192
+msgid ""
+"For more information on ``CMAKE_BUILD_TYPE``, see: https://cmake.org/cmake/"
+"help/latest/variable/CMAKE_BUILD_TYPE.html"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:196
+msgid "``CMAKE_INSTALL_RPATH`` and ``CMAKE_INSTALL_RPATH_USE_LINK_PATH=ON``"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:198
+msgid ""
+"CMake uses different RPATHs during the build and after installation, so that "
+"executables can locate the libraries they're linked to during the build, and "
+"installed executables do not have RPATHs to build directories. In Spack, we "
+"have to make sure that RPATHs are set properly after installation."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:201
+msgid ""
+"Spack sets ``CMAKE_INSTALL_RPATH`` to a list of ``<prefix>/lib`` or "
+"``<prefix>/lib64`` directories of the spec's link-type dependencies. Apart "
+"from that, it sets ``-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON``, which should "
+"add RPATHs for directories of linked libraries not in the directories "
+"covered by ``CMAKE_INSTALL_RPATH``."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:204
+msgid ""
+"Usually it's enough to set only ``-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON``, "
+"but the reason to provide both options is that packages may dynamically open "
+"shared libraries, which CMake cannot detect. In those cases, the RPATHs from "
+"``CMAKE_INSTALL_RPATH`` are used as search paths."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:209
+msgid ""
+"Some packages provide stub libraries, which contain an interface for linking "
+"without an implementation. When using such libraries, it's best to override "
+"the option ``-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF`` in ``cmake_args``, so "
+"that stub libraries are not used at runtime."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:214
+msgid "Generators"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:216
+msgid ""
+"CMake and Autotools are build-script generation tools; they \"generate\" the "
+"Makefiles that are used to build a software package. CMake actually supports "
+"multiple generators, not just Makefiles. Another common generator is Ninja. "
+"To switch to the Ninja generator, simply add:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:221
+msgid "generator(\"ninja\")"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:226
+msgid ""
+"``CMakePackage`` defaults to \"Unix Makefiles\". If you switch to the Ninja "
+"generator, make sure to add:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:229
+msgid "depends_on(\"ninja\", type=\"build\")"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:233
+msgid ""
+"to the package as well. Aside from that, you shouldn't need to do anything "
+"else. Spack will automatically detect that you are using Ninja and run:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:237
+msgid ""
+"$ cmake .. -G Ninja\n"
+"$ ninja\n"
+"$ ninja install"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:243
+msgid ""
+"Spack currently only supports \"Unix Makefiles\" and \"Ninja\" as valid "
+"generators, but it should be simple to add support for alternative "
+"generators. For more information on CMake generators, see: https://cmake.org/"
+"cmake/help/latest/manual/cmake-generators.7.html"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:247
+msgid "CMakeLists.txt in a sub-directory"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:249
+msgid ""
+"Occasionally, developers will hide their source code and ``CMakeLists.txt`` "
+"in a subdirectory like ``src``. If this happens, Spack won't be able to "
+"automatically detect the build system properly when running ``spack "
+"create``. You will have to manually change the package base class and tell "
+"Spack where ``CMakeLists.txt`` resides. You can do this like so:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:254
+msgid "root_cmakelists_dir = \"src\""
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:259
+msgid ""
+"Note that this path is relative to the root of the extracted tarball, not to "
+"the ``build_directory``. It defaults to the current directory."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:263
+msgid "Building out of source"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:265
+msgid ""
+"By default, Spack builds every ``CMakePackage`` in a ``spack-build`` sub-"
+"directory. If, for whatever reason, you would like to build in a different "
+"sub-directory, simply override ``build_directory`` like so:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:268
+msgid "build_directory = \"my-build\""
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:273
+msgid "Build and install targets"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:275
+msgid "For most CMake packages, the usual:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:277
+msgid ""
+"$ cmake\n"
+"$ make\n"
+"$ make install"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:283
+msgid ""
+"is sufficient to install the package. However, if you need to run make with "
+"any other targets, for example, to build an optional library or build the "
+"documentation, you can add these like so:"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:286
+msgid ""
+"build_targets = [\"all\", \"docs\"]\n"
+"install_targets = [\"install\", \"docs\"]"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:292
+msgid "Testing"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:294
+msgid ""
+"CMake-based packages typically provide unit testing via the ``test`` target. "
+"If you build your software with ``--test=root``, Spack will check for the "
+"presence of a ``test`` target in the Makefile and run ``make test`` for you. "
+"If you want to run a different test instead, simply override the ``check`` "
+"method."
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:299
+msgid "External documentation"
+msgstr ""
+
+#: ../../../build_systems/cmakepackage.rst:301
+msgid ""
+"For more information on the CMake build system, see: https://cmake.org/cmake/"
+"help/latest/"
+msgstr ""
