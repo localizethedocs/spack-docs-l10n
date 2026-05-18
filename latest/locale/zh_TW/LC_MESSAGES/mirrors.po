@@ -1,0 +1,369 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../mirrors.rst:-1
+msgid ""
+"Discover how to set up and manage mirrors in Spack to provide a local "
+"repository of tarballs for offline package fetching."
+msgstr ""
+
+#: ../../../mirrors.rst:13
+msgid "Mirrors (mirrors.yaml)"
+msgstr ""
+
+#: ../../../mirrors.rst:15
+msgid ""
+"Some sites may not have access to the internet for fetching packages. These "
+"sites will need a local repository of tarballs from which they can get their "
+"files. Spack has support for this with *mirrors*. A mirror is a URL that "
+"points to a directory, either on the local filesystem or on some server, "
+"containing tarballs for all of Spack's packages."
+msgstr ""
+
+#: ../../../mirrors.rst:20
+msgid "Here's an example of a mirror's directory structure:"
+msgstr ""
+
+#: ../../../mirrors.rst:22
+msgid ""
+"mirror/\n"
+"    cmake/\n"
+"        cmake-2.8.10.2.tar.gz\n"
+"    dyninst/\n"
+"        dyninst-8.1.1.tgz\n"
+"        dyninst-8.1.2.tgz\n"
+"    libdwarf/\n"
+"        libdwarf-20130126.tar.gz\n"
+"        libdwarf-20130207.tar.gz\n"
+"        libdwarf-20130729.tar.gz\n"
+"    libelf/\n"
+"        libelf-0.8.12.tar.gz\n"
+"        libelf-0.8.13.tar.gz\n"
+"    libunwind/\n"
+"        libunwind-1.1.tar.gz\n"
+"    mpich/\n"
+"        mpich-3.0.4.tar.gz\n"
+"    mvapich2/\n"
+"        mvapich2-1.9.tgz"
+msgstr ""
+
+#: ../../../mirrors.rst:44
+msgid ""
+"The structure is very simple. There is a top-level directory. The second "
+"level directories are named after packages, and the third level contains "
+"tarballs for each package, named after each package."
+msgstr ""
+
+#: ../../../mirrors.rst:50
+msgid ""
+"Archives are **not** named exactly the way they were in the package's fetch "
+"URL. They have the form ``<name>-<version>.<extension>``, where ``<name>`` "
+"is Spack's name for the package, ``<version>`` is the version of the "
+"tarball, and ``<extension>`` is whatever format the package's fetch URL "
+"contains."
+msgstr ""
+
+#: ../../../mirrors.rst:53
+msgid ""
+"In order to make mirror creation reasonably fast, we copy the tarball in its "
+"original format to the mirror directory, but we do not standardize on a "
+"particular compression algorithm, because this would potentially require "
+"expanding and recompressing each archive."
+msgstr ""
+
+#: ../../../mirrors.rst:58
+msgid "``spack mirror``"
+msgstr ""
+
+#: ../../../mirrors.rst:60
+msgid ""
+"Mirrors are managed with the ``spack mirror`` command. The help for ``spack "
+"mirror`` looks like this:"
+msgstr ""
+
+#: ../../../mirrors.rst:65
+msgid ""
+"The ``create`` command actually builds a mirror by fetching all of its "
+"packages from the internet and checksumming them."
+msgstr ""
+
+#: ../../../mirrors.rst:67
+msgid ""
+"The other three commands are for managing mirror configuration. They control "
+"the URL(s) from which Spack downloads its packages."
+msgstr ""
+
+#: ../../../mirrors.rst:73
+msgid "``spack mirror create``"
+msgstr ""
+
+#: ../../../mirrors.rst:75
+msgid ""
+"You can create a mirror using the ``spack mirror create`` command, assuming "
+"you're on a machine where you can access the internet."
+msgstr ""
+
+#: ../../../mirrors.rst:77
+msgid ""
+"The command will iterate through all of Spack's packages and download the "
+"safe ones into a directory structure like the one above. Here is what it "
+"looks like:"
+msgstr ""
+
+#: ../../../mirrors.rst:80
+msgid ""
+"$ spack mirror create libelf libdwarf\n"
+"==> Created new mirror in spack-mirror-2014-06-24\n"
+"==> Trying to fetch from http://www.mr511.de/software/libelf-0.8.13.tar.gz\n"
+"##########################################################                "
+"81.6%\n"
+"==> Checksum passed for libelf@0.8.13\n"
+"==> Added libelf@0.8.13\n"
+"==> Trying to fetch from http://www.mr511.de/software/libelf-0.8.12.tar.gz\n"
+"######################################################################    "
+"98.6%\n"
+"==> Checksum passed for libelf@0.8.12\n"
+"==> Added libelf@0.8.12\n"
+"==> Trying to fetch from http://www.prevanders.net/libdwarf-20130207.tar.gz\n"
+"######################################################################    "
+"97.3%\n"
+"==> Checksum passed for libdwarf@20130207\n"
+"==> Added libdwarf@20130207\n"
+"==> Trying to fetch from http://www.prevanders.net/libdwarf-20130126.tar.gz\n"
+"########################################################                  "
+"78.9%\n"
+"==> Checksum passed for libdwarf@20130126\n"
+"==> Added libdwarf@20130126\n"
+"==> Trying to fetch from http://www.prevanders.net/libdwarf-20130729.tar.gz\n"
+"#############################################################             "
+"84.7%\n"
+"==> Added libdwarf@20130729\n"
+"==> Added spack-mirror-2014-06-24/libdwarf/libdwarf-20130729.tar.gz to "
+"mirror\n"
+"==> Added python@2.7.8.\n"
+"==> Successfully updated mirror in spack-mirror-2015-02-24.\n"
+"  Archive stats:\n"
+"    0    already present\n"
+"    5    added\n"
+"    0    failed to fetch."
+msgstr ""
+
+#: ../../../mirrors.rst:111
+msgid ""
+"Once this is done, you can tar up the ``spack-mirror-2014-06-24`` directory "
+"and copy it over to the machine you want it hosted on."
+msgstr ""
+
+#: ../../../mirrors.rst:114
+msgid "Custom package sets"
+msgstr ""
+
+#: ../../../mirrors.rst:116
+msgid ""
+"Normally, ``spack mirror create`` downloads all the archives it has "
+"checksums for. If you want to only create a mirror for a subset of packages, "
+"you can do that by supplying a list of package specs on the command line "
+"after ``spack mirror create``. For example, this command:"
+msgstr ""
+
+#: ../../../mirrors.rst:120
+msgid "$ spack mirror create libelf@0.8.12: boost@1.44:"
+msgstr ""
+
+#: ../../../mirrors.rst:124
+msgid ""
+"Will create a mirror for libelf versions greater than or equal to 0.8.12 and "
+"boost versions greater than or equal to 1.44."
+msgstr ""
+
+#: ../../../mirrors.rst:127
+msgid "Mirror files"
+msgstr ""
+
+#: ../../../mirrors.rst:129
+msgid ""
+"If you have a *very* large number of packages you want to mirror, you can "
+"supply a file with specs in it, one per line:"
+msgstr ""
+
+#: ../../../mirrors.rst:131
+msgid ""
+"$ cat specs.txt\n"
+"libdwarf\n"
+"libelf@0.8.12:\n"
+"boost@1.44:\n"
+"boost@1.39.0\n"
+"...\n"
+"$ spack mirror create --file specs.txt\n"
+"..."
+msgstr ""
+
+#: ../../../mirrors.rst:142
+msgid ""
+"This is useful if there is a specific suite of software managed by your site."
+msgstr ""
+
+#: ../../../mirrors.rst:145
+msgid "Mirror environment"
+msgstr ""
+
+#: ../../../mirrors.rst:147
+msgid ""
+"To create a mirror of all packages required by a concrete environment, "
+"activate the environment and run ``spack mirror create -a``. This is "
+"especially useful to create a mirror of an environment that was concretized "
+"on another machine."
+msgstr ""
+
+#: ../../../mirrors.rst:150
+msgid ""
+"Optionally specify ``-j <n_workers>`` to control the number of workers used "
+"to create a full mirror. If not specified, the optimal number of workers is "
+"determined dynamically. For a full mirror, the number of workers used is the "
+"minimum of 16 workers, available CPU cores, and number of packages to "
+"mirror. For individual packages, 1 worker is used."
+msgstr ""
+
+#: ../../../mirrors.rst:155
+msgid ""
+"[remote] $ spack env create myenv\n"
+"[remote] $ spack env activate myenv\n"
+"[remote] $ spack add ...\n"
+"[remote] $ spack concretize\n"
+"\n"
+"$ sftp remote:/spack/var/environment/myenv/spack.lock\n"
+"$ spack env create myenv spack.lock\n"
+"$ spack env activate myenv\n"
+"$ spack mirror create -a"
+msgstr ""
+
+#: ../../../mirrors.rst:172
+msgid "``spack mirror add``"
+msgstr ""
+
+#: ../../../mirrors.rst:174
+msgid ""
+"Once you have a mirror, you need to let Spack know about it. This is "
+"relatively simple. First, figure out the URL for the mirror. If it's a "
+"directory, you can use a file URL like this one:"
+msgstr ""
+
+#: ../../../mirrors.rst:179
+msgid "file://$HOME/spack-mirror-2014-06-24"
+msgstr ""
+
+#: ../../../mirrors.rst:183
+msgid ""
+"That points to the directory on the local filesystem. If it were on a web "
+"server, you could use a URL like this one:"
+msgstr ""
+
+#: ../../../mirrors.rst:186
+msgid "https://example.com/some/web-hosted/directory/spack-mirror-2014-06-24"
+msgstr ""
+
+#: ../../../mirrors.rst:188
+msgid ""
+"Spack will use the URL as the root for all of the packages it fetches. You "
+"can tell your Spack installation to use that mirror like this:"
+msgstr ""
+
+#: ../../../mirrors.rst:191
+msgid ""
+"$ spack mirror add local_filesystem file://$HOME/spack-mirror-2014-06-24"
+msgstr ""
+
+#: ../../../mirrors.rst:195
+msgid "Each mirror has a name so that you can refer to it again later."
+msgstr ""
+
+#: ../../../mirrors.rst:200
+msgid "``spack mirror list``"
+msgstr ""
+
+#: ../../../mirrors.rst:202
+msgid "To see all the mirrors Spack knows about, run ``spack mirror list``:"
+msgstr ""
+
+#: ../../../mirrors.rst:204
+msgid ""
+"$ spack mirror list\n"
+"local_filesystem    file:///home/username/spack-mirror-2014-06-24"
+msgstr ""
+
+#: ../../../mirrors.rst:212
+msgid "``spack mirror remove``"
+msgstr ""
+
+#: ../../../mirrors.rst:214
+msgid "To remove a mirror by name, run:"
+msgstr ""
+
+#: ../../../mirrors.rst:216
+msgid ""
+"$ spack mirror remove local_filesystem\n"
+"$ spack mirror list\n"
+"==> No mirrors configured."
+msgstr ""
+
+#: ../../../mirrors.rst:223
+msgid "Mirror precedence"
+msgstr ""
+
+#: ../../../mirrors.rst:225
+msgid "Adding a mirror really adds a line in ``~/.spack/mirrors.yaml``:"
+msgstr ""
+
+#: ../../../mirrors.rst:227
+msgid ""
+"mirrors:\n"
+"  local_filesystem: file:///home/username/spack-mirror-2014-06-24\n"
+"  remote_server: https://example.com/some/web-hosted/directory/spack-"
+"mirror-2014-06-24"
+msgstr ""
+
+#: ../../../mirrors.rst:233
+msgid ""
+"If you want to change the order in which mirrors are searched for packages, "
+"you can edit this file and reorder the sections. Spack will search the "
+"topmost mirror first and the bottom-most mirror last."
+msgstr ""
+
+#: ../../../mirrors.rst:239
+msgid "Local Default Cache"
+msgstr ""
+
+#: ../../../mirrors.rst:241
+msgid ""
+"Spack caches resources that are downloaded as part of installations. The "
+"cache is a valid Spack mirror: it uses the same directory structure and "
+"naming scheme as other Spack mirrors (so it can be copied anywhere and "
+"referenced with a URL like other mirrors). The mirror is maintained locally "
+"(within the Spack installation directory) at :file:`var/spack/cache/`. It is "
+"always enabled (and is always searched first when attempting to retrieve "
+"files for an installation) but can be cleared with ``spack clean --misc-"
+"cache``; the cache directory can also be deleted manually without issue."
+msgstr ""
+
+#: ../../../mirrors.rst:246
+msgid ""
+"Caching includes retrieved tarball archives and source control repositories, "
+"but only resources with an associated digest or commit ID (e.g. a revision "
+"number for SVN) will be cached."
+msgstr ""

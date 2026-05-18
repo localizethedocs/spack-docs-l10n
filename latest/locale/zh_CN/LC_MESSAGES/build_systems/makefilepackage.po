@@ -1,0 +1,440 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../build_systems/makefilepackage.rst:-1
+msgid ""
+"A guide to using the Makefile build system in Spack for packages that use "
+"plain Makefiles."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:13
+msgid "Makefile"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:15
+msgid ""
+"The most primitive build system a package can use is a plain Makefile. "
+"Makefiles are simple to write for small projects, but they usually require "
+"you to edit the Makefile to set platform and compiler-specific variables."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:19
+msgid "Phases"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:21
+msgid ""
+"The ``MakefileBuilder`` and ``MakefilePackage`` base classes come with 3 "
+"phases:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:23
+msgid "``edit`` - edit the Makefile"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:24
+msgid "``build`` - build the project"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:25
+msgid "``install`` - install the project"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:27
+msgid ""
+"By default, ``edit`` does nothing, but you can override it to replace "
+"hardcoded Makefile variables. The ``build`` and ``install`` phases run:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:30
+msgid ""
+"$ make\n"
+"$ make install"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:37
+msgid "Important files"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:39
+msgid ""
+"The main file that matters for a ``MakefilePackage`` is the Makefile. This "
+"file will be named one of the following ways:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:42
+msgid "GNUmakefile (only works with GNU Make)"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:43
+msgid "Makefile (most common)"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:44
+msgid "makefile"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:46
+msgid ""
+"Some Makefiles also *include* other configuration files. Check for an "
+"``include`` directive in the Makefile."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:50
+msgid "Build system dependencies"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:52
+msgid ""
+"Spack assumes that the operating system will have a valid ``make`` utility "
+"installed already, so you don't need to add a dependency on ``make``. "
+"However, if the package uses a ``GNUmakefile`` or the developers recommend "
+"using GNU Make, you should add a dependency on ``gmake``:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:55
+msgid "depends_on(\"gmake\", type=\"build\")"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:61
+msgid "Types of Makefile packages"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:63
+msgid ""
+"Most of the work involved in packaging software that uses Makefiles involves "
+"overriding or replacing hard-coded variables. Many packages make the mistake "
+"of hard-coding compilers, usually for GCC or Intel. This is fine if you "
+"happen to be using that particular compiler, but Spack is designed to work "
+"with *any* compiler, and you need to ensure that this is the case."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:67
+msgid ""
+"Depending on how the Makefile is designed, there are 4 common strategies "
+"that can be used to set or override the appropriate variables:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:70
+msgid "Environment variables"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:72
+msgid ""
+"Make has multiple types of `assignment operators <https://www.gnu.org/"
+"software/make/manual/make.html#Setting>`_. Some Makefiles use ``=`` to "
+"assign variables. The only way to override these variables is to edit the "
+"Makefile or override them on the command-line. However, Makefiles that use "
+"``?=`` for assignment honor environment variables. Since Spack already sets "
+"``CC``, ``CXX``, ``F77``, and ``FC``, you won't need to worry about setting "
+"these variables. If there are any other variables you need to set, you can "
+"do this in the ``setup_build_environment`` method:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:79
+msgid ""
+"def setup_build_environment(self, env: EnvironmentModifications) -> None:\n"
+"    env.set(\"PREFIX\", prefix)\n"
+"    env.set(\"BLASLIB\", spec[\"blas\"].libs.ld_flags)"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:86
+msgid ""
+"`cbench <https://github.com/spack/spack-packages/blob/develop/repos/"
+"spack_repo/builtin/packages/cbench/package.py>`_ is a good example of a "
+"simple package that does this, while `esmf <https://github.com/spack/spack-"
+"packages/blob/develop/repos/spack_repo/builtin/packages/esmf/package.py>`_ "
+"is a good example of a more complex package."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:89
+msgid "Command-line arguments"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:91
+msgid ""
+"If the Makefile ignores environment variables, the next thing to try is "
+"command-line arguments. You can do this by overriding the ``build_targets`` "
+"attribute. If you don't need access to the spec, you can do this like so:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:95
+msgid "build_targets = [\"CC=cc\"]"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:100
+msgid "If you do need access to the spec, you can create a property like so:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:102
+msgid ""
+"@property\n"
+"def build_targets(self):\n"
+"    spec = self.spec\n"
+"\n"
+"    return [\n"
+"        \"CC=cc\",\n"
+"        f\"BLASLIB={spec['blas'].libs.ld_flags}\",\n"
+"    ]"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:114
+msgid ""
+"`cloverleaf <https://github.com/spack/spack-packages/blob/develop/repos/"
+"spack_repo/builtin/packages/cloverleaf/package.py>`_ is a good example of a "
+"package that uses this strategy."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:117
+msgid "Edit Makefile"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:119
+msgid ""
+"Some Makefiles are just plain stubborn and will ignore command-line "
+"variables. The only way to ensure that these packages build correctly is to "
+"directly edit the Makefile. Spack provides a ``FileFilter`` class and a "
+"``filter`` method to help with this. For example:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:124
+msgid ""
+"def edit(self, spec, prefix):\n"
+"    makefile = FileFilter(\"Makefile\")\n"
+"\n"
+"    makefile.filter(r\"^\\s*CC\\s*=.*\", f\"CC = {spack_cc}\")\n"
+"    makefile.filter(r\"^\\s*CXX\\s*=.*\", f\"CXX = {spack_cxx}\")\n"
+"    makefile.filter(r\"^\\s*F77\\s*=.*\", f\"F77 = {spack_f77}\")\n"
+"    makefile.filter(r\"^\\s*FC\\s*=.*\", f\"FC = {spack_fc}\")"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:135
+msgid ""
+"`stream <https://github.com/spack/spack-packages/blob/develop/repos/"
+"spack_repo/builtin/packages/stream/package.py>`_ is a good example of a "
+"package that involves editing a Makefile to set the appropriate variables."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:138
+msgid "Config file"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:140
+msgid ""
+"More complex packages often involve Makefiles that *include* a configuration "
+"file. These configuration files are primarily composed of variables relating "
+"to the compiler, platform, and the location of dependencies or names of "
+"libraries. Since these config files are dependent on the compiler and "
+"platform, you will often see entire directories of examples for common "
+"compilers and architectures. Use these examples to help determine what "
+"possible values to use."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:145
+msgid ""
+"If the config file is long and only contains one or two variables that need "
+"to be modified, you can use the technique above to edit the config file. "
+"However, if you end up needing to modify most of the variables, it may be "
+"easier to write a new file from scratch."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:148
+msgid ""
+"If each variable is independent of each other, a dictionary works well for "
+"storing variables:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:150
+msgid ""
+"def edit(self, spec, prefix):\n"
+"    config = {\n"
+"        \"CC\": \"cc\",\n"
+"        \"MAKE\": \"make\",\n"
+"    }\n"
+"\n"
+"    if spec.satisfies(\"+blas\"):\n"
+"        config[\"BLAS_LIBS\"] = spec[\"blas\"].libs.joined()\n"
+"\n"
+"    with open(\"make.inc\", \"w\") as inc:\n"
+"        for key in config:\n"
+"            inc.write(f\"{key} = {config[key]}\\n\")"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:166
+msgid ""
+"`elk <https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/"
+"builtin/packages/elk/package.py>`_ is a good example of a package that uses "
+"a dictionary to store configuration variables."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:168
+msgid ""
+"If the order of variables is important, it may be easier to store them in a "
+"list:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:170
+msgid ""
+"def edit(self, spec, prefix):\n"
+"    config = [\n"
+"        f\"INSTALL_DIR = {prefix}\",\n"
+"        \"INCLUDE_DIR = $(INSTALL_DIR)/include\",\n"
+"        \"LIBRARY_DIR = $(INSTALL_DIR)/lib\",\n"
+"    ]\n"
+"\n"
+"    with open(\"make.inc\", \"w\") as inc:\n"
+"        for var in config:\n"
+"            inc.write(f\"{var}\\n\")"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:184
+msgid ""
+"`hpl <https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/"
+"builtin/packages/hpl/package.py>`_ is a good example of a package that uses "
+"a list to store configuration variables."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:187
+msgid "Variables to watch out for"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:189
+msgid ""
+"The following is a list of common variables to watch out for. The first two "
+"sections are `implicit variables <https://www.gnu.org/software/make/manual/"
+"html_node/Implicit-Variables.html>`_ defined by Make and will always use the "
+"same name, while the rest are user-defined variables and may vary from "
+"package to package."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:192
+msgid "**Compilers**"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:194
+msgid ""
+"This includes variables such as ``CC``, ``CXX``, ``F77``, ``F90``, and "
+"``FC``, as well as variables related to MPI compiler wrappers, like "
+"``MPICC`` and friends."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:196
+msgid "**Compiler flags**"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:198
+msgid ""
+"This includes variables for compiler flags, such as ``CFLAGS``, "
+"``CXXFLAGS``, ``F77FLAGS``, ``F90FLAGS``, ``FCFLAGS``, and ``CPPFLAGS``. "
+"These variables are often hard-coded to contain flags specific to a certain "
+"compiler. If these flags don't work for every compiler, you may want to "
+"consider filtering them."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:202
+msgid "**Variables that enable or disable features**"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:204
+msgid ""
+"This includes variables like ``MPI``, ``OPENMP``, ``PIC``, and ``DEBUG``. "
+"These flags often require you to create a variant so that you can either "
+"build with or without MPI support, for example. These flags are often "
+"compiler-dependent. You should replace them with the appropriate compiler "
+"flags, such as ``self.compiler.openmp_flag`` or ``self.compiler.pic_flag``."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:209
+msgid "**Platform flags**"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:211
+msgid ""
+"These flags control the type of architecture that the executable is compiled "
+"for. Watch out for variables like ``PLAT`` or ``ARCH``."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:214
+msgid "**Dependencies**"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:216
+msgid ""
+"Look out for variables that sound like they could be used to locate "
+"dependencies, such as ``JAVA_HOME``, ``JPEG_ROOT``, or ``ZLIBDIR``. Also "
+"watch out for variables that control linking, such as ``LIBS``, ``LDFLAGS``, "
+"and ``INCLUDES``. These variables need to be set to the installation prefix "
+"of a dependency, or to the correct linker flags to link to that dependency."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:220
+msgid "**Installation prefix**"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:222
+msgid ""
+"If your Makefile has an ``install`` target, it needs some way of knowing "
+"where to install. By default, many packages install to ``/usr`` or ``/usr/"
+"local``. Since many Spack users won't have sudo privileges, it is imperative "
+"that each package is installed to the proper prefix. Look for variables like "
+"``PREFIX`` or ``INSTALL``."
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:228
+msgid "Makefiles in a sub-directory"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:230
+msgid ""
+"Not every package places their Makefile in the root of the package tarball. "
+"If the Makefile is in a sub-directory like ``src``, you can tell Spack where "
+"to locate it like so:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:233
+msgid "build_directory = \"src\""
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:239
+msgid "Manual installation"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:241
+msgid ""
+"Not every Makefile includes an ``install`` target. If this is the case, you "
+"can override the default ``install`` method to manually install the package:"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:244
+msgid ""
+"def install(self, spec, prefix):\n"
+"    mkdir(prefix.bin)\n"
+"    install(\"foo\", prefix.bin)\n"
+"    install_tree(\"lib\", prefix.lib)"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:253
+msgid "External documentation"
+msgstr ""
+
+#: ../../../build_systems/makefilepackage.rst:255
+msgid ""
+"For more information on reading and writing Makefiles, see: https://www.gnu."
+"org/software/make/manual/make.html"
+msgstr ""
