@@ -1,0 +1,552 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../include_yaml.rst:-1
+msgid ""
+"Learn how to use include directives to modularize your Spack YAML "
+"configuration files for better organization and reusability."
+msgstr ""
+
+#: ../../../include_yaml.rst:13
+msgid "Include Settings (include.yaml)"
+msgstr ""
+
+#: ../../../include_yaml.rst:15
+msgid ""
+"Spack allows you to include configuration files through ``include.yaml``, or "
+"in the ``include:`` section in an environment. You can specify includes "
+"using local paths, remote paths, and ``git`` URLs. Included paths become "
+"configuration scopes in Spack and can even be used to override built-in "
+"scopes."
+msgstr ""
+
+#: ../../../include_yaml.rst:20
+msgid "Local files"
+msgstr ""
+
+#: ../../../include_yaml.rst:22
+msgid ""
+"You can include a single configuration file or an entire configuration "
+"*scope* like this:"
+msgstr ""
+
+#: ../../../include_yaml.rst:24
+msgid ""
+"include:\n"
+"- /path/to/a/required/config.yaml\n"
+"- $MY_SPECIAL_CONFIG_FILE\n"
+"- path: $HOME/path/to/my/project/packages.yaml\n"
+"- path: /path/to/$os/$target/config\n"
+"  optional: true\n"
+"- path: /path/to/os-specific/config-dir\n"
+"  when: os == \"ventura\""
+msgstr ""
+
+#: ../../../include_yaml.rst:35
+msgid ""
+"Included paths may be absolute, relative (to the configuration file), "
+"specified as URLs, or provided in environment variables (e.g., "
+"``$MY_SPECIAL_CONFIG_FILE``)."
+msgstr ""
+
+#: ../../../include_yaml.rst:37
+msgid ""
+"``optional``: Spack will raise an error when an included configuration file "
+"does not exist, *unless* it is explicitly made ``optional: true``, like the "
+"second path above."
+msgstr ""
+
+#: ../../../include_yaml.rst:38
+msgid ""
+"``when``: Configuration scopes can also be included *conditionally* with "
+"``when``. ``when:`` conditions are evaluated as described for :ref:`Spec "
+"List References <spec-list-references>`."
+msgstr ""
+
+#: ../../../include_yaml.rst:42
+msgid ""
+"The same conditions and variables in :ref:`Spec List References <spec-list-"
+"references>` can be used for conditional activation in the ``when`` clauses."
+msgstr ""
+
+#: ../../../include_yaml.rst:45
+msgid "Remote file URLs"
+msgstr ""
+
+#: ../../../include_yaml.rst:47
+msgid ""
+"Only the ``ftp``, ``http``, and ``https`` protocols (or schemes) are "
+"supported for remote file URLs. Spack-specific, environment, and user path "
+"variables can be used. (See :ref:`config-file-variables` for more "
+"information.)"
+msgstr ""
+
+#: ../../../include_yaml.rst:51
+msgid ""
+"A ``sha256`` is required. For example, suppose you have a ``/etc/spack/"
+"include.yaml`` file that specifies a remote ``config.yaml`` file as follows::"
+msgstr ""
+
+#: ../../../include_yaml.rst:54
+msgid ""
+"include:\n"
+"- path: https://github.com/path/to/raw/config/config.yaml\n"
+"  sha256: 26e871804a92cd07bb3d611b31b4156ae93d35b6a6d6e0ef3a67871fcb1d258b"
+msgstr ""
+
+#: ../../../include_yaml.rst:58
+msgid ""
+"The ``config.yaml`` file is downloaded to a subdirectory of ``/etc/spack``. "
+"The contents of the downloaded file are read and included in Spack's "
+"configuration when Spack configuration files are processed."
+msgstr ""
+
+#: ../../../include_yaml.rst:63
+msgid ""
+"You can check the destination of the downloaded file by running: ``spack "
+"config scopes -p``."
+msgstr ""
+
+#: ../../../include_yaml.rst:67
+msgid ""
+"Remote file URLs must link to the **raw** form of the file's contents (e.g., "
+"`GitHub <https://docs.github.com/en/repositories/working-with-files/using-"
+"files/viewing-and-understanding-files#viewing-or-copying-the-raw-file-"
+"content>`_ or `GitLab <https://docs.gitlab.com/ee/api/repository_files."
+"html#get-raw-file-from-repository>`_)."
+msgstr ""
+
+#: ../../../include_yaml.rst:69
+msgid ""
+"If the directory containing the ``include.yaml`` file is not writable when "
+"the remote file is downloaded, then the destination will be a temporary "
+"directory."
+msgstr ""
+
+#: ../../../include_yaml.rst:73
+msgid "``git`` repository files"
+msgstr ""
+
+#: ../../../include_yaml.rst:75
+msgid ""
+"You can also include configuration files from a ``git`` repository. The "
+"``branch``, ``commit``, or ``tag`` to be checked out is required. A list of "
+"relative paths in which to find the configuration files is also required. "
+"Inclusion of the repository (and its paths) can be optional or conditional. "
+"If you want to control the :ref:`name of the configuration scope <named-"
+"config-scopes>`, you can provide a ``name``."
+msgstr ""
+
+#: ../../../include_yaml.rst:81
+msgid ""
+"For example, suppose we only want to include the ``config.yaml`` and "
+"``packages.yaml`` files from the `spack/spack-configs <https://github.com/"
+"spack/spack-configs>`_ repository's ``USC/config`` directory when using the "
+"``centos7`` operating system. And we want the configuration scope name to "
+"start ``common``. We could then configure the include in, for example, the "
+"user scope include file (i.e., ``$HOME/.spack/include.yaml`` by default), as "
+"follows::"
+msgstr ""
+
+#: ../../../include_yaml.rst:85
+msgid ""
+"include:\n"
+"- name: common\n"
+"  git: https://github.com/spack/spack-configs.git\n"
+"  branch: main\n"
+"  when: os == \"centos7\"\n"
+"  paths:\n"
+"  - USC/config/config.yaml\n"
+"  - USC/config/packages.yaml"
+msgstr ""
+
+#: ../../../include_yaml.rst:96
+msgid ""
+"The git URL could be specified through an environment variable (e.g., "
+"``$MY_USC_CONFIG_URL``)."
+msgstr ""
+
+#: ../../../include_yaml.rst:98
+msgid ""
+"If the condition is satisfied, then the ``main`` branch of the repository "
+"will be cloned -- under ``$HOME/.spack/includes`` -- when configuration "
+"scopes are initially created. Once cloned, the settings for the two files "
+"under the ``USC/config`` directory will be integrated into Spack's "
+"configuration. In this example, the new scopes and their paths can be seen "
+"by running::"
+msgstr ""
+
+#: ../../../include_yaml.rst:102
+msgid ""
+"$ spack config scopes -p\n"
+"Scope               Path\n"
+"command_line\n"
+"spack                           /Users/username/spack/etc/spack/\n"
+"user                            /Users/username/.spack/\n"
+"common:USC/config/config.yaml   /Users/username/.spack/includes/common/USC/"
+"config/config.yaml\n"
+"common:USC/config/packages.yaml /Users/username/.spack/includes/common/USC/"
+"config/packages.yaml\n"
+"site                            /Users/username/spack/etc/spack/site/\n"
+"system                          /etc/spack/\n"
+"defaults                        /Users/username/spack/etc/spack/defaults/\n"
+"defaults:darwin                 /Users/username/spack/etc/spack/defaults/"
+"darwin/\n"
+"defaults:base                   /Users/username/spack/etc/spack/defaults/"
+"base/\n"
+"_builtin"
+msgstr ""
+
+#: ../../../include_yaml.rst:116
+msgid ""
+"Since there are two unique paths, each results in a separate configuration "
+"scope. If only the ``USC/config`` directory was listed under ``paths``, then "
+"there would be only one configuration scope, named ``USC``, and the "
+"configuration settings from all of the configuration files within that "
+"directory would be integrated."
+msgstr ""
+
+#: ../../../include_yaml.rst:119
+msgid "``git:``, ``branch:``, ``commit:``, and ``tag:`` attributes."
+msgstr ""
+
+#: ../../../include_yaml.rst:122
+msgid "``name:`` attribute and git environment variable support."
+msgstr ""
+
+#: ../../../include_yaml.rst:126
+msgid "Precedence"
+msgstr ""
+
+#: ../../../include_yaml.rst:128
+msgid ""
+"Using ``include:`` adds the included files as a configuration scope *below* "
+"the including file. This is so that you can override settings from files you "
+"include. If you want one file to take precedence over another, you can put "
+"the include with higher precedence earlier in the list:"
+msgstr ""
+
+#: ../../../include_yaml.rst:132
+msgid ""
+"include:\n"
+"- /path/to/higher/precedence/scope/\n"
+"- /path/to/middle/precedence/scope/\n"
+"- git: https://github.com/org/git-repo-scope\n"
+"  commit: 95c59784bd02ea248bf905d79d063df38e087b19"
+msgstr ""
+
+#: ../../../include_yaml.rst:141
+msgid "``prefer_modify``"
+msgstr ""
+
+#: ../../../include_yaml.rst:143
+msgid ""
+"When you use commands like ``spack compiler find``, ``spack external find``, "
+"``spack config edit`` or ``spack config add``, they modify the topmost "
+"writable scope in the current configuration. Scopes can tell Spack to prefer "
+"to edit their included scopes instead, using ``prefer_modify``:"
+msgstr ""
+
+#: ../../../include_yaml.rst:146
+msgid ""
+"include:\n"
+"- name: \"preferred\"\n"
+"  path: /path/to/scope/we/want-to-write\n"
+"  prefer_modify: true"
+msgstr ""
+
+#: ../../../include_yaml.rst:153
+msgid ""
+"Now, if the including scope is the highest precedence scope and would "
+"otherwise be selected automatically by one of these commands, they will "
+"instead prefer to edit ``preferred``. The including scope can still be "
+"modified by using the ``--scope`` argument (e.g., ``spack compiler find --"
+"scope NAME``)."
+msgstr ""
+
+#: ../../../include_yaml.rst:158
+msgid ""
+"Recursive includes are not currently processed in a breadth-first manner, so "
+"the value of a configuration option that is altered by multiple included "
+"files may not be what you expect. This will be addressed in a future update."
+msgstr ""
+
+#: ../../../include_yaml.rst:161
+msgid "The ``prefer_modify:`` attribute."
+msgstr ""
+
+#: ../../../include_yaml.rst:164
+msgid "Overriding local paths"
+msgstr ""
+
+#: ../../../include_yaml.rst:166
+msgid ""
+"Optionally, you can enable a local path to be overridden by an environment "
+"variable using ``path_override_env_var:``:"
+msgstr ""
+
+#: ../../../include_yaml.rst:168
+msgid ""
+"include:\n"
+"- path_override_env_var: SPECIAL_CONFIG_PATH\n"
+"  path: /path/to/special/config.yaml"
+msgstr ""
+
+#: ../../../include_yaml.rst:174
+msgid ""
+"Here, If ``SPECIAL_CONFIG_PATH`` is set, its value will be used as the path. "
+"If not, Spack will instead use the ``path:`` specified in configuration."
+msgstr ""
+
+#: ../../../include_yaml.rst:179
+msgid ""
+"``path_override_env_var:`` is currently only supported for ``path:`` "
+"includes, not ``git:`` includes."
+msgstr ""
+
+#: ../../../include_yaml.rst:181
+msgid "The ``path_override_env_var:`` attribute."
+msgstr ""
+
+#: ../../../include_yaml.rst:187
+msgid "Named configuration scopes"
+msgstr ""
+
+#: ../../../include_yaml.rst:189
+msgid ""
+"By default, the included scope names are constructed by appending ``:`` and "
+"the included scope's basename to the parent scope name. For example, Spack's "
+"own ``defaults`` scope includes a ``base`` scope and a platform-specific "
+"scope::"
+msgstr ""
+
+#: ../../../include_yaml.rst:192
+msgid ""
+"$ spack config scopes -p\n"
+"Scope            Path\n"
+"command_line\n"
+"spack            /home/username/spack/etc/spack/\n"
+"user             /home/username/.spack/\n"
+"site             /home/username/spack/etc/spack/site/\n"
+"defaults         /home/username/spack/etc/spack/defaults/\n"
+"defaults:darwin  /home/username/spack/etc/spack/defaults/darwin/\n"
+"defaults:base    /home/username/spack/etc/spack/defaults/base/\n"
+"_builtin"
+msgstr ""
+
+#: ../../../include_yaml.rst:203
+msgid ""
+"You can see ``defaults`` and the included ``defaults:base`` and ``defaults:"
+"darwin`` scopes here."
+msgstr ""
+
+#: ../../../include_yaml.rst:205
+msgid ""
+"If you want to define your own name for an included scope, you can supply an "
+"optional ``name:`` argument when you include it:"
+msgstr ""
+
+#: ../../../include_yaml.rst:207
+msgid ""
+"spack:\n"
+"  include:\n"
+"  - path: foo\n"
+"    name: myscope"
+msgstr ""
+
+#: ../../../include_yaml.rst:214
+msgid "You can see the ``myscope`` name when we activate this environment::"
+msgstr ""
+
+#: ../../../include_yaml.rst:216
+msgid ""
+"> spack -e ./env config scopes -p\n"
+"Scope                    Path\n"
+"command_line\n"
+"env:/home/username/env   /home/username/env/spack.yaml/\n"
+"myscope                  /home/username/env/foo/\n"
+"spack                    /home/username/spack/etc/spack/\n"
+"user                     /home/username/.spack/\n"
+"site                     /home/username/spack/etc/spack/site/\n"
+"defaults                 /home/username/spack/etc/spack/defaults/\n"
+"defaults:darwin          /home/username/spack/etc/spack/defaults/darwin/\n"
+"defaults:base            /home/username/spack/etc/spack/defaults/base/\n"
+"_builtin"
+msgstr ""
+
+#: ../../../include_yaml.rst:229
+msgid ""
+"You can now use the argument ``myscope`` to refer to this, for example with "
+"``spack config --scope myscope add ...``."
+msgstr ""
+
+#: ../../../include_yaml.rst:232
+msgid "Built-in configuration scopes"
+msgstr ""
+
+#: ../../../include_yaml.rst:234
+msgid ""
+"The default ``user``, ``system``, and ``site`` scopes are defined using "
+"``include:`` in ``$spack/etc/spack/include.yaml``:"
+msgstr ""
+
+#: ../../../include_yaml.rst:236
+msgid ""
+"include:\n"
+"  # user configuration scope\n"
+"  - name: \"user\"\n"
+"    path_override_env_var: SPACK_USER_CONFIG_PATH\n"
+"    path: \"~/.spack\"\n"
+"    optional: true\n"
+"    prefer_modify: true\n"
+"    when: '\"SPACK_DISABLE_LOCAL_CONFIG\" not in env'\n"
+"\n"
+"  # site configuration scope\n"
+"  - name: \"site\"\n"
+"    path: \"$spack/etc/spack/site\"\n"
+"    optional: true\n"
+"\n"
+"  # system configuration scope\n"
+"  - name: \"system\"\n"
+"    path_override_env_var: SPACK_SYSTEM_CONFIG_PATH\n"
+"    path: \"/etc/spack\"\n"
+"    optional: true\n"
+"    when: '\"SPACK_DISABLE_LOCAL_CONFIG\" not in env'\n"
+msgstr ""
+
+#: ../../../include_yaml.rst:239
+msgid ""
+"You can see that all three of these scopes are given meaningful names, and "
+"all three are ``optional``, i.e., they'll be ignored if their directories do "
+"not exist. The ``user`` and ``system`` scopes can also be disabled by "
+"setting ``SPACK_DISABLE_LOCAL_CONFIG``. Finally, the ``user`` scope can be "
+"overridden with a path in ``SPACK_USER_CONFIG_PATH`` if it is set."
+msgstr ""
+
+#: ../../../include_yaml.rst:244
+msgid "Overriding scopes by name"
+msgstr ""
+
+#: ../../../include_yaml.rst:246
+msgid ""
+"Configuration scopes have unique names. This means that you can use the "
+"``name:`` attribute to *replace* a builtin scope. If you supply an "
+"environment like this:"
+msgstr ""
+
+#: ../../../include_yaml.rst:250
+msgid ""
+"spack:\n"
+"  include:\n"
+"  - path: foo\n"
+"    name: user"
+msgstr ""
+
+#: ../../../include_yaml.rst:257
+msgid ""
+"The newly included ``user`` scope will *completely* override the builtin "
+"``user`` scope::"
+msgstr ""
+
+#: ../../../include_yaml.rst:259
+msgid ""
+"> spack -e ~/env config scopes -p\n"
+"Scope                    Path\n"
+"command_line\n"
+"env:/home/username/env   /home/username/env/spack.yaml/\n"
+"user                     /home/username/env/foo/\n"
+"spack                    /home/username/spack/etc/spack/\n"
+"site                     /home/username/spack/etc/spack/site/\n"
+"defaults                 /home/username/spack/etc/spack/defaults/\n"
+"defaults:darwin          /home/username/spack/etc/spack/defaults/darwin/\n"
+"defaults:base            /home/username/spack/etc/spack/defaults/base/\n"
+"_builtin"
+msgstr ""
+
+#: ../../../include_yaml.rst:273
+msgid ""
+"Overriding the ``defaults`` scope can have **very** unexpected consequences "
+"and is not advised."
+msgstr ""
+
+#: ../../../include_yaml.rst:275
+msgid "The ``name:`` attribute."
+msgstr ""
+
+#: ../../../include_yaml.rst:279
+msgid "Overriding built-in scopes with ``include::``"
+msgstr ""
+
+#: ../../../include_yaml.rst:281
+msgid ""
+"In some cases, you may want to override *all* of the built-in configuration "
+"scopes. The ``user`` and ``system`` scopes depend on the user and the "
+"machine on which Spack is running, and they can end up bringing in "
+"unexpected configuration settings in surprising ways."
+msgstr ""
+
+#: ../../../include_yaml.rst:284
+msgid ""
+"If you want to eliminate them completely from an environment, you can write:"
+msgstr ""
+
+#: ../../../include_yaml.rst:286
+msgid ""
+"spack:\n"
+"  include:: []"
+msgstr ""
+
+#: ../../../include_yaml.rst:291
+msgid ""
+"This overrides all scopes except the ``defaults`` that Spack needs in order "
+"to function. You can see that ``spack``, ``user``, and ``site`` are "
+"overridden::"
+msgstr ""
+
+#: ../../../include_yaml.rst:294
+msgid ""
+"> spack -e ~/env config scopes -vp\n"
+"Scope                    Type          Status    Path\n"
+"command_line             internal      active\n"
+"env:/home/username/env   env,path      active    /home/username/env/spack."
+"yaml/\n"
+"spack                    path          override  /home/username/spack/etc/"
+"spack/\n"
+"user                     include,path  override  /home/username/.spack/\n"
+"site                     include,path  override  /home/username/spack/etc/"
+"spack/site/\n"
+"defaults                 path          active    /home/username/spack/etc/"
+"spack/defaults/\n"
+"defaults:darwin          include,path  active    /home/username/spack/etc/"
+"spack/defaults/darwin/\n"
+"defaults:base            include,path  active    /home/username/spack/etc/"
+"spack/defaults/base/\n"
+"_builtin                 internal      active"
+msgstr ""
+
+#: ../../../include_yaml.rst:306
+msgid ""
+"And if you run ``spack config blame``, the settings from these scopes will "
+"no longer show up. ``defaults`` are not overridden as they are needed by "
+"Spack to function. This allows you to create completely isolated "
+"environments that do not bring in external settings."
+msgstr ""
+
+#: ../../../include_yaml.rst:310
+msgid "``include::`` with two colons for overriding."
+msgstr ""

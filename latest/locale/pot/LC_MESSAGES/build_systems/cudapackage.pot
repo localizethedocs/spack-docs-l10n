@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../build_systems/cudapackage.rst:-1
+msgid ""
+"A guide to packaging CUDA applications with Spack, including helpers for "
+"managing CUDA dependencies and architecture-specific builds."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:13
+msgid "Cuda"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:15
+msgid ""
+"Different from other packages, ``CudaPackage`` does not represent a build "
+"system. Instead its goal is to simplify and unify usage of ``CUDA`` in other "
+"packages by providing a `mixin-class <https://en.wikipedia.org/wiki/Mixin>`_."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:18
+msgid ""
+"You can find source for the package at `<https://github.com/spack/spack-"
+"packages/blob/develop/repos/spack_repo/builtin/build_systems/cuda.py>`__."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:21
+msgid "Variants"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:23
+msgid "This package provides the following variants:"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:25
+msgid "**cuda**"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:27
+msgid ""
+"This variant is used to enable/disable building with ``CUDA``. The default "
+"is disabled (or ``False``)."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:30
+msgid "**cuda_arch**"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:32
+msgid ""
+"This variant supports the optional specification of one or more "
+"architectures. Valid values are maintained in the ``cuda_arch_values`` "
+"property and are the numeric character equivalent of the compute capability "
+"version (e.g., '10' for version 1.0). Each provided value affects associated "
+"``CUDA`` dependencies and compiler conflicts."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:36
+msgid ""
+"The variant builds both PTX code for the *virtual* architecture (e.g. "
+"``compute_10``) and binary code for the *real* architecture (e.g. ``sm_10``)."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:38
+msgid ""
+"GPUs and their compute capability versions are listed at https://developer."
+"nvidia.com/cuda-gpus."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:41
+msgid "Conflicts"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:43
+msgid ""
+"Conflicts are used to prevent builds with known bugs or issues. While base "
+"``CUDA`` conflicts have been included with this package, you may want to add "
+"more for your software."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:46
+msgid ""
+"For example, if your package requires ``cuda_arch`` to be specified when "
+"``cuda`` is enabled, you can add the following conflict to your package to "
+"terminate such build attempts with a suitable message:"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:48
+msgid ""
+"conflicts(\"cuda_arch=none\", when=\"+cuda\", msg=\"CUDA architecture is "
+"required\")"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:52
+msgid ""
+"Similarly, if your software does not support all versions of the property, "
+"you could add ``conflicts`` to your package for those versions. For example, "
+"suppose your software does not work with CUDA compute capability versions "
+"prior to SM 5.0 (``50``). You can add the following code to display a custom "
+"message should a user attempt such a build:"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:56
+msgid ""
+"unsupported_cuda_archs = [\"10\", \"11\", \"12\", \"13\", \"20\", \"21\", "
+"\"30\", \"32\", \"35\", \"37\"]\n"
+"for value in unsupported_cuda_archs:\n"
+"    conflicts(\n"
+"        f\"cuda_arch={value}\", when=\"+cuda\", msg=f\"CUDA architecture "
+"{value} is not supported\"\n"
+"    )"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:65
+msgid "Methods"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:67
+msgid ""
+"This package provides one custom helper method, which is used to build "
+"standard CUDA compiler flags."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:69
+msgid "**cuda_flags**"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:70
+msgid ""
+"This built-in static method returns a list of command line flags for the "
+"chosen ``cuda_arch`` value(s). The flags are intended to be passed to the "
+"CUDA compiler driver (i.e., ``nvcc``)."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:73
+msgid ""
+"This method must be explicitly called when you are creating the arguments "
+"for your build in order to use the values."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:76
+msgid "Usage"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:78
+msgid ""
+"This helper package can be added to your package by adding it as a base "
+"class of your package. For example, you can add it to your :ref:"
+"`CMakePackage <cmakepackage>`-based package as follows:"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:81
+msgid ""
+"class MyCudaPackage(CMakePackage, CudaPackage):\n"
+"    ...\n"
+"\n"
+"    def cmake_args(self):\n"
+"        spec = self.spec\n"
+"        args = []\n"
+"        ...\n"
+"        if spec.satisfies(\"+cuda\"):\n"
+"            # Set up the CUDA macros needed by the build\n"
+"            args.append(\"-DWITH_CUDA=ON\")\n"
+"            cuda_arch_list = spec.variants[\"cuda_arch\"].value\n"
+"            cuda_arch = cuda_arch_list[0]\n"
+"            if cuda_arch != \"none\":\n"
+"                args.append(f\"-DCUDA_FLAGS=-arch=sm_{cuda_arch}\")\n"
+"        else:\n"
+"            # Ensure build with CUDA is disabled\n"
+"            args.append(\"-DWITH_CUDA=OFF\")\n"
+"        ...\n"
+"        return args"
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:104
+msgid ""
+"assuming only the ``WITH_CUDA`` and ``CUDA_FLAGS`` flags are required. You "
+"will need to customize options as needed for your build."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:107
+msgid ""
+"This example also illustrates how to check for the ``cuda`` variant using "
+"``self.spec`` and how to retrieve the ``cuda_arch`` variant's value, which "
+"is a list, using ``self.spec.variants[\"cuda_arch\"].value``."
+msgstr ""
+
+#: ../../../build_systems/cudapackage.rst:109
+msgid ""
+"With over 70 packages using ``CudaPackage`` as of January 2021 there are "
+"lots of examples to choose from to get more ideas for using this package."
+msgstr ""
