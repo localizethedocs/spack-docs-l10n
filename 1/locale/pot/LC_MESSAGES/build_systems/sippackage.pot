@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../build_systems/sippackage.rst:-1
+msgid ""
+"A guide to using the SIP build system in Spack for creating Python bindings "
+"for C and C++ libraries."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:13
+msgid "SIP"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:15
+msgid ""
+"SIP is a tool that makes it very easy to create Python bindings for C and C+"
+"+ libraries. It was originally developed to create PyQt, the Python bindings "
+"for the Qt toolkit, but can be used to create bindings for any C or C++ "
+"library."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:18
+msgid ""
+"SIP comprises a code generator and a Python module. The code generator "
+"processes a set of specification files and generates C or C++ code which is "
+"then compiled to create the bindings extension module. The SIP Python module "
+"provides support functions to the automatically generated code."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:23
+msgid "Phases"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:25
+msgid ""
+"The ``SIPBuilder`` and ``SIPPackage`` base classes come with the following "
+"phases:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:27
+msgid "``configure`` - configure the package"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:28
+msgid "``build`` - build the package"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:29
+msgid "``install`` - install the package"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:31
+msgid "By default, these phases run:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:33
+msgid ""
+"$ sip-build --verbose --target-dir ...\n"
+"$ make\n"
+"$ make install"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:41
+msgid "Important files"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:43
+msgid ""
+"Each SIP package comes with a custom configuration file written in Python. "
+"For newer packages, this is called ``project.py``, while in older packages, "
+"it may be called ``configure.py``. This script contains instructions to "
+"build the project."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:48
+msgid "Build system dependencies"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:50
+msgid ""
+"``SIPPackage`` requires several dependencies. Python and SIP are needed at "
+"build-time to run the aforementioned configure script. Python is also needed "
+"at run-time to actually use the installed Python library. And as we are "
+"building Python bindings for C/C++ libraries, Python is also needed as a "
+"link dependency. All of these dependencies are automatically added via the "
+"base class."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:56
+msgid ""
+"extends(\"python\", type=(\"build\", \"link\", \"run\"))\n"
+"depends_on(\"py-sip\", type=\"build\")"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:63
+msgid "Passing arguments to ``sip-build``"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:65
+msgid ""
+"Each phase comes with a ``<phase_args>`` function that can be used to pass "
+"arguments to that particular phase. For example, if you need to pass "
+"arguments to the configure phase, you can use:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:68
+msgid ""
+"def configure_args(self):\n"
+"    return [\"--no-python-dbus\"]"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:74
+msgid "A list of valid options can be found by running ``sip-build --help``."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:77
+msgid "Testing"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:79
+msgid ""
+"Just because a package successfully built does not mean that it built "
+"correctly. The most reliable test of whether or not the package was "
+"correctly installed is to attempt to import all of the modules that get "
+"installed. To get a list of modules, run the following command in the site-"
+"packages directory:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:83
+msgid ""
+">>> import setuptools\n"
+">>> setuptools.find_packages()\n"
+"[\n"
+"    'PyQt5', 'PyQt5.QtCore', 'PyQt5.QtGui', 'PyQt5.QtHelp',\n"
+"    'PyQt5.QtMultimedia', 'PyQt5.QtMultimediaWidgets', 'PyQt5.QtNetwork',\n"
+"    'PyQt5.QtOpenGL', 'PyQt5.QtPrintSupport', 'PyQt5.QtQml',\n"
+"    'PyQt5.QtQuick', 'PyQt5.QtSvg', 'PyQt5.QtTest', 'PyQt5.QtWebChannel',\n"
+"    'PyQt5.QtWebSockets', 'PyQt5.QtWidgets', 'PyQt5.QtXml',\n"
+"    'PyQt5.QtXmlPatterns'\n"
+" ]"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:97
+msgid ""
+"Large, complex packages like ``py-pyqt5`` will return a long list of "
+"packages, while other packages may return an empty list. These packages only "
+"install a single ``foo.py`` file. In Python packaging lingo, a \"package\" "
+"is a directory containing files like:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:101
+msgid ""
+"foo/__init__.py\n"
+"foo/bar.py\n"
+"foo/baz.py"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:108
+msgid "whereas a \"module\" is a single Python file."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:110
+msgid ""
+"The ``SIPPackage`` base class automatically detects these module names for "
+"you. If, for whatever reason, the module names detected are wrong, you can "
+"provide the names yourself by overriding ``import_modules`` like so:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:113
+msgid "import_modules = [\"PyQt5\"]"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:118
+msgid ""
+"These tests often catch missing dependencies and non-RPATHed libraries. Make "
+"sure not to add modules/packages containing the word \"test\", as these "
+"likely won't end up in the installation directory, or may require test "
+"dependencies like pytest to be installed."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:121
+msgid ""
+"These tests can be triggered by running ``spack install --test=root`` or by "
+"running ``spack test run`` after the installation has finished."
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:124
+msgid "External documentation"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:126
+msgid "For more information on the SIP build system, see:"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:128
+msgid "https://www.riverbankcomputing.com/software/sip/intro"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:129
+msgid "https://www.riverbankcomputing.com/static/Docs/sip/"
+msgstr ""
+
+#: ../../../build_systems/sippackage.rst:130
+msgid "https://wiki.python.org/moin/SIP"
+msgstr ""

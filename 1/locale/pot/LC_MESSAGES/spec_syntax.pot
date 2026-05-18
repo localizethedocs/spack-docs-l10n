@@ -1,0 +1,1084 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../spec_syntax.rst:-1
+msgid ""
+"A detailed guide to the Spack spec syntax for describing package "
+"constraints, including versions, variants, and dependencies."
+msgstr ""
+
+#: ../../../spec_syntax.rst:13
+msgid "Spec Syntax"
+msgstr ""
+
+#: ../../../spec_syntax.rst:15
+msgid ""
+"Spack has a specific syntax to describe package constraints. Each constraint "
+"is individually referred to as a *spec*. Spack uses specs to:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:19
+msgid "Refer to a particular build configuration of a package, or"
+msgstr ""
+
+#: ../../../spec_syntax.rst:20
+msgid ""
+"Express requirements, or preferences, on packages via configuration files, or"
+msgstr ""
+
+#: ../../../spec_syntax.rst:21
+msgid "Query installed packages, or buildcaches"
+msgstr ""
+
+#: ../../../spec_syntax.rst:23
+msgid ""
+"Specs are more than a package name and a version; you can use them to "
+"specify the compiler, compiler version, architecture, compile options, and "
+"dependency options for a build. In this section, we'll go over the full "
+"syntax of specs."
+msgstr ""
+
+#: ../../../spec_syntax.rst:26
+msgid ""
+"Here is an example of using a complex spec to install a very specific "
+"configuration of ``mpileaks``:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:28
+msgid ""
+"$ spack install mpileaks@1.2:1.4 +debug ~qt target=x86_64_v3 %gcc@15 "
+"^libelf@1.1 %clang@20"
+msgstr ""
+
+#: ../../../spec_syntax.rst:32
+msgid ""
+"The figure below helps you get a sense of the various parts that compose "
+"this spec:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:34
+msgid "Spack spec with annotations"
+msgstr ""
+
+#: ../../../spec_syntax.rst:37
+msgid "When installing this, you will get:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:39
+msgid ""
+"The ``mpileaks`` package at some version between ``1.2`` and ``1.4`` "
+"(inclusive),"
+msgstr ""
+
+#: ../../../spec_syntax.rst:40
+msgid "with ``debug`` options enabled, and without ``qt`` support,"
+msgstr ""
+
+#: ../../../spec_syntax.rst:41
+msgid "optimized for an ``x86_64_v3`` architecture,"
+msgstr ""
+
+#: ../../../spec_syntax.rst:42
+msgid "built using ``gcc`` at version ``15``,"
+msgstr ""
+
+#: ../../../spec_syntax.rst:43
+msgid ""
+"depending on ``libelf`` at version ``1.1``, built with ``clang`` at version "
+"``20``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:45
+msgid ""
+"Most specs will not be as complicated as this one, but this is a good "
+"example of what is possible with specs. There are a few general rules that "
+"we can already infer from this first example:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:48
+msgid ""
+"Users can be as vague, or as specific, as they want about the details of "
+"building packages"
+msgstr ""
+
+#: ../../../spec_syntax.rst:49
+msgid ""
+"The spec syntax is recursive, i.e. each dependency after ``%`` or ``^`` is a "
+"spec itself"
+msgstr ""
+
+#: ../../../spec_syntax.rst:50
+msgid ""
+"Transitive dependencies come after the ``^`` sigil, and they always refer to "
+"the root package"
+msgstr ""
+
+#: ../../../spec_syntax.rst:51
+msgid ""
+"Direct dependencies come after the ``%`` sigil, and they refer either to the "
+"root package, or to the last transitive dependency defined"
+msgstr ""
+
+#: ../../../spec_syntax.rst:53
+msgid ""
+"The flexibility the spec syntax offers in specifying the details of a build "
+"makes Spack good for beginners and experts alike."
+msgstr ""
+
+#: ../../../spec_syntax.rst:58
+msgid "Software Model"
+msgstr ""
+
+#: ../../../spec_syntax.rst:60
+msgid ""
+"To really understand what's going on above, we need to think about how "
+"software is structured. An executable or a library generally depends on "
+"other libraries in order to run. We can represent the relationship between a "
+"package and its dependencies as a graph. Here is a simplified dependency "
+"graph for ``mpileaks``:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:84
+msgid ""
+"Each box above is a package, and each arrow represents a dependency on some "
+"other package. For example, we say that the package ``mpileaks`` *depends "
+"on* ``callpath`` and ``mpich``. ``mpileaks`` also depends *indirectly* on "
+"``dyninst``, ``libdwarf``, and ``libelf``, in that these libraries are "
+"dependencies of ``callpath``. To install ``mpileaks``, Spack has to build "
+"all of these packages. Dependency graphs in Spack have to be acyclic, and "
+"the *depends on* relationship is directional, so this is a *directed, "
+"acyclic graph* or *DAG*."
+msgstr ""
+
+#: ../../../spec_syntax.rst:90
+msgid ""
+"The package name identifier in the spec is the root of some dependency DAG, "
+"and the DAG itself is implicit. Spack knows the precise dependencies among "
+"packages, but users do not need to know the full DAG structure. Each ``^`` "
+"in the full spec refers to a *transitive* dependency of the root package. "
+"Each ``%`` refers to a *direct* dependency, either of the root, or of the "
+"last defined transitive dependency ."
+msgstr ""
+
+#: ../../../spec_syntax.rst:95
+msgid ""
+"Spack allows only a single configuration of each package, where that is "
+"needed for consistency. Above, both ``mpileaks`` and ``callpath`` depend on "
+"``mpich``, but ``mpich`` appears only once in the DAG. You cannot build an "
+"``mpileaks`` version that depends on one version of ``mpich`` *and* on a "
+"``callpath`` version that depends on some *other* version of ``mpich``. In "
+"general, such a configuration would likely behave unexpectedly at runtime, "
+"and Spack enforces this to ensure a consistent runtime environment."
+msgstr ""
+
+#: ../../../spec_syntax.rst:100
+msgid ""
+"The purpose of specs is to abstract this full DAG away from Spack users. A "
+"user who does not care about the DAG at all, can refer to ``mpileaks`` by "
+"simply writing:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:103
+msgid "mpileaks"
+msgstr ""
+
+#: ../../../spec_syntax.rst:107
+msgid ""
+"The spec becomes only slightly more complicated, if that user knows that "
+"``mpileaks`` indirectly uses ``dyninst`` and wants a particular version of "
+"``dyninst``:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:109
+msgid "mpileaks ^dyninst@8.1"
+msgstr ""
+
+#: ../../../spec_syntax.rst:113
+msgid ""
+"Spack will fill in the rest of the details before installing the spec. The "
+"user only needs to know package names and minimal details about their "
+"relationship. You can put all the same modifiers on dependency specs that "
+"you would put on the root spec. That is, you can specify their versions, "
+"variants, and architectures just like any other spec. Specifiers are "
+"associated with the nearest package name to their left."
+msgstr ""
+
+#: ../../../spec_syntax.rst:122
+msgid "Virtual dependencies"
+msgstr ""
+
+#: ../../../spec_syntax.rst:124
+msgid ""
+"The dependency graph for ``mpileaks`` we saw above wasn't *quite* accurate. "
+"``mpileaks`` uses MPI, which is an interface that has many different "
+"implementations. Above, we showed ``mpileaks`` and ``callpath`` depending on "
+"``mpich``, which is one *particular* implementation of MPI. However, we "
+"could build either with another implementation, such as ``openmpi`` or "
+"``mvapich``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:129
+msgid ""
+"Spack represents interfaces like this using *virtual dependencies*. The real "
+"dependency DAG for ``mpileaks`` looks like this:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:153
+msgid ""
+"Notice that ``mpich`` has now been replaced with ``mpi``. There is no *real* "
+"MPI package, but some packages *provide* the MPI interface, and these "
+"packages can be substituted in for ``mpi`` when ``mpileaks`` is built."
+msgstr ""
+
+#: ../../../spec_syntax.rst:156
+msgid ""
+"Spack is unique in that its virtual packages can be versioned, just like "
+"regular packages. A particular version of a package may provide a particular "
+"version of a virtual package. A package can *depend on* a particular version "
+"of a virtual package. For instance, if an application needs MPI-2 functions, "
+"it can depend on ``mpi@2:`` to indicate that it needs some implementation "
+"that provides MPI-2 functions."
+msgstr ""
+
+#: ../../../spec_syntax.rst:161
+msgid "Below are more details about the specifiers that you can add to specs."
+msgstr ""
+
+#: ../../../spec_syntax.rst:166
+msgid "Version specifier"
+msgstr ""
+
+#: ../../../spec_syntax.rst:168
+msgid "A version specifier"
+msgstr ""
+
+#: ../../../spec_syntax.rst:170
+msgid "pkg@specifier"
+msgstr ""
+
+#: ../../../spec_syntax.rst:174
+msgid ""
+"comes after a package name and starts with ``@``. It can be something "
+"abstract that matches multiple known versions or a specific version."
+msgstr ""
+
+#: ../../../spec_syntax.rst:177
+msgid "The version specifier usually represents *a range of versions*:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:179
+msgid ""
+"# All versions between v1.0 and v1.5.\n"
+"# This includes any v1.5.x version\n"
+"@1.0:1.5\n"
+"\n"
+"# All versions up to and including v3\n"
+"# This would include v3.4 etc.\n"
+"@:3\n"
+"\n"
+"# All versions above and including v4.2\n"
+"@4.2:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:192
+msgid "but can also be *a specific version*:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:194
+msgid ""
+"# Exactly version v3.2, will NOT match v3.2.1 etc.\n"
+"@=3.2"
+msgstr ""
+
+#: ../../../spec_syntax.rst:200
+msgid ""
+"As a shorthand, ``@3`` is equivalent to the range ``@3:3`` and includes any "
+"version with major version ``3``. Versions are ordered lexicographically by "
+"their components. For more details on the order, see :ref:`the packaging "
+"guide <version-comparison>`."
+msgstr ""
+
+#: ../../../spec_syntax.rst:204
+msgid ""
+"Notice that you can distinguish between the specific version ``@=3.2`` and "
+"the range ``@3.2``. This is useful for packages that follow a versioning "
+"scheme that omits the zero patch version number: ``3.2``, ``3.2.1``, "
+"``3.2.2``, etc. In general, it is preferable to use the range syntax "
+"``@3.2``, because ranges also match versions with one-off suffixes, such as "
+"``3.2-custom``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:208
+msgid ""
+"A version specifier can also be a list of ranges and specific versions, "
+"separated by commas. For example:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:211
+msgid "@1.0:1.5,=1.7.1"
+msgstr ""
+
+#: ../../../spec_syntax.rst:215
+msgid ""
+"matches any version in the range ``1.0:1.5`` and the specific version "
+"``1.7.1``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:218
+msgid "Git versions"
+msgstr ""
+
+#: ../../../spec_syntax.rst:221
+msgid ""
+"Users wanting to just match specific commits for branch or tag based "
+"versions should assign the ``commit`` variant (``commit=<40 char sha>``). "
+"Spack reserves this variant specifically to track provenance of git based "
+"versions. Spack will attempt to compute this value for you automatically "
+"during concretization and raise a warning if it is unable to assign the "
+"commit. Further details can be found in :ref:`git_version_provenance`."
+msgstr ""
+
+#: ../../../spec_syntax.rst:227
+msgid ""
+"For packages with a ``git`` attribute, ``git`` references may be specified "
+"instead of a numerical version (i.e., branches, tags, and commits). Spack "
+"will stage and build based off the ``git`` reference provided. Acceptable "
+"syntaxes for this are:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:231
+msgid ""
+"# commit hashes\n"
+"foo@abcdef1234abcdef1234abcdef1234abcdef1234  # 40 character hashes are "
+"automatically treated as git commits\n"
+"foo@git.abcdef1234abcdef1234abcdef1234abcdef1234\n"
+"\n"
+"# branches and tags\n"
+"foo@git.develop  # use the develop branch\n"
+"foo@git.0.19  # use the 0.19 tag"
+msgstr ""
+
+#: ../../../spec_syntax.rst:241
+msgid ""
+"Spack always needs to associate a Spack version with the git reference, "
+"which is used for version comparison. This Spack version is heuristically "
+"taken from the closest valid git tag among the ancestors of the git ref."
+msgstr ""
+
+#: ../../../spec_syntax.rst:244
+msgid ""
+"Once a Spack version is associated with a git ref, it is always printed with "
+"the git ref. For example, if the commit ``@git.abcdefg`` is tagged ``0.19``, "
+"then the spec will be shown as ``@git.abcdefg=0.19``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:247
+msgid ""
+"If the git ref is not exactly a tag, then the distance to the nearest tag is "
+"also part of the resolved version. ``@git.abcdefg=0.19.git.8`` means that "
+"the commit is 8 commits away from the ``0.19`` tag."
+msgstr ""
+
+#: ../../../spec_syntax.rst:250
+msgid ""
+"In cases where Spack cannot resolve a sensible version from a git ref, users "
+"can specify the Spack version to use for the git ref. This is done by "
+"appending ``=`` and the Spack version to the git ref. For example:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:254
+msgid ""
+"foo@git.my_ref=3.2 # use the my_ref tag or branch, but treat it as version "
+"3.2 for version comparisons\n"
+"foo@git.abcdef1234abcdef1234abcdef1234abcdef1234=develop # use the given "
+"commit, but treat it as develop for version comparisons"
+msgstr ""
+
+#: ../../../spec_syntax.rst:259
+msgid ""
+"Details about how versions are compared and how Spack determines if one "
+"version is less than another are discussed in the developer guide."
+msgstr ""
+
+#: ../../../spec_syntax.rst:264
+msgid "Variants"
+msgstr ""
+
+#: ../../../spec_syntax.rst:266
+msgid ""
+"Variants are named options associated with a particular package and are "
+"typically used to enable or disable certain features at build time. They are "
+"optional, as each package must provide default values for each variant it "
+"makes available."
+msgstr ""
+
+#: ../../../spec_syntax.rst:269
+msgid ""
+"The variants available for a particular package are defined by the package "
+"author. ``spack info <package>`` will provide information on what build "
+"variants are available."
+msgstr ""
+
+#: ../../../spec_syntax.rst:272
+msgid "There are different types of variants."
+msgstr ""
+
+#: ../../../spec_syntax.rst:275
+msgid "Boolean Variants"
+msgstr ""
+
+#: ../../../spec_syntax.rst:277
+msgid ""
+"Typically used to enable or disable a feature at compile time. For example, "
+"a package might have a ``debug`` variant that can be explicitly enabled with:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:280
+msgid "+debug"
+msgstr ""
+
+#: ../../../spec_syntax.rst:284
+msgid "and disabled with"
+msgstr ""
+
+#: ../../../spec_syntax.rst:286
+msgid "~debug"
+msgstr ""
+
+#: ../../../spec_syntax.rst:291
+msgid "Single-valued Variants"
+msgstr ""
+
+#: ../../../spec_syntax.rst:293
+msgid ""
+"Often used to set defaults. For example, a package might have a "
+"``compression`` variant that determines the default compression algorithm, "
+"which users could set to:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:296
+msgid "compression=gzip"
+msgstr ""
+
+#: ../../../spec_syntax.rst:300
+msgid "or"
+msgstr ""
+
+#: ../../../spec_syntax.rst:302
+msgid "compression=zstd"
+msgstr ""
+
+#: ../../../spec_syntax.rst:307
+msgid "Multi-valued Variants"
+msgstr ""
+
+#: ../../../spec_syntax.rst:309
+msgid ""
+"A package might have a ``fabrics`` variant that determines which network "
+"fabrics to support. Users could activate multiple values at the same time. "
+"For instance:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:313
+msgid "fabrics=verbs,ofi"
+msgstr ""
+
+#: ../../../spec_syntax.rst:317
+msgid ""
+"enables both InfiniBand verbs and OpenFabrics interfaces. The values are "
+"separated by commas."
+msgstr ""
+
+#: ../../../spec_syntax.rst:320
+msgid ""
+"The meaning of ``fabrics=verbs,ofi`` is to enable *at least* the specified "
+"fabrics, but other fabrics may be enabled as well. If the intent is to "
+"enable *only* the specified fabrics, then the:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:323
+msgid "fabrics:=verbs,ofi"
+msgstr ""
+
+#: ../../../spec_syntax.rst:327
+msgid "syntax should be used with the ``:=`` operator."
+msgstr ""
+
+#: ../../../spec_syntax.rst:331
+msgid "Variant propagation to dependencies"
+msgstr ""
+
+#: ../../../spec_syntax.rst:333
+msgid ""
+"Spack allows variants to propagate their value to the package's dependencies "
+"by using ``++``, ``--``, and ``~~`` for boolean variants. For example, for a "
+"``debug`` variant:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:336
+msgid ""
+"mpileaks ++debug   # enabled debug will be propagated to dependencies\n"
+"mpileaks +debug    # only mpileaks will have debug enabled"
+msgstr ""
+
+#: ../../../spec_syntax.rst:341
+msgid ""
+"To propagate the value of non-boolean variants Spack uses ``name==value``. "
+"For example, for the ``stackstart`` variant:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:344
+msgid ""
+"mpileaks stackstart==4   # variant will be propagated to dependencies\n"
+"mpileaks stackstart=4    # only mpileaks will have this variant value"
+msgstr ""
+
+#: ../../../spec_syntax.rst:349
+msgid ""
+"Spack also allows variants to be propagated from a package that does not "
+"have that variant."
+msgstr ""
+
+#: ../../../spec_syntax.rst:352
+msgid "Compiler Flags"
+msgstr ""
+
+#: ../../../spec_syntax.rst:354
+msgid ""
+"Compiler flags are specified using the same syntax as non-boolean variants, "
+"but fulfill a different purpose. While the function of a variant is set by "
+"the package, compiler flags are used by the compiler wrappers to inject "
+"flags into the compile line of the build. Additionally, compiler flags can "
+"be inherited by dependencies by using ``==``. ``spack install libdwarf "
+"cppflags==\"-g\"`` will install both libdwarf and libelf with the ``-g`` "
+"flag injected into their compile line."
+msgstr ""
+
+#: ../../../spec_syntax.rst:359
+msgid ""
+"Notice that the value of the compiler flags must be quoted if it contains "
+"any spaces. Any of ``cppflags=-O3``, ``cppflags=\"-O3\"``, ``cppflags='-"
+"O3'``, and ``cppflags=\"-O3 -fPIC\"`` are acceptable, but ``cppflags=-O3 -"
+"fPIC`` is not. Additionally, if the value of the compiler flags is not the "
+"last thing on the line, it must be followed by a space. The command ``spack "
+"install libelf cppflags=\"-O3\"%intel`` will be interpreted as an attempt to "
+"set ``cppflags=\"-O3%intel\"``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:364
+msgid ""
+"The six compiler flags are injected in the same order as implicit make "
+"commands in GNU Autotools. If all flags are set, the order is ``$cppflags "
+"$cflags|$cxxflags $ldflags <command> $ldlibs`` for C and C++, and ``$fflags "
+"$cppflags $ldflags <command> $ldlibs`` for Fortran."
+msgstr ""
+
+#: ../../../spec_syntax.rst:371
+msgid "Architecture specifiers"
+msgstr ""
+
+#: ../../../spec_syntax.rst:373
+msgid ""
+"Each node in the dependency graph of a spec has an architecture attribute. "
+"This attribute is a triplet of platform, operating system, and processor. "
+"You can specify the elements either separately by using the reserved "
+"keywords ``platform``, ``os``, and ``target``:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:377
+msgid ""
+"$ spack install libelf platform=linux\n"
+"$ spack install libelf os=ubuntu18.04\n"
+"$ spack install libelf target=broadwell"
+msgstr ""
+
+#: ../../../spec_syntax.rst:383
+msgid ""
+"Normally, users don't have to bother specifying the architecture if they are "
+"installing software for their current host, as in that case the values will "
+"be detected automatically. If you need fine-grained control over which "
+"packages use which targets (or over *all* packages' default target), see :"
+"ref:`package-preferences`."
+msgstr ""
+
+#: ../../../spec_syntax.rst:391
+msgid "Support for specific microarchitectures"
+msgstr ""
+
+#: ../../../spec_syntax.rst:393
+msgid ""
+"Spack knows how to detect and optimize for many specific microarchitectures "
+"and encodes this information in the ``target`` portion of the architecture "
+"specification. A complete list of the microarchitectures known to Spack can "
+"be obtained in the following way:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:398
+msgid ""
+"When a spec is installed, Spack matches the compiler being used with the "
+"microarchitecture being targeted to inject appropriate optimization flags at "
+"compile time. Giving a command such as the following:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:401
+msgid "$ spack install zlib target=icelake %gcc@14"
+msgstr ""
+
+#: ../../../spec_syntax.rst:405
+msgid "will produce compilation lines similar to:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:407
+msgid ""
+"$ /usr/bin/gcc-14 -march=icelake-client -mtune=icelake-client -c ztest10532."
+"c\n"
+"$ /usr/bin/gcc-14 -march=icelake-client -mtune=icelake-client -c -fPIC -O2 "
+"ztest10532.\n"
+"..."
+msgstr ""
+
+#: ../../../spec_syntax.rst:413
+msgid ""
+"where the flags ``-march=icelake-client -mtune=icelake-client`` are injected "
+"by Spack based on the requested target and compiler."
+msgstr ""
+
+#: ../../../spec_syntax.rst:415
+msgid ""
+"If Spack determines that the requested compiler cannot optimize for the "
+"requested target or cannot build binaries for that target at all, it will "
+"exit with a meaningful error message:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:417
+msgid ""
+"$ spack install zlib target=icelake %gcc@5\n"
+"==> Error: cannot produce optimized binary for micro-architecture "
+"\"icelake\" with gcc@5.5.0 [supported compiler versions are 8:]"
+msgstr ""
+
+#: ../../../spec_syntax.rst:422
+msgid ""
+"Conversely, if an older compiler is selected for a newer microarchitecture, "
+"Spack will optimize for the best match instead of failing:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:424
+msgid ""
+"$ spack arch\n"
+"linux-ubuntu18.04-broadwell\n"
+"\n"
+"$ spack spec zlib%gcc@4.8\n"
+"Input spec\n"
+"--------------------------------\n"
+"zlib%gcc@4.8\n"
+"\n"
+"Concretized\n"
+"--------------------------------\n"
+"zlib@1.2.11%gcc@4.8+optimize+pic+shared arch=linux-ubuntu18.04-haswell\n"
+"\n"
+"$ spack spec zlib%gcc@9.0.1\n"
+"Input spec\n"
+"--------------------------------\n"
+"zlib%gcc@9.0.1\n"
+"\n"
+"Concretized\n"
+"--------------------------------\n"
+"zlib@1.2.11%gcc@9.0.1+optimize+pic+shared arch=linux-ubuntu18.04-broadwell"
+msgstr ""
+
+#: ../../../spec_syntax.rst:447
+msgid ""
+"In the snippet above, for instance, the microarchitecture was demoted to "
+"``haswell`` when compiling with ``gcc@4.8`` because support to optimize for "
+"``broadwell`` starts from ``gcc@4.9:``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:449
+msgid ""
+"Finally, if Spack has no information to match the compiler and target, it "
+"will proceed with the installation but avoid injecting any microarchitecture-"
+"specific flags."
+msgstr ""
+
+#: ../../../spec_syntax.rst:455
+msgid "Dependencies"
+msgstr ""
+
+#: ../../../spec_syntax.rst:457
+msgid ""
+"Each node in a DAG can specify dependencies using either the ``%`` or the "
+"``^`` sigil:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:459
+msgid ""
+"The ``%`` sigil identifies direct dependencies, which means there must be an "
+"edge connecting the dependency to the node they refer to."
+msgstr ""
+
+#: ../../../spec_syntax.rst:460
+msgid ""
+"The ``^`` sigil identifies transitive dependencies, which means the "
+"dependency just needs to be in the sub-DAG of the node they refer to."
+msgstr ""
+
+#: ../../../spec_syntax.rst:462
+msgid ""
+"The order of transitive dependencies does not matter when writing a spec. "
+"For example, these two specs represent exactly the same configuration:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:465
+msgid ""
+"mpileaks ^callpath@1.0 ^libelf@0.8.3\n"
+"mpileaks ^libelf@0.8.3 ^callpath@1.0"
+msgstr ""
+
+#: ../../../spec_syntax.rst:470
+msgid ""
+"Direct dependencies specified with ``%`` apply either to the most recent "
+"transitive dependency (``^``), or, if none, to the root package in the spec. "
+"So in the spec:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:473
+msgid "root %dep1 ^transitive %dep2 %dep3"
+msgstr ""
+
+#: ../../../spec_syntax.rst:477
+msgid ""
+"``dep1`` is a direct dependency of ``root``, while both ``dep2`` and "
+"``dep3`` are direct dependencies of ``transitive``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:480
+msgid "Constraining virtual packages"
+msgstr ""
+
+#: ../../../spec_syntax.rst:482
+msgid ""
+"When installing a package that depends on a virtual package, see :ref:`sec-"
+"virtual-dependencies`, you can opt to specify the particular provider you "
+"want to use, or you can let Spack pick. For example, if you just type this:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:485
+msgid "$ spack install mpileaks"
+msgstr ""
+
+#: ../../../spec_syntax.rst:489
+msgid ""
+"Then Spack will pick an ``mpi`` provider for you according to site policies. "
+"If you really want a particular version, say ``mpich``, then you could run "
+"this instead:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:492
+msgid "$ spack install mpileaks ^mpich"
+msgstr ""
+
+#: ../../../spec_syntax.rst:496
+msgid ""
+"This forces Spack to use some version of ``mpich`` for its implementation. "
+"As always, you can be even more specific and require a particular ``mpich`` "
+"version:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:499
+msgid "$ spack install mpileaks ^mpich@3"
+msgstr ""
+
+#: ../../../spec_syntax.rst:503
+msgid ""
+"The ``mpileaks`` package in particular only needs MPI-1 commands, so any MPI "
+"implementation will do. If another package depends on ``mpi@2`` and you try "
+"to give it an insufficient MPI implementation (e.g., one that provides only "
+"``mpi@:1``), then Spack will raise an error. Likewise, if you try to plug in "
+"some package that doesn't provide MPI, Spack will raise an error."
+msgstr ""
+
+#: ../../../spec_syntax.rst:510
+msgid "Explicit binding of virtual dependencies"
+msgstr ""
+
+#: ../../../spec_syntax.rst:512
+msgid ""
+"There are packages that provide more than just one virtual dependency. When "
+"interacting with them, users might want to utilize just a subset of what "
+"they could provide and use other providers for virtuals they need."
+msgstr ""
+
+#: ../../../spec_syntax.rst:515
+msgid ""
+"It is possible to be more explicit and tell Spack which dependency should "
+"provide which virtual, using a special syntax:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:517
+msgid "$ spack spec strumpack ^mpi=intel-parallel-studio+mkl ^lapack=openblas"
+msgstr ""
+
+#: ../../../spec_syntax.rst:521
+msgid "Concretizing the spec above produces the following DAG:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:525
+msgid ""
+"where ``intel-parallel-studio`` *could* provide ``mpi``, ``lapack``, and "
+"``blas`` but is used only for the former. The ``lapack`` and ``blas`` "
+"dependencies are satisfied by ``openblas``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:529
+msgid "Dependency edge attributes"
+msgstr ""
+
+#: ../../../spec_syntax.rst:531
+msgid ""
+"Some specs require additional information about the relationship between a "
+"package and its dependency. This information lives on the edge between the "
+"two, and can be specified by following the dependency sigil with square-"
+"brackets ``[]``. Edge attributes are always specified as key-value pairs:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:535
+msgid "root ^[key=value] dep"
+msgstr ""
+
+#: ../../../spec_syntax.rst:539
+msgid ""
+"In the following sections we'll discuss the edge attributes that are "
+"currently allowed in the spec syntax."
+msgstr ""
+
+#: ../../../spec_syntax.rst:542
+msgid "Virtuals"
+msgstr ""
+
+#: ../../../spec_syntax.rst:544
+msgid ""
+"Packages can provide, or depend on, multiple virtual packages. Users can "
+"select which virtuals to use from which dependency by specifying the "
+"``virtuals`` edge attribute:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:547
+msgid "$ spack install mpich %[virtuals=c,cxx] clang %[virtuals=fortran] gcc"
+msgstr ""
+
+#: ../../../spec_syntax.rst:551
+msgid ""
+"The command above tells Spack to use ``clang`` to provide the ``c`` and "
+"``cxx`` virtuals, and ``gcc`` to provide the ``fortran`` virtual."
+msgstr ""
+
+#: ../../../spec_syntax.rst:553
+msgid ""
+"The special syntax we have seen in :ref:`explicit-binding-virtuals` is a "
+"more compact way to specify the ``virtuals`` edge attribute. For instance, "
+"an equivalent formulation of the command above is:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:556
+msgid "$ spack install mpich %c,cxx=clang %fortran=gcc"
+msgstr ""
+
+#: ../../../spec_syntax.rst:561
+msgid "Conditional dependencies"
+msgstr ""
+
+#: ../../../spec_syntax.rst:563
+msgid ""
+"Conditional dependencies allow dependency constraints to be applied only "
+"under certain conditions. We can express conditional constraints by "
+"specifying the ``when`` edge attribute:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:566
+msgid "$ spack install hdf5 ^[when=+mpi] mpich@3.1"
+msgstr ""
+
+#: ../../../spec_syntax.rst:570
+msgid ""
+"This tells Spack that hdf5 should depend on ``mpich@3.1`` if it is "
+"configured with MPI support."
+msgstr ""
+
+#: ../../../spec_syntax.rst:573
+msgid "Dependency propagation"
+msgstr ""
+
+#: ../../../spec_syntax.rst:575
+msgid ""
+"The dependency specifications on a node, can be propagated using a double "
+"percent ``%%`` sigil. This is particularly useful when specifying compilers. "
+"For instance, the following command:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:579
+msgid "$ spack install hdf5+cxx+fortran %%c,cxx=clang %%fortran=gfortran"
+msgstr ""
+
+#: ../../../spec_syntax.rst:583
+msgid ""
+"tells Spack to install ``hdf5`` using Clang as the C and C++ compiler, and "
+"GCC as the Fortran compiler. It also tells Spack to propagate the same "
+"choices, as :ref:`strong preferences <package-strong-preferences>`,  to the "
+"runtime sub-DAG of ``hdf5``. Build tools are unaffected and can still prefer "
+"to use a different compiler."
+msgstr ""
+
+#: ../../../spec_syntax.rst:588
+msgid "Specifying Specs by Hash"
+msgstr ""
+
+#: ../../../spec_syntax.rst:590
+msgid ""
+"Complicated specs can become cumbersome to enter on the command line, "
+"especially when many of the qualifications are necessary to distinguish "
+"between similar installs. To avoid this, when referencing an existing spec, "
+"Spack allows you to reference specs by their hash. We previously discussed "
+"the spec hash that Spack computes. In place of a spec in any command, "
+"substitute ``/<hash>`` where ``<hash>`` is any amount from the beginning of "
+"a spec hash."
+msgstr ""
+
+#: ../../../spec_syntax.rst:595
+msgid ""
+"For example, let's say that you accidentally installed two different "
+"``mvapich2`` installations. If you want to uninstall one of them but don't "
+"know what the difference is, you can run:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:598
+msgid ""
+"$ spack find --long mvapich2\n"
+"==> 2 installed packages.\n"
+"-- linux-centos7-x86_64 / gcc@6.3.0 ----------\n"
+"qmt35td mvapich2@2.2%gcc\n"
+"er3die3 mvapich2@2.2%gcc"
+msgstr ""
+
+#: ../../../spec_syntax.rst:607
+msgid "You can then uninstall the latter installation using:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:609
+msgid "$ spack uninstall /er3die3"
+msgstr ""
+
+#: ../../../spec_syntax.rst:614
+msgid ""
+"Or, if you want to build with a specific installation as a dependency, you "
+"can use:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:616
+msgid "$ spack install trilinos ^/er3die3"
+msgstr ""
+
+#: ../../../spec_syntax.rst:621
+msgid ""
+"If the given spec hash is sufficiently long as to be unique, Spack will "
+"replace the reference with the spec to which it refers. Otherwise, it will "
+"prompt for a more qualified hash."
+msgstr ""
+
+#: ../../../spec_syntax.rst:624
+msgid ""
+"Note that this will not work to reinstall a dependency uninstalled by "
+"``spack uninstall --force``."
+msgstr ""
+
+#: ../../../spec_syntax.rst:627
+msgid "Specs on the command line"
+msgstr ""
+
+#: ../../../spec_syntax.rst:629
+msgid ""
+"The characters used in the spec syntax were chosen to work well with most "
+"shells. However, there are cases where the shell may interpret the spec "
+"before Spack gets a chance to parse it, leading to unexpected results. Here "
+"we document two such cases, and how to avoid them."
+msgstr ""
+
+#: ../../../spec_syntax.rst:634
+msgid "Unix shells"
+msgstr ""
+
+#: ../../../spec_syntax.rst:636
+msgid ""
+"On Unix-like systems, the shell may expand ``~foo`` to the home directory of "
+"a user named ``foo``, so Spack won't see it as a :ref:`disabled boolean "
+"variant <basic-variants>` ``foo``. To work around this without quoting, you "
+"can avoid whitespace between the package name and boolean variants:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:639
+msgid ""
+"mpileaks ~debug   # shell may expand this to `mpileaks /home/debug`\n"
+"mpileaks~debug    # use this instead"
+msgstr ""
+
+#: ../../../spec_syntax.rst:644
+msgid ""
+"Alternatively, you can use a hyphen ``-`` character to disable a variant, "
+"but be aware that this *requires* a space between the package name and the "
+"variant:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:646
+msgid ""
+"mpileaks-debug     # wrong: refers to a package named \"mpileaks-debug\"\n"
+"mpileaks -debug    # right: refers to a package named mpileaks with debug "
+"disabled"
+msgstr ""
+
+#: ../../../spec_syntax.rst:651
+msgid ""
+"As a last resort, ``debug=False`` can also be used to disable a boolean "
+"variant."
+msgstr ""
+
+#: ../../../spec_syntax.rst:654
+msgid "Windows CMD"
+msgstr ""
+
+#: ../../../spec_syntax.rst:656
+msgid ""
+"In Windows CMD, the caret ``^`` is an escape character, and needs itself "
+"escaping. Similarly, the equals ``=`` character has special meaning in CMD."
+msgstr ""
+
+#: ../../../spec_syntax.rst:659
+msgid ""
+"To use the caret and equals characters in a spec, you can quote and escape "
+"them like this:"
+msgstr ""
+
+#: ../../../spec_syntax.rst:661
+msgid "C:\\> spack install mpileaks \"^^libelf\" \"foo=bar\""
+msgstr ""
+
+#: ../../../spec_syntax.rst:665
+msgid ""
+"These issues are not present in PowerShell. See GitHub issue `#42833 "
+"<https://github.com/spack/spack/issues/42833>`_ and `#43348 <https://github."
+"com/spack/spack/issues/43348>`_ for more details."
+msgstr ""
