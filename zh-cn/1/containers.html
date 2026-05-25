@@ -1,0 +1,1420 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Learn how to turn Spack packages and Spack environments into OCI-compatible container images, either by exporting existing installations or by generating recipes for Docker and Singularity." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-10-03T10:07:20+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜索" href="search.html"><link rel="next" title="Build Caches" href="binary_caches.html"><link rel="prev" title="Environments (spack.yaml, spack.lock)" href="environments.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/containers.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>Container Images - Spack 1.1.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/containers.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="container-images">
+<span id="containers"></span><h1>Container Images<a class="headerlink" href="#container-images" title="Link to this heading">¶</a></h1>
+<p>Whether you want to share applications with others who do not use Spack, deploy on cloud services that run container images, or move workloads to HPC clusters, containers are an effective way to package and distribute software.</p>
+<p>Spack offers two fundamentally different paradigms for creating container images, each with distinct advantages.
+You can either export software packages already built on your host system as a container image, or you can generate a traditional recipe file (<code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> or Singularity Definition File) to build the software from scratch inside the container.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Comparison of Spack container image creation methods</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 42.0%" />
+<col style="width: 43.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p><a class="reference internal" href="#exporting-images"><span class="std std-ref">Container Image Export</span></a></p></th>
+<th class="head"><p><a class="reference internal" href="#generating-recipes"><span class="std std-ref">Recipe Generation</span></a></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Purpose</strong></p></td>
+<td><p>Exports existing installations from the host system as a container image</p></td>
+<td><p>Runs <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code> to build software from source <em>inside</em> the container build process</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Spack Command</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">containerize</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Reproducibility</strong></p></td>
+<td><p>Limited: depends on the host system</p></td>
+<td><p>High: controlled build environment</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Input</strong></p></td>
+<td><p>Installed Spack packages or environments</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Speed</strong></p></td>
+<td><p>Faster: copies existing binaries</p></td>
+<td><p>Slower: typically builds from source</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Troubleshooting</strong></p></td>
+<td><p>Build issues are resolved on the host, where debugging is simpler</p></td>
+<td><p>Build issues must be resolved inside the container build process</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Build Tools</strong></p></td>
+<td><p>None</p></td>
+<td><p>Docker, Podman, Singularity, or similar</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Privileges</strong></p></td>
+<td><p>None (rootless)</p></td>
+<td><p>May require elevated privileges, depending on the container build tool (root)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Output destination</strong></p></td>
+<td><p>OCI-compatible registry</p></td>
+<td><p>Local Docker or Singularity image</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="exporting-spack-installations-as-container-images">
+<span id="exporting-images"></span><h2>Exporting Spack installations as Container Images<a class="headerlink" href="#exporting-spack-installations-as-container-images" title="Link to this heading">¶</a></h2>
+<p>The command</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>spack buildcache push [--base-image BASE_IMAGE] [--tag TAG] mirror [specs...]
+</pre></div>
+</div>
+<p>creates and pushes a container image to an OCI-compatible container registry, with the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> argument specifying a registry (see below).</p>
+<p>Think of this command less as &quot;building a container&quot; and more as archiving a working software stack into a portable image.</p>
+<p>Container images created this way are <strong>minimal</strong>: they contain only runtime dependencies of the specified specs, the base image, and nothing else.
+Spack itself is <em>not</em> included in the resulting image.</p>
+<p>The arguments are as follows:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--base-image</span> <span class="pre">BASE_IMAGE</span></code></dt><dd><p>Specifies the base image to use for the container.
+This should be a minimal Linux distribution with a libc that is compatible with the host system.
+For example, if your host system is Ubuntu 22.04, you can use <code class="docutils literal notranslate"><span class="pre">ubuntu:22.04</span></code>, <code class="docutils literal notranslate"><span class="pre">ubuntu:24.04</span></code>, or newer: the libc in the container image must be at least the version of the host system, assuming ABI compatibility.
+It is also perfectly fine to use a completely different Linux distribution as long as the libc is compatible.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--tag</span> <span class="pre">TAG</span></code></dt><dd><p>Specifies a container image tag to use.
+This tag is used for the image consisting of all specs specified in the command line together.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mirror</span></code> argument</dt><dd><p>Either the name of a configured OCI registry image (in <code class="docutils literal notranslate"><span class="pre">mirrors.yaml</span></code>), or a URL specifying the registry and image name.</p>
+<ul class="simple">
+<li><p>When pushing to remote registries, you will typically <a class="reference internal" href="#configuring-container-registries"><span class="std std-ref">specify the name of a registry</span></a> from your Spack configuration.</p></li>
+<li><p>When pushing to a local registry, you can simply specify a URL like <code class="docutils literal notranslate"><span class="pre">oci+http://localhost:5000/[image]</span></code>, where <code class="docutils literal notranslate"><span class="pre">[image]</span></code> is the name of the image to create, and <code class="docutils literal notranslate"><span class="pre">oci+http://</span></code> indicates that the registry does not support HTTPS.</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">specs...</span></code> arguments</dt><dd><p>is a list of Spack specs to include in the image.
+These are packages that have already been installed by Spack.
+When a Spack environment is activated, only the packages in the environment are included in the image.
+If no specs are given, and a Spack environment is active, all packages in the environment are included.</p>
+</dd>
+</dl>
+<p>Spack publishes every individual dependency as a separate image layer, which allows for efficient storage and transfer of images with overlapping dependencies.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The Docker <code class="docutils literal notranslate"><span class="pre">overlayfs2</span></code> storage driver is limited to 128 layers, above which a <code class="docutils literal notranslate"><span class="pre">max</span> <span class="pre">depth</span> <span class="pre">exceeded</span></code> error may be produced when pulling the image.
+You can hit this limit when exporting container images from larger environments or packages with many dependencies.
+There are <a class="reference external" href="https://docs.docker.com/storage/storagedriver/">alternative drivers</a> to work around this limitation.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span> <span class="pre">--base-image</span> <span class="pre">...</span></code> command serves a <strong>dual purpose</strong>:</p>
+<ol class="arabic simple">
+<li><p>It makes container images available for container runtimes like Docker and Podman.</p></li>
+<li><p>It makes the <em>same</em> binaries available <a class="reference internal" href="binary_caches.html#binary-caches-oci"><span class="std std-ref">as a build cache</span></a> for <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code>.</p></li>
+</ol>
+<section id="container-registries">
+<span id="configuring-container-registries"></span><h3>Container registries<a class="headerlink" href="#container-registries" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code> command exports container images directly to an OCI-compatible container registry, such as Docker Hub, GitHub Container Registry (GHCR), Amazon ECR, Google GCR, Azure ACR, or a private registry.</p>
+<p>These services require authentication, which is configured with the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">add</span></code> command:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack mirror add \
+      --oci-username-variable REGISTRY_USER \
+      --oci-password-variable REGISTRY_TOKEN \
+      example-registry \
+      oci://example.com/name/image
+</pre></div>
+</div>
+<p>This registers a mirror named <code class="docutils literal notranslate"><span class="pre">example-registry</span></code> in your <code class="docutils literal notranslate"><span class="pre">mirrors.yaml</span></code> configuration file that is associated with a container registry and image <code class="docutils literal notranslate"><span class="pre">example.com/name/image</span></code>.
+The registry can then be referred to by its name, e.g. <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span> <span class="pre">example-registry</span> <span class="pre">...</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">oci://</span></code> scheme in the URL indicates that this is an OCI-compatible registry with HTTPS support.
+If you only specify <code class="docutils literal notranslate"><span class="pre">oci://name/image</span></code>, Spack will assume the registry is hosted on Docker Hub.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--oci-username-variable</span></code> and <code class="docutils literal notranslate"><span class="pre">--oci-password-variable</span></code> options specify the names of <em>environment variables</em> that will be used to authenticate with the registry.
+Spack does not store your credentials in configuration files; it expects you to set the corresponding environment variables in your shell before running the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code> command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">REGISTRY_USER</span><span class="o">=</span>user <span class="nv">REGISTRY_TOKEN</span><span class="o">=</span>token spack buildcache push ...
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p>The registry password is typically a <em>personal access token</em> (PAT) generated on the registry website or a command line tool.
+In the section <a class="reference internal" href="binary_caches.html#oci-authentication"><span class="std std-ref">Authentication with popular Container Registries</span></a> we list specific examples for popular registries.</p>
+</div>
+<p>If you don't have access to a remote registry, or wish to experiment with container images locally, you can run a <em>local registry</em> on your machine and let Spack push to it.
+This is as simple as running the <a class="reference external" href="https://hub.docker.com/_/registry">official registry image</a> in the background:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run -d -p <span class="m">5000</span>:5000 --name registry registry
+</pre></div>
+</div>
+<p>In this case, it is not necessary to configure a named mirror, you can simply refer to it by URL using <code class="docutils literal notranslate"><span class="pre">oci+http://localhost:5000/[image]</span></code>, where <code class="docutils literal notranslate"><span class="pre">[image]</span></code> is the name of the image to create, and <code class="docutils literal notranslate"><span class="pre">oci+http://</span></code> indicates that the registry does not support HTTPS.</p>
+</section>
+<section id="example-1-pushing-selected-specs-as-container-images">
+<span id="local-registry-example"></span><h3>Example 1: pushing selected specs as container images<a class="headerlink" href="#example-1-pushing-selected-specs-as-container-images" title="Link to this heading">¶</a></h3>
+<p>Assume we have <code class="docutils literal notranslate"><span class="pre">python&#64;3.13</span></code> and <code class="docutils literal notranslate"><span class="pre">cmake&#64;3</span></code> already installed by Spack, and we want to push them as a combined container image <code class="docutils literal notranslate"><span class="pre">software_stack:latest</span></code> to a local registry.</p>
+<p>First we verify that the specs are indeed installed:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack find --long <span class="nc">python</span><span class="kp">@3.13</span> <span class="nc">cmake</span><span class="kp">@3</span>
+
+<span class="go">-- linux-ubuntu24.04-zen2 / %c,cxx=gcc@13.3.0 -------------------</span>
+<span class="go">scpgv2h cmake@3.31.8  n54tvjw python@3.13.5</span>
+</pre></div>
+</div>
+<p>Since these are the only installations on our system, we can simply refer to them by their spec strings.
+In case there are multiple installations, we could use <code class="docutils literal notranslate"><span class="pre">python/n54tvjw</span></code> and <code class="docutils literal notranslate"><span class="pre">cmake/scpgv2h</span></code> to uniquely refer to them by hashes.</p>
+<p>We now use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code> to publish these packages as a container image with <code class="docutils literal notranslate"><span class="pre">ubuntu:24.04</span></code> as a base image:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack buildcache push <span class="se">\</span>
+      --base-image ubuntu:24.04 <span class="se">\</span>
+      --tag latest <span class="se">\</span>
+      oci+http://localhost:5000/software_stack <span class="se">\</span>
+      python@3.13 cmake@3
+</pre></div>
+</div>
+<p>They can now be pulled and run with Docker or any other OCI-compatible container runtime:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run -it localhost:5000/software_stack:latest
+<span class="gp">root@container-id:/# </span>python3 --version
+<span class="go">Python 3.13.5</span>
+<span class="gp">root@container-id:/# </span>cmake --version
+<span class="go">cmake version 3.31.8</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2-pushing-entire-spack-environments-as-container-images">
+<span id="installed-environments-as-containers"></span><h3>Example 2: pushing entire Spack environments as container images<a class="headerlink" href="#example-2-pushing-entire-spack-environments-as-container-images" title="Link to this heading">¶</a></h3>
+<p>In this example we show how to export an installed <a class="reference internal" href="environments.html#environments"><span class="std std-ref">Spack environment</span></a> as a container image and push it to a remote registry.</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and install an environment</span>
+<span class="gp">$ </span>spack env create .
+<span class="gp">$ </span>spack -e . add <span class="nc">python</span><span class="kp">@3.13</span> <span class="nc">cmake</span><span class="kp">@3</span>
+<span class="gp">$ </span>spack -e . install
+
+<span class="c1"># Configure a remote registry</span>
+<span class="gp">$ </span>spack -e . mirror add \
+      --oci-username-variable REGISTRY_USER \
+      --oci-password-variable REGISTRY_TOKEN \
+      container-registry \
+      oci://example.com/name/image
+
+<span class="c1"># Push the image</span>
+<span class="gp">$ </span>REGISTRY_USER=user REGISTRY_TOKEN=token \
+  spack -e . buildcache push \
+      --update-index \
+      --base-image ubuntu:24.04 \
+      --tag my_env \
+      container-registry
+</pre></div>
+</div>
+<p>The resulting container image can then be run as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run -it example.com/name/image:my_env
+<span class="gp">root@container-id:/# </span>python3 --version
+<span class="go">Python 3.13.5</span>
+<span class="gp">root@container-id:/# </span>cmake --version
+<span class="go">cmake version 3.31.8</span>
+</pre></div>
+</div>
+<p>The advantage of using a Spack environment is that we do not have to specify the individual specs on the command line when pushing the image.
+With environments, all root specs and their runtime dependencies are included in the container image.</p>
+<p>If you do specify specs in <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code> with an environment active, only those matching specs from the environment are included in the image.</p>
+</section>
+</section>
+<section id="generating-recipes-for-docker-and-singularity">
+<span id="generating-recipes"></span><h2>Generating recipes for Docker and Singularity<a class="headerlink" href="#generating-recipes-for-docker-and-singularity" title="Link to this heading">¶</a></h2>
+<p>Apart from exporting existing installations into container images, Spack can also generate recipes for container images.
+This is useful if you want to run Spack itself in a sandboxed environment instead of on the host system.</p>
+<p>This approach requires you to have a container runtime like Docker or Singularity installed on your system, and can only be used using Spack environments.</p>
+<p>Since recipes need a little more boilerplate than:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span> spack.yaml /environment
+<span class="k">RUN</span> spack -e /environment install
+</pre></div>
+</div>
+<p>Spack provides a command to generate customizable recipes for container images.
+Customizations include minimizing the size of the image, installing packages in the base image using the system package manager, and setting up a proper entrypoint to run the image.</p>
+<section id="a-quick-introduction">
+<span id="cmd-spack-containerize"></span><h3>A Quick Introduction<a class="headerlink" href="#a-quick-introduction" title="Link to this heading">¶</a></h3>
+<p>Consider having a Spack environment like the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gromacs+mpi</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mpich</span>
+</pre></div>
+</div>
+<p>Producing a <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> from it is as simple as changing directories to where the <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file is stored and running the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack containerize &gt; Dockerfile
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> that gets created uses multi-stage builds and other techniques to minimize the size of the final image:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Build stage with Spack pre-installed and ready to be used</span>
+<span class="k">FROM</span> <span class="s">spack/ubuntu-jammy:develop</span> <span class="k">AS</span> <span class="s">builder</span>
+
+
+<span class="c"># What we want to install and how we want to install it</span>
+<span class="c"># is specified in a manifest file (spack.yaml)</span>
+<span class="k">RUN</span> mkdir -p /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">set</span> -o noclobber <span class="se">\</span>
+<span class="o">&amp;&amp;</span>  <span class="o">(</span><span class="nb">echo</span> spack: <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  specs:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - gromacs+mpi&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - mpich&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  concretizer:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    unify: true&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  config:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    install_tree:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      root: /opt/software&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  view: /opt/views/view&#39;</span><span class="o">)</span> &gt; /opt/spack-environment/spack.yaml
+
+<span class="c"># Install the software, remove unnecessary deps</span>
+<span class="k">RUN</span> <span class="nb">cd</span> /opt/spack-environment <span class="o">&amp;&amp;</span> spack env activate . <span class="o">&amp;&amp;</span> spack install --fail-fast <span class="o">&amp;&amp;</span> spack gc -y
+
+<span class="c"># Strip all the binaries</span>
+<span class="k">RUN</span> find -L /opt/views/view/* -type f -exec readlink -f <span class="s1">&#39;{}&#39;</span> <span class="se">\;</span> <span class="p">|</span> <span class="se">\</span>
+    xargs file -i <span class="p">|</span> <span class="se">\</span>
+    grep <span class="s1">&#39;charset=binary&#39;</span> <span class="p">|</span> <span class="se">\</span>
+    grep <span class="s1">&#39;x-executable\|x-archive\|x-sharedlib&#39;</span> <span class="p">|</span> <span class="se">\</span>
+    awk -F: <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs strip
+
+<span class="c"># Modifications to the environment that are necessary to run</span>
+<span class="k">RUN</span> <span class="nb">cd</span> /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    spack env activate --sh -d . &gt; activate.sh
+
+
+<span class="c"># Bare OS image to run the installed executables</span>
+<span class="k">FROM</span> <span class="s">ubuntu:22.04</span>
+
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/spack-environment /opt/spack-environment
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/software /opt/software
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/views /opt/views
+
+<span class="k">RUN</span> <span class="o">{</span> <span class="se">\</span>
+      <span class="nb">echo</span> <span class="s1">&#39;#!/bin/sh&#39;</span> <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;.&#39;</span> /opt/spack-environment/activate.sh <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;exec &quot;$@&quot;&#39;</span><span class="p">;</span> <span class="se">\</span>
+    <span class="o">}</span> &gt; /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> chmod a+x /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> ln -s /opt/views/view /opt/view
+
+
+<span class="k">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;/entrypoint.sh&quot;</span> <span class="p">]</span>
+<span class="k">CMD</span> <span class="p">[</span> <span class="s2">&quot;/bin/bash&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>The image itself can then be built and run in the usual way with any of the tools suitable for the task.
+For instance, if we decided to use Docker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ spack containerize &gt; Dockerfile
+$ docker build -t myimage .
+<span class="o">[</span> ... <span class="o">]</span>
+$ docker run -it myimage
+</pre></div>
+</div>
+<p>The various components involved in the generation of the recipe and their configuration are discussed in detail in the sections below.</p>
+</section>
+<section id="official-container-images-for-spack">
+<span id="container-spack-images"></span><h3>Official Container Images for Spack<a class="headerlink" href="#official-container-images-for-spack" title="Link to this heading">¶</a></h3>
+<p>Container images with Spack preinstalled are available on <a class="reference external" href="https://hub.docker.com/u/spack">Docker Hub</a> and <a class="reference external" href="https://github.com/orgs/spack/packages?repo_name=spack">GitHub Container Registry</a>.
+These images are based on popular distributions and are named accordingly (e.g. <code class="docutils literal notranslate"><span class="pre">spack/ubuntu-noble</span></code> for Spack on top of <code class="docutils literal notranslate"><span class="pre">ubuntu:24.04</span></code>).</p>
+<p>The table below summarizes the available base images and their corresponding Spack images:</p>
+<div class="table-wrapper docutils container" id="id2">
+<span id="containers-supported-os"></span><span id="containers-supported-os"></span><table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Supported base container images</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Base Distribution</p></th>
+<th class="head"><p>Base Image</p></th>
+<th class="head"><p>Spack Image</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu 20.04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ubuntu:20.04</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/ubuntu-focal</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ubuntu 22.04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ubuntu:22.04</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/ubuntu-jammy</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Ubuntu 24.04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ubuntu:24.04</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/ubuntu-noble</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>CentOS Stream 9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">quay.io/centos/centos:stream9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/centos-stream9</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>openSUSE Leap</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">opensuse/leap</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/leap15</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Amazon Linux 2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">amazonlinux:2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/amazon-linux</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>AlmaLinux 8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">almalinux:8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/almalinux8</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>AlmaLinux 9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">almalinux:9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/almalinux9</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Rocky Linux 8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rockylinux:8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/rockylinux8</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Rocky Linux 9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rockylinux:9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/rockylinux9</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Fedora Linux 39</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fedora:39</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/fedora39</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fedora Linux 40</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fedora:40</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack/fedora40</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>All container images are tagged with the version of Spack they contain.</p>
+<div class="table-wrapper docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Spack container image tags</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tag</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;image&gt;:latest</span></code></p></td>
+<td><p>Latest <em>stable</em> release of Spack</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;image&gt;:1</span></code></p></td>
+<td><p>Latest <code class="docutils literal notranslate"><span class="pre">1.x.y</span></code> release of Spack</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;image&gt;:1.0</span></code></p></td>
+<td><p>Latest <code class="docutils literal notranslate"><span class="pre">1.0.y</span></code> release of Spack</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;image&gt;:1.0.2</span></code></p></td>
+<td><p>Specific <code class="docutils literal notranslate"><span class="pre">1.0.2</span></code> release of Spack</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;image&gt;:develop</span></code></p></td>
+<td><p>Latest <em>development</em> version of Spack</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These images are available for anyone to use and take care of all the repetitive tasks that are necessary to set up Spack within a container.
+The container recipes generated by Spack use them as default base images for their <code class="docutils literal notranslate"><span class="pre">build</span></code> stage, even though options to use custom base images provided by users are available to accommodate complex use cases.</p>
+</section>
+<section id="configuring-the-container-recipe">
+<h3>Configuring the Container Recipe<a class="headerlink" href="#configuring-the-container-recipe" title="Link to this heading">¶</a></h3>
+<p>Any Spack environment can be used for the automatic generation of container recipes.
+Sensible defaults are provided for things like the base image or the version of Spack used in the image.
+If finer tuning is needed, it can be obtained by adding the relevant metadata under the <code class="docutils literal notranslate"><span class="pre">container</span></code> attribute of environments:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gromacs+mpi</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mpich</span>
+
+  <span class="nt">container</span><span class="p">:</span>
+    <span class="c1"># Select the format of the recipe e.g. docker,</span>
+    <span class="c1"># singularity or anything else that is currently supported</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
+
+    <span class="c1"># Sets the base images for the stages where Spack builds the</span>
+    <span class="c1"># software or where the software gets installed after being built.</span>
+    <span class="nt">images</span><span class="p">:</span>
+      <span class="nt">os</span><span class="p">:</span> <span class="s">&quot;almalinux:9&quot;</span>
+      <span class="nt">spack</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">develop</span>
+
+    <span class="c1"># Whether or not to strip binaries</span>
+    <span class="nt">strip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+    <span class="c1"># Additional system packages that are needed at runtime</span>
+    <span class="nt">os_packages</span><span class="p">:</span>
+      <span class="nt">final</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">libgomp</span>
+
+    <span class="c1"># Labels for the image</span>
+    <span class="nt">labels</span><span class="p">:</span>
+      <span class="nt">app</span><span class="p">:</span> <span class="s">&quot;gromacs&quot;</span>
+      <span class="nt">mpi</span><span class="p">:</span> <span class="s">&quot;mpich&quot;</span>
+</pre></div>
+</div>
+<p>A detailed description of the options available can be found in the <a class="reference internal" href="#container-config-options"><span class="std std-ref">Configuration Reference</span></a> section.</p>
+</section>
+<section id="setting-base-images">
+<h3>Setting Base Images<a class="headerlink" href="#setting-base-images" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">images</span></code> subsection is used to select both the image where Spack builds the software and the image where the built software is installed.
+This attribute can be set in different ways and which one to use depends on the use case at hand.</p>
+<section id="use-official-spack-images-from-dockerhub">
+<h4>Use Official Spack Images From Dockerhub<a class="headerlink" href="#use-official-spack-images-from-dockerhub" title="Link to this heading">¶</a></h4>
+<p>To generate a recipe that uses an official Docker image from the Spack organization to build the software and the corresponding official OS image to install the built software, all the user has to do is specify:</p>
+<ol class="arabic simple">
+<li><p>An operating system under <code class="docutils literal notranslate"><span class="pre">images:os</span></code></p></li>
+<li><p>A Spack version under <code class="docutils literal notranslate"><span class="pre">images:spack</span></code></p></li>
+</ol>
+<p>Any combination of these two values that can be mapped to one of the images discussed in <a class="reference internal" href="#container-spack-images"><span class="std std-ref">Official Container Images for Spack</span></a> is allowed.
+For instance, the following <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gromacs+mpi</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mpich</span>
+
+  <span class="nt">container</span><span class="p">:</span>
+    <span class="nt">images</span><span class="p">:</span>
+      <span class="nt">os</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">almalinux:9</span>
+      <span class="nt">spack</span><span class="p">:</span> <span class="s">&quot;1.0&quot;</span>
+</pre></div>
+</div>
+<p>uses <code class="docutils literal notranslate"><span class="pre">spack/almalinux9:1.0</span></code> and <code class="docutils literal notranslate"><span class="pre">almalinux:9</span></code> for the stages where the software is respectively built and installed:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Build stage with Spack pre-installed and ready to be used</span>
+<span class="k">FROM</span> <span class="s">spack/almalinux9:1.0</span> <span class="k">AS</span> <span class="s">builder</span>
+
+
+<span class="c"># What we want to install and how we want to install it</span>
+<span class="c"># is specified in a manifest file (spack.yaml)</span>
+<span class="k">RUN</span> mkdir -p /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">set</span> -o noclobber <span class="se">\</span>
+<span class="o">&amp;&amp;</span>  <span class="o">(</span><span class="nb">echo</span> spack: <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  specs:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - gromacs+mpi&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - mpich&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  concretizer:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    unify: true&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  config:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    install_tree:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      root: /opt/software&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  view: /opt/views/view&#39;</span><span class="o">)</span> &gt; /opt/spack-environment/spack.yaml
+
+<span class="c"># ...</span>
+
+<span class="c"># Bare OS image to run the installed executables</span>
+<span class="k">FROM</span> <span class="s">quay.io/almalinuxorg/almalinux:9</span>
+
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/spack-environment /opt/spack-environment
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/software /opt/software
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/views /opt/views
+
+<span class="k">RUN</span> <span class="o">{</span> <span class="se">\</span>
+      <span class="nb">echo</span> <span class="s1">&#39;#!/bin/sh&#39;</span> <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;.&#39;</span> /opt/spack-environment/activate.sh <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;exec &quot;$@&quot;&#39;</span><span class="p">;</span> <span class="se">\</span>
+    <span class="o">}</span> &gt; /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> chmod a+x /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> ln -s /opt/views/view /opt/view
+
+
+<span class="k">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;/entrypoint.sh&quot;</span> <span class="p">]</span>
+<span class="k">CMD</span> <span class="p">[</span> <span class="s2">&quot;/bin/bash&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>This is the simplest available method of selecting base images, and we advise its use whenever possible.
+There are cases, though, where using Spack official images is not enough to fit production needs.
+In these situations, users can extend the recipe to start with the bootstrapping of Spack at a certain pinned version or manually select which base image to start from in the recipe, as we'll see next.</p>
+</section>
+<section id="use-a-bootstrap-stage-for-spack">
+<h4>Use a Bootstrap Stage for Spack<a class="headerlink" href="#use-a-bootstrap-stage-for-spack" title="Link to this heading">¶</a></h4>
+<p>In some cases, users may want to pin the commit SHA that is used for Spack to ensure later reproducibility or start from a fork of the official Spack repository to try a bugfix or a feature in an early stage of development.
+This is possible by being just a little more verbose when specifying information about Spack in the <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">images</span><span class="p">:</span>
+  <span class="nt">os</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">amazonlinux:2</span>
+  <span class="nt">spack</span><span class="p">:</span>
+    <span class="c1"># URL of the Spack repository to be used in the container image</span>
+    <span class="nt">url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;to-use-a-fork&gt;</span>
+    <span class="c1"># Either a commit SHA, a branch name, or a tag</span>
+    <span class="nt">ref</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;sha/tag/branch&gt;</span>
+    <span class="c1"># If true, turn a branch name or a tag into the corresponding commit</span>
+    <span class="c1"># SHA at the time of recipe generation</span>
+    <span class="nt">resolve_sha</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;true/false&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">url</span></code> specifies the URL from which to clone Spack and defaults to <a class="reference external" href="https://github.com/spack/spack">https://github.com/spack/spack</a>.
+The <code class="docutils literal notranslate"><span class="pre">ref</span></code> attribute can be either a commit SHA, a branch name, or a tag.
+The default value in this case is to use the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch, but it may change in the future to point to the latest stable release.
+Finally, <code class="docutils literal notranslate"><span class="pre">resolve_sha</span></code> transforms branch names or tags into the corresponding commit SHAs at the time of recipe generation to allow for greater reproducibility of the results at a later time.</p>
+<p>The list of operating systems that can be used to bootstrap Spack can be obtained with:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack containerize --list-os
+==&gt; The following operating systems can be used to bootstrap Spack:
+alpine:3 amazonlinux:2 fedora:40 fedora:39 rockylinux:9 rockylinux:8 almalinux:9 almalinux:8 centos:stream9 opensuse/leap:15 nvidia/cuda:11.2.1 ubuntu:24.04 ubuntu:22.04 ubuntu:20.04
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">resolve_sha</span></code> option uses <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rev-parse</span></code> under the hood and thus requires checking out the corresponding Spack repository in a temporary folder before generating the recipe.
+Recipe generation may take longer when this option is set to true because of this additional step.</p>
+</div>
+</section>
+<section id="use-custom-images-provided-by-users">
+<h4>Use Custom Images Provided by Users<a class="headerlink" href="#use-custom-images-provided-by-users" title="Link to this heading">¶</a></h4>
+<p>Consider, as an example, building a production-grade image for a CUDA application.
+The best strategy would probably be to build on top of images provided by the vendor and regard CUDA as an external package.</p>
+<p>Spack does not currently provide an official image with CUDA configured this way, but users can build it on their own and then configure the environment to explicitly pull it.
+This requires users to:</p>
+<ol class="arabic simple">
+<li><p>Specify the image used to build the software under <code class="docutils literal notranslate"><span class="pre">images:build</span></code></p></li>
+<li><p>Specify the image used to install the built software under <code class="docutils literal notranslate"><span class="pre">images:final</span></code></p></li>
+</ol>
+<p>A <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> like the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gromacs@2019.4+cuda build_type=Release</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mpich</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">fftw precision=float</span>
+  <span class="nt">packages</span><span class="p">:</span>
+    <span class="nt">cuda</span><span class="p">:</span>
+      <span class="nt">buildable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+      <span class="nt">externals</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cuda%gcc</span>
+        <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/local/cuda</span>
+
+  <span class="nt">container</span><span class="p">:</span>
+    <span class="nt">images</span><span class="p">:</span>
+      <span class="nt">build</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">custom/cuda-13.0.1-ubuntu22.04:latest</span>
+      <span class="nt">final</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nvidia/cuda:13.0.1-base-ubuntu22.04</span>
+</pre></div>
+</div>
+<p>produces, for instance, the following <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Build stage with Spack pre-installed and ready to be used</span>
+<span class="k">FROM</span> <span class="s">custom/cuda-13.0.1-ubuntu22.04:latest</span> <span class="k">AS</span> <span class="s">builder</span>
+
+
+<span class="c"># What we want to install and how we want to install it</span>
+<span class="c"># is specified in a manifest file (spack.yaml)</span>
+<span class="k">RUN</span> mkdir -p /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">set</span> -o noclobber <span class="se">\</span>
+<span class="o">&amp;&amp;</span>  <span class="o">(</span><span class="nb">echo</span> spack: <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  specs:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - gromacs@2019.4+cuda build_type=Release&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - mpich&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - fftw precision=float&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  packages:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    cuda:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      buildable: false&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      externals:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      - spec: cuda%gcc&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;        prefix: /usr/local/cuda&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  concretizer:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    unify: true&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  config:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    install_tree:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      root: /opt/software&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  view: /opt/views/view&#39;</span><span class="o">)</span> &gt; /opt/spack-environment/spack.yaml
+
+<span class="c"># Install the software, remove unnecessary deps</span>
+<span class="k">RUN</span> <span class="nb">cd</span> /opt/spack-environment <span class="o">&amp;&amp;</span> spack env activate . <span class="o">&amp;&amp;</span> spack install --fail-fast <span class="o">&amp;&amp;</span> spack gc -y
+
+<span class="c"># Strip all the binaries</span>
+<span class="k">RUN</span> find -L /opt/views/view/* -type f -exec readlink -f <span class="s1">&#39;{}&#39;</span> <span class="se">\;</span> <span class="p">|</span> <span class="se">\</span>
+    xargs file -i <span class="p">|</span> <span class="se">\</span>
+    grep <span class="s1">&#39;charset=binary&#39;</span> <span class="p">|</span> <span class="se">\</span>
+    grep <span class="s1">&#39;x-executable\|x-archive\|x-sharedlib&#39;</span> <span class="p">|</span> <span class="se">\</span>
+    awk -F: <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs strip
+
+<span class="c"># Modifications to the environment that are necessary to run</span>
+<span class="k">RUN</span> <span class="nb">cd</span> /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    spack env activate --sh -d . &gt; activate.sh
+
+
+<span class="c"># Bare OS image to run the installed executables</span>
+<span class="k">FROM</span> <span class="s">nvidia/cuda:13.0.1-base-ubuntu22.04</span>
+
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/spack-environment /opt/spack-environment
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/software /opt/software
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/views /opt/views
+
+<span class="k">RUN</span> <span class="o">{</span> <span class="se">\</span>
+      <span class="nb">echo</span> <span class="s1">&#39;#!/bin/sh&#39;</span> <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;.&#39;</span> /opt/spack-environment/activate.sh <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;exec &quot;$@&quot;&#39;</span><span class="p">;</span> <span class="se">\</span>
+    <span class="o">}</span> &gt; /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> chmod a+x /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> ln -s /opt/views/view /opt/view
+
+
+<span class="k">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;/entrypoint.sh&quot;</span> <span class="p">]</span>
+<span class="k">CMD</span> <span class="p">[</span> <span class="s2">&quot;/bin/bash&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>where the base images for both stages are completely custom.</p>
+<p>This second mode of selection for base images is more flexible than just choosing an operating system and a Spack version but is also more demanding.
+Users may need to generate their base images themselves, and it's also their responsibility to ensure that:</p>
+<ol class="arabic simple">
+<li><p>Spack is available in the <code class="docutils literal notranslate"><span class="pre">build</span></code> stage and set up correctly to install the required software</p></li>
+<li><p>The artifacts produced in the <code class="docutils literal notranslate"><span class="pre">build</span></code> stage can be executed in the <code class="docutils literal notranslate"><span class="pre">final</span></code> stage</p></li>
+</ol>
+<p>Therefore, we do not recommend its use in cases that can be otherwise covered by the simplified mode shown first.</p>
+</section>
+</section>
+<section id="singularity-definition-files">
+<h3>Singularity Definition Files<a class="headerlink" href="#singularity-definition-files" title="Link to this heading">¶</a></h3>
+<p>In addition to producing recipes in <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> format, Spack can produce Singularity Definition Files by just changing the value of the <code class="docutils literal notranslate"><span class="pre">format</span></code> attribute:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat spack.yaml
+<span class="go">spack:</span>
+<span class="go">  specs:</span>
+<span class="go">  - hdf5~mpi</span>
+<span class="go">  container:</span>
+<span class="go">    format: singularity</span>
+
+<span class="gp">$ </span>spack containerize &gt; hdf5.def
+<span class="gp">$ </span>sudo singularity build hdf5.sif hdf5.def
+</pre></div>
+</div>
+<p>The minimum version of Singularity required to build a SIF (Singularity Image Format) image from the recipes generated by Spack is <code class="docutils literal notranslate"><span class="pre">3.5.3</span></code>.</p>
+</section>
+<section id="extending-the-jinja2-templates">
+<h3>Extending the Jinja2 Templates<a class="headerlink" href="#extending-the-jinja2-templates" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> and the Singularity definition file that Spack can generate are based on a few Jinja2 templates that are rendered according to the Spack environment being containerized.
+Even though Spack allows a great deal of customization by just setting appropriate values for the configuration options, sometimes that is not enough.</p>
+<p>In those cases, a user can directly extend the template that Spack uses to render the image to, e.g., set additional environment variables or perform specific operations either before or after a given stage of the build.
+Let's consider as an example the following structure:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree /opt/environment
+<span class="go">/opt/environment</span>
+<span class="go">├── data</span>
+<span class="go">│     └── data.csv</span>
+<span class="go">├── spack.yaml</span>
+<span class="go">├── data</span>
+<span class="go">└── templates</span>
+<span class="go">    └── container</span>
+<span class="go">        └── CustomDockerfile</span>
+</pre></div>
+</div>
+<p>containing both the custom template extension and the Spack environment manifest file.
+To use a custom template, the Spack environment must register the directory containing it and declare its use under the <code class="docutils literal notranslate"><span class="pre">container</span></code> configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">hdf5~mpi</span>
+  <span class="nt">concretizer</span><span class="p">:</span>
+    <span class="nt">unify</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">config</span><span class="p">:</span>
+<span class="hll">    <span class="nt">template_dirs</span><span class="p">:</span>
+</span><span class="hll">    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/opt/environment/templates</span>
+</span>  <span class="nt">container</span><span class="p">:</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
+    <span class="nt">depfile</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="hll">    <span class="nt">template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">container/CustomDockerfile</span>
+</span></pre></div>
+</div>
+<p>The template extension can override two blocks, named <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> and <code class="docutils literal notranslate"><span class="pre">final_stage</span></code>, similarly to the example below:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">/opt/environment/templates/container/CustomDockerfile</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{% extends &quot;container/Dockerfile&quot; %}
+{% block build_stage %}
+<span class="hll">RUN echo &quot;Start building&quot;
+</span>{{ super() }}
+{% endblock %}
+{% block final_stage %}
+{{ super() }}
+<span class="hll">COPY data /share/myapp/data
+</span>{% endblock %}
+</pre></div>
+</div>
+</div>
+<p>The Dockerfile is generated by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack -e /opt/environment containerize
+</pre></div>
+</div>
+<p>Note that the Spack environment must be active for Spack to read the template.
+The recipe that gets generated contains the two extra instructions that we added in our template extension:</p>
+<div class="highlight-Dockerfile notranslate"><div class="highlight"><pre><span></span><span class="c"># Build stage with Spack pre-installed and ready to be used</span>
+<span class="k">FROM</span> <span class="s">spack/ubuntu-jammy:develop</span> <span class="k">AS</span> <span class="s">builder</span>
+
+<span class="hll"><span class="k">RUN</span> <span class="nb">echo</span> <span class="s2">&quot;Start building&quot;</span>
+</span>
+<span class="c"># What we want to install and how we want to install it</span>
+<span class="c"># is specified in a manifest file (spack.yaml)</span>
+<span class="k">RUN</span> mkdir -p /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">set</span> -o noclobber <span class="se">\</span>
+<span class="o">&amp;&amp;</span>  <span class="o">(</span><span class="nb">echo</span> spack: <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  specs:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  - hdf5~mpi&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  concretizer:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    unify: true&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  config:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    template_dirs:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    - /tmp/tmp.xvyLqAZpZg&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;    install_tree:&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;      root: /opt/software&#39;</span> <span class="se">\</span>
+<span class="o">&amp;&amp;</span>   <span class="nb">echo</span> <span class="s1">&#39;  view: /opt/views/view&#39;</span><span class="o">)</span> &gt; /opt/spack-environment/spack.yaml
+
+<span class="c"># Install the software, remove unnecessary deps</span>
+<span class="k">RUN</span> <span class="nb">cd</span> /opt/spack-environment <span class="o">&amp;&amp;</span> spack env activate . <span class="o">&amp;&amp;</span> spack concretize <span class="o">&amp;&amp;</span> spack env depfile -o Makefile <span class="o">&amp;&amp;</span> make -j <span class="k">$(</span>nproc<span class="k">)</span> <span class="o">&amp;&amp;</span> spack gc -y
+
+<span class="c"># Strip all the binaries</span>
+<span class="k">RUN</span> find -L /opt/views/view/* -type f -exec readlink -f <span class="s1">&#39;{}&#39;</span> <span class="se">\;</span> <span class="p">|</span> <span class="se">\</span>
+    xargs file -i <span class="p">|</span> <span class="se">\</span>
+    grep <span class="s1">&#39;charset=binary&#39;</span> <span class="p">|</span> <span class="se">\</span>
+    grep <span class="s1">&#39;x-executable\|x-archive\|x-sharedlib&#39;</span> <span class="p">|</span> <span class="se">\</span>
+    awk -F: <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs strip
+
+<span class="c"># Modifications to the environment that are necessary to run</span>
+<span class="k">RUN</span> <span class="nb">cd</span> /opt/spack-environment <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    spack env activate --sh -d . &gt; activate.sh
+
+
+
+<span class="c"># Bare OS image to run the installed executables</span>
+<span class="k">FROM</span> <span class="s">ubuntu:22.04</span>
+
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/spack-environment /opt/spack-environment
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/software /opt/software
+<span class="k">COPY</span> --from<span class="o">=</span>builder /opt/views /opt/views
+
+<span class="k">RUN</span> <span class="o">{</span> <span class="se">\</span>
+      <span class="nb">echo</span> <span class="s1">&#39;#!/bin/sh&#39;</span> <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;.&#39;</span> /opt/spack-environment/activate.sh <span class="se">\</span>
+      <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;exec &quot;$@&quot;&#39;</span><span class="p">;</span> <span class="se">\</span>
+    <span class="o">}</span> &gt; /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> chmod a+x /entrypoint.sh <span class="se">\</span>
+<span class="o">&amp;&amp;</span> ln -s /opt/views/view /opt/view
+
+
+
+<span class="hll"><span class="k">COPY</span> data /share/myapp/data
+</span><span class="k">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;/entrypoint.sh&quot;</span> <span class="p">]</span>
+<span class="k">CMD</span> <span class="p">[</span> <span class="s2">&quot;/bin/bash&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-reference">
+<span id="container-config-options"></span><h3>Configuration Reference<a class="headerlink" href="#configuration-reference" title="Link to this heading">¶</a></h3>
+<p>The tables below describe all the configuration options that are currently supported to customize the generation of container recipes:</p>
+<div class="table-wrapper docutils container" id="id5">
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">General configuration options for the <code class="docutils literal notranslate"><span class="pre">container</span></code> section of <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code></span><a class="headerlink" href="#id5" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Allowed Values</p></th>
+<th class="head"><p>Required</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">format</span></code></p></td>
+<td><p>The format of the recipe</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">docker</span></code> or <code class="docutils literal notranslate"><span class="pre">singularity</span></code></p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">depfile</span></code></p></td>
+<td><p>Whether to use a depfile for installation, or not</p></td>
+<td><p>True or False (default)</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">images:os</span></code></p></td>
+<td><p>Operating system used as a base for the image</p></td>
+<td><p>See <a class="reference internal" href="#containers-supported-os"><span class="std std-ref">Supported base container images</span></a></p></td>
+<td><p>Yes, if using constrained selection of base images</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">images:spack</span></code></p></td>
+<td><p>Version of Spack used in the <code class="docutils literal notranslate"><span class="pre">build</span></code> stage</p></td>
+<td><p>Valid tags for <code class="docutils literal notranslate"><span class="pre">base:image</span></code></p></td>
+<td><p>Yes, if using constrained selection of base images</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">images:spack:url</span></code></p></td>
+<td><p>Repository from which Spack is cloned</p></td>
+<td><p>Any fork of Spack</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">images:spack:ref</span></code></p></td>
+<td><p>Reference for the checkout of Spack</p></td>
+<td><p>Either a commit SHA, a branch name, or a tag</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">images:spack:resolve_sha</span></code></p></td>
+<td><p>Resolve branches and tags in <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> to commits in the generated recipe</p></td>
+<td><p>True or False (default: False)</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">images:build</span></code></p></td>
+<td><p>Image to be used in the <code class="docutils literal notranslate"><span class="pre">build</span></code> stage</p></td>
+<td><p>Any valid container image</p></td>
+<td><p>Yes, if using custom selection of base images</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">images:final</span></code></p></td>
+<td><p>Image to be used in the <code class="docutils literal notranslate"><span class="pre">final</span></code> stage (runtime)</p></td>
+<td><p>Any valid container image</p></td>
+<td><p>Yes, if using custom selection of base images</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">strip</span></code></p></td>
+<td><p>Whether to strip binaries</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">os_packages:command</span></code></p></td>
+<td><p>Tool used to manage system packages</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">apt</span></code>, <code class="docutils literal notranslate"><span class="pre">yum</span></code>, <code class="docutils literal notranslate"><span class="pre">dnf</span></code>, <code class="docutils literal notranslate"><span class="pre">dnf_epel</span></code>, <code class="docutils literal notranslate"><span class="pre">zypper</span></code>, <code class="docutils literal notranslate"><span class="pre">apk</span></code>, <code class="docutils literal notranslate"><span class="pre">yum_amazon</span></code></p></td>
+<td><p>Only with custom base images</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">os_packages:update</span></code></p></td>
+<td><p>Whether or not to update the list of available packages</p></td>
+<td><p>True or False (default: True)</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">os_packages:build</span></code></p></td>
+<td><p>System packages needed at build-time</p></td>
+<td><p>Valid packages for the current OS</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">os_packages:final</span></code></p></td>
+<td><p>System packages needed at run-time</p></td>
+<td><p>Valid packages for the current OS</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">labels</span></code></p></td>
+<td><p>Labels to tag the image</p></td>
+<td><p>Pairs of key-value strings</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper docutils container" id="id6">
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Configuration options specific to Singularity</span><a class="headerlink" href="#id6" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Allowed Values</p></th>
+<th class="head"><p>Required</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">singularity:runscript</span></code></p></td>
+<td><p>Content of <code class="docutils literal notranslate"><span class="pre">%runscript</span></code></p></td>
+<td><p>Any valid script</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">singularity:startscript</span></code></p></td>
+<td><p>Content of <code class="docutils literal notranslate"><span class="pre">%startscript</span></code></p></td>
+<td><p>Any valid script</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">singularity:test</span></code></p></td>
+<td><p>Content of <code class="docutils literal notranslate"><span class="pre">%test</span></code></p></td>
+<td><p>Any valid script</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">singularity:help</span></code></p></td>
+<td><p>Description of the image</p></td>
+<td><p>Description string</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h3>
+<section id="mpi">
+<h4>MPI<a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h4>
+<p>Due to the dependency on Fortran for OpenMPI, which is the Spack default implementation, consider adding <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> to the <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span></code> list.</p>
+<p>Recent versions of OpenMPI will require you to pass <code class="docutils literal notranslate"><span class="pre">--allow-run-as-root</span></code> to your <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> calls if started as root user inside Docker.</p>
+<p>For execution on HPC clusters, it can be helpful to import the Docker image into Singularity in order to start a program with an <em>external</em> MPI.
+Otherwise, also add <code class="docutils literal notranslate"><span class="pre">openssh-server</span></code> to the <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span></code> list.</p>
+</section>
+<section id="cuda">
+<h4>CUDA<a class="headerlink" href="#cuda" title="Link to this heading">¶</a></h4>
+<p>Starting from CUDA 9.0, NVIDIA provides minimal CUDA images based on Ubuntu.
+Please see <a class="reference external" href="https://hub.docker.com/r/nvidia/cuda/">their instructions</a>.
+Avoid double-installing CUDA by adding, e.g.:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">cuda</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;cuda@9.0.176</span><span class="nv"> </span><span class="s">arch=linux-ubuntu16-x86_64</span><span class="nv"> </span><span class="s">%gcc@5.4.0&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/local/cuda</span>
+    <span class="nt">buildable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>to your <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code>.</p>
+<p>Users will either need <code class="docutils literal notranslate"><span class="pre">nvidia-docker</span></code> or, e.g., Singularity to <em>execute</em> device kernels.</p>
+</section>
+<section id="docker-on-windows-and-macos">
+<h4>Docker on Windows and macOS<a class="headerlink" href="#docker-on-windows-and-macos" title="Link to this heading">¶</a></h4>
+<p>On macOS and Windows, Docker runs on a hypervisor that is not allocated much memory by default, and some Spack packages may fail to build due to lack of memory.
+To work around this issue, consider configuring your Docker installation to use more of your host memory.
+In some cases, you can also ease the memory pressure on parallel builds by limiting the parallelism in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">build_jobs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="binary_caches.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Build Caches</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="environments.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Environments (spack.yaml, spack.lock)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on 10月 03, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Container Images</a><ul>
+<li><a class="reference internal" href="#exporting-spack-installations-as-container-images">Exporting Spack installations as Container Images</a><ul>
+<li><a class="reference internal" href="#container-registries">Container registries</a></li>
+<li><a class="reference internal" href="#example-1-pushing-selected-specs-as-container-images">Example 1: pushing selected specs as container images</a></li>
+<li><a class="reference internal" href="#example-2-pushing-entire-spack-environments-as-container-images">Example 2: pushing entire Spack environments as container images</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generating-recipes-for-docker-and-singularity">Generating recipes for Docker and Singularity</a><ul>
+<li><a class="reference internal" href="#a-quick-introduction">A Quick Introduction</a></li>
+<li><a class="reference internal" href="#official-container-images-for-spack">Official Container Images for Spack</a></li>
+<li><a class="reference internal" href="#configuring-the-container-recipe">Configuring the Container Recipe</a></li>
+<li><a class="reference internal" href="#setting-base-images">Setting Base Images</a><ul>
+<li><a class="reference internal" href="#use-official-spack-images-from-dockerhub">Use Official Spack Images From Dockerhub</a></li>
+<li><a class="reference internal" href="#use-a-bootstrap-stage-for-spack">Use a Bootstrap Stage for Spack</a></li>
+<li><a class="reference internal" href="#use-custom-images-provided-by-users">Use Custom Images Provided by Users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#singularity-definition-files">Singularity Definition Files</a></li>
+<li><a class="reference internal" href="#extending-the-jinja2-templates">Extending the Jinja2 Templates</a></li>
+<li><a class="reference internal" href="#configuration-reference">Configuration Reference</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#mpi">MPI</a></li>
+<li><a class="reference internal" href="#cuda">CUDA</a></li>
+<li><a class="reference internal" href="#docker-on-windows-and-macos">Docker on Windows and macOS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=b98c2dc9"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

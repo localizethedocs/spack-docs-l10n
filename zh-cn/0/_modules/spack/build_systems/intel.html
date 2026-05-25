@@ -1,0 +1,1601 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.build_systems.intel &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/build_systems/intel.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.build_systems.intel</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.build_systems.intel 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ElementTree</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+<span class="kn">from</span> <span class="nn">llnl.util.filesystem</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HeaderList</span><span class="p">,</span>
+    <span class="n">LibraryList</span><span class="p">,</span>
+    <span class="n">ancestor</span><span class="p">,</span>
+    <span class="n">filter_file</span><span class="p">,</span>
+    <span class="n">find_headers</span><span class="p">,</span>
+    <span class="n">find_libraries</span><span class="p">,</span>
+    <span class="n">find_system_libraries</span><span class="p">,</span>
+    <span class="n">install</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">spack.builder</span>
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">from</span> <span class="nn">spack.build_environment</span> <span class="kn">import</span> <span class="n">dso_suffix</span>
+<span class="kn">from</span> <span class="nn">spack.error</span> <span class="kn">import</span> <span class="n">InstallError</span>
+<span class="kn">from</span> <span class="nn">spack.util.environment</span> <span class="kn">import</span> <span class="n">EnvironmentModifications</span>
+<span class="kn">from</span> <span class="nn">spack.util.executable</span> <span class="kn">import</span> <span class="n">Executable</span>
+<span class="kn">from</span> <span class="nn">spack.util.prefix</span> <span class="kn">import</span> <span class="n">Prefix</span>
+<span class="kn">from</span> <span class="nn">spack.version</span> <span class="kn">import</span> <span class="n">Version</span><span class="p">,</span> <span class="n">ver</span>
+
+<span class="kn">from</span> <span class="nn">.generic</span> <span class="kn">import</span> <span class="n">Package</span>
+
+<span class="c1"># A couple of utility functions that might be useful in general. If so, they</span>
+<span class="c1"># should really be defined elsewhere, unless deemed heretical.</span>
+<span class="c1"># (Or na&quot;ive on my part).</span>
+
+
+<div class="viewcode-block" id="debug_print">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.debug_print">[文档]</a>
+<span class="k">def</span> <span class="nf">debug_print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prints a message (usu. a variable) and the callers&#39; names for a couple</span>
+<span class="sd">    of stack frames.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># https://docs.python.org/2/library/inspect.html#the-interpreter-stack</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+    <span class="n">_func_name</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">_func_name</span><span class="p">],</span> <span class="n">stack</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">_func_name</span><span class="p">],</span> <span class="n">msg</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="raise_lib_error">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.raise_lib_error">[文档]</a>
+<span class="k">def</span> <span class="nf">raise_lib_error</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bails out with an error message. Shows args after the first as one per</span>
+<span class="sd">    line, tab-indented, useful for long paths to line up and stand out.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="n">InstallError</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args</span><span class="p">))</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_expand_fields</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[Experimental] Expand arch-related fields in a string, typically a</span>
+<span class="sd">    filename.</span>
+
+<span class="sd">    Supported fields and their typical expansions are::</span>
+
+<span class="sd">        {platform}  linux, mac</span>
+<span class="sd">        {arch}      intel64 (including on Mac)</span>
+<span class="sd">        {libarch}   intel64, empty on Mac</span>
+<span class="sd">        {bits}      64</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Python-native string formatting requires arg list counts to match the</span>
+    <span class="c1"># replacement field count; optional fields are far easier with regexes.</span>
+
+    <span class="n">_bits</span> <span class="o">=</span> <span class="s2">&quot;64&quot;</span>
+    <span class="n">_arch</span> <span class="o">=</span> <span class="s2">&quot;intel64&quot;</span>  <span class="c1"># TBD: ia32</span>
+
+    <span class="k">if</span> <span class="s2">&quot;linux&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">:</span>  <span class="c1"># NB: linux2 vs. linux</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{platform}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;linux&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">_arch</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;darwin&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{platform}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;mac&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>  <span class="c1"># no arch dirs are used (as of 2018)</span>
+    <span class="c1"># elif &#39;win&#39; in sys.platform:            # TBD</span>
+    <span class="c1">#     s = re.sub(&#39;{platform}&#39;, &#39;windows&#39;, s)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{arch}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">_arch</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{bits}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">_bits</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+
+<div class="viewcode-block" id="IntelPackage">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage">[文档]</a>
+<span class="k">class</span> <span class="nc">IntelPackage</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specialized class for licensed Intel software.</span>
+
+<span class="sd">    This class provides two phases that can be overridden:</span>
+
+<span class="sd">    1. :py:meth:`~.IntelPackage.configure`</span>
+<span class="sd">    2. :py:meth:`~.IntelPackage.install`</span>
+
+<span class="sd">    They both have sensible defaults and for many packages the</span>
+<span class="sd">    only thing necessary will be to override setup_run_environment</span>
+<span class="sd">    to set the appropriate environment variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: This attribute is used in UI queries that need to know the build</span>
+    <span class="c1">#: system base class</span>
+    <span class="n">build_system_class</span> <span class="o">=</span> <span class="s2">&quot;IntelPackage&quot;</span>
+
+    <span class="c1">#: A dict that maps Spack version specs to release years, needed to infer</span>
+    <span class="c1">#: the installation directory layout for pre-2016 versions in the family of</span>
+    <span class="c1">#: Intel packages.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Like any property, it can be overridden in client packages, should older</span>
+    <span class="c1"># versions ever be added there.  The initial dict here contains the</span>
+    <span class="c1"># packages defined in Spack as of 2018-04.  Keys could conceivably overlap</span>
+    <span class="c1"># but preferably should not - only the first key in hash traversal order</span>
+    <span class="c1"># that satisfies self.spec will be used.</span>
+    <span class="n">version_years</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># intel-daal is versioned 2016 and later, no divining is needed</span>
+        <span class="s2">&quot;intel-ipp@9.0:9&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
+        <span class="s2">&quot;intel-mkl@11.3.0:11.3&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
+        <span class="s2">&quot;intel-mpi@5.1:5&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Below is the list of possible values for setting auto dispatch functions</span>
+    <span class="c1"># for the Intel compilers. Using these allows for the building of fat</span>
+    <span class="c1"># binaries that will detect the CPU SIMD capabilities at run time and</span>
+    <span class="c1"># activate the appropriate extensions.</span>
+    <span class="n">auto_dispatch_options</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;COMMON-AVX512&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MIC-AVX512&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CORE-AVX512&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CORE-AVX2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CORE-AVX-I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;AVX&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SSE4.2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SSE4.1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SSSE3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SSE3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SSE2&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">license_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># The Intel libraries are provided without requiring a license as of</span>
+        <span class="c1"># version 2017.2. Trying to specify one anyway will fail. See:</span>
+        <span class="c1"># https://software.intel.com/en-us/articles/free-ipsxe-tools-and-libraries</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_compilers</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">&lt;</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;2017.2&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Comment symbol used in the license.lic file</span>
+    <span class="n">license_comment</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span>
+
+    <span class="c1">#: Environment variables that Intel searches for a license file</span>
+    <span class="n">license_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;INTEL_LICENSE_FILE&quot;</span><span class="p">]</span>
+
+    <span class="c1">#: URL providing information on how to acquire a license key</span>
+    <span class="n">license_url</span> <span class="o">=</span> <span class="s2">&quot;https://software.intel.com/en-us/articles/intel-license-manager-faq&quot;</span>
+
+    <span class="c1">#: Location where Intel searches for a license file</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">license_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Licenses&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_compilers</span><span class="p">:</span>
+            <span class="n">dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_bin_dir</span><span class="p">(</span><span class="s2">&quot;compiler&quot;</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">variant</span><span class="p">,</span> <span class="n">component_suite_dir</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="s2">&quot;+advisor&quot;</span><span class="p">:</span> <span class="s2">&quot;advisor&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;+inspector&quot;</span><span class="p">:</span> <span class="s2">&quot;inspector&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;+itac&quot;</span><span class="p">:</span> <span class="s2">&quot;itac&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;+vtune&quot;</span><span class="p">:</span> <span class="s2">&quot;vtune_profiler&quot;</span><span class="p">,</span>
+            <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">variant</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                    <span class="n">dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;licenses&quot;</span><span class="p">,</span> <span class="n">component_suite_dir</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;license.lic&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">files</span>
+
+    <span class="c1">#: Components to install (list of name patterns from pset/mediaconfig.xml)</span>
+    <span class="c1"># NB: Renamed from plain components() for coding and maintainability.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pset_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Do not detail single-purpose client packages.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_compilers</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;ALL&quot;</span><span class="p">]</span>
+
+        <span class="c1"># tty.warn(&#39;DEBUG: installing ALL components&#39;)</span>
+        <span class="c1"># return [&#39;ALL&#39;]</span>
+
+        <span class="c1"># Always include compilers and closely related components.</span>
+        <span class="c1"># Pre-2016 compiler components have different names - throw in all.</span>
+        <span class="c1"># Later releases have overlapping minor parts that differ by &quot;edition&quot;.</span>
+        <span class="c1"># NB: The spack package &#39;intel&#39; is a subset of</span>
+        <span class="c1"># &#39;intel-parallel-studio@composer&#39; without the lib variants.</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot; intel-icc          intel-ifort&quot;</span>
+            <span class="s2">&quot; intel-ccomp        intel-fcomp        intel-comp-&quot;</span>
+            <span class="s2">&quot; intel-compilerproc intel-compilerprof intel-compilerpro-&quot;</span>
+            <span class="s2">&quot; intel-psxe intel-openmp&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">additions_for</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;cluster&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-icsxe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;professional&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-ips-&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;composer&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-compxe&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edition</span> <span class="ow">in</span> <span class="n">additions_for</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">+=</span> <span class="n">additions_for</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_edition</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">variant</span><span class="p">,</span> <span class="n">components_to_add</span> <span class="ow">in</span> <span class="p">{</span>
+            <span class="s2">&quot;+daal&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-daal&quot;</span><span class="p">,</span>  <span class="c1"># Data Analytics Acceleration Lib</span>
+            <span class="s2">&quot;+gdb&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-gdb&quot;</span><span class="p">,</span>  <span class="c1"># Integrated Performance Primitives</span>
+            <span class="s2">&quot;+ipp&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-ipp intel-crypto-ipp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;+mkl&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-mkl&quot;</span><span class="p">,</span>  <span class="c1"># Math Kernel Library</span>
+            <span class="s2">&quot;+mpi&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-mpi intel-imb&quot;</span><span class="p">,</span>  <span class="c1"># MPI runtime, SDK, benchm.</span>
+            <span class="s2">&quot;+tbb&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-tbb&quot;</span><span class="p">,</span>  <span class="c1"># Threading Building Blocks</span>
+            <span class="s2">&quot;+advisor&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-advisor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;+clck&quot;</span><span class="p">:</span> <span class="s2">&quot; intel_clck&quot;</span><span class="p">,</span>  <span class="c1"># Cluster Checker</span>
+            <span class="s2">&quot;+inspector&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-inspector&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;+itac&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-itac intel-ta intel-tc&quot;</span> <span class="s2">&quot; intel-trace-analyzer intel-trace-collector&quot;</span><span class="p">,</span>
+            <span class="c1"># Trace Analyzer and Collector</span>
+            <span class="s2">&quot;+vtune&quot;</span><span class="p">:</span> <span class="s2">&quot; intel-vtune&quot;</span><span class="p">,</span>
+            <span class="c1"># VTune, ..-profiler since 2020, ..-amplifier before</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">variant</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">+=</span> <span class="n">components_to_add</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># Utilities</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_filtered_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expands the list of desired component patterns to the exact names</span>
+<span class="sd">        present in the given download.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pset_components</span>
+        <span class="k">if</span> <span class="s2">&quot;ALL&quot;</span> <span class="ow">in</span> <span class="n">c</span> <span class="ow">or</span> <span class="s2">&quot;DEFAULTS&quot;</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>  <span class="c1"># No filter needed</span>
+            <span class="k">return</span> <span class="n">c</span>
+
+        <span class="c1"># mediaconfig.xml is known to contain duplicate components.</span>
+        <span class="c1"># If more than one copy of the same component is used, you</span>
+        <span class="c1"># will get an error message about invalid components.</span>
+        <span class="c1"># Use sets to prevent duplicates and for efficient traversal.</span>
+        <span class="n">requested</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">confirmed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># NB: To get a reasonable overview in pretty much the documented way:</span>
+        <span class="c1">#</span>
+        <span class="c1">#   grep -E &#39;&lt;Product|&lt;Abbr|&lt;Name&gt;..[a-z]&#39;  pset/mediaconfig.xml</span>
+        <span class="c1">#</span>
+        <span class="c1"># https://software.intel.com/en-us/articles/configuration-file-format</span>
+        <span class="c1">#</span>
+        <span class="n">xmltree</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;pset/mediaconfig.xml&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">xmltree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//Abbr&quot;</span><span class="p">):</span>  <span class="c1"># XPath expression</span>
+            <span class="n">name_present</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">text</span>
+            <span class="k">for</span> <span class="n">name_requested</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name_present</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">name_requested</span><span class="p">):</span>
+                    <span class="n">confirmed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name_present</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">confirmed</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">intel64_int_suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provide the suffix for Intel library names to match a client</span>
+<span class="sd">        application&#39;s desired int size, conveyed by the active spec variant.</span>
+<span class="sd">        The possible suffixes and their meanings are:</span>
+
+<span class="sd">          ``ilp64``  all of int, long, and pointer are 64 bit,</span>
+<span class="sd">          `` lp64``  only long and pointer are 64 bit; int will be 32bit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;+ilp64&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ilp64&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;lp64&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_has_compilers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;intel&quot;</span><span class="p">,</span> <span class="s2">&quot;intel-parallel-studio&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_edition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;intel-parallel-studio&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># clearer than .up_to(1), I think.</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;intel&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;composer&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version_yearlike</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the version in a unified style, suitable for Version class</span>
+<span class="sd">        conditionals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Input data for this routine:  self.version</span>
+        <span class="c1"># Returns:                      YYYY.Nupdate[.Buildseq]</span>
+        <span class="c1">#</span>
+        <span class="c1"># Specifics by package:</span>
+        <span class="c1">#</span>
+        <span class="c1">#   Package                     Format of self.version</span>
+        <span class="c1">#   ------------------------------------------------------------</span>
+        <span class="c1">#   &#39;intel-parallel-studio&#39;     &lt;edition&gt;.YYYY.Nupdate</span>
+        <span class="c1">#   &#39;intel&#39;                     YY.0.Nupdate (some assigned ad-hoc)</span>
+        <span class="c1">#   Recent lib packages         YYYY.Nupdate.Buildseq</span>
+        <span class="c1">#   Early lib packages          Major.Minor.Patch.Buildseq</span>
+        <span class="c1">#   ------------------------------------------------------------</span>
+        <span class="c1">#</span>
+        <span class="c1">#   Package                     Output</span>
+        <span class="c1">#   ------------------------------------------------------------</span>
+        <span class="c1">#   &#39;intel-parallel-studio&#39;     YYYY.Nupdate</span>
+        <span class="c1">#   &#39;intel&#39;                     YYYY.Nupdate</span>
+        <span class="c1">#   Recent lib packages         YYYY.Nupdate.Buildseq</span>
+        <span class="c1">#   Known early lib packages    YYYY.Minor.Patch.Buildseq (*)</span>
+        <span class="c1">#   Unknown early lib packages  (2000 + Major).Minor.Patch.Buildseq</span>
+        <span class="c1">#   ----------------------------------------------------------------</span>
+        <span class="c1">#</span>
+        <span class="c1">#   (*) YYYY is taken from @property &quot;version_years&quot; (a dict of specs)</span>
+        <span class="c1">#</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;intel&quot;</span><span class="p">:</span>
+                <span class="c1"># Has a &quot;Minor&quot; version element, but it is always set as 0. To</span>
+                <span class="c1"># be useful for comparisons, drop it and get YYYY.Nupdate.</span>
+                <span class="n">v_tail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>  <span class="c1"># coerced just fine via __getitem__</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">v_tail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="c1"># Hmm - this happens on &quot;spack install intel-mkl@11&quot;.</span>
+            <span class="c1"># I thought concretization picks an actual version??</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>  <span class="c1"># give up</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;intel-parallel-studio&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v_tail</span>
+
+        <span class="n">v_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">v_year</span> <span class="o">&lt;</span> <span class="mi">2000</span><span class="p">:</span>
+            <span class="c1"># Shoehorn Major into release year until we know better.</span>
+            <span class="n">v_year</span> <span class="o">+=</span> <span class="mi">2000</span>
+            <span class="k">for</span> <span class="n">spec</span><span class="p">,</span> <span class="n">year</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_years</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
+                    <span class="n">v_year</span> <span class="o">=</span> <span class="n">year</span>
+                    <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">v_year</span><span class="p">,</span> <span class="n">v_tail</span><span class="p">))</span>
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># Directory handling common to all Intel components</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># For reference: classes using IntelPackage, as of Spack-0.11:</span>
+    <span class="c1">#</span>
+    <span class="c1">#  intel/               intel-ipp/          intel-mpi/</span>
+    <span class="c1">#  intel-daal/          intel-mkl/          intel-parallel-studio/</span>
+    <span class="c1">#</span>
+    <span class="c1"># Not using class IntelPackage:</span>
+    <span class="c1">#  intel-gpu-tools/        intel-mkl-dnn/          intel-tbb/</span>
+    <span class="c1">#</span>
+<div class="viewcode-block" id="IntelPackage.normalize_suite_dir">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.normalize_suite_dir">[文档]</a>
+    <span class="k">def</span> <span class="nf">normalize_suite_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_dir_name</span><span class="p">,</span> <span class="n">version_globs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*.*.*&quot;</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the version-specific and absolute path to the directory of</span>
+<span class="sd">        an Intel product or a suite of product components.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">            suite_dir_name (str):</span>
+<span class="sd">                Name of the product directory, without numeric version.</span>
+
+<span class="sd">                - Examples::</span>
+
+<span class="sd">                    composer_xe, parallel_studio_xe, compilers_and_libraries</span>
+
+<span class="sd">                The following will work as well, even though they are not</span>
+<span class="sd">                directly targets for Spack installation::</span>
+
+<span class="sd">                    advisor_xe, inspector_xe, vtune_amplifier_xe,</span>
+<span class="sd">                    performance_snapshots (new name for vtune as of 2018)</span>
+
+<span class="sd">                These are single-component products without subordinate</span>
+<span class="sd">                components and are normally made available to users by a</span>
+<span class="sd">                toplevel psxevars.sh or equivalent file to source (and thus by</span>
+<span class="sd">                the modulefiles that Spack produces).</span>
+
+<span class="sd">            version_globs (list): Suffix glob patterns (most specific</span>
+<span class="sd">                first) expected to qualify suite_dir_name to its fully</span>
+<span class="sd">                version-specific install directory (as opposed to a</span>
+<span class="sd">                compatibility directory or symlink).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># See ./README-intel.rst for background and analysis of dir layouts.</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+
+        <span class="c1"># Distinguish between product installations that were done external to</span>
+        <span class="c1"># Spack (integrated via packages.yaml) and Spack-internal ones. The</span>
+        <span class="c1"># resulting prefixes may differ in directory depth and specificity.</span>
+        <span class="n">unversioned_dirname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">suite_dir_name</span> <span class="ow">and</span> <span class="n">suite_dir_name</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+            <span class="c1"># If e.g. MKL was installed outside of Spack, it is likely just one</span>
+            <span class="c1"># product or product component among possibly many other Intel</span>
+            <span class="c1"># products and their releases that were installed in sibling or</span>
+            <span class="c1"># cousin directories.  In such cases, the prefix given to Spack</span>
+            <span class="c1"># will inevitably be a highly product-specific and preferably fully</span>
+            <span class="c1"># version-specific directory.  This is what we want and need, and</span>
+            <span class="c1"># nothing more specific than that, i.e., if needed, convert, e.g.:</span>
+            <span class="c1">#   .../compilers_and_libraries*/* -&gt; .../compilers_and_libraries*</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;(</span><span class="si">%s%s</span><span class="s2">.*?)</span><span class="si">%s</span><span class="s2">.*&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">suite_dir_name</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">),</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+            <span class="c1"># The Intel installer scripts try hard to place compatibility links</span>
+            <span class="c1"># named like this in the install dir to convey upgrade benefits to</span>
+            <span class="c1"># traditional client apps. But such a generic name can be trouble</span>
+            <span class="c1"># when given to Spack: the link target is bound to change outside</span>
+            <span class="c1"># of Spack&#39;s purview and when it does, the outcome of subsequent</span>
+            <span class="c1"># builds of dependent packages may be affected. (Though Intel has</span>
+            <span class="c1"># been remarkably good at backward compatibility.)</span>
+            <span class="c1"># I&#39;m not sure if Spack&#39;s package hashing includes link targets.</span>
+            <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suite_dir_name</span><span class="p">):</span>
+                <span class="c1"># NB: This could get tiresome without a seen++ test.</span>
+                <span class="c1"># tty.warn(&#39;Intel product found in a version-neutral directory&#39;</span>
+                <span class="c1">#          &#39; - future builds may not be reproducible.&#39;)</span>
+                <span class="c1">#</span>
+                <span class="c1"># Simply doing realpath() would not be enough, because:</span>
+                <span class="c1">#   compilers_and_libraries -&gt; compilers_and_libraries_2018</span>
+                <span class="c1"># which is mostly a staging directory for symlinks (see next).</span>
+                <span class="n">unversioned_dirname</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># By contrast, a Spack-internal MKL installation will inherit its</span>
+            <span class="c1"># prefix from install.sh of Intel&#39;s package distribution, where it</span>
+            <span class="c1"># means the high-level installation directory that is specific to</span>
+            <span class="c1"># the *vendor* (think of the default &quot;/opt/intel&quot;). We must now</span>
+            <span class="c1"># step down into the *product* directory to get the usual</span>
+            <span class="c1"># hierarchy. But let&#39;s not do that in haste ...</span>
+            <span class="c1">#</span>
+            <span class="c1"># For a Spack-born install, the fully-qualified release directory</span>
+            <span class="c1"># desired above may seem less important since product upgrades</span>
+            <span class="c1"># won&#39;t land in the same parent. However, only the fully qualified</span>
+            <span class="c1"># directory contains the regular files for the compiler commands:</span>
+            <span class="c1">#</span>
+            <span class="c1"># $ ls -lF &lt;HASH&gt;/compilers_and_libraries*/linux/bin/intel64/icc</span>
+            <span class="c1">#</span>
+            <span class="c1"># &lt;HASH&gt;/compilers_and_libraries_2018.1.163/linux/bin/intel64/icc*</span>
+            <span class="c1">#   A regular file in the actual release directory. Bingo!</span>
+            <span class="c1">#</span>
+            <span class="c1"># &lt;HASH&gt;/compilers_and_libraries_2018/linux/bin/intel64/icc -&gt; ...</span>
+            <span class="c1">#   A symlink - no good. Note that &quot;compilers_and_libraries_2018/&quot;</span>
+            <span class="c1">#   is itself a directory (not symlink) but it merely holds a</span>
+            <span class="c1">#   compatibility dir hierarchy with lots of symlinks into the</span>
+            <span class="c1">#   release dir.</span>
+            <span class="c1">#</span>
+            <span class="c1"># &lt;HASH&gt;/compilers_and_libraries/linux/bin/intel64/icc -&gt; ...</span>
+            <span class="c1">#   Ditto.</span>
+            <span class="c1">#</span>
+            <span class="c1">#  Now, the Spack packages for MKL and MPI packges use version</span>
+            <span class="c1">#  triplets, but the one for intel-parallel-studio does not.</span>
+            <span class="c1">#  So, we can&#39;t have it quite as easy as:</span>
+            <span class="c1"># d = Prefix(d.append(&#39;compilers_and_libraries_&#39; + self.version))</span>
+            <span class="c1">#  Alright, let&#39;s see what we can find instead:</span>
+            <span class="n">unversioned_dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">suite_dir_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">unversioned_dirname</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">version_globs</span><span class="p">:</span>
+                <span class="n">try_glob</span> <span class="o">=</span> <span class="n">unversioned_dirname</span> <span class="o">+</span> <span class="n">g</span>
+                <span class="n">debug_print</span><span class="p">(</span><span class="s2">&quot;trying </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">try_glob</span><span class="p">)</span>
+
+                <span class="n">matching_dirs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">try_glob</span><span class="p">))</span>
+                <span class="c1"># NB: Python glob() returns results in arbitrary order - ugh!</span>
+                <span class="c1"># NB2: sorted() is a shortcut that is NOT number-aware.</span>
+
+                <span class="k">if</span> <span class="n">matching_dirs</span><span class="p">:</span>
+                    <span class="n">debug_print</span><span class="p">(</span><span class="s2">&quot;found </span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">matching_dirs</span><span class="p">),</span> <span class="n">matching_dirs</span><span class="p">)</span>
+                    <span class="c1"># Take the highest and thus presumably newest match, which</span>
+                    <span class="c1"># better be the sole one anyway.</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">matching_dirs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">matching_dirs</span><span class="p">:</span>
+                <span class="c1"># No match -- return a sensible value anyway.</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">unversioned_dirname</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Prefix</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.normalize_path">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.normalize_path">[文档]</a>
+    <span class="k">def</span> <span class="nf">normalize_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component_path</span><span class="p">,</span> <span class="n">component_suite_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the absolute or relative path to a component or file under a</span>
+<span class="sd">        component suite directory.</span>
+
+<span class="sd">        Intel&#39;s product names, scope, and directory layout changed over the</span>
+<span class="sd">        years.  This function provides a unified interface to their directory</span>
+<span class="sd">        names.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">            component_path (str): a component name like &#39;mkl&#39;, or &#39;mpi&#39;, or a</span>
+<span class="sd">                deeper relative path.</span>
+
+<span class="sd">            component_suite_dir (str): _Unversioned_ name of the expected</span>
+<span class="sd">                parent directory of component_path.  When absent or `None`, an</span>
+<span class="sd">                appropriate default will be used.  A present but empty string</span>
+<span class="sd">                `&quot;&quot;` requests that `component_path` refer to `self.prefix`</span>
+<span class="sd">                directly.</span>
+
+<span class="sd">                Typical values: `compilers_and_libraries`, `composer_xe`,</span>
+<span class="sd">                `parallel_studio_xe`.</span>
+
+<span class="sd">                Also supported: `advisor`, `inspector`, `vtune`. The actual</span>
+<span class="sd">                directory name for these suites varies by release year. The</span>
+<span class="sd">                name will be corrected as needed for use in the return value.</span>
+
+<span class="sd">            relative (bool): When True, return path relative to self.prefix,</span>
+<span class="sd">                otherwise, return an absolute path (the default).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Design note: Choosing the default for `component_suite_dir` was a bit</span>
+        <span class="c1"># tricky since there better be a sensible means to specify direct</span>
+        <span class="c1"># parentage under self.prefix (even though you normally shouldn&#39;t need</span>
+        <span class="c1"># a function for that).  I chose &quot;&quot; to allow that case be represented,</span>
+        <span class="c1"># and &#39;None&#39; or the absence of the kwarg to represent the most relevant</span>
+        <span class="c1"># case for the time of writing.</span>
+        <span class="c1">#</span>
+        <span class="c1"># In the 2015 releases (the earliest in Spack as of 2018), there were</span>
+        <span class="c1"># nominally two separate products that provided the compilers:</span>
+        <span class="c1"># &quot;Composer&quot; as lower tier, and &quot;Parallel Studio&quot; as upper tier. In</span>
+        <span class="c1"># Spack, we justifiably retcon both as &quot;intel-parallel-studio@composer&quot;</span>
+        <span class="c1"># and &quot;...@cluster&quot;, respectively.  Both of these use the older</span>
+        <span class="c1"># &quot;composer_xe&quot; dir layout, as do their virtual package personas.</span>
+        <span class="c1">#</span>
+        <span class="c1"># All other &quot;intel-foo&quot; packages in Spack as of 2018-04 use the</span>
+        <span class="c1"># &quot;compilers_and_libraries&quot; layout, including the 2016 releases that</span>
+        <span class="c1"># are not natively versioned by year.</span>
+
+        <span class="n">cs</span> <span class="o">=</span> <span class="n">component_suite_dir</span>
+        <span class="k">if</span> <span class="n">cs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">component_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ism&quot;</span><span class="p">):</span>
+            <span class="n">cs</span> <span class="o">=</span> <span class="s2">&quot;parallel_studio_xe&quot;</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_yearlike</span>
+
+        <span class="c1"># Glob variants to complete component_suite_dir.</span>
+        <span class="c1"># Helper var for older MPI versions - those are reparented, with each</span>
+        <span class="c1"># version in their own version-named dir.</span>
+        <span class="n">standalone_glob</span> <span class="o">=</span> <span class="s2">&quot;[1-9]*.*.*&quot;</span>
+
+        <span class="c1"># Most other components; try most specific glob first.</span>
+        <span class="c1"># flake8 is far too opinionated about lists - ugh.</span>
+        <span class="n">normalize_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;version_globs&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+                <span class="s2">&quot;_</span><span class="si">%s</span><span class="s2">.*&quot;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">up_to</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>  <span class="c1"># should be: YYYY.Nupdate</span>
+                <span class="s2">&quot;_*.*.*&quot;</span><span class="p">,</span>  <span class="c1"># last resort</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">rename_rule</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="c1"># cs given as arg, in years, dir actually used, [version_globs]</span>
+            <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;:2015&quot;</span><span class="p">,</span> <span class="s2">&quot;composer_xe&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2016:&quot;</span><span class="p">,</span> <span class="s2">&quot;compilers_and_libraries&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;advisor&quot;</span><span class="p">,</span> <span class="s2">&quot;:2016&quot;</span><span class="p">,</span> <span class="s2">&quot;advisor_xe&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;inspector&quot;</span><span class="p">,</span> <span class="s2">&quot;:2016&quot;</span><span class="p">,</span> <span class="s2">&quot;inspector_xe&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;vtune_profiler&quot;</span><span class="p">,</span> <span class="s2">&quot;:2017&quot;</span><span class="p">,</span> <span class="s2">&quot;vtune_amplifier_xe&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;vtune&quot;</span><span class="p">,</span> <span class="s2">&quot;:2017&quot;</span><span class="p">,</span> <span class="s2">&quot;vtune_amplifier_xe&quot;</span><span class="p">],</span>  <span class="c1"># alt.</span>
+            <span class="p">[</span><span class="s2">&quot;vtune_profiler&quot;</span><span class="p">,</span> <span class="s2">&quot;:2019&quot;</span><span class="p">,</span> <span class="s2">&quot;vtune_amplifier&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;itac&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;itac&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="n">standalone_glob</span><span class="p">]],</span>
+        <span class="p">]:</span>
+            <span class="k">if</span> <span class="n">cs</span> <span class="o">==</span> <span class="n">rename_rule</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">ver</span><span class="p">(</span><span class="n">rename_rule</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="n">cs</span> <span class="o">=</span> <span class="n">rename_rule</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rename_rule</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">normalize_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;version_globs&quot;</span><span class="p">:</span> <span class="n">rename_rule</span><span class="p">[</span><span class="mi">3</span><span class="p">]}</span>
+                <span class="k">break</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_suite_dir</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="o">**</span><span class="n">normalize_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Help find components not located directly under d.</span>
+        <span class="c1"># NB: ancestor() not well suited if version_globs may contain os.sep .</span>
+        <span class="n">parent_dir</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+        <span class="n">reparent_as</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">cs</span> <span class="o">==</span> <span class="s2">&quot;compilers_and_libraries&quot;</span><span class="p">:</span>  <span class="c1"># must qualify further</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{platform}</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">cs</span> <span class="o">==</span> <span class="s2">&quot;composer_xe&quot;</span><span class="p">:</span>
+            <span class="n">reparent_as</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mpi&quot;</span><span class="p">:</span> <span class="s2">&quot;impi&quot;</span><span class="p">}</span>
+            <span class="c1"># ignore &#39;imb&#39; (MPI Benchmarks)</span>
+
+        <span class="k">for</span> <span class="n">nominal_p</span><span class="p">,</span> <span class="n">actual_p</span> <span class="ow">in</span> <span class="n">reparent_as</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">component_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">nominal_p</span><span class="p">):</span>
+                <span class="n">dirs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">,</span> <span class="n">actual_p</span><span class="p">,</span> <span class="n">standalone_glob</span><span class="p">))</span>
+                <span class="n">debug_print</span><span class="p">(</span><span class="s2">&quot;reparent dirs: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dirs</span><span class="p">)</span>
+                <span class="c1"># Brazenly assume last match is the most recent version;</span>
+                <span class="c1"># convert back to relative of parent_dir, and re-assemble.</span>
+                <span class="n">rel_dir</span> <span class="o">=</span> <span class="n">dirs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">component_path</span> <span class="o">=</span> <span class="n">component_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">nominal_p</span><span class="p">,</span> <span class="n">rel_dir</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">parent_dir</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">component_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">relative</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">parent_dir</span><span class="p">)</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.component_bin_dir">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.component_bin_dir">[文档]</a>
+    <span class="k">def</span> <span class="nf">component_bin_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="o">==</span> <span class="s2">&quot;compiler&quot;</span><span class="p">:</span>  <span class="c1"># bin dir is always under PARENT</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ancestor</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot;bin&quot;</span><span class="p">,</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>  <span class="c1"># cosmetics, when {libarch} is empty</span>
+            <span class="c1"># NB: Works fine even with relative=True, e.g.:</span>
+            <span class="c1">#   composer_xe/compiler -&gt; composer_xe/bin/intel64</span>
+        <span class="k">elif</span> <span class="n">component</span> <span class="o">==</span> <span class="s2">&quot;mpi&quot;</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="s2">&quot;bin&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">)</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.component_lib_dir">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.component_lib_dir">[文档]</a>
+    <span class="k">def</span> <span class="nf">component_lib_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provide directory suitable for find_libraries() and</span>
+<span class="sd">        SPACK_COMPILER_EXTRA_RPATHS.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="o">==</span> <span class="s2">&quot;mpi&quot;</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="s2">&quot;lib&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>  <span class="c1"># cosmetics, when {libarch} is empty</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="o">==</span> <span class="s2">&quot;tbb&quot;</span><span class="p">:</span>  <span class="c1"># must qualify further for abi</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tbb_abi</span><span class="p">)</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.component_include_dir">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.component_include_dir">[文档]</a>
+    <span class="k">def</span> <span class="nf">component_include_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="o">==</span> <span class="s2">&quot;mpi&quot;</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{libarch}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">file_to_source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Full path of file to source for initializing an Intel package.</span>
+<span class="sd">        A client package could override as follows:</span>
+<span class="sd">        `    @property`</span>
+<span class="sd">        `    def file_to_source(self):`</span>
+<span class="sd">        `        return self.normalize_path(&quot;apsvars.sh&quot;, &quot;vtune_amplifier&quot;)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vars_file_info_for</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1"># key (usu. spack package name) -&gt; [rel_path, component_suite_dir]</span>
+            <span class="c1"># Extension note: handle additions by Spack name or ad-hoc keys.</span>
+            <span class="s2">&quot;@early_compiler&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bin/compilervars&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">&quot;intel-parallel-studio&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bin/psxevars&quot;</span><span class="p">,</span> <span class="s2">&quot;parallel_studio_xe&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;intel&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bin/compilervars&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">&quot;intel-daal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;daal/bin/daalvars&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">&quot;intel-ipp&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ipp/bin/ippvars&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">&quot;intel-mkl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mkl/bin/mklvars&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">&quot;intel-mpi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mpi/</span><span class="si">{libarch}</span><span class="s2">/bin/mpivars&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_yearlike</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">ver</span><span class="p">(</span><span class="s2">&quot;:2015&quot;</span><span class="p">)):</span>
+            <span class="c1"># Same file as &#39;intel&#39; but &#39;None&#39; for component_suite_dir will</span>
+            <span class="c1"># resolve differently. Listed as a separate entry to serve as</span>
+            <span class="c1"># example and to avoid pitfalls upon possible refactoring.</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;@early_compiler&quot;</span>
+
+        <span class="n">f</span><span class="p">,</span> <span class="n">component_suite_dir</span> <span class="o">=</span> <span class="n">vars_file_info_for</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">_expand_fields</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.sh&quot;</span>
+        <span class="c1"># TODO?? win32 would have to handle os.sep, &#39;.bat&#39; (unless POSIX??)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">component_suite_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span>
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># Threading, including (WIP) support for virtual &#39;tbb&#39;</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">openmp_libs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Supply LibraryList for linking OpenMP&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="c1"># NB: Hunting down explicit library files may be the Spack way of</span>
+            <span class="c1"># doing things, but be aware that &quot;{icc|ifort} --help openmp&quot;</span>
+            <span class="c1"># steers us towards options instead: -qopenmp-link={dynamic,static}</span>
+
+            <span class="n">omp_libnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;libiomp5&quot;</span><span class="p">]</span>
+            <span class="n">omp_libs</span> <span class="o">=</span> <span class="n">find_libraries</span><span class="p">(</span>
+                <span class="n">omp_libnames</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;compiler&quot;</span><span class="p">),</span>
+                <span class="n">shared</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;+shared&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="c1"># Note about search root here: For MKL, the directory</span>
+            <span class="c1"># &quot;$MKLROOT/../compiler&quot; will be present even for an MKL-only</span>
+            <span class="c1"># product installation (as opposed to one being ghosted via</span>
+            <span class="c1"># packages.yaml), specificially to provide the &#39;iomp5&#39; libs.</span>
+
+        <span class="k">elif</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">compiler_environment</span><span class="p">():</span>
+                <span class="n">omp_lib_path</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">cc</span><span class="p">)(</span>
+                    <span class="s2">&quot;--print-file-name&quot;</span><span class="p">,</span> <span class="s2">&quot;libgomp.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dso_suffix</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span>
+                <span class="p">)</span>
+            <span class="n">omp_libs</span> <span class="o">=</span> <span class="n">LibraryList</span><span class="p">(</span><span class="n">omp_lib_path</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="k">elif</span> <span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">compiler_environment</span><span class="p">():</span>
+                <span class="n">omp_lib_path</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">cc</span><span class="p">)(</span>
+                    <span class="s2">&quot;--print-file-name&quot;</span><span class="p">,</span> <span class="s2">&quot;libomp.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dso_suffix</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span>
+                <span class="p">)</span>
+            <span class="n">omp_libs</span> <span class="o">=</span> <span class="n">LibraryList</span><span class="p">(</span><span class="n">omp_lib_path</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">omp_libs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">raise_lib_error</span><span class="p">(</span><span class="s2">&quot;Cannot locate OpenMP libraries:&quot;</span><span class="p">,</span> <span class="n">omp_libnames</span><span class="p">)</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">omp_libs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">omp_libs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_gcc_executable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return GCC executable&quot;&quot;&quot;</span>
+        <span class="c1"># Match the available gcc, as it&#39;s done in tbbvars.sh.</span>
+        <span class="n">gcc_name</span> <span class="o">=</span> <span class="s2">&quot;gcc&quot;</span>
+        <span class="c1"># but first check if -gcc-name is specified in cflags</span>
+        <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">compiler_flags</span><span class="p">[</span><span class="s2">&quot;cflags&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">flag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;-gcc-name=&quot;</span><span class="p">):</span>
+                <span class="n">gcc_name</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-gcc-name=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">gcc_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Executable</span><span class="p">(</span><span class="n">gcc_name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tbb_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Note: TBB is included as</span>
+        <span class="c1"># #include &lt;tbb/task_scheduler_init.h&gt;</span>
+        <span class="k">return</span> <span class="n">HeaderList</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">component_include_dir</span><span class="p">(</span><span class="s2">&quot;tbb&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/dummy.h&quot;</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tbb_libs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Supply LibraryList for linking TBB&quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: When is &#39;libtbbmalloc&#39; needed?</span>
+        <span class="n">tbb_lib</span> <span class="o">=</span> <span class="n">find_libraries</span><span class="p">([</span><span class="s2">&quot;libtbb&quot;</span><span class="p">],</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;tbb&quot;</span><span class="p">))</span>
+        <span class="c1"># NB: Like icc with -qopenmp, so does icpc steer us towards using an</span>
+        <span class="c1"># option: &quot;icpc -tbb&quot;</span>
+
+        <span class="c1"># TODO: clang(?)</span>
+        <span class="n">gcc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gcc_executable</span>  <span class="c1"># must be gcc, not self.compiler.cc</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">compiler_environment</span><span class="p">():</span>
+            <span class="n">cxx_lib_path</span> <span class="o">=</span> <span class="n">gcc</span><span class="p">(</span><span class="s2">&quot;--print-file-name&quot;</span><span class="p">,</span> <span class="s2">&quot;libstdc++.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dso_suffix</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="n">libs</span> <span class="o">=</span> <span class="n">tbb_lib</span> <span class="o">+</span> <span class="n">LibraryList</span><span class="p">(</span><span class="n">cxx_lib_path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">libs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">libs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_tbb_abi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select the ABI needed for linking TBB&quot;&quot;&quot;</span>
+        <span class="n">gcc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gcc_executable</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">compiler_environment</span><span class="p">():</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;(gcc|LLVM).* ([0-9]+\.[0-9]+\.[0-9]+).*&quot;</span><span class="p">,</span>
+                <span class="n">gcc</span><span class="p">(</span><span class="s2">&quot;--version&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">I</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">abi</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="c1"># TODO: Confirm that this covers clang (needed on Linux only)</span>
+            <span class="n">gcc_version</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">matches</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">gcc_version</span> <span class="o">&gt;=</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;4.7&quot;</span><span class="p">):</span>
+                <span class="n">abi</span> <span class="o">=</span> <span class="s2">&quot;gcc4.7&quot;</span>
+            <span class="k">elif</span> <span class="n">gcc_version</span> <span class="o">&gt;=</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;4.4&quot;</span><span class="p">):</span>
+                <span class="n">abi</span> <span class="o">=</span> <span class="s2">&quot;gcc4.4&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">abi</span> <span class="o">=</span> <span class="s2">&quot;gcc4.1&quot;</span>  <span class="c1"># unlikely, one hopes.</span>
+
+        <span class="c1"># Alrighty then ...</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">abi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">abi</span>
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># Support for virtual &#39;blas/lapack/scalapack&#39;</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">blas_libs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Main magic here.</span>
+        <span class="c1"># For reference, see The Intel Math Kernel Library Link Line Advisor:</span>
+        <span class="c1"># https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/</span>
+
+        <span class="n">mkl_integer</span> <span class="o">=</span> <span class="s2">&quot;libmkl_intel_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">intel64_int_suffix</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;threads=openmp&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                <span class="n">mkl_threading</span> <span class="o">=</span> <span class="s2">&quot;libmkl_intel_thread&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                <span class="n">mkl_threading</span> <span class="o">=</span> <span class="s2">&quot;libmkl_gnu_thread&quot;</span>
+            <span class="n">threading_engine_libs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openmp_libs</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;threads=tbb&quot;</span><span class="p">):</span>
+            <span class="n">mkl_threading</span> <span class="o">=</span> <span class="s2">&quot;libmkl_tbb_thread&quot;</span>
+            <span class="n">threading_engine_libs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tbb_libs</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;threads=none&quot;</span><span class="p">):</span>
+            <span class="n">mkl_threading</span> <span class="o">=</span> <span class="s2">&quot;libmkl_sequential&quot;</span>
+            <span class="n">threading_engine_libs</span> <span class="o">=</span> <span class="n">LibraryList</span><span class="p">([])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">raise_lib_error</span><span class="p">(</span><span class="s2">&quot;Cannot determine MKL threading libraries.&quot;</span><span class="p">)</span>
+
+        <span class="n">mkl_libnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">mkl_integer</span><span class="p">,</span> <span class="n">mkl_threading</span><span class="p">,</span> <span class="s2">&quot;libmkl_core&quot;</span><span class="p">]</span>
+        <span class="n">mkl_libs</span> <span class="o">=</span> <span class="n">find_libraries</span><span class="p">(</span>
+            <span class="n">mkl_libnames</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span> <span class="n">shared</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;+shared&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">mkl_libs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mkl_libs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">raise_lib_error</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot locate core MKL libraries:&quot;</span><span class="p">,</span>
+                <span class="n">mkl_libnames</span><span class="p">,</span>
+                <span class="s2">&quot;in:&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="c1"># The Intel MKL link line advisor recommends these system libraries</span>
+        <span class="n">system_libs</span> <span class="o">=</span> <span class="n">find_system_libraries</span><span class="p">(</span>
+            <span class="s2">&quot;libpthread libm libdl&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">shared</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;+shared&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">system_libs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mkl_libs</span> <span class="o">+</span> <span class="n">threading_engine_libs</span> <span class="o">+</span> <span class="n">system_libs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lapack_libs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blas_libs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">scalapack_libs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Intel MKL does not directly depend on MPI but the BLACS library</span>
+        <span class="c1"># which underlies ScaLapack does. It comes in several personalities;</span>
+        <span class="c1"># we must supply a personality matching the MPI implementation that</span>
+        <span class="c1"># is active for the root package that asked for ScaLapack.</span>
+        <span class="n">spec_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">root</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span> <span class="ow">and</span> <span class="s2">&quot;^mpich&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span><span class="p">:</span>
+            <span class="c1"># The only supported choice for MKL 2018 on Mac.</span>
+            <span class="n">blacs_lib</span> <span class="o">=</span> <span class="s2">&quot;libmkl_blacs_mpich&quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;^openmpi&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span><span class="p">:</span>
+            <span class="n">blacs_lib</span> <span class="o">=</span> <span class="s2">&quot;libmkl_blacs_openmpi&quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;^mpich@1&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span><span class="p">:</span>
+            <span class="c1"># Was supported only up to 2015.</span>
+            <span class="n">blacs_lib</span> <span class="o">=</span> <span class="s2">&quot;libmkl_blacs&quot;</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="s2">&quot;^mpich@2:&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+            <span class="ow">or</span> <span class="s2">&quot;^cray-mpich&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+            <span class="ow">or</span> <span class="s2">&quot;^mvapich2&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+            <span class="ow">or</span> <span class="s2">&quot;^mvapich&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+            <span class="ow">or</span> <span class="s2">&quot;^intel-mpi&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+            <span class="ow">or</span> <span class="s2">&quot;^intel-oneapi-mpi&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+            <span class="ow">or</span> <span class="s2">&quot;^intel-parallel-studio&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span>
+        <span class="p">):</span>
+            <span class="n">blacs_lib</span> <span class="o">=</span> <span class="s2">&quot;libmkl_blacs_intelmpi&quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;^mpt&quot;</span> <span class="ow">in</span> <span class="n">spec_root</span><span class="p">:</span>
+            <span class="n">blacs_lib</span> <span class="o">=</span> <span class="s2">&quot;libmkl_blacs_sgimpt&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">raise_lib_error</span><span class="p">(</span><span class="s2">&quot;Cannot find a BLACS library for the given MPI.&quot;</span><span class="p">)</span>
+
+        <span class="n">int_suff</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">intel64_int_suffix</span>
+        <span class="n">scalapack_libnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;libmkl_scalapack&quot;</span> <span class="o">+</span> <span class="n">int_suff</span><span class="p">,</span> <span class="n">blacs_lib</span> <span class="o">+</span> <span class="n">int_suff</span><span class="p">]</span>
+        <span class="n">sca_libs</span> <span class="o">=</span> <span class="n">find_libraries</span><span class="p">(</span>
+            <span class="n">scalapack_libnames</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span> <span class="n">shared</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;+shared&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">sca_libs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sca_libs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">raise_lib_error</span><span class="p">(</span><span class="s2">&quot;Cannot locate ScaLapack/BLACS libraries:&quot;</span><span class="p">,</span> <span class="n">scalapack_libnames</span><span class="p">)</span>
+        <span class="c1"># NB: ScaLapack is installed as &quot;cluster&quot; components within MKL or</span>
+        <span class="c1"># MKL-encompassing products.  But those were *optional* for the ca.</span>
+        <span class="c1"># 2015/2016 product releases, which was easy to overlook, and I have</span>
+        <span class="c1"># been bitten by that.  Thus, complain early because it&#39;d be a sore</span>
+        <span class="c1"># disappointment to have missing ScaLapack libs show up as a link error</span>
+        <span class="c1"># near the end phase of a client package&#39;s build phase.</span>
+
+        <span class="k">return</span> <span class="n">sca_libs</span>
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># Support for virtual &#39;mpi&#39;</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mpi_compiler_wrappers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return paths to compiler wrappers as a dict of env-like names&quot;&quot;&quot;</span>
+        <span class="c1"># Intel comes with 2 different flavors of MPI wrappers:</span>
+        <span class="c1">#</span>
+        <span class="c1"># * mpiicc, mpiicpc, and mpiifort are hardcoded to wrap around</span>
+        <span class="c1">#   the Intel compilers.</span>
+        <span class="c1"># * mpicc, mpicxx, mpif90, and mpif77 allow you to set which</span>
+        <span class="c1">#   compilers to wrap using I_MPI_CC and friends. By default,</span>
+        <span class="c1">#   wraps around the GCC compilers.</span>
+        <span class="c1">#</span>
+        <span class="c1"># In theory, these should be equivalent as long as I_MPI_CC</span>
+        <span class="c1"># and friends are set to point to the Intel compilers, but in</span>
+        <span class="c1"># practice, mpicc fails to compile some applications while</span>
+        <span class="c1"># mpiicc works.</span>
+        <span class="n">bindir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_bin_dir</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;intel&quot;</span><span class="p">:</span>
+            <span class="n">wrapper_vars</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="c1"># eschew Prefix objects -- emphasize the command strings.</span>
+                <span class="s2">&quot;MPICC&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpiicc&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPICXX&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpiicpc&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPIF77&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpiifort&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPIF90&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpiifort&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPIFC&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpiifort&quot;</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wrapper_vars</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;MPICC&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpicc&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPICXX&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpicxx&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPIF77&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpif77&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPIF90&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpif90&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;MPIFC&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bindir</span><span class="p">,</span> <span class="s2">&quot;mpif90&quot;</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="c1"># debug_print(&quot;wrapper_vars =&quot;, wrapper_vars)</span>
+        <span class="k">return</span> <span class="n">wrapper_vars</span>
+
+<div class="viewcode-block" id="IntelPackage.mpi_setup_dependent_build_environment">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.mpi_setup_dependent_build_environment">[文档]</a>
+    <span class="k">def</span> <span class="nf">mpi_setup_dependent_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">,</span> <span class="n">compilers_of_client</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unified back-end for setup_dependent_build_environment() of</span>
+<span class="sd">        Intel packages that provide &#39;mpi&#39;.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">            env, dependent_spec: same as in</span>
+<span class="sd">                setup_dependent_build_environment().</span>
+
+<span class="sd">            compilers_of_client (dict): Conveys spack_cc, spack_cxx, etc.,</span>
+<span class="sd">                from the scope of dependent packages; constructed in caller.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># See also: setup_dependent_package()</span>
+        <span class="n">wrapper_vars</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;I_MPI_CC&quot;</span><span class="p">:</span> <span class="n">compilers_of_client</span><span class="p">[</span><span class="s2">&quot;CC&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;I_MPI_CXX&quot;</span><span class="p">:</span> <span class="n">compilers_of_client</span><span class="p">[</span><span class="s2">&quot;CXX&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;I_MPI_F77&quot;</span><span class="p">:</span> <span class="n">compilers_of_client</span><span class="p">[</span><span class="s2">&quot;F77&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;I_MPI_F90&quot;</span><span class="p">:</span> <span class="n">compilers_of_client</span><span class="p">[</span><span class="s2">&quot;F90&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;I_MPI_FC&quot;</span><span class="p">:</span> <span class="n">compilers_of_client</span><span class="p">[</span><span class="s2">&quot;FC&quot;</span><span class="p">],</span>
+            <span class="c1"># NB: Normally set by the modulefile, but that is not active here:</span>
+            <span class="s2">&quot;I_MPI_ROOT&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="n">compiler_wrapper_commands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpi_compiler_wrappers</span>
+        <span class="n">wrapper_vars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;MPICC&quot;</span><span class="p">:</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPICC&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;MPICXX&quot;</span><span class="p">:</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPICXX&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;MPIF77&quot;</span><span class="p">:</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPIF77&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;MPIF90&quot;</span><span class="p">:</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPIF90&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Ensure that the directory containing the compiler wrappers is in the</span>
+        <span class="c1"># PATH. Spack packages add `prefix.bin` to their dependents&#39; paths,</span>
+        <span class="c1"># but because of the intel directory hierarchy that is insufficient.</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">prepend_path</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">wrapper_vars</span><span class="p">[</span><span class="s2">&quot;MPICC&quot;</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">wrapper_vars</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="s2">&quot;adding to build env:&quot;</span><span class="p">,</span> <span class="n">wrapper_vars</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># General support for child packages</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">HeaderList</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="s2">&quot;+mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">find_headers</span><span class="p">(</span>
+                <span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">],</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_include_dir</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;+mkl&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">find_headers</span><span class="p">(</span>
+                <span class="p">[</span><span class="s2">&quot;mkl_cblas&quot;</span><span class="p">,</span> <span class="s2">&quot;mkl_lapacke&quot;</span><span class="p">],</span>
+                <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_include_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+                <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;+tbb&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;tbb&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tbb_headers</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">libs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">LibraryList</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="s2">&quot;+tbb&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;tbb&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tbb_libs</span> <span class="o">+</span> <span class="n">result</span>
+        <span class="k">if</span> <span class="s2">&quot;+mkl&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;blas&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blas_libs</span> <span class="o">+</span> <span class="n">result</span>
+        <span class="k">if</span> <span class="s2">&quot;+mkl&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;lapack&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lapack_libs</span> <span class="o">+</span> <span class="n">result</span>
+        <span class="k">if</span> <span class="s2">&quot;+mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">):</span>
+            <span class="c1"># If prefix is too general, recursive searches may get files from</span>
+            <span class="c1"># supported but inappropriate sub-architectures like &#39;mic&#39;.</span>
+            <span class="n">libnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;libmpifort&quot;</span><span class="p">,</span> <span class="s2">&quot;libmpi&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;cxx&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">last_query</span><span class="o">.</span><span class="n">extra_parameters</span><span class="p">:</span>
+                <span class="n">libnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;libmpicxx&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">libnames</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">find_libraries</span><span class="p">(</span>
+                    <span class="n">libnames</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">),</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="n">result</span>
+            <span class="p">)</span>
+            <span class="c1"># Intel MPI since 2019 depends on libfabric which is not in the</span>
+            <span class="c1"># lib directory but in a directory of its own which should be</span>
+            <span class="c1"># included in the rpath</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_yearlike</span> <span class="o">&gt;=</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;2019&quot;</span><span class="p">):</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">ancestor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="s2">&quot;+external-libfabric&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;libfabric&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="n">find_libraries</span><span class="p">([</span><span class="s2">&quot;libfabric&quot;</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;libfabric&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;^mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">root</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;+mkl&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;scalapack&quot;</span><span class="p">)):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scalapack_libs</span> <span class="o">+</span> <span class="n">result</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="IntelPackage.setup_run_environment">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.setup_run_environment">[文档]</a>
+    <span class="k">def</span> <span class="nf">setup_run_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds environment variables to the generated module file.</span>
+
+<span class="sd">        These environment variables come from running:</span>
+
+<span class="sd">        .. code-block:: console</span>
+
+<span class="sd">           $ source parallel_studio_xe_2017/bin/psxevars.sh intel64</span>
+<span class="sd">           [and likewise for MKL, MPI, and other components]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_to_source</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;sourcing &quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># All Intel packages expect at least the architecture as argument.</span>
+        <span class="c1"># Some accept more args, but those are not (yet?) handled here.</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">_expand_fields</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{arch}</span><span class="s2">&quot;</span><span class="p">),)</span>
+
+        <span class="c1"># On Mac, the platform is *also required*, at least as of 2018.</span>
+        <span class="c1"># I am not sure about earlier versions.</span>
+        <span class="c1"># if sys.platform == &#39;darwin&#39;:</span>
+        <span class="c1">#     args = ()</span>
+
+        <span class="n">env</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">EnvironmentModifications</span><span class="o">.</span><span class="n">from_sourcing_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;intel&quot;</span><span class="p">,</span> <span class="s2">&quot;intel-parallel-studio&quot;</span><span class="p">):</span>
+            <span class="c1"># this package provides compilers</span>
+            <span class="c1"># TODO: fix check above when compilers are dependencies</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;CC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">icc</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;CXX&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">icpc</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;FC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">ifort</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;F77&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">ifort</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;F90&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">ifort</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.setup_dependent_build_environment">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.setup_dependent_build_environment">[文档]</a>
+    <span class="k">def</span> <span class="nf">setup_dependent_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">):</span>
+        <span class="c1"># NB: This function is overwritten by &#39;mpi&#39; provider packages:</span>
+        <span class="c1">#</span>
+        <span class="c1"># var/spack/repos/builtin/packages/intel-mpi/package.py</span>
+        <span class="c1"># var/spack/repos/builtin/packages/intel-parallel-studio/package.py</span>
+        <span class="c1">#</span>
+        <span class="c1"># They call _setup_dependent_env_callback() as well, but with the</span>
+        <span class="c1"># dictionary kwarg compilers_of_client{} present and populated.</span>
+
+        <span class="c1"># Handle everything in a callback version.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_dependent_env_callback</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_setup_dependent_env_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">,</span> <span class="n">compilers_of_client</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="c1"># Expected to be called from a client&#39;s</span>
+        <span class="c1"># setup_dependent_build_environment(),</span>
+        <span class="c1"># with args extended to convey the client&#39;s compilers as needed.</span>
+
+        <span class="k">if</span> <span class="s2">&quot;+mkl&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">):</span>
+            <span class="c1"># Spack&#39;s env philosophy demands that we replicate some of the</span>
+            <span class="c1"># settings normally handled by file_to_source ...</span>
+            <span class="c1">#</span>
+            <span class="c1"># TODO: Why is setup_run_environment()</span>
+            <span class="c1"># [which uses file_to_source()]</span>
+            <span class="c1"># not called as a matter of course upon entering the current</span>
+            <span class="c1"># function? (guarding against multiple calls notwithstanding)</span>
+            <span class="c1">#</span>
+            <span class="c1"># Use a local dict to facilitate debug_print():</span>
+            <span class="n">env_mods</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;MKLROOT&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;SPACK_COMPILER_EXTRA_RPATHS&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;CMAKE_LIBRARY_PATH&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;CMAKE_INCLUDE_PATH&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_include_dir</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;PKG_CONFIG_PATH&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;mkl&quot;</span><span class="p">),</span> <span class="s2">&quot;bin&quot;</span><span class="p">,</span> <span class="s2">&quot;pkgconfig&quot;</span><span class="p">),</span>
+            <span class="p">}</span>
+
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;MKLROOT&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">[</span><span class="s2">&quot;MKLROOT&quot;</span><span class="p">])</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">append_path</span><span class="p">(</span><span class="s2">&quot;SPACK_COMPILER_EXTRA_RPATHS&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">[</span><span class="s2">&quot;SPACK_COMPILER_EXTRA_RPATHS&quot;</span><span class="p">])</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">append_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">[</span><span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">])</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">append_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_LIBRARY_PATH&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">[</span><span class="s2">&quot;CMAKE_LIBRARY_PATH&quot;</span><span class="p">])</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">append_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_INCLUDE_PATH&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">[</span><span class="s2">&quot;CMAKE_INCLUDE_PATH&quot;</span><span class="p">])</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">append_path</span><span class="p">(</span><span class="s2">&quot;PKG_CONFIG_PATH&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">[</span><span class="s2">&quot;PKG_CONFIG_PATH&quot;</span><span class="p">])</span>
+
+            <span class="n">debug_print</span><span class="p">(</span><span class="s2">&quot;adding/modifying build env:&quot;</span><span class="p">,</span> <span class="n">env_mods</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;+mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">compilers_of_client</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mpi_setup_dependent_build_environment</span><span class="p">(</span>
+                    <span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">,</span> <span class="n">compilers_of_client</span>
+                <span class="p">)</span>
+                <span class="c1"># We could forego this nonce function and inline its code here,</span>
+                <span class="c1"># but (a) it sisters mpi_compiler_wrappers() [needed twice]</span>
+                <span class="c1"># which performs dizzyingly similar but necessarily different</span>
+                <span class="c1"># actions, and (b) function code leaves a bit more breathing</span>
+                <span class="c1"># room within the suffocating corset of flake8 line length.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InstallError</span><span class="p">(</span><span class="s2">&quot;compilers_of_client arg required for MPI&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IntelPackage.setup_dependent_package">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.setup_dependent_package">[文档]</a>
+    <span class="k">def</span> <span class="nf">setup_dependent_package</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">dep_spec</span><span class="p">):</span>
+        <span class="c1"># https://spack.readthedocs.io/en/latest/spack.html#spack.package_base.PackageBase.setup_dependent_package</span>
+        <span class="c1"># Reminder: &quot;module&quot; refers to Python module.</span>
+        <span class="c1"># Called before the install() method of dependents.</span>
+
+        <span class="k">if</span> <span class="s2">&quot;+mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">):</span>
+            <span class="n">compiler_wrapper_commands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpi_compiler_wrappers</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">mpicc</span> <span class="o">=</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPICC&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">mpicxx</span> <span class="o">=</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPICXX&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">mpif77</span> <span class="o">=</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPIF77&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">mpifc</span> <span class="o">=</span> <span class="n">compiler_wrapper_commands</span><span class="p">[</span><span class="s2">&quot;MPIFC&quot;</span><span class="p">]</span>
+            <span class="n">debug_print</span><span class="p">(</span>
+                <span class="p">(</span><span class="s2">&quot;spec &#39;</span><span class="si">%s</span><span class="s2">&#39; received .mpi* properties:&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">),</span> <span class="n">compiler_wrapper_commands</span>
+            <span class="p">)</span></div>
+
+
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="c1"># Specifics for installation phase</span>
+    <span class="c1"># ---------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">global_license_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the path where a Spack-global license file should be stored.</span>
+
+<span class="sd">        All Intel software shares the same license, so we store it in a</span>
+<span class="sd">        common &#39;intel&#39; directory.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_license_dir</span><span class="p">,</span> <span class="s2">&quot;intel&quot;</span><span class="p">,</span> <span class="s2">&quot;license.lic&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_determine_license_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provide appropriate license tokens for the installer (silent.cfg).&quot;&quot;&quot;</span>
+        <span class="c1"># See:</span>
+        <span class="c1">#   ./README-intel.rst, section &quot;Details for licensing tokens&quot;.</span>
+        <span class="c1">#   ./build_systems/README-intel.rst, section &quot;Licenses&quot;</span>
+        <span class="c1">#</span>
+        <span class="c1"># Ideally, we just tell the installer to look around on the system.</span>
+        <span class="c1"># Thankfully, we neither need to care nor emulate where it looks:</span>
+        <span class="n">license_type</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ACTIVATION_TYPE&quot;</span><span class="p">:</span> <span class="s2">&quot;exist_lic&quot;</span><span class="p">}</span>
+
+        <span class="c1"># However (and only), if the spack-internal Intel license file has been</span>
+        <span class="c1"># populated beyond its templated explanatory comments, proffer it to</span>
+        <span class="c1"># the installer instead:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_license_file</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="c1"># The file will have been created upon self.license_required AND</span>
+            <span class="c1"># self.license_files having been populated, so the &quot;if&quot; is usually</span>
+            <span class="c1"># true by the time the present function runs; ../hooks/licensing.py</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[ \t]*[^&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">license_comment</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+                    <span class="n">license_type</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;ACTIVATION_TYPE&quot;</span><span class="p">:</span> <span class="s2">&quot;license_file&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;ACTIVATION_LICENSE_FILE&quot;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+                    <span class="p">}</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">license_type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">license_type</span>
+
+<div class="viewcode-block" id="IntelPackage.configure">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.configure">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_before</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the silent.cfg file to pass to installer.sh.</span>
+
+<span class="sd">        See https://software.intel.com/en-us/articles/configuration-file-format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+        <span class="c1"># Both tokens AND values of the configuration file are validated during</span>
+        <span class="c1"># the run of the underlying binary installer. Any unknown token or</span>
+        <span class="c1"># unacceptable value will cause that installer to fail.  Notably, this</span>
+        <span class="c1"># applies to trying to specify a license for a product that does not</span>
+        <span class="c1"># require one.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Fortunately, the validator is a script from a solid code base that is</span>
+        <span class="c1"># only lightly adapted to the token vocabulary of each product and</span>
+        <span class="c1"># release.  Let&#39;s get that script so we can preempt its objections.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Rather than running the script on a trial file and dissecting its</span>
+        <span class="c1"># pronouncements, let&#39;s brazenly skim it for supported tokens and build</span>
+        <span class="c1"># our configuration accordingly. We can do this because the tokens are</span>
+        <span class="c1"># quite long and specific.</span>
+
+        <span class="n">validator_code</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;pset/check.awk&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="c1"># Let&#39;s go a little further and distill the tokens (plus some noise).</span>
+        <span class="n">tokenlike_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Z_]{4,}&quot;</span><span class="p">,</span> <span class="n">validator_code</span><span class="p">))</span>
+
+        <span class="c1"># NB: .cfg files generated with the &quot;--duplicate filename&quot; option have</span>
+        <span class="c1"># the COMPONENTS string begin with a separator - do not worry about it.</span>
+        <span class="n">components_joined</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filtered_components</span><span class="p">)</span>
+        <span class="n">nonrpm_db_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s2">&quot;nonrpm-db&quot;</span><span class="p">)</span>
+
+        <span class="n">config_draft</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1"># Basics first - these should be accepted in all products.</span>
+            <span class="s2">&quot;ACCEPT_EULA&quot;</span><span class="p">:</span> <span class="s2">&quot;accept&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PSET_MODE&quot;</span><span class="p">:</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CONTINUE_WITH_OPTIONAL_ERROR&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CONTINUE_WITH_INSTALLDIR_OVERWRITE&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SIGNING_ENABLED&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="c1"># Highly variable package specifics:</span>
+            <span class="s2">&quot;PSET_INSTALL_DIR&quot;</span><span class="p">:</span> <span class="n">prefix</span><span class="p">,</span>
+            <span class="s2">&quot;NONRPM_DB_DIR&quot;</span><span class="p">:</span> <span class="n">nonrpm_db_dir</span><span class="p">,</span>
+            <span class="s2">&quot;COMPONENTS&quot;</span><span class="p">:</span> <span class="n">components_joined</span><span class="p">,</span>
+            <span class="c1"># Conditional tokens; the first is supported post-2015 only.</span>
+            <span class="c1"># Ignore ia32; most recent products don&#39;t even provide it.</span>
+            <span class="s2">&quot;ARCH_SELECTED&quot;</span><span class="p">:</span> <span class="s2">&quot;INTEL64&quot;</span><span class="p">,</span>  <span class="c1"># was: &#39;ALL&#39;</span>
+            <span class="c1"># &#39;ism&#39; component -- see uninstall_ism(); also varies by release.</span>
+            <span class="s2">&quot;PHONEHOME_SEND_USAGE_DATA&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="c1"># Ah, as of 2018.2, that somewhat loaded term got replaced by one</span>
+            <span class="c1"># in business-speak. We uphold our preference, both out of general</span>
+            <span class="c1"># principles and for technical reasons like overhead and non-routed</span>
+            <span class="c1"># compute nodes.</span>
+            <span class="s2">&quot;INTEL_SW_IMPROVEMENT_PROGRAM_CONSENT&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="c1"># Deal with licensing only if truly needed.</span>
+        <span class="c1"># NB: Token was &#39;ACTIVATION&#39; pre ~2013, so basically irrelevant here.</span>
+        <span class="k">if</span> <span class="s2">&quot;ACTIVATION_TYPE&quot;</span> <span class="ow">in</span> <span class="n">tokenlike_words</span><span class="p">:</span>
+            <span class="n">config_draft</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_license_type</span><span class="p">)</span>
+
+        <span class="c1"># Write sorted *by token* so the file looks less like a hash dump.</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;silent.cfg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">config_draft</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenlike_words</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.install">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.install">[文档]</a>
+    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs Intel&#39;s install.sh installation script. Afterwards, save the</span>
+<span class="sd">        installer config and logs to &lt;prefix&gt;/.spack</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># prepare</span>
+        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;spack-intel-&quot;</span><span class="p">)</span>
+
+        <span class="n">install_script</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;./install.sh&quot;</span><span class="p">)</span>
+        <span class="n">install_script</span><span class="o">.</span><span class="n">add_default_env</span><span class="p">(</span><span class="s2">&quot;TMPDIR&quot;</span><span class="p">,</span> <span class="n">tmpdir</span><span class="p">)</span>
+
+        <span class="c1"># Need to set HOME to avoid using ~/intel</span>
+        <span class="n">install_script</span><span class="o">.</span><span class="n">add_default_env</span><span class="p">(</span><span class="s2">&quot;HOME&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="c1"># perform</span>
+        <span class="n">install_script</span><span class="p">(</span><span class="s2">&quot;--silent&quot;</span><span class="p">,</span> <span class="s2">&quot;silent.cfg&quot;</span><span class="p">)</span>
+
+        <span class="c1"># preserve config and logs</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s2">&quot;.spack&quot;</span><span class="p">)</span>
+        <span class="n">install</span><span class="p">(</span><span class="s2">&quot;silent.cfg&quot;</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/intel*log&quot;</span> <span class="o">%</span> <span class="n">tmpdir</span><span class="p">):</span>
+            <span class="n">install</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.validate_install">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.validate_install">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">validate_install</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Sometimes the installer exits with an error but doesn&#39;t pass a</span>
+        <span class="c1"># non-zero exit code to spack. Check for the existence of a &#39;bin&#39;</span>
+        <span class="c1"># directory to catch this error condition.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InstallError</span><span class="p">(</span><span class="s2">&quot;The installer has failed to install anything.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.configure_rpath">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.configure_rpath">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">configure_rpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;+rpath&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># https://software.intel.com/en-us/cpp-compiler-18.0-developer-guide-and-reference-using-configuration-files</span>
+        <span class="n">compilers_bin_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_bin_dir</span><span class="p">(</span><span class="s2">&quot;compiler&quot;</span><span class="p">)</span>
+        <span class="n">compilers_lib_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_lib_dir</span><span class="p">(</span><span class="s2">&quot;compiler&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">compiler_name</span> <span class="ow">in</span> <span class="s2">&quot;icc icpc ifort&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compilers_bin_dir</span><span class="p">,</span> <span class="n">compiler_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">InstallError</span><span class="p">(</span><span class="s2">&quot;Cannot find compiler command to configure rpath:</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
+
+            <span class="n">compiler_cfg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">f</span> <span class="o">+</span> <span class="s2">&quot;.cfg&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">compiler_cfg</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;-Xlinker -rpath=</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">compilers_lib_dir</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.configure_auto_dispatch">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.configure_auto_dispatch">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">configure_auto_dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_compilers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;auto_dispatch=none&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="n">compilers_bin_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_bin_dir</span><span class="p">(</span><span class="s2">&quot;compiler&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">compiler_name</span> <span class="ow">in</span> <span class="s2">&quot;icc icpc ifort&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compilers_bin_dir</span><span class="p">,</span> <span class="n">compiler_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">InstallError</span><span class="p">(</span>
+                        <span class="s2">&quot;Cannot find compiler command to configure &quot;</span> <span class="s2">&quot;auto_dispatch:</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">f</span>
+                    <span class="p">)</span>
+
+                <span class="n">ad</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">IntelPackage</span><span class="o">.</span><span class="n">auto_dispatch_options</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;auto_dispatch=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+                        <span class="n">ad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="n">compiler_cfg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">f</span> <span class="o">+</span> <span class="s2">&quot;.cfg&quot;</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">compiler_cfg</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                    <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;-ax</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ad</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.filter_compiler_wrappers">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.filter_compiler_wrappers">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">filter_compiler_wrappers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;+mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">provides</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="s2">&quot;~newdtags&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="n">bin_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_bin_dir</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="s2">&quot;mpif77 mpif90 mpigcc mpigxx mpiicc mpiicpc &quot;</span> <span class="s2">&quot;mpiifort&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bin_dir</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+                <span class="n">filter_file</span><span class="p">(</span><span class="s2">&quot;-Xlinker --enable-new-dtags&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntelPackage.uninstall_ism">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.uninstall_ism">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">uninstall_ism</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># The &quot;Intel(R) Software Improvement Program&quot; [ahem] gets installed,</span>
+        <span class="c1"># apparently regardless of PHONEHOME_SEND_USAGE_DATA.</span>
+        <span class="c1">#</span>
+        <span class="c1"># https://software.intel.com/en-us/articles/software-improvement-program</span>
+        <span class="c1"># https://software.intel.com/en-us/forums/intel-c-compiler/topic/506959</span>
+        <span class="c1"># Hubert H. (Intel)  Mon, 03/10/2014 - 03:02 wrote:</span>
+        <span class="c1">#  &quot;... you can also uninstall the Intel(R) Software Manager</span>
+        <span class="c1">#  completely: &lt;installdir&gt;/intel/ism/uninstall.sh&quot;</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;ism&quot;</span><span class="p">),</span> <span class="s2">&quot;uninstall.sh&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Uninstalling &quot;Intel Software Improvement Program&quot;&#39;</span> <span class="s2">&quot;component&quot;</span><span class="p">)</span>
+            <span class="n">uninstall</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">uninstall</span><span class="p">(</span><span class="s2">&quot;--silent&quot;</span><span class="p">)</span>
+
+        <span class="c1"># TODO? also try</span>
+        <span class="c1">#   ~/intel/ism/uninstall --silent</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+        <span class="k">return</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">base_lib_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provide the library directory located in the base of Intel installation.&quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_path</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">)</span>
+
+        <span class="n">debug_print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span>
+
+<div class="viewcode-block" id="IntelPackage.modify_LLVMgold_rpath">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.intel.IntelPackage.modify_LLVMgold_rpath">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">modify_LLVMgold_rpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add libimf.so and other required libraries to the RUNPATH of LLVMgold.so.</span>
+
+<span class="sd">        These are needed explicitly at dependent link time when</span>
+<span class="sd">        `ld -plugin LLVMgold.so` is called by the compiler.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_compilers</span><span class="p">:</span>
+            <span class="n">LLVMgold_libs</span> <span class="o">=</span> <span class="n">find_libraries</span><span class="p">(</span>
+                <span class="s2">&quot;LLVMgold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_lib_dir</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="c1"># Ignore ia32 entries as they mostly ignore throughout the rest</span>
+            <span class="c1"># of the file.</span>
+            <span class="c1"># The first entry in rpath preserves the original, the seconds entry</span>
+            <span class="c1"># is the location of libimf.so. If this relative location is changed</span>
+            <span class="c1"># in compiler releases, then we need to search for libimf.so instead</span>
+            <span class="c1"># of this static path.</span>
+            <span class="k">for</span> <span class="n">lib</span> <span class="ow">in</span> <span class="n">LLVMgold_libs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;^patchelf&quot;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">(</span>
+                        <span class="s2">&quot;Attempting to patch RPATH in LLVMgold.so.&quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;`patchelf` dependency should be set in package.py&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">patchelf</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;patchelf&quot;</span><span class="p">)</span>
+                <span class="n">rpath</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">patchelf</span><span class="p">(</span><span class="s2">&quot;--print-rpath&quot;</span><span class="p">,</span> <span class="n">lib</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                        <span class="s2">&quot;$ORIGIN/../compiler/lib/intel64_lin&quot;</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">patchelf</span><span class="p">(</span><span class="s2">&quot;--set-rpath&quot;</span><span class="p">,</span> <span class="n">rpath</span><span class="p">,</span> <span class="n">lib</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

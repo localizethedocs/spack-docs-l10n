@@ -1,0 +1,686 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.hooks package &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/spack.hooks.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="spack.modules package" href="spack.modules.html" />
+    <link rel="prev" title="spack.environment package" href="spack.environment.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="spack.html">Spack API Docs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_short_version"><code class="docutils literal notranslate"><span class="pre">get_short_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_spack_commit"><code class="docutils literal notranslate"><span class="pre">get_spack_commit()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.spack_version_info"><code class="docutils literal notranslate"><span class="pre">spack_version_info</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="spack.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.build_systems.html">spack.build_systems package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">spack.hooks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.absolutify_elf_sonames">spack.hooks.absolutify_elf_sonames module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.autopush">spack.hooks.autopush module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.drop_redundant_rpaths">spack.hooks.drop_redundant_rpaths module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.licensing">spack.hooks.licensing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.module_file_generation">spack.hooks.module_file_generation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.permissions_setters">spack.hooks.permissions_setters module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.sbang">spack.hooks.sbang module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.windows_runtime_linkage">spack.hooks.windows_runtime_linkage module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.hooks.write_install_manifest">spack.hooks.write_install_manifest module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.html">spack.util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.audit">spack.audit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.binary_distribution">spack.binary_distribution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.build_environment">spack.build_environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.builder">spack.builder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.caches">spack.caches module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.ci">spack.ci module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.compiler">spack.compiler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.concretize">spack.concretize module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.config">spack.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.context">spack.context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.cray_manifest">spack.cray_manifest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.database">spack.database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.dependency">spack.dependency module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.deptypes">spack.deptypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directives">spack.directives module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directives_meta">spack.directives_meta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directory_layout">spack.directory_layout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.error">spack.error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.extensions">spack.extensions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.fetch_strategy">spack.fetch_strategy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.filesystem_view">spack.filesystem_view module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.graph">spack.graph module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.hash_types">spack.hash_types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.install_test">spack.install_test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.installer">spack.installer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.main">spack.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.mirror">spack.mirror module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.mixins">spack.mixins module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.multimethod">spack.multimethod module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package">spack.package module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_base">spack.package_base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_completions">spack.package_completions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_prefs">spack.package_prefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_test">spack.package_test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.parser">spack.parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.patch">spack.patch module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.paths">spack.paths module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.projections">spack.projections module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.provider_index">spack.provider_index module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.relocate">spack.relocate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.relocate_text">spack.relocate_text module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.repo">spack.repo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.report">spack.report module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.resource">spack.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.rewiring">spack.rewiring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.spec">spack.spec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.spec_list">spack.spec_list module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.stage">spack.stage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.store">spack.store module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.subprocess_context">spack.subprocess_context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.tag">spack.tag module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.tengine">spack.tengine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.traverse">spack.traverse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.url">spack.url module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.user_environment">spack.user_environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.variant">spack.variant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.verify">spack.verify module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="spack.html">spack package</a></li>
+      <li class="breadcrumb-item active">spack.hooks package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/spack.hooks.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-spack.hooks">
+<span id="spack-hooks-package"></span><h1>spack.hooks package<a class="headerlink" href="#module-spack.hooks" title="Link to this heading"></a></h1>
+<p>This package contains modules with hooks for various stages in the
+Spack install process.  You can add modules here and they'll be
+executed by package at various times during the package lifecycle.</p>
+<p>Each hook is just a function that takes a package as a parameter.
+Hooks are not executed in any particular order.</p>
+<p>Currently the following hooks are supported:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pre_install(spec)</p></li>
+<li><p>post_install(spec, explicit)</p></li>
+<li><p>pre_uninstall(spec)</p></li>
+<li><p>post_uninstall(spec)</p></li>
+</ul>
+</div></blockquote>
+<p>This can be used to implement support for things like module
+systems (e.g. modules, lmod, etc.) or to add other custom
+features.</p>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-spack.hooks.absolutify_elf_sonames">
+<span id="spack-hooks-absolutify-elf-sonames-module"></span><h2>spack.hooks.absolutify_elf_sonames module<a class="headerlink" href="#module-spack.hooks.absolutify_elf_sonames" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.hooks.absolutify_elf_sonames.</span></span><span class="sig-name descname"><span class="pre">SharedLibrariesVisitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclude_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#SharedLibrariesVisitor"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="llnl.util.html#llnl.util.filesystem.BaseDirectoryVisitor" title="llnl.util.filesystem.BaseDirectoryVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDirectoryVisitor</span></code></a></p>
+<p>Visitor that collects all shared libraries in a prefix, with the
+exception of an exclude list.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.before_visit_dir">
+<span class="sig-name descname"><span class="pre">before_visit_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#SharedLibrariesVisitor.before_visit_dir"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.before_visit_dir" title="Link to this definition"></a></dt>
+<dd><p>Return True from this function to recurse into the directory at
+os.path.join(root, rel_path). Return False in order not to recurse further.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current directory from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> -- depth of current directory from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> when the directory should be recursed into. <code class="docutils literal notranslate"><span class="pre">False</span></code> when
+not</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.14）">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.before_visit_symlinked_dir">
+<span class="sig-name descname"><span class="pre">before_visit_symlinked_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#SharedLibrariesVisitor.before_visit_symlinked_dir"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.before_visit_symlinked_dir" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> to recurse into the symlinked directory and <code class="docutils literal notranslate"><span class="pre">False</span></code> in order not to.
+Note: <code class="docutils literal notranslate"><span class="pre">rel_path</span></code> is the path to the symlink itself. Following symlinked directories
+blindly can cause infinite recursion due to cycles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current symlink from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> -- depth of current symlink from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> when the directory should be recursed into. <code class="docutils literal notranslate"><span class="pre">False</span></code> when
+not</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.14）">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.get_shared_libraries_relative_paths">
+<span class="sig-name descname"><span class="pre">get_shared_libraries_relative_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#SharedLibrariesVisitor.get_shared_libraries_relative_paths"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.get_shared_libraries_relative_paths" title="Link to this definition"></a></dt>
+<dd><p>Get the libraries that should be patched, with the excluded libraries
+removed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.visit_file">
+<span class="sig-name descname"><span class="pre">visit_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#SharedLibrariesVisitor.visit_file"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.visit_file" title="Link to this definition"></a></dt>
+<dd><p>Handle the non-symlink file at <code class="docutils literal notranslate"><span class="pre">os.path.join(root,</span> <span class="pre">rel_path)</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current file from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.14）"><em>int</em></a>) -- depth of current file from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.visit_symlinked_file">
+<span class="sig-name descname"><span class="pre">visit_symlinked_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#SharedLibrariesVisitor.visit_symlinked_file"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.SharedLibrariesVisitor.visit_symlinked_file" title="Link to this definition"></a></dt>
+<dd><p>Handle the symlink to a file at <code class="docutils literal notranslate"><span class="pre">os.path.join(root,</span> <span class="pre">rel_path)</span></code>. Note: <code class="docutils literal notranslate"><span class="pre">rel_path</span></code> is
+the location of the symlink, not to what it is pointing to. The symlink may be dangling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current symlink from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> -- depth of current symlink from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.find_and_patch_sonames">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.absolutify_elf_sonames.</span></span><span class="sig-name descname"><span class="pre">find_and_patch_sonames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patchelf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#find_and_patch_sonames"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.find_and_patch_sonames" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.is_shared_library_elf">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.absolutify_elf_sonames.</span></span><span class="sig-name descname"><span class="pre">is_shared_library_elf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#is_shared_library_elf"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.is_shared_library_elf" title="Link to this definition"></a></dt>
+<dd><p>Return true if filepath is most a shared library.
+Our definition of a shared library for ELF requires:
+1. a dynamic section,
+2. a soname OR lack of interpreter.
+The problem is that PIE objects (default on Ubuntu) are
+ET_DYN too, and not all shared libraries have a soname...
+no interpreter is typically the best indicator then.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.patch_sonames">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.absolutify_elf_sonames.</span></span><span class="sig-name descname"><span class="pre">patch_sonames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patchelf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_paths</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#patch_sonames"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.patch_sonames" title="Link to this definition"></a></dt>
+<dd><p>Set the soname to the file's own path for a list of
+given shared libraries.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.absolutify_elf_sonames.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.absolutify_elf_sonames.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/absolutify_elf_sonames.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.absolutify_elf_sonames.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-spack.hooks.autopush">
+<span id="spack-hooks-autopush-module"></span><h2>spack.hooks.autopush module<a class="headerlink" href="#module-spack.hooks.autopush" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.autopush.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.autopush.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/autopush.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.autopush.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-spack.hooks.drop_redundant_rpaths">
+<span id="spack-hooks-drop-redundant-rpaths-module"></span><h2>spack.hooks.drop_redundant_rpaths module<a class="headerlink" href="#module-spack.hooks.drop_redundant_rpaths" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.hooks.drop_redundant_rpaths.</span></span><span class="sig-name descname"><span class="pre">ElfFilesWithRPathVisitor</span></span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#ElfFilesWithRPathVisitor"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="llnl.util.html#llnl.util.filesystem.BaseDirectoryVisitor" title="llnl.util.filesystem.BaseDirectoryVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDirectoryVisitor</span></code></a></p>
+<p>Visitor that collects all elf files that have an rpath</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.before_visit_dir">
+<span class="sig-name descname"><span class="pre">before_visit_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#ElfFilesWithRPathVisitor.before_visit_dir"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.before_visit_dir" title="Link to this definition"></a></dt>
+<dd><p>Return True from this function to recurse into the directory at
+os.path.join(root, rel_path). Return False in order not to recurse further.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current directory from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> -- depth of current directory from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> when the directory should be recursed into. <code class="docutils literal notranslate"><span class="pre">False</span></code> when
+not</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.14）">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.before_visit_symlinked_dir">
+<span class="sig-name descname"><span class="pre">before_visit_symlinked_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#ElfFilesWithRPathVisitor.before_visit_symlinked_dir"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.before_visit_symlinked_dir" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> to recurse into the symlinked directory and <code class="docutils literal notranslate"><span class="pre">False</span></code> in order not to.
+Note: <code class="docutils literal notranslate"><span class="pre">rel_path</span></code> is the path to the symlink itself. Following symlinked directories
+blindly can cause infinite recursion due to cycles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current symlink from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> -- depth of current symlink from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> when the directory should be recursed into. <code class="docutils literal notranslate"><span class="pre">False</span></code> when
+not</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.14）">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.visit_file">
+<span class="sig-name descname"><span class="pre">visit_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#ElfFilesWithRPathVisitor.visit_file"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.visit_file" title="Link to this definition"></a></dt>
+<dd><p>Handle the non-symlink file at <code class="docutils literal notranslate"><span class="pre">os.path.join(root,</span> <span class="pre">rel_path)</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current file from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.14）"><em>int</em></a>) -- depth of current file from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.visit_symlinked_file">
+<span class="sig-name descname"><span class="pre">visit_symlinked_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#ElfFilesWithRPathVisitor.visit_symlinked_file"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.ElfFilesWithRPathVisitor.visit_symlinked_file" title="Link to this definition"></a></dt>
+<dd><p>Handle the symlink to a file at <code class="docutils literal notranslate"><span class="pre">os.path.join(root,</span> <span class="pre">rel_path)</span></code>. Note: <code class="docutils literal notranslate"><span class="pre">rel_path</span></code> is
+the location of the symlink, not to what it is pointing to. The symlink may be dangling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> -- root directory</p></li>
+<li><p><strong>rel_path</strong> -- relative path to current symlink from <code class="docutils literal notranslate"><span class="pre">root</span></code></p></li>
+<li><p><strong>depth</strong> -- depth of current symlink from the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.drop_redundant_rpaths">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.drop_redundant_rpaths.</span></span><span class="sig-name descname"><span class="pre">drop_redundant_rpaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.14）"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="（在 Python v3.14）"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="（在 Python v3.14）"><span class="pre">bytes</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="（在 Python v3.14）"><span class="pre">bytes</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="（在 Python v3.14）"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#drop_redundant_rpaths"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.drop_redundant_rpaths" title="Link to this definition"></a></dt>
+<dd><p>Drop redundant entries from rpath.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> -- Path to a potential ELF file to patch.</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of the old and new rpath if the rpath was patched, None otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.drop_redundant_rpaths.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.drop_redundant_rpaths.should_keep">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.drop_redundant_rpaths.</span></span><span class="sig-name descname"><span class="pre">should_keep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="（在 Python v3.14）"><span class="pre">bytes</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.14）"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/spack/hooks/drop_redundant_rpaths.html#should_keep"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.drop_redundant_rpaths.should_keep" title="Link to this definition"></a></dt>
+<dd><p>Return True iff path starts with $ (typically for $ORIGIN/${ORIGIN}) or is
+absolute and exists.</p>
+</dd></dl>
+
+</section>
+<section id="module-spack.hooks.licensing">
+<span id="spack-hooks-licensing-module"></span><h2>spack.hooks.licensing module<a class="headerlink" href="#module-spack.hooks.licensing" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.licensing.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.licensing.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/licensing.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.licensing.post_install" title="Link to this definition"></a></dt>
+<dd><p>This hook symlinks local licenses to the global license for
+licensed software.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.licensing.pre_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.licensing.</span></span><span class="sig-name descname"><span class="pre">pre_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/licensing.html#pre_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.licensing.pre_install" title="Link to this definition"></a></dt>
+<dd><p>This hook handles global license setup for licensed software.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.licensing.set_up_license">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.licensing.</span></span><span class="sig-name descname"><span class="pre">set_up_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/licensing.html#set_up_license"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.licensing.set_up_license" title="Link to this definition"></a></dt>
+<dd><p>Prompt the user, letting them know that a license is required.</p>
+<p>For packages that rely on license files, a global license file is
+created and opened for editing.</p>
+<p>For packages that rely on environment variables to point to a
+license, a warning message is printed.</p>
+<p>For all other packages, documentation on how to set up a license
+is printed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.licensing.symlink_license">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.licensing.</span></span><span class="sig-name descname"><span class="pre">symlink_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/licensing.html#symlink_license"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.licensing.symlink_license" title="Link to this definition"></a></dt>
+<dd><p>Create local symlinks that point to the global license file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.licensing.write_license_file">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.licensing.</span></span><span class="sig-name descname"><span class="pre">write_license_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/licensing.html#write_license_file"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.licensing.write_license_file" title="Link to this definition"></a></dt>
+<dd><p>Writes empty license file.</p>
+<p>Comments give suggestions on alternative methods of
+installing a license.</p>
+</dd></dl>
+
+</section>
+<section id="module-spack.hooks.module_file_generation">
+<span id="spack-hooks-module-file-generation-module"></span><h2>spack.hooks.module_file_generation module<a class="headerlink" href="#module-spack.hooks.module_file_generation" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.module_file_generation.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.module_file_generation.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.14）"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/module_file_generation.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.module_file_generation.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.module_file_generation.post_uninstall">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.module_file_generation.</span></span><span class="sig-name descname"><span class="pre">post_uninstall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/module_file_generation.html#post_uninstall"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.module_file_generation.post_uninstall" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-spack.hooks.permissions_setters">
+<span id="spack-hooks-permissions-setters-module"></span><h2>spack.hooks.permissions_setters module<a class="headerlink" href="#module-spack.hooks.permissions_setters" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.permissions_setters.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.permissions_setters.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/permissions_setters.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.permissions_setters.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-spack.hooks.sbang">
+<span id="spack-hooks-sbang-module"></span><h2>spack.hooks.sbang module<a class="headerlink" href="#module-spack.hooks.sbang" title="Link to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="spack.hooks.sbang.SbangPathError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">SbangPathError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">long_message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#SbangPathError"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.SbangPathError" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="spack.html#spack.error.SpackError" title="spack.error.SpackError"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpackError</span></code></a></p>
+<p>Raised when the install tree root is too long for sbang to work.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.filter_shebang">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">filter_shebang</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#filter_shebang"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.filter_shebang" title="Link to this definition"></a></dt>
+<dd><p>Adds a second shebang line, using sbang, at the beginning of a file, if necessary.
+Note: Spack imposes a relaxed shebang line limit, meaning that a newline or end of
+file must occur before <code class="docutils literal notranslate"><span class="pre">spack_shebang_limit</span></code> bytes. If not, the file is not
+patched.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.filter_shebangs_in_directory">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">filter_shebangs_in_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#filter_shebangs_in_directory"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.filter_shebangs_in_directory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.get_interpreter">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">get_interpreter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">binary_string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#get_interpreter"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.get_interpreter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.install_sbang">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">install_sbang</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#install_sbang"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.install_sbang" title="Link to this definition"></a></dt>
+<dd><p>Ensure that <code class="docutils literal notranslate"><span class="pre">sbang</span></code> is installed in the root of Spack's install_tree.</p>
+<p>This is the shortest known publicly accessible path, and installing
+<code class="docutils literal notranslate"><span class="pre">sbang</span></code> here ensures that users can access the script and that
+<code class="docutils literal notranslate"><span class="pre">sbang</span></code> itself is in a short path.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.post_install" title="Link to this definition"></a></dt>
+<dd><p>This hook edits scripts so that they call /bin/bash
+$spack_prefix/bin/sbang instead of something longer than the
+shebang limit.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.sbang_install_path">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">sbang_install_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#sbang_install_path"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.sbang_install_path" title="Link to this definition"></a></dt>
+<dd><p>Location sbang should be installed within Spack's <code class="docutils literal notranslate"><span class="pre">install_tree</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.sbang.sbang_shebang_line">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">sbang_shebang_line</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/sbang.html#sbang_shebang_line"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.sbang.sbang_shebang_line" title="Link to this definition"></a></dt>
+<dd><p>Full shebang line that should be prepended to files to use sbang.</p>
+<p>The line returned does not have a final newline (caller should add it
+if needed).</p>
+<p>This should be the only place in Spack that knows about what
+interpreter we use for <code class="docutils literal notranslate"><span class="pre">sbang</span></code>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="spack.hooks.sbang.spack_shebang_limit">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.sbang.</span></span><span class="sig-name descname"><span class="pre">spack_shebang_limit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4096</span></em><a class="headerlink" href="#spack.hooks.sbang.spack_shebang_limit" title="Link to this definition"></a></dt>
+<dd><p>Spack itself also limits the shebang line to at most 4KB, which should be plenty.</p>
+</dd></dl>
+
+</section>
+<section id="module-spack.hooks.windows_runtime_linkage">
+<span id="spack-hooks-windows-runtime-linkage-module"></span><h2>spack.hooks.windows_runtime_linkage module<a class="headerlink" href="#module-spack.hooks.windows_runtime_linkage" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.windows_runtime_linkage.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.windows_runtime_linkage.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/windows_runtime_linkage.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.windows_runtime_linkage.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-spack.hooks.write_install_manifest">
+<span id="spack-hooks-write-install-manifest-module"></span><h2>spack.hooks.write_install_manifest module<a class="headerlink" href="#module-spack.hooks.write_install_manifest" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.hooks.write_install_manifest.post_install">
+<span class="sig-prename descclassname"><span class="pre">spack.hooks.write_install_manifest.</span></span><span class="sig-name descname"><span class="pre">post_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/hooks/write_install_manifest.html#post_install"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#spack.hooks.write_install_manifest.post_install" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="spack.environment.html" class="btn btn-neutral float-left" title="spack.environment package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="spack.modules.html" class="btn btn-neutral float-right" title="spack.modules package" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

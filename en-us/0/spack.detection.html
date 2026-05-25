@@ -1,0 +1,942 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.detection package &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/spack.detection.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="spack.environment package" href="spack.environment.html" />
+    <link rel="prev" title="spack.container package" href="spack.container.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="spack.html">Spack API Docs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_short_version"><code class="docutils literal notranslate"><span class="pre">get_short_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_spack_commit"><code class="docutils literal notranslate"><span class="pre">get_spack_commit()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.spack_version_info"><code class="docutils literal notranslate"><span class="pre">spack_version_info</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="spack.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.build_systems.html">spack.build_systems package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">spack.detection package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#spack.detection.by_path"><code class="docutils literal notranslate"><span class="pre">by_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spack.detection.detection_tests"><code class="docutils literal notranslate"><span class="pre">detection_tests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spack.detection.executable_prefix"><code class="docutils literal notranslate"><span class="pre">executable_prefix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spack.detection.executables_in_path"><code class="docutils literal notranslate"><span class="pre">executables_in_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spack.detection.set_virtuals_nonbuildable"><code class="docutils literal notranslate"><span class="pre">set_virtuals_nonbuildable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spack.detection.update_configuration"><code class="docutils literal notranslate"><span class="pre">update_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.detection.common">spack.detection.common module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.detection.path">spack.detection.path module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-spack.detection.test">spack.detection.test module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.html">spack.util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.audit">spack.audit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.binary_distribution">spack.binary_distribution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.build_environment">spack.build_environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.builder">spack.builder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.caches">spack.caches module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.ci">spack.ci module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.compiler">spack.compiler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.concretize">spack.concretize module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.config">spack.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.context">spack.context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.cray_manifest">spack.cray_manifest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.database">spack.database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.dependency">spack.dependency module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.deptypes">spack.deptypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directives">spack.directives module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directives_meta">spack.directives_meta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directory_layout">spack.directory_layout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.error">spack.error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.extensions">spack.extensions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.fetch_strategy">spack.fetch_strategy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.filesystem_view">spack.filesystem_view module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.graph">spack.graph module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.hash_types">spack.hash_types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.install_test">spack.install_test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.installer">spack.installer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.main">spack.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.mirror">spack.mirror module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.mixins">spack.mixins module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.multimethod">spack.multimethod module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package">spack.package module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_base">spack.package_base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_completions">spack.package_completions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_prefs">spack.package_prefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_test">spack.package_test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.parser">spack.parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.patch">spack.patch module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.paths">spack.paths module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.projections">spack.projections module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.provider_index">spack.provider_index module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.relocate">spack.relocate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.relocate_text">spack.relocate_text module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.repo">spack.repo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.report">spack.report module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.resource">spack.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.rewiring">spack.rewiring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.spec">spack.spec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.spec_list">spack.spec_list module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.stage">spack.stage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.store">spack.store module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.subprocess_context">spack.subprocess_context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.tag">spack.tag module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.tengine">spack.tengine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.traverse">spack.traverse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.url">spack.url module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.user_environment">spack.user_environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.variant">spack.variant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.verify">spack.verify module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="spack.html">spack package</a></li>
+      <li class="breadcrumb-item active">spack.detection package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/spack.detection.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-spack.detection">
+<span id="spack-detection-package"></span><h1>spack.detection package<a class="headerlink" href="#module-spack.detection" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.by_path">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.</span></span><span class="sig-name descname"><span class="pre">by_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">packages_to_search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_hints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#by_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.by_path" title="Link to this definition"></a></dt>
+<dd><p>Return the list of packages that have been detected on the system, keyed by
+unqualified package name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>packages_to_search</strong> – list of packages to be detected. Each package can be either unqualified
+of fully qualified</p></li>
+<li><p><strong>path_hints</strong> – initial list of paths to be searched</p></li>
+<li><p><strong>max_workers</strong> – maximum number of workers to search for packages in parallel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.detection_tests">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.</span></span><span class="sig-name descname"><span class="pre">detection_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="spack.html#spack.repo.RepoPath" title="spack.repo.RepoPath"><span class="pre">RepoPath</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#spack.detection.test.Runner" title="spack.detection.test.Runner"><span class="pre">Runner</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/test.html#detection_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.detection_tests" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of test runners for a given package.</p>
+<p>Currently, detection tests are specified in a YAML file, called <code class="docutils literal notranslate"><span class="pre">detection_test.yaml</span></code>,
+alongside the <code class="docutils literal notranslate"><span class="pre">package.py</span></code> file.</p>
+<p>This function reads that file to create a bunch of <code class="docutils literal notranslate"><span class="pre">Runner</span></code> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pkg_name</strong> – name of the package to test</p></li>
+<li><p><strong>repository</strong> – repository where the package lives</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.executable_prefix">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.</span></span><span class="sig-name descname"><span class="pre">executable_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executable_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/spack/detection/common.html#executable_prefix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.executable_prefix" title="Link to this definition"></a></dt>
+<dd><p>Given a directory where an executable is found, guess the prefix
+(i.e. the “root” directory of that installation) and return it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>executable_dir</strong> – directory where an executable is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.executables_in_path">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.</span></span><span class="sig-name descname"><span class="pre">executables_in_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_hints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#executables_in_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.executables_in_path" title="Link to this definition"></a></dt>
+<dd><p>Get the paths of all executables available from the current PATH.</p>
+<p>For convenience, this is constructed as a dictionary where the keys are
+the executable paths and the values are the names of the executables
+(i.e. the basename of the executable path).</p>
+<p>There may be multiple paths with the same basename. In this case it is
+assumed there are two different instances of the executable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_hints</strong> – list of paths to be searched. If None the list will be
+constructed based on the PATH environment variable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.set_virtuals_nonbuildable">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.</span></span><span class="sig-name descname"><span class="pre">set_virtuals_nonbuildable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">virtuals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.14)"><span class="pre">Set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#set_virtuals_nonbuildable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.set_virtuals_nonbuildable" title="Link to this definition"></a></dt>
+<dd><p>Update packages:virtual:buildable:False for the provided virtual packages, if the property
+is not set by the user. Returns the list of virtual packages that have been updated.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.update_configuration">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.</span></span><span class="sig-name descname"><span class="pre">update_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detected_packages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buildable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#update_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.update_configuration" title="Link to this definition"></a></dt>
+<dd><p>Add the packages passed as arguments to packages.yaml</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detected_packages</strong> – list of specs to be added</p></li>
+<li><p><strong>scope</strong> – configuration scope where to add the detected packages</p></li>
+<li><p><strong>buildable</strong> – whether the detected packages are buildable or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-spack.detection.common">
+<span id="spack-detection-common-module"></span><h2>spack.detection.common module<a class="headerlink" href="#module-spack.detection.common" title="Link to this heading"></a></h2>
+<p>Define a common data structure to represent external packages and a
+function to update packages.yaml given a list of detected packages.</p>
+<p>Ideally, each detection method should be placed in a specific subpackage
+and implement at least a function that returns a list of specs.</p>
+<p>The update in packages.yaml can then be done using the function provided here.</p>
+<p>The module also contains other functions that might be useful across different
+detection mechanisms.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsCompilerExternalPaths">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">WindowsCompilerExternalPaths</span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsCompilerExternalPaths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsCompilerExternalPaths" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_bundled_packages">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_compiler_bundled_packages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsCompilerExternalPaths.find_windows_compiler_bundled_packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_bundled_packages" title="Link to this definition"></a></dt>
+<dd><p>Return all MSVC compiler bundled packages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_cmake_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_compiler_cmake_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsCompilerExternalPaths.find_windows_compiler_cmake_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_cmake_paths" title="Link to this definition"></a></dt>
+<dd><p>Semi hard-coded search path for cmake bundled with MSVC</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_ninja_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_compiler_ninja_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsCompilerExternalPaths.find_windows_compiler_ninja_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_ninja_paths" title="Link to this definition"></a></dt>
+<dd><p>Semi hard-coded search heuristic for locating ninja bundled with MSVC</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_root_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_compiler_root_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsCompilerExternalPaths.find_windows_compiler_root_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsCompilerExternalPaths.find_windows_compiler_root_paths" title="Link to this definition"></a></dt>
+<dd><p>Helper for Windows compiler installation root discovery</p>
+<p>At the moment simply returns location of VS install paths from VSWhere
+But should be extended to include more information as relevant</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">WindowsKitExternalPaths</span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths.find_windows_driver_development_kit_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_driver_development_kit_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths.find_windows_driver_development_kit_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths.find_windows_driver_development_kit_paths" title="Link to this definition"></a></dt>
+<dd><p>Provides a list of all installation paths
+for the WDK by version and architecture</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths.find_windows_kit_bin_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_kit_bin_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kit_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths.find_windows_kit_bin_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths.find_windows_kit_bin_paths" title="Link to this definition"></a></dt>
+<dd><p>Returns Windows kit bin directory per version</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths.find_windows_kit_lib_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_kit_lib_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kit_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths.find_windows_kit_lib_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths.find_windows_kit_lib_paths" title="Link to this definition"></a></dt>
+<dd><p>Returns Windows kit lib directory per version</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths.find_windows_kit_reg_installed_roots_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_kit_reg_installed_roots_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths.find_windows_kit_reg_installed_roots_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths.find_windows_kit_reg_installed_roots_paths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths.find_windows_kit_reg_sdk_paths">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_kit_reg_sdk_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths.find_windows_kit_reg_sdk_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths.find_windows_kit_reg_sdk_paths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.common.WindowsKitExternalPaths.find_windows_kit_roots">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_windows_kit_roots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#WindowsKitExternalPaths.find_windows_kit_roots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.WindowsKitExternalPaths.find_windows_kit_roots" title="Link to this definition"></a></dt>
+<dd><p>Return Windows kit root, typically %programfiles%Windows Kits10|11</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.compute_windows_program_path_for_package">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">compute_windows_program_path_for_package</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="spack.html#spack.package_base.PackageBase" title="spack.package_base.PackageBase"><span class="pre">PackageBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#compute_windows_program_path_for_package"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.compute_windows_program_path_for_package" title="Link to this definition"></a></dt>
+<dd><p>Given a package, attempts to compute its Windows program files location,
+and returns the list of best guesses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pkg</strong> – package for which Program Files location is to be computed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.compute_windows_user_path_for_package">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">compute_windows_user_path_for_package</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="spack.html#spack.package_base.PackageBase" title="spack.package_base.PackageBase"><span class="pre">PackageBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#compute_windows_user_path_for_package"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.compute_windows_user_path_for_package" title="Link to this definition"></a></dt>
+<dd><p>Given a package attempt to compute its user scoped
+install location, return list of potential locations based
+on common heuristics. For more info on Windows user specific
+installs see:
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/system.environment.specialfolder?view=netframework-4.8">https://learn.microsoft.com/en-us/dotnet/api/system.environment.specialfolder?view=netframework-4.8</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.executable_prefix">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">executable_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executable_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/spack/detection/common.html#executable_prefix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.executable_prefix" title="Link to this definition"></a></dt>
+<dd><p>Given a directory where an executable is found, guess the prefix
+(i.e. the “root” directory of that installation) and return it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>executable_dir</strong> – directory where an executable is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.find_win32_additional_install_paths">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">find_win32_additional_install_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#find_win32_additional_install_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.find_win32_additional_install_paths" title="Link to this definition"></a></dt>
+<dd><p>Not all programs on Windows live on the PATH
+Return a list of other potential install locations.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.is_executable">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">is_executable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/spack/detection/common.html#is_executable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.is_executable" title="Link to this definition"></a></dt>
+<dd><p>Return True if the path passed as argument is that of an executable</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.library_prefix">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">library_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">library_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/spack/detection/common.html#library_prefix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.library_prefix" title="Link to this definition"></a></dt>
+<dd><p>Given a directory where a library is found, guess the prefix
+(i.e. the “root” directory of that installation) and return it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>library_dir</strong> – directory where a library is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.path_to_dict">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">path_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/common.html#path_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.path_to_dict" title="Link to this definition"></a></dt>
+<dd><p>Return dictionary[fullpath]: basename from list of paths</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.set_virtuals_nonbuildable">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">set_virtuals_nonbuildable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">virtuals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.14)"><span class="pre">Set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#set_virtuals_nonbuildable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.set_virtuals_nonbuildable" title="Link to this definition"></a></dt>
+<dd><p>Update packages:virtual:buildable:False for the provided virtual packages, if the property
+is not set by the user. Returns the list of virtual packages that have been updated.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.common.update_configuration">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.common.</span></span><span class="sig-name descname"><span class="pre">update_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detected_packages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buildable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/common.html#update_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.common.update_configuration" title="Link to this definition"></a></dt>
+<dd><p>Add the packages passed as arguments to packages.yaml</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detected_packages</strong> – list of specs to be added</p></li>
+<li><p><strong>scope</strong> – configuration scope where to add the detected packages</p></li>
+<li><p><strong>buildable</strong> – whether the detected packages are buildable or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-spack.detection.path">
+<span id="spack-detection-path-module"></span><h2>spack.detection.path module<a class="headerlink" href="#module-spack.detection.path" title="Link to this heading"></a></h2>
+<p>Detection of software installed in the system, based on paths inspections
+and running executables.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="spack.detection.path.DETECTION_TIMEOUT">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">DETECTION_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#spack.detection.path.DETECTION_TIMEOUT" title="Link to this definition"></a></dt>
+<dd><p>Timeout used for package detection (seconds)</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.path.ExecutablesFinder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">ExecutablesFinder</span></span><a class="reference internal" href="_modules/spack/detection/path.html#ExecutablesFinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.ExecutablesFinder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spack.detection.path.Finder" title="spack.detection.path.Finder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finder</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.ExecutablesFinder.candidate_files">
+<span class="sig-name descname"><span class="pre">candidate_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#ExecutablesFinder.candidate_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.ExecutablesFinder.candidate_files" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of candidate files found on the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patterns</strong> – search patterns to be used for matching files</p></li>
+<li><p><strong>paths</strong> – paths where to search for files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.ExecutablesFinder.default_path_hints">
+<span class="sig-name descname"><span class="pre">default_path_hints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#ExecutablesFinder.default_path_hints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.ExecutablesFinder.default_path_hints" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.ExecutablesFinder.prefix_from_path">
+<span class="sig-name descname"><span class="pre">prefix_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/spack/detection/path.html#ExecutablesFinder.prefix_from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.ExecutablesFinder.prefix_from_path" title="Link to this definition"></a></dt>
+<dd><p>Given a path where a file was found, returns the corresponding prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – path of a detected file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.ExecutablesFinder.search_patterns">
+<span class="sig-name descname"><span class="pre">search_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.14)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.package_base.PackageBase" title="spack.package_base.PackageBase"><span class="pre">PackageBase</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#ExecutablesFinder.search_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.ExecutablesFinder.search_patterns" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of patterns used to match candidate files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pkg</strong> – package being detected</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.path.Finder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">Finder</span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Inspects the file-system looking for packages. Guesses places where to look using PATH.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.Finder.candidate_files">
+<span class="sig-name descname"><span class="pre">candidate_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder.candidate_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder.candidate_files" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of candidate files found on the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patterns</strong> – search patterns to be used for matching files</p></li>
+<li><p><strong>paths</strong> – paths where to search for files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.Finder.default_path_hints">
+<span class="sig-name descname"><span class="pre">default_path_hints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder.default_path_hints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder.default_path_hints" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.Finder.detect_specs">
+<span class="sig-name descname"><span class="pre">detect_specs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.14)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.package_base.PackageBase" title="spack.package_base.PackageBase"><span class="pre">PackageBase</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder.detect_specs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder.detect_specs" title="Link to this definition"></a></dt>
+<dd><p>Given a list of files matching the search patterns, returns a list of detected specs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pkg</strong> – package being detected</p></li>
+<li><p><strong>paths</strong> – files matching the package search patterns</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.Finder.find">
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_guess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder.find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder.find" title="Link to this definition"></a></dt>
+<dd><p>For a given package, returns a list of detected specs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pkg_name</strong> – package being detected</p></li>
+<li><p><strong>repository</strong> – repository to retrieve the package</p></li>
+<li><p><strong>initial_guess</strong> – initial list of paths to search from the caller if None, default paths
+are searched. If this is an empty list, nothing will be searched.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.Finder.prefix_from_path">
+<span class="sig-name descname"><span class="pre">prefix_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder.prefix_from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder.prefix_from_path" title="Link to this definition"></a></dt>
+<dd><p>Given a path where a file was found, returns the corresponding prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – path of a detected file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.Finder.search_patterns">
+<span class="sig-name descname"><span class="pre">search_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.14)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.package_base.PackageBase" title="spack.package_base.PackageBase"><span class="pre">PackageBase</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#Finder.search_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.Finder.search_patterns" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of patterns used to match candidate files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pkg</strong> – package being detected</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.path.LibrariesFinder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">LibrariesFinder</span></span><a class="reference internal" href="_modules/spack/detection/path.html#LibrariesFinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.LibrariesFinder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spack.detection.path.Finder" title="spack.detection.path.Finder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finder</span></code></a></p>
+<p>Finds libraries on the system, searching by LD_LIBRARY_PATH, LIBRARY_PATH,
+DYLD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, and standard system library paths</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.LibrariesFinder.candidate_files">
+<span class="sig-name descname"><span class="pre">candidate_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#LibrariesFinder.candidate_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.LibrariesFinder.candidate_files" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of candidate files found on the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patterns</strong> – search patterns to be used for matching files</p></li>
+<li><p><strong>paths</strong> – paths where to search for files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.LibrariesFinder.prefix_from_path">
+<span class="sig-name descname"><span class="pre">prefix_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/spack/detection/path.html#LibrariesFinder.prefix_from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.LibrariesFinder.prefix_from_path" title="Link to this definition"></a></dt>
+<dd><p>Given a path where a file was found, returns the corresponding prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – path of a detected file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.path.LibrariesFinder.search_patterns">
+<span class="sig-name descname"><span class="pre">search_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.14)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.package_base.PackageBase" title="spack.package_base.PackageBase"><span class="pre">PackageBase</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#LibrariesFinder.search_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.LibrariesFinder.search_patterns" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of patterns used to match candidate files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pkg</strong> – package being detected</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.accept_elf">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">accept_elf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host_compat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/path.html#accept_elf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.accept_elf" title="Link to this definition"></a></dt>
+<dd><p>Accept an ELF file if the header matches the given compat triplet. In case it’s not an ELF
+(e.g. static library, or some arbitrary file, fall back to is_readable_file).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.by_path">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">by_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">packages_to_search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_hints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#by_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.by_path" title="Link to this definition"></a></dt>
+<dd><p>Return the list of packages that have been detected on the system, keyed by
+unqualified package name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>packages_to_search</strong> – list of packages to be detected. Each package can be either unqualified
+of fully qualified</p></li>
+<li><p><strong>path_hints</strong> – initial list of paths to be searched</p></li>
+<li><p><strong>max_workers</strong> – maximum number of workers to search for packages in parallel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.common_windows_package_paths">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">common_windows_package_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#common_windows_package_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.common_windows_package_paths" title="Link to this definition"></a></dt>
+<dd><p>Get the paths for common package installation location on Windows
+that are outside the PATH
+Returns [] on unix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.dedupe_paths">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">dedupe_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#dedupe_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.dedupe_paths" title="Link to this definition"></a></dt>
+<dd><p>Deduplicate paths based on inode and device number. In case the list contains first a
+symlink and then the directory it points to, the symlink is replaced with the directory path.
+This ensures that we pick for example <code class="docutils literal notranslate"><span class="pre">/usr/bin</span></code> over <code class="docutils literal notranslate"><span class="pre">/bin</span></code> if the latter is a symlink to
+the former`.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.executables_in_path">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">executables_in_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_hints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#executables_in_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.executables_in_path" title="Link to this definition"></a></dt>
+<dd><p>Get the paths of all executables available from the current PATH.</p>
+<p>For convenience, this is constructed as a dictionary where the keys are
+the executable paths and the values are the names of the executables
+(i.e. the basename of the executable path).</p>
+<p>There may be multiple paths with the same basename. In this case it is
+assumed there are two different instances of the executable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_hints</strong> – list of paths to be searched. If None the list will be
+constructed based on the PATH environment variable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.file_identifier">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">file_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/path.html#file_identifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.file_identifier" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.libraries_in_ld_and_system_library_path">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">libraries_in_ld_and_system_library_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_hints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#libraries_in_ld_and_system_library_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.libraries_in_ld_and_system_library_path" title="Link to this definition"></a></dt>
+<dd><p>Get the paths of all libraries available from <code class="docutils literal notranslate"><span class="pre">path_hints</span></code> or the
+following defaults:</p>
+<ul class="simple">
+<li><p>Environment variables (Linux: <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>, Darwin: <code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">DYLD_FALLBACK_LIBRARY_PATH</span></code>)</p></li>
+<li><p>Dynamic linker default paths (glibc: ld.so.conf, musl: ld-musl-&lt;arch&gt;.path)</p></li>
+<li><p>Default system library paths.</p></li>
+</ul>
+<p>For convenience, this is constructed as a dictionary where the keys are
+the library paths and the values are the names of the libraries
+(i.e. the basename of the library path).</p>
+<p>There may be multiple paths with the same basename. In this case it is
+assumed there are two different instances of the library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_hints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>) – list of paths to be searched. If None the list will be
+constructed based on the set of LD_LIBRARY_PATH, LIBRARY_PATH,
+DYLD_LIBRARY_PATH, and DYLD_FALLBACK_LIBRARY_PATH environment
+variables as well as the standard system library paths.</p></li>
+<li><p><strong>path_hints</strong> – list of paths to be searched. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the default
+system paths are used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.path.libraries_in_windows_paths">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.path.</span></span><span class="sig-name descname"><span class="pre">libraries_in_windows_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_hints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/path.html#libraries_in_windows_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.path.libraries_in_windows_paths" title="Link to this definition"></a></dt>
+<dd><p>Get the paths of all libraries available from the system PATH paths.</p>
+<p>For more details, see <cite>libraries_in_ld_and_system_library_path</cite> regarding
+return type and contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_hints</strong> – list of paths to be searched. If None the list will be
+constructed based on the set of PATH environment
+variables as well as the standard system library paths.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-spack.detection.test">
+<span id="spack-detection-test-module"></span><h2>spack.detection.test module<a class="headerlink" href="#module-spack.detection.test" title="Link to this heading"></a></h2>
+<p>Create and run mock e2e tests for package detection.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.test.DetectionTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.test.</span></span><span class="sig-name descname"><span class="pre">DetectionTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#spack.detection.test.MockExecutables" title="spack.detection.test.MockExecutables"><span class="pre">MockExecutables</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#spack.detection.test.ExpectedTestResult" title="spack.detection.test.ExpectedTestResult"><span class="pre">ExpectedTestResult</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/test.html#DetectionTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.DetectionTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>Data structure to construct detection tests by PATH inspection.</p>
+<p>Packages may have a YAML file containing the description of one or more detection tests
+to be performed. Each test creates a few mock executable scripts in a temporary folder,
+and checks that detection by PATH gives the expected results.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.DetectionTest.layout">
+<span class="sig-name descname"><span class="pre">layout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#spack.detection.test.MockExecutables" title="spack.detection.test.MockExecutables"><span class="pre">MockExecutables</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#spack.detection.test.DetectionTest.layout" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.DetectionTest.pkg_name">
+<span class="sig-name descname"><span class="pre">pkg_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#spack.detection.test.DetectionTest.pkg_name" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.DetectionTest.results">
+<span class="sig-name descname"><span class="pre">results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#spack.detection.test.ExpectedTestResult" title="spack.detection.test.ExpectedTestResult"><span class="pre">ExpectedTestResult</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#spack.detection.test.DetectionTest.results" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.test.ExpectedTestResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.test.</span></span><span class="sig-name descname"><span class="pre">ExpectedTestResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/test.html#ExpectedTestResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.ExpectedTestResult" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>Data structure to model assertions on detection tests</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.ExpectedTestResult.extra_attributes">
+<span class="sig-name descname"><span class="pre">extra_attributes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#spack.detection.test.ExpectedTestResult.extra_attributes" title="Link to this definition"></a></dt>
+<dd><p>Attributes expected in the external spec</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.ExpectedTestResult.spec">
+<span class="sig-name descname"><span class="pre">spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#spack.detection.test.ExpectedTestResult.spec" title="Link to this definition"></a></dt>
+<dd><p>Spec to be detected</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.test.MockExecutables">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.test.</span></span><span class="sig-name descname"><span class="pre">MockExecutables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/test.html#MockExecutables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.MockExecutables" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>Mock executables to be used in detection tests</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.MockExecutables.executables">
+<span class="sig-name descname"><span class="pre">executables</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#spack.detection.test.MockExecutables.executables" title="Link to this definition"></a></dt>
+<dd><p>Relative paths for mock executables to be created</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.detection.test.MockExecutables.script">
+<span class="sig-name descname"><span class="pre">script</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#spack.detection.test.MockExecutables.script" title="Link to this definition"></a></dt>
+<dd><p>Shell script for the mock executable</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.detection.test.Runner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.detection.test.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#spack.detection.test.DetectionTest" title="spack.detection.test.DetectionTest"><span class="pre">DetectionTest</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="spack.html#spack.repo.RepoPath" title="spack.repo.RepoPath"><span class="pre">RepoPath</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/detection/test.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.Runner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Runs an external detection test</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.detection.test.Runner.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/test.html#Runner.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.Runner.execute" title="Link to this definition"></a></dt>
+<dd><p>Executes a test and returns the specs that have been detected.</p>
+<p>This function sets-up a test in a temporary directory, according to the prescriptions
+in the test layout, then performs a detection by executables and returns the specs that
+have been detected.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="spack.detection.test.Runner.expected_specs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expected_specs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="spack.html#spack.spec.Spec" title="spack.spec.Spec"><span class="pre">Spec</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#spack.detection.test.Runner.expected_specs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.test.detection_tests">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.test.</span></span><span class="sig-name descname"><span class="pre">detection_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="spack.html#spack.repo.RepoPath" title="spack.repo.RepoPath"><span class="pre">RepoPath</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#spack.detection.test.Runner" title="spack.detection.test.Runner"><span class="pre">Runner</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/test.html#detection_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.detection_tests" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of test runners for a given package.</p>
+<p>Currently, detection tests are specified in a YAML file, called <code class="docutils literal notranslate"><span class="pre">detection_test.yaml</span></code>,
+alongside the <code class="docutils literal notranslate"><span class="pre">package.py</span></code> file.</p>
+<p>This function reads that file to create a bunch of <code class="docutils literal notranslate"><span class="pre">Runner</span></code> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pkg_name</strong> – name of the package to test</p></li>
+<li><p><strong>repository</strong> – repository where the package lives</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.detection.test.read_detection_tests">
+<span class="sig-prename descclassname"><span class="pre">spack.detection.test.</span></span><span class="sig-name descname"><span class="pre">read_detection_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="spack.html#spack.repo.RepoPath" title="spack.repo.RepoPath"><span class="pre">RepoPath</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/spack/detection/test.html#read_detection_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.detection.test.read_detection_tests" title="Link to this definition"></a></dt>
+<dd><p>Returns the normalized content of the detection_tests.yaml associated with the package
+passed in input.</p>
+<p>The content is merged with that of any package that is transitively included using the
+“includes” attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pkg_name</strong> – name of the package to test</p></li>
+<li><p><strong>repository</strong> – repository in which to search for packages</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="spack.container.html" class="btn btn-neutral float-left" title="spack.container package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="spack.environment.html" class="btn btn-neutral float-right" title="spack.environment package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

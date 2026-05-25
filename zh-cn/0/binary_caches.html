@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Caches &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/binary_caches.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Bootstrapping" href="bootstrapping.html" />
+    <link rel="prev" title="Package Repositories (repos.yaml)" href="repositories.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build Caches</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-build-cache">Creating a build cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#finding-or-installing-build-cache-files">Finding or installing build cache files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#list-of-popular-build-caches">List of popular build caches</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#build-cache-signing">Build cache signing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relocation">Relocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-push-to-a-build-cache">Automatic push to a build cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oci-docker-v2-registries-as-build-cache">OCI / Docker V2 registries as build cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-build-cache-for-github-actions">Spack build cache for GitHub Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-buildcache"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spack-buildcache-push"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spack-buildcache-list"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spack-buildcache-install"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">install</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spack-buildcache-keys"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">keys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Build Caches</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/binary_caches.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="build-caches">
+<span id="binary-caches"></span><h1>Build Caches<a class="headerlink" href="#build-caches" title="Link to this heading"></a></h1>
+<p>Some sites may encourage users to set up their own test environments
+before carrying out central installations, or some users may prefer to set
+up these environments on their own motivation. To reduce the load of
+recompiling otherwise identical package specs in different installations,
+installed packages can be put into build cache tarballs, pushed to
+your Spack mirror and then downloaded and installed by others.</p>
+<p>Whenever a mirror provides prebuilt packages, Spack will take these packages
+into account during concretization and installation, making <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code>
+significantly faster.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>We use the terms &quot;build cache&quot; and &quot;mirror&quot; often interchangeably. Mirrors
+are used during installation both for sources and prebuilt packages. Build
+caches refer to mirrors that provide prebuilt packages.</p>
+</div>
+<section id="creating-a-build-cache">
+<h2>Creating a build cache<a class="headerlink" href="#creating-a-build-cache" title="Link to this heading"></a></h2>
+<p>Build caches are created via:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>push<span class="w"> </span>&lt;path/url/mirror<span class="w"> </span>name&gt;<span class="w"> </span>&lt;spec&gt;
+</pre></div>
+</div>
+<p>This command takes the locally installed spec and its dependencies, and
+creates tarballs of their install prefixes. It also generates metadata files,
+signed with GPG. These tarballs and metadata files are then pushed to the
+provided binary cache, which can be a local directory or a remote URL.</p>
+<p>Here is an example where a build cache is created in a local directory named
+&quot;spack-cache&quot;, to which we push the &quot;ninja&quot; spec:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>push<span class="w"> </span>./spack-cache<span class="w"> </span>ninja
+<span class="go">==&gt; Pushing binary packages to file:///home/spackuser/spack/spack-cache/build_cache</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">ninja</span></code> must be installed locally for this to work.</p>
+<p>Once you have a build cache, you can add it as a mirror, discussed next.</p>
+</section>
+<section id="finding-or-installing-build-cache-files">
+<h2>Finding or installing build cache files<a class="headerlink" href="#finding-or-installing-build-cache-files" title="Link to this heading"></a></h2>
+<p>To find build caches or install build caches, a Spack mirror must be configured
+with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>&lt;name&gt;<span class="w"> </span>&lt;url<span class="w"> </span>or<span class="w"> </span>path&gt;
+</pre></div>
+</div>
+<p>Both web URLs and local paths on the filesystem can be specified. In the previous
+example, you might add the directory &quot;spack-cache&quot; and call it <code class="docutils literal notranslate"><span class="pre">mymirror</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>mymirror<span class="w"> </span>./spack-cache
+</pre></div>
+</div>
+<p>You can see that the mirror is added with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">list</span></code> as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>list
+<span class="go">mymirror           file:///home/spackuser/spack/spack-cache</span>
+<span class="go">spack-public       https://spack-llnl-mirror.s3-us-west-2.amazonaws.com/</span>
+</pre></div>
+</div>
+<p>At this point, you've create a buildcache, but spack hasn't indexed it, so if
+you run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">list</span></code> you won't see any results. You need to index
+this new build cache as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>update-index<span class="w"> </span>./spack-cache
+</pre></div>
+</div>
+<p>Now you can use list:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$  </span>spack<span class="w"> </span>buildcache<span class="w"> </span>list
+<span class="go">==&gt; 1 cached build.</span>
+<span class="go">-- linux-ubuntu20.04-skylake / gcc@9.3.0 ------------------------</span>
+<span class="go">ninja@1.10.2</span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">mymirror</span></code> configured and an index available, Spack will automatically
+use it during concretization and installation. That means that you can expect
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">ninja</span></code> to fetch prebuilt packages from the mirror. Let's
+verify by re-installing ninja:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>uninstall<span class="w"> </span>ninja
+<span class="gp">$ </span>spack<span class="w"> </span>install<span class="w"> </span>ninja
+<span class="go">==&gt; Installing ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz</span>
+<span class="go">==&gt; Fetching file:///home/spackuser/spack/spack-cache/build_cache/linux-ubuntu20.04-skylake-gcc-9.3.0-ninja-1.10.2-yxferyhmrjkosgta5ei6b4lqf6bxbscz.spec.json.sig</span>
+<span class="go">gpg: Signature made Do 12 Jan 2023 16:01:04 CET</span>
+<span class="go">gpg:                using RSA key 61B82B2B2350E171BD17A1744E3A689061D57BF6</span>
+<span class="go">gpg: Good signature from &quot;example (GPG created for Spack) &lt;example@example.com&gt;&quot; [ultimate]</span>
+<span class="go">==&gt; Fetching file:///home/spackuser/spack/spack-cache/build_cache/linux-ubuntu20.04-skylake/gcc-9.3.0/ninja-1.10.2/linux-ubuntu20.04-skylake-gcc-9.3.0-ninja-1.10.2-yxferyhmrjkosgta5ei6b4lqf6bxbscz.spack</span>
+<span class="go">==&gt; Extracting ninja-1.10.2-yxferyhmrjkosgta5ei6b4lqf6bxbscz from binary cache</span>
+<span class="go">==&gt; ninja: Successfully installed ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz</span>
+<span class="go">Search: 0.00s.  Fetch: 0.17s.  Install: 0.12s.  Total: 0.29s</span>
+<span class="go">[+] /home/harmen/spack/opt/spack/linux-ubuntu20.04-skylake/gcc-9.3.0/ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz</span>
+</pre></div>
+</div>
+<p>It worked! You've just completed a full example of creating a build cache with
+a spec of interest, adding it as a mirror, updating its index, listing the contents,
+and finally, installing from it.</p>
+<p>By default Spack falls back to building from sources when the mirror is not available
+or when the package is simply not already available. To force Spack to only install
+prebuilt packages, you can use</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>install<span class="w"> </span>--use-buildcache<span class="w"> </span>only<span class="w"> </span>&lt;package&gt;
+</pre></div>
+</div>
+<p>For example, to combine all of the commands above to add the E4S build cache
+and then install from it exclusively, you would do:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>E4S<span class="w"> </span>https://cache.e4s.io
+<span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>keys<span class="w"> </span>--install<span class="w"> </span>--trust
+<span class="gp">$ </span>spack<span class="w"> </span>install<span class="w"> </span>--use-buildcache<span class="w"> </span>only<span class="w"> </span>&lt;package&gt;
+</pre></div>
+</div>
+<p>We use <code class="docutils literal notranslate"><span class="pre">--install</span></code> and <code class="docutils literal notranslate"><span class="pre">--trust</span></code> to say that we are installing keys to our
+keyring, and trusting all downloaded keys.</p>
+<section id="list-of-popular-build-caches">
+<h3>List of popular build caches<a class="headerlink" href="#list-of-popular-build-caches" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://e4s-project.github.io/">Extreme-scale Scientific Software Stack (E4S)</a>: <a class="reference external" href="https://oaciss.uoregon.edu/e4s/inventory.html">build cache</a>'</p></li>
+</ul>
+</section>
+</section>
+<section id="build-cache-signing">
+<h2>Build cache signing<a class="headerlink" href="#build-cache-signing" title="Link to this heading"></a></h2>
+<p>By default, Spack will add a cryptographic signature to each package pushed to
+a build cache, and verifies the signature when installing from a build cache.</p>
+<p>Keys for signing can be managed with the <a class="reference internal" href="getting_started.html#cmd-spack-gpg"><span class="std std-ref">spack gpg</span></a> command,
+as well as <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">keys</span></code> as mentioned above.</p>
+<p>You can disable signing when pushing with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span> <span class="pre">--unsigned</span></code>,
+and disable verification when installing from any build cache with
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">--no-check-signature</span></code>.</p>
+<p>Alternatively, signing and verification can be enabled or disabled on a per build cache
+basis:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>--signed<span class="w"> </span>&lt;name&gt;<span class="w"> </span>&lt;url&gt;<span class="w">  </span><span class="c1"># enable signing and verification</span>
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>--unsigned<span class="w"> </span>&lt;name&gt;<span class="w"> </span>&lt;url&gt;<span class="w">  </span><span class="c1"># disable signing and verification</span>
+
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--signed<span class="w"> </span>&lt;name&gt;<span class="w">  </span><span class="c1"># enable signing and verification for an existing mirror</span>
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--unsigned<span class="w"> </span>&lt;name&gt;<span class="w">  </span><span class="c1"># disable signing and verification for an existing mirror</span>
+</pre></div>
+</div>
+<p>Or you can directly edit the <code class="docutils literal notranslate"><span class="pre">mirrors.yaml</span></code> configuration file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">mirrors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">&lt;name&gt;</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;url&gt;</span>
+<span class="w">    </span><span class="nt">signed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># disable signing and verification</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="mirrors.html#mirrors"><span class="std std-ref">Mirrors (mirrors.yaml)</span></a>.</p>
+</section>
+<section id="relocation">
+<h2>Relocation<a class="headerlink" href="#relocation" title="Link to this heading"></a></h2>
+<p>When using buildcaches across different machines, it is likely that the install
+root will be different from the one used to build the binaries.</p>
+<p>To address this issue, Spack automatically relocates all paths encoded in binaries
+and scripts to their new location upon install.</p>
+<p>Note that there are some cases where this is not possible: if binaries are built in
+a relatively short path, and then installed to a longer path, there may not be enough
+space in the binary to encode the new path. In this case, Spack will fail to install
+the package from the build cache, and a source build is required.</p>
+<p>To reduce the likelihood of this happening, it is highly recommended to add padding to
+the install root during the build, as specified in the <a class="reference internal" href="config_yaml.html#config-yaml"><span class="std std-ref">config</span></a>
+section of the configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">install_tree</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/spack</span>
+<span class="w">    </span><span class="nt">padded_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
+</pre></div>
+</div>
+</section>
+<section id="automatic-push-to-a-build-cache">
+<span id="binary-caches-oci"></span><h2>Automatic push to a build cache<a class="headerlink" href="#automatic-push-to-a-build-cache" title="Link to this heading"></a></h2>
+<p>Sometimes it is convenient to push packages to a build cache as soon as they are installed. Spack can do this by setting autopush flag when adding a mirror:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>--autopush<span class="w"> </span>&lt;name&gt;<span class="w"> </span>&lt;url<span class="w"> </span>or<span class="w"> </span>path&gt;
+</pre></div>
+</div>
+<p>Or the autopush flag can be set for an existing mirror:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--autopush<span class="w"> </span>&lt;name&gt;<span class="w">  </span><span class="c1"># enable automatic push for an existing mirror</span>
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--no-autopush<span class="w"> </span>&lt;name&gt;<span class="w">  </span><span class="c1"># disable automatic push for an existing mirror</span>
+</pre></div>
+</div>
+<p>Then after installing a package it is automatically pushed to all mirrors with <code class="docutils literal notranslate"><span class="pre">autopush:</span> <span class="pre">true</span></code>. The command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>install<span class="w"> </span>&lt;package&gt;
+</pre></div>
+</div>
+<p>will have the same effect as</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>install<span class="w"> </span>&lt;package&gt;
+<span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>push<span class="w"> </span>&lt;cache&gt;<span class="w"> </span>&lt;package&gt;<span class="w">  </span><span class="c1"># for all caches with autopush: true</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Packages are automatically pushed to a build cache only if they are built from source.</p>
+</div>
+</section>
+<section id="oci-docker-v2-registries-as-build-cache">
+<h2>OCI / Docker V2 registries as build cache<a class="headerlink" href="#oci-docker-v2-registries-as-build-cache" title="Link to this heading"></a></h2>
+<p>Spack can also use OCI or Docker V2 registries such as Dockerhub, Quay.io,
+Github Packages, GitLab Container Registry, JFrog Artifactory, and others
+as build caches. This is a convenient way to share binaries using public
+infrastructure, or to cache Spack built binaries in Github Actions and
+GitLab CI.</p>
+<p>To get started, configure an OCI mirror using <code class="docutils literal notranslate"><span class="pre">oci://</span></code> as the scheme,
+and optionally specify variables that hold the username and password (or
+personal access token) for the registry:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>--oci-username-variable<span class="w"> </span>REGISTRY_USER<span class="w"> </span><span class="se">\</span>
+<span class="w">                   </span>--oci-password-variable<span class="w"> </span>REGISTRY_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">                   </span>my_registry<span class="w"> </span>oci://example.com/my_image
+</pre></div>
+</div>
+<p>Spack follows the naming conventions of Docker, with Dockerhub as the default
+registry. To use Dockerhub, you can omit the registry domain:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>...<span class="w"> </span>my_registry<span class="w"> </span>oci://username/my_image
+</pre></div>
+</div>
+<p>From here, you can use the mirror as any other build cache:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">REGISTRY_USER</span><span class="o">=</span>...
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">REGISTRY_TOKEN</span><span class="o">=</span>...
+<span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>push<span class="w"> </span>my_registry<span class="w"> </span>&lt;specs...&gt;<span class="w">  </span><span class="c1"># push to the registry</span>
+<span class="gp">$ </span>spack<span class="w"> </span>install<span class="w"> </span>&lt;specs...&gt;<span class="w">  </span><span class="c1"># or install from the registry</span>
+</pre></div>
+</div>
+<p>A unique feature of buildcaches on top of OCI registries is that it's incredibly
+easy to generate get a runnable container image with the binaries installed. This
+is a great way to make applications available to users without requiring them to
+install Spack -- all you need is Docker, Podman or any other OCI-compatible container
+runtime.</p>
+<p>To produce container images, all you need to do is add the <code class="docutils literal notranslate"><span class="pre">--base-image</span></code> flag
+when pushing to the build cache:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>buildcache<span class="w"> </span>push<span class="w"> </span>--base-image<span class="w"> </span>ubuntu:20.04<span class="w"> </span>my_registry<span class="w"> </span>ninja
+<span class="go">Pushed to example.com/my_image:ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz.spack</span>
+
+<span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>example.com/my_image:ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz.spack
+<span class="gp">root@e4c2b6f6b3f4:/# </span>ninja<span class="w"> </span>--version
+<span class="go">1.11.1</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">--base-image</span></code> is not specified, distroless images are produced. In practice,
+you won't be able to run these as containers, since they don't come with libc and
+other system dependencies. However, they are still compatible with tools like
+<code class="docutils literal notranslate"><span class="pre">skopeo</span></code>, <code class="docutils literal notranslate"><span class="pre">podman</span></code>, and <code class="docutils literal notranslate"><span class="pre">docker</span></code> for pulling and pushing.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The docker <code class="docutils literal notranslate"><span class="pre">overlayfs2</span></code> storage driver is limited to 128 layers, above which a
+<code class="docutils literal notranslate"><span class="pre">max</span> <span class="pre">depth</span> <span class="pre">exceeded</span></code> error may be produced when pulling the image. There
+are <a class="reference external" href="https://docs.docker.com/storage/storagedriver/">alternative drivers</a>.</p>
+</div>
+</section>
+<section id="spack-build-cache-for-github-actions">
+<h2>Spack build cache for GitHub Actions<a class="headerlink" href="#spack-build-cache-for-github-actions" title="Link to this heading"></a></h2>
+<p>To significantly speed up Spack in GitHub Actions, binaries can be cached in
+GitHub Packages. This service is an OCI registry that can be linked to a GitHub
+repository.</p>
+<p>Spack offers a public build cache for GitHub Actions with a set of common packages,
+which lets you get started quickly. See the following resources for more information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/spack/setup-spack">spack/setup-spack</a> for setting up Spack in GitHub
+Actions</p></li>
+<li><p><a class="reference external" href="https://github.com/spack/github-actions-buildcache">spack/github-actions-buildcache</a> for
+more details on the public build cache</p></li>
+</ul>
+</section>
+<section id="spack-buildcache">
+<span id="cmd-spack-buildcache"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span></code><a class="headerlink" href="#spack-buildcache" title="Link to this heading"></a></h2>
+<section id="spack-buildcache-push">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">push</span></code><a class="headerlink" href="#spack-buildcache-push" title="Link to this heading"></a></h3>
+<p>Create tarball of installed Spack package and all dependencies.
+Tarballs are checksummed and signed if gpg2 is available.
+Places them in a directory <code class="docutils literal notranslate"><span class="pre">build_cache</span></code> that can be copied to a mirror.
+Commands like <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">install</span></code> will search Spack mirrors for build_cache to get the list of build caches.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Arguments</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;specs&gt;</span></code></p></td>
+<td><p>list of partial specs or hashes with a leading <code class="docutils literal notranslate"><span class="pre">/</span></code> to match from installed packages and used for creating build caches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path&gt;</span></code></p></td>
+<td><p>directory in which <code class="docutils literal notranslate"><span class="pre">build_cache</span></code> directory is created, defaults to <code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span></code></p></td>
+<td><p>overwrite <code class="docutils literal notranslate"><span class="pre">.spack</span></code> file in <code class="docutils literal notranslate"><span class="pre">build_cache</span></code> directory if it exists</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">&lt;key&gt;</span></code></p></td>
+<td><p>the key to sign package with. In the case where multiple keys exist, the package will be unsigned unless <code class="docutils literal notranslate"><span class="pre">-k</span></code> is used.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>make paths in binaries relative before creating tarball</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-y</span></code></p></td>
+<td><p>answer yes to all create unsigned <code class="docutils literal notranslate"><span class="pre">build_cache</span></code> questions</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="spack-buildcache-list">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">list</span></code><a class="headerlink" href="#spack-buildcache-list" title="Link to this heading"></a></h3>
+<p>Retrieves all specs for build caches available on a Spack mirror.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Arguments</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;specs&gt;</span></code></p></td>
+<td><p>list of partial package specs to be matched against specs downloaded for build caches</p></td>
+</tr>
+</tbody>
+</table>
+<p>E.g. <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">list</span> <span class="pre">gcc</span></code> with print only commands to install <code class="docutils literal notranslate"><span class="pre">gcc</span></code> package(s)</p>
+</section>
+<section id="spack-buildcache-install">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">install</span></code><a class="headerlink" href="#spack-buildcache-install" title="Link to this heading"></a></h3>
+<p>Retrieves all specs for build caches available on a Spack mirror and installs build caches
+with specs matching the specs input.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Arguments</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;specs&gt;</span></code></p></td>
+<td><p>list of partial package specs or hashes with a leading <code class="docutils literal notranslate"><span class="pre">/</span></code> to be installed from build caches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span></code></p></td>
+<td><p>remove install directory if it exists before unpacking tarball</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-y</span></code></p></td>
+<td><p>answer yes to all to don't verify package with gpg questions</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="spack-buildcache-keys">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">buildcache</span> <span class="pre">keys</span></code><a class="headerlink" href="#spack-buildcache-keys" title="Link to this heading"></a></h3>
+<p>List public keys available on Spack mirror.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Arguments</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-i</span></code></p></td>
+<td><p>trust the keys downloaded with prompt for each</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-y</span></code></p></td>
+<td><p>answer yes to all trust all keys downloaded</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="repositories.html" class="btn btn-neutral float-left" title="Package Repositories (repos.yaml)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="bootstrapping.html" class="btn btn-neutral float-right" title="Bootstrapping" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

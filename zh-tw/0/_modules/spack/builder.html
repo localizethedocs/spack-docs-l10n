@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.builder &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/builder.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.builder</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.builder 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">collections.abc</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util</span> <span class="kn">import</span> <span class="n">lang</span>
+
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.multimethod</span>
+<span class="kn">import</span> <span class="nn">spack.repo</span>
+
+<span class="c1">#: Builder classes, as registered by the &quot;builder&quot; decorator</span>
+<span class="n">BUILDER_CLS</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1">#: An object of this kind is a shared global state used to collect callbacks during</span>
+<span class="c1">#: class definition time, and is flushed when the class object is created at the end</span>
+<span class="c1">#: of the class definition</span>
+<span class="c1">#:</span>
+<span class="c1">#: Args:</span>
+<span class="c1">#:    attribute_name (str): name of the attribute that will be attached to the builder</span>
+<span class="c1">#:    callbacks (list): container used to temporarily aggregate the callbacks</span>
+<span class="n">CallbackTemporaryStage</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;CallbackTemporaryStage&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;attribute_name&quot;</span><span class="p">,</span> <span class="s2">&quot;callbacks&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1">#: Shared global state to aggregate &quot;@run_before&quot; callbacks</span>
+<span class="n">_RUN_BEFORE</span> <span class="o">=</span> <span class="n">CallbackTemporaryStage</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s2">&quot;run_before_callbacks&quot;</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[])</span>
+<span class="c1">#: Shared global state to aggregate &quot;@run_after&quot; callbacks</span>
+<span class="n">_RUN_AFTER</span> <span class="o">=</span> <span class="n">CallbackTemporaryStage</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s2">&quot;run_after_callbacks&quot;</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[])</span>
+
+<span class="c1">#: Map id(pkg) to a builder, to avoid creating multiple</span>
+<span class="c1">#: builders for the same package object.</span>
+<span class="n">_BUILDERS</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="builder">
+<a class="viewcode-back" href="../../spack.html#spack.builder.builder">[文件]</a>
+<span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">build_system_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class decorator used to register the default builder</span>
+<span class="sd">    for a given build-system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        build_system_name (str): name of the build-system</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">build_system</span> <span class="o">=</span> <span class="n">build_system_name</span>
+        <span class="n">BUILDER_CLS</span><span class="p">[</span><span class="n">build_system_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
+        <span class="k">return</span> <span class="bp">cls</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+
+<div class="viewcode-block" id="create">
+<a class="viewcode-back" href="../../spack.html#spack.builder.create">[文件]</a>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a package object with an associated concrete spec,</span>
+<span class="sd">    return the builder object that can install it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         pkg (spack.package_base.PackageBase): package for which we want the builder</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_BUILDERS</span><span class="p">:</span>
+        <span class="n">_BUILDERS</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">pkg</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_create</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_BUILDERS</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">pkg</span><span class="p">)]</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">_PhaseAdapter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">phase_fn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span> <span class="o">=</span> <span class="n">builder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_fn</span> <span class="o">=</span> <span class="n">phase_fn</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_builder_class">
+<a class="viewcode-back" href="../../spack.html#spack.builder.get_builder_class">[文件]</a>
+<span class="k">def</span> <span class="nf">get_builder_class</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the builder class if a package module defines it.&quot;&quot;&quot;</span>
+    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">cls</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">ROOT_PYTHON_NAMESPACE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_create</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new builder object for the package object being passed as argument.</span>
+
+<span class="sd">    The function inspects the build-system used by the package object and try to:</span>
+
+<span class="sd">    1. Return a custom builder, if any is defined in the same ``package.py`` file.</span>
+<span class="sd">    2. Return a customization of more generic builders, if any is defined in the</span>
+<span class="sd">       class hierarchy (look at AspellDictPackage for an example of that)</span>
+<span class="sd">    3. Return a run-time generated adapter builder otherwise</span>
+
+<span class="sd">    The run-time generated adapter builder is capable of adapting an old-style package</span>
+<span class="sd">    to the new architecture, where the installation procedure has been extracted from</span>
+<span class="sd">    the ``*Package`` hierarchy into a ``*Builder`` hierarchy. This means that the</span>
+<span class="sd">    adapter looks for attribute or method overrides preferably in the ``*Package``</span>
+<span class="sd">    before using the default builder implementation.</span>
+
+<span class="sd">    Note that in case a builder is explicitly coded in ``package.py``, no attempt is made</span>
+<span class="sd">    to look for build-related methods in the ``*Package``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pkg (spack.package_base.PackageBase): package object for which we need a builder</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">package_buildsystem</span> <span class="o">=</span> <span class="n">buildsystem_name</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+    <span class="n">default_builder_cls</span> <span class="o">=</span> <span class="n">BUILDER_CLS</span><span class="p">[</span><span class="n">package_buildsystem</span><span class="p">]</span>
+    <span class="n">builder_cls_name</span> <span class="o">=</span> <span class="n">default_builder_cls</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">builder_class</span> <span class="o">=</span> <span class="n">get_builder_class</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">builder_cls_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">builder_class</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">builder_class</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+
+    <span class="c1"># Specialized version of a given buildsystem can subclass some</span>
+    <span class="c1"># base classes and specialize certain phases or methods or attributes.</span>
+    <span class="c1"># In that case they can store their builder class as a class level attribute.</span>
+    <span class="c1"># See e.g. AspellDictPackage as an example.</span>
+    <span class="n">base_cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">builder_cls_name</span><span class="p">,</span> <span class="n">default_builder_cls</span><span class="p">)</span>
+
+    <span class="c1"># From here on we define classes to construct a special builder that adapts to the</span>
+    <span class="c1"># old, single class, package format. The adapter forwards any call or access to an</span>
+    <span class="c1"># attribute related to the installation procedure to a package object wrapped in</span>
+    <span class="c1"># a class that falls-back on calling the base builder if no override is found on the</span>
+    <span class="c1"># package. The semantic should be the same as the method in the base builder were still</span>
+    <span class="c1"># present in the base class of the package.</span>
+
+    <span class="k">class</span> <span class="nc">_ForwardToBaseBuilder</span><span class="p">:</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped_pkg_object</span><span class="p">,</span> <span class="n">root_builder</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_package_object</span> <span class="o">=</span> <span class="n">wrapped_pkg_object</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root_builder</span> <span class="o">=</span> <span class="n">root_builder</span>
+
+            <span class="n">package_cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">wrapped_pkg_object</span><span class="p">)</span>
+            <span class="n">wrapper_cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">bases</span> <span class="o">=</span> <span class="p">(</span><span class="n">package_cls</span><span class="p">,</span> <span class="n">wrapper_cls</span><span class="p">)</span>
+            <span class="n">new_cls_name</span> <span class="o">=</span> <span class="n">package_cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;Wrapper&quot;</span>
+            <span class="c1"># Forward attributes that might be monkey patched later</span>
+            <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span>
+                <span class="n">new_cls_name</span><span class="p">,</span>
+                <span class="n">bases</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;run_tests&quot;</span><span class="p">:</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">wrapped_package_object</span><span class="o">.</span><span class="n">run_tests</span><span class="p">),</span>
+                    <span class="s2">&quot;test_requires_compiler&quot;</span><span class="p">:</span> <span class="nb">property</span><span class="p">(</span>
+                        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">wrapped_package_object</span><span class="o">.</span><span class="n">test_requires_compiler</span>
+                    <span class="p">),</span>
+                    <span class="s2">&quot;test_suite&quot;</span><span class="p">:</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">wrapped_package_object</span><span class="o">.</span><span class="n">test_suite</span><span class="p">),</span>
+                    <span class="s2">&quot;tester&quot;</span><span class="p">:</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">wrapped_package_object</span><span class="o">.</span><span class="n">tester</span><span class="p">),</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">new_cls</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="n">package_cls</span><span class="o">.</span><span class="vm">__module__</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">new_cls</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">wrapped_pkg_object</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_builder</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_builder</span><span class="p">),</span> <span class="n">item</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">super</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_builder</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_builder</span><span class="p">)</span><span class="o">.</span><span class="n">phases</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_PhaseAdapter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_builder</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">forward_method_to_getattr</span><span class="p">(</span><span class="n">fn_name</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">fn_name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">__forward</span>
+
+    <span class="c1"># Add fallback methods for the Package object to refer to the builder. If a method</span>
+    <span class="c1"># with the same name is defined in the Package, it will override this definition</span>
+    <span class="c1"># (when _ForwardToBaseBuilder is initialized)</span>
+    <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="n">base_cls</span><span class="o">.</span><span class="n">phases</span>
+        <span class="o">+</span> <span class="n">base_cls</span><span class="o">.</span><span class="n">legacy_methods</span>
+        <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base_cls</span><span class="p">,</span> <span class="s2">&quot;legacy_long_methods&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">())</span>
+        <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;setup_build_environment&quot;</span><span class="p">,</span> <span class="s2">&quot;setup_dependent_build_environment&quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">_ForwardToBaseBuilder</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">forward_method_to_getattr</span><span class="p">(</span><span class="n">method_name</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">forward_property_to_getattr</span><span class="p">(</span><span class="n">property_name</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">property_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">__forward</span>
+
+    <span class="k">for</span> <span class="n">attribute_name</span> <span class="ow">in</span> <span class="n">base_cls</span><span class="o">.</span><span class="n">legacy_attributes</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span>
+            <span class="n">_ForwardToBaseBuilder</span><span class="p">,</span>
+            <span class="n">attribute_name</span><span class="p">,</span>
+            <span class="nb">property</span><span class="p">(</span><span class="n">forward_property_to_getattr</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Adapter</span><span class="p">(</span><span class="n">base_cls</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">_PackageAdapterMeta</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">):</span>
+            <span class="c1"># Deal with custom phases in packages here</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;phases&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phases</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">phases</span>
+                <span class="k">for</span> <span class="n">phase</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">Adapter</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">_PackageAdapterMeta</span><span class="o">.</span><span class="n">phase_method_adapter</span><span class="p">(</span><span class="n">phase</span><span class="p">))</span>
+
+            <span class="c1"># Attribute containing the package wrapped in dispatcher with a `__getattr__`</span>
+            <span class="c1"># method that will forward certain calls to the default builder.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span> <span class="o">=</span> <span class="n">_ForwardToBaseBuilder</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">root_builder</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+
+        <span class="c1"># These two methods don&#39;t follow the (self, spec, prefix) signature of phases nor</span>
+        <span class="c1"># the (self) signature of methods, so they are added explicitly to avoid using a</span>
+        <span class="c1"># catch-all (*args, **kwargs)</span>
+        <span class="k">def</span> <span class="nf">setup_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="o">.</span><span class="n">setup_build_environment</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">setup_dependent_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="o">.</span><span class="n">setup_dependent_build_environment</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Adapter</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="buildsystem_name">
+<a class="viewcode-back" href="../../spack.html#spack.builder.buildsystem_name">[文件]</a>
+<span class="k">def</span> <span class="nf">buildsystem_name</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a package object with an associated concrete spec,</span>
+<span class="sd">    return the name of its build system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         pkg (spack.package_base.PackageBase): package for which we want</span>
+<span class="sd">            the build system name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;build_system&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="c1"># We are reading an old spec without the build_system variant</span>
+        <span class="k">return</span> <span class="n">pkg</span><span class="o">.</span><span class="n">legacy_buildsystem</span></div>
+
+
+
+<div class="viewcode-block" id="PhaseCallbacksMeta">
+<a class="viewcode-back" href="../../spack.html#spack.builder.PhaseCallbacksMeta">[文件]</a>
+<span class="k">class</span> <span class="nc">PhaseCallbacksMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Permit to register arbitrary functions during class definition and run them</span>
+<span class="sd">    later, before or after a given install phase.</span>
+
+<span class="sd">    Each method decorated with ``run_before`` or ``run_after`` gets temporarily</span>
+<span class="sd">    stored in a global shared state when a class being defined is parsed by the Python</span>
+<span class="sd">    interpreter. At class definition time that temporary storage gets flushed and a list</span>
+<span class="sd">    of callbacks is attached to the class being defined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attr_dict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">temporary_stage</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_RUN_BEFORE</span><span class="p">,</span> <span class="n">_RUN_AFTER</span><span class="p">):</span>
+            <span class="n">staged_callbacks</span> <span class="o">=</span> <span class="n">temporary_stage</span><span class="o">.</span><span class="n">callbacks</span>
+
+            <span class="c1"># Here we have an adapter from an old-style package. This means there is no</span>
+            <span class="c1"># hierarchy of builders, and every callback that had to be combined between</span>
+            <span class="c1"># *Package and *Builder has been combined already by _PackageAdapterMeta</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Adapter&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># If we are here we have callbacks. To get a complete list, we accumulate all the</span>
+            <span class="c1"># callbacks from base classes, we deduplicate them, then prepend what we have</span>
+            <span class="c1"># registered here.</span>
+            <span class="c1">#</span>
+            <span class="c1"># The order should be:</span>
+            <span class="c1"># 1. Callbacks are registered in order within the same class</span>
+            <span class="c1"># 2. Callbacks defined in derived classes precede those defined in base</span>
+            <span class="c1">#    classes</span>
+            <span class="n">callbacks_from_base</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
+                <span class="n">current_callbacks</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">temporary_stage</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">current_callbacks</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">callbacks_from_base</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">current_callbacks</span><span class="p">)</span>
+            <span class="n">callbacks_from_base</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lang</span><span class="o">.</span><span class="n">dedupe</span><span class="p">(</span><span class="n">callbacks_from_base</span><span class="p">))</span>
+            <span class="c1"># Set the callbacks in this class and flush the temporary stage</span>
+            <span class="n">attr_dict</span><span class="p">[</span><span class="n">temporary_stage</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">staged_callbacks</span><span class="p">[:]</span> <span class="o">+</span> <span class="n">callbacks_from_base</span>
+            <span class="k">del</span> <span class="n">temporary_stage</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[:]</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PhaseCallbacksMeta</span><span class="p">,</span> <span class="n">mcs</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attr_dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PhaseCallbacksMeta.run_after">
+<a class="viewcode-back" href="../../spack.html#spack.builder.PhaseCallbacksMeta.run_after">[文件]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">run_after</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorator to register a function for running after a given phase.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            phase (str): phase after which the function must run.</span>
+<span class="sd">            when (str): condition under which the function is run (if None, it is always run).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">when</span><span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+            <span class="n">_RUN_AFTER</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fn</span>
+
+        <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<div class="viewcode-block" id="PhaseCallbacksMeta.run_before">
+<a class="viewcode-back" href="../../spack.html#spack.builder.PhaseCallbacksMeta.run_before">[文件]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">run_before</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorator to register a function for running before a given phase.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           phase (str): phase before which the function must run.</span>
+<span class="sd">           when (str): condition under which the function is run (if None, it is always run).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">when</span><span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+            <span class="n">_RUN_BEFORE</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fn</span>
+
+        <span class="k">return</span> <span class="n">_decorator</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BuilderMeta">
+<a class="viewcode-back" href="../../spack.html#spack.builder.BuilderMeta">[文件]</a>
+<span class="k">class</span> <span class="nc">BuilderMeta</span><span class="p">(</span>
+    <span class="n">PhaseCallbacksMeta</span><span class="p">,</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">multimethod</span><span class="o">.</span><span class="n">MultiMethodMeta</span><span class="p">,</span>
+    <span class="nb">type</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>  <span class="c1"># type: ignore</span>
+<span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">_PackageAdapterMeta</span><span class="p">(</span><span class="n">BuilderMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Metaclass to adapt old-style packages to the new architecture based on builders</span>
+<span class="sd">    for the installation phase.</span>
+
+<span class="sd">    This class does the necessary mangling to function argument so that a call to a</span>
+<span class="sd">    builder object can delegate to a package object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">phase_method_adapter</span><span class="p">(</span><span class="n">phase_name</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+            <span class="n">phase_fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="p">,</span> <span class="n">phase_name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">phase_fn</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_adapter</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">legacy_long_method_adapter</span><span class="p">(</span><span class="n">method_name</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+            <span class="n">bind_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">bind_method</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_adapter</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">legacy_method_adapter</span><span class="p">(</span><span class="n">method_name</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">bind_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">bind_method</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">_adapter</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">legacy_attribute_adapter</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">_adapter</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">combine_callbacks</span><span class="p">(</span><span class="n">pipeline_attribute_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function combines callbacks from old-style packages with callbacks that might</span>
+<span class="sd">        be registered for the default builder.</span>
+
+<span class="sd">        It works by:</span>
+<span class="sd">        1. Extracting the callbacks from the old-style package</span>
+<span class="sd">        2. Transforming those callbacks by adding an adapter that receives a builder as argument</span>
+<span class="sd">           and calls the wrapped function with ``builder.pkg``</span>
+<span class="sd">        3. Combining the list of transformed callbacks with those that might be present in the</span>
+<span class="sd">           default builder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">unwrap_pkg</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+                <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+                <span class="k">def</span> <span class="nf">_wrapped</span><span class="p">(</span><span class="n">builder</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">builder</span><span class="o">.</span><span class="n">pkg_with_dispatcher</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">_wrapped</span>
+
+            <span class="c1"># Concatenate the current list with the one from package</span>
+            <span class="n">callbacks_from_package</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="n">pipeline_attribute_name</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">callbacks_from_package</span> <span class="o">=</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">unwrap_pkg</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">callbacks_from_package</span><span class="p">]</span>
+            <span class="n">callbacks_from_builder</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="n">pipeline_attribute_name</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">return</span> <span class="n">callbacks_from_package</span> <span class="o">+</span> <span class="n">callbacks_from_builder</span>
+
+        <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">_adapter</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attr_dict</span><span class="p">):</span>
+        <span class="c1"># Add ways to intercept methods and attribute calls and dispatch</span>
+        <span class="c1"># them first to a package object</span>
+        <span class="n">default_builder_cls</span> <span class="o">=</span> <span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">phase_name</span> <span class="ow">in</span> <span class="n">default_builder_cls</span><span class="o">.</span><span class="n">phases</span><span class="p">:</span>
+            <span class="n">attr_dict</span><span class="p">[</span><span class="n">phase_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_PackageAdapterMeta</span><span class="o">.</span><span class="n">phase_method_adapter</span><span class="p">(</span><span class="n">phase_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="n">default_builder_cls</span><span class="o">.</span><span class="n">legacy_methods</span><span class="p">:</span>
+            <span class="n">attr_dict</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_PackageAdapterMeta</span><span class="o">.</span><span class="n">legacy_method_adapter</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+
+        <span class="c1"># These exist e.g. for Python, see discussion in https://github.com/spack/spack/pull/32068</span>
+        <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">default_builder_cls</span><span class="p">,</span> <span class="s2">&quot;legacy_long_methods&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">attr_dict</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_PackageAdapterMeta</span><span class="o">.</span><span class="n">legacy_long_method_adapter</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">attribute_name</span> <span class="ow">in</span> <span class="n">default_builder_cls</span><span class="o">.</span><span class="n">legacy_attributes</span><span class="p">:</span>
+            <span class="n">attr_dict</span><span class="p">[</span><span class="n">attribute_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_PackageAdapterMeta</span><span class="o">.</span><span class="n">legacy_attribute_adapter</span><span class="p">(</span>
+                <span class="n">attribute_name</span>
+            <span class="p">)</span>
+
+        <span class="n">combine_callbacks</span> <span class="o">=</span> <span class="n">_PackageAdapterMeta</span><span class="o">.</span><span class="n">combine_callbacks</span>
+        <span class="n">attr_dict</span><span class="p">[</span><span class="n">_RUN_BEFORE</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_callbacks</span><span class="p">(</span><span class="n">_RUN_BEFORE</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+        <span class="n">attr_dict</span><span class="p">[</span><span class="n">_RUN_AFTER</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_callbacks</span><span class="p">(</span><span class="n">_RUN_AFTER</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">_PackageAdapterMeta</span><span class="p">,</span> <span class="n">mcs</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attr_dict</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="InstallationPhase">
+<a class="viewcode-back" href="../../spack.html#spack.builder.InstallationPhase">[文件]</a>
+<span class="k">class</span> <span class="nc">InstallationPhase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages a single phase of the installation.</span>
+
+<span class="sd">    This descriptor stores at creation time the name of the method it should</span>
+<span class="sd">    search for execution. The method is retrieved at __get__ time, so that</span>
+<span class="sd">    it can be overridden by subclasses of whatever class declared the phases.</span>
+
+<span class="sd">    It also provides hooks to execute arbitrary callbacks before and after</span>
+<span class="sd">    the phase.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">builder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span> <span class="o">=</span> <span class="n">builder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_phase_fn</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_before</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_callbacks</span><span class="p">(</span><span class="n">_RUN_BEFORE</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_after</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_callbacks</span><span class="p">(</span><span class="n">_RUN_AFTER</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_make_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callbacks_attribute</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">callbacks</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">callbacks_attribute</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">condition</span><span class="p">),</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">callbacks</span><span class="p">:</span>
+            <span class="c1"># Same if it is for another phase</span>
+            <span class="k">if</span> <span class="n">phase</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># If we have no condition or the callback satisfies a condition, register it</span>
+            <span class="k">if</span> <span class="n">condition</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">condition</span><span class="p">):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">: executing &quot;</span><span class="si">{1}</span><span class="s1">&quot; phase&#39;</span>
+        <span class="k">return</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InstallationPhase.execute">
+<a class="viewcode-back" href="../../spack.html#spack.builder.InstallationPhase.execute">[文件]</a>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pkg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">pkg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_on_phase_start</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_before</span><span class="p">:</span>
+            <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_fn</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_after</span><span class="p">:</span>
+            <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_on_phase_exit</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_select_phase_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">phase_fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">phase_fn</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">&#39;unexpected error: package &quot;</span><span class="si">{0.fullname}</span><span class="s1">&quot; must implement an &#39;</span>
+                <span class="s1">&#39;&quot;</span><span class="si">{1}</span><span class="s1">&quot; phase for the &quot;</span><span class="si">{2}</span><span class="s1">&quot; build system&#39;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">build_system</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">phase_fn</span>
+
+    <span class="k">def</span> <span class="nf">_on_phase_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+        <span class="c1"># If a phase has a matching stop_before_phase attribute,</span>
+        <span class="c1"># stop the installation process raising a StopPhase</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;stop_before_phase&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">StopPhase</span><span class="p">(</span><span class="s2">&quot;Stopping before &#39;</span><span class="si">{0}</span><span class="s2">&#39; phase&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_on_phase_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+        <span class="c1"># If a phase has a matching last_phase attribute,</span>
+        <span class="c1"># stop the installation process raising a StopPhase</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;last_phase&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">StopPhase</span><span class="p">(</span><span class="s2">&quot;Stopping at &#39;</span><span class="si">{0}</span><span class="s2">&#39; phase&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+<div class="viewcode-block" id="InstallationPhase.copy">
+<a class="viewcode-back" href="../../spack.html#spack.builder.InstallationPhase.copy">[文件]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Builder">
+<a class="viewcode-back" href="../../spack.html#spack.builder.Builder">[文件]</a>
+<span class="k">class</span> <span class="nc">Builder</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">BuilderMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A builder is a class that, given a package object (i.e. associated with</span>
+<span class="sd">    concrete spec), knows how to install it.</span>
+
+<span class="sd">    The builder behaves like a sequence, and when iterated over return the</span>
+<span class="sd">    &quot;phases&quot; of the installation in the correct order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pkg (spack.package_base.PackageBase): package object to be built</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Sequence of phases. Must be defined in derived classes</span>
+    <span class="n">phases</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="c1">#: Build system name. Must also be defined in derived classes.</span>
+    <span class="n">build_system</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">legacy_methods</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">legacy_attributes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="c1"># type hints for some of the legacy methods</span>
+    <span class="n">build_time_test_callbacks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">install_time_test_callbacks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="c1">#: List of glob expressions. Each expression must either be</span>
+    <span class="c1">#: absolute or relative to the package source path.</span>
+    <span class="c1">#: Matching artifacts found at the end of the build process will be</span>
+    <span class="c1">#: copied in the same directory tree as _spack_build_logfile and</span>
+    <span class="c1">#: _spack_build_envfile.</span>
+    <span class="n">archive_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span> <span class="o">=</span> <span class="n">pkg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">phase</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">phase</span><span class="p">]</span> <span class="o">=</span> <span class="n">InstallationPhase</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">spec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">prefix</span>
+
+<div class="viewcode-block" id="Builder.setup_build_environment">
+<a class="viewcode-back" href="../../spack.html#spack.builder.Builder.setup_build_environment">[文件]</a>
+    <span class="k">def</span> <span class="nf">setup_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets up the build environment for a package.</span>
+
+<span class="sd">        This method will be called before the current package prefix exists in</span>
+<span class="sd">        Spack&#39;s store.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            env (spack.util.environment.EnvironmentModifications): environment</span>
+<span class="sd">                modifications to be applied when the package is built. Package authors</span>
+<span class="sd">                can call methods on it to alter the build environment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(),</span> <span class="s2">&quot;setup_build_environment&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup_build_environment</span><span class="p">(</span><span class="n">env</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Builder.setup_dependent_build_environment">
+<a class="viewcode-back" href="../../spack.html#spack.builder.Builder.setup_dependent_build_environment">[文件]</a>
+    <span class="k">def</span> <span class="nf">setup_dependent_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets up the build environment of packages that depend on this one.</span>
+
+<span class="sd">        This is similar to ``setup_build_environment``, but it is used to</span>
+<span class="sd">        modify the build environments of packages that *depend* on this one.</span>
+
+<span class="sd">        This gives packages like Python and others that follow the extension</span>
+<span class="sd">        model a way to implement common environment or compile-time settings</span>
+<span class="sd">        for dependencies.</span>
+
+<span class="sd">        This method will be called before the dependent package prefix exists</span>
+<span class="sd">        in Spack&#39;s store.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            1. Installing python modules generally requires ``PYTHONPATH``</span>
+<span class="sd">            to point to the ``lib/pythonX.Y/site-packages`` directory in the</span>
+<span class="sd">            module&#39;s install prefix. This method could be used to set that</span>
+<span class="sd">            variable.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            env (spack.util.environment.EnvironmentModifications): environment</span>
+<span class="sd">                modifications to be applied when the dependent package is built.</span>
+<span class="sd">                Package authors can call methods on it to alter the build environment.</span>
+
+<span class="sd">            dependent_spec (spack.spec.Spec): the spec of the dependent package</span>
+<span class="sd">                about to be built. This allows the extendee (self) to query</span>
+<span class="sd">                the dependent&#39;s state. Note that *this* package&#39;s spec is</span>
+<span class="sd">                available as ``self.spec``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(),</span> <span class="s2">&quot;setup_dependent_build_environment&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup_dependent_build_environment</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phases</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">/</span><span class="si">{hash:7}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; builder for &quot;</span><span class="si">{1}</span><span class="s1">&quot;&#39;</span>
+        <span class="k">return</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">build_system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">/</span><span class="si">{hash:7}</span><span class="s2">&quot;</span><span class="p">))</span></div>
+
+
+
+<span class="c1"># Export these names as standalone to be used in packages</span>
+<span class="n">run_after</span> <span class="o">=</span> <span class="n">PhaseCallbacksMeta</span><span class="o">.</span><span class="n">run_after</span>
+<span class="n">run_before</span> <span class="o">=</span> <span class="n">PhaseCallbacksMeta</span><span class="o">.</span><span class="n">run_before</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,664 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.oci.opener &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/oci/opener.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.oci.opener</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.oci.opener 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="sd">&quot;&quot;&quot;All the logic for OCI fetching and authentication&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">urllib.error</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span> <span class="nn">http.client</span> <span class="kn">import</span> <span class="n">HTTPResponse</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">Request</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.lang</span>
+
+<span class="kn">import</span> <span class="nn">spack.config</span>
+<span class="kn">import</span> <span class="nn">spack.mirror</span>
+<span class="kn">import</span> <span class="nn">spack.parser</span>
+<span class="kn">import</span> <span class="nn">spack.util.web</span>
+
+<span class="kn">from</span> <span class="nn">.image</span> <span class="kn">import</span> <span class="n">ImageReference</span>
+
+
+<span class="k">def</span> <span class="nf">_urlopen</span><span class="p">():</span>
+    <span class="n">opener</span> <span class="o">=</span> <span class="n">create_opener</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">dispatch_open</span><span class="p">(</span><span class="n">fullurl</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config:connect_timeout&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fullurl</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dispatch_open</span>
+
+
+<span class="n">OpenType</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">HTTPResponse</span><span class="p">]</span>
+<span class="n">MaybeOpen</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="n">OpenType</span><span class="p">]</span>
+
+<span class="c1">#: Opener that automatically uses OCI authentication based on mirror config</span>
+<span class="n">urlopen</span><span class="p">:</span> <span class="n">OpenType</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">Singleton</span><span class="p">(</span><span class="n">_urlopen</span><span class="p">)</span>
+
+
+<span class="n">SP</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; &quot;</span>
+<span class="n">OWS</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[ \t]*&quot;</span>
+<span class="n">BWS</span> <span class="o">=</span> <span class="n">OWS</span>
+<span class="n">HTAB</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\t&quot;</span>
+<span class="n">VCHAR</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\x21-\x7E&quot;</span>
+<span class="n">tchar</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[!#$%&amp;&#39;*+\-.^_`|~0-9A-Za-z]&quot;</span>
+<span class="n">token</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tchar</span><span class="si">}</span><span class="s2">+&quot;</span>
+<span class="n">obs_text</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\x80-\xFF&quot;</span>
+<span class="n">qdtext</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">HTAB</span><span class="si">}{</span><span class="n">SP</span><span class="si">}</span><span class="s2">\x21\x23-\x5B\x5D-\x7E</span><span class="si">{</span><span class="n">obs_text</span><span class="si">}</span><span class="s2">]&quot;</span>
+<span class="n">quoted_pair</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">([</span><span class="si">{</span><span class="n">HTAB</span><span class="si">}{</span><span class="n">SP</span><span class="si">}{</span><span class="n">VCHAR</span><span class="si">}{</span><span class="n">obs_text</span><span class="si">}</span><span class="s2">])&quot;</span>
+<span class="n">quoted_string</span> <span class="o">=</span> <span class="sa">rf</span><span class="s1">&#39;&quot;(?:(</span><span class="si">{</span><span class="n">qdtext</span><span class="si">}</span><span class="s1">*)|</span><span class="si">{</span><span class="n">quoted_pair</span><span class="si">}</span><span class="s1">)*&quot;&#39;</span>
+
+
+<div class="viewcode-block" id="TokenType">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.TokenType">[文件]</a>
+<span class="k">class</span> <span class="nc">TokenType</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">TokenBase</span><span class="p">):</span>
+    <span class="n">AUTH_PARAM</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">)</span><span class="si">{</span><span class="n">BWS</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">BWS</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">quoted_string</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="c1"># TOKEN68 = r&quot;([A-Za-z0-9\-._~+/]+=*)&quot;  # todo... support this?</span>
+    <span class="n">TOKEN</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tchar</span><span class="si">}</span><span class="s2">+&quot;</span>
+    <span class="n">EQUALS</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">BWS</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">BWS</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">COMMA</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OWS</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">OWS</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">SPACE</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; +&quot;</span>
+    <span class="n">EOF</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$&quot;</span>
+    <span class="n">ANY</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;.&quot;</span></div>
+
+
+
+<span class="n">TOKEN_REGEXES</span> <span class="o">=</span> <span class="p">[</span><span class="sa">rf</span><span class="s2">&quot;(?P&lt;</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">regex</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">TokenType</span><span class="p">]</span>
+
+<span class="n">ALL_TOKENS</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">TOKEN_REGEXES</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="State">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.State">[文件]</a>
+<span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">CHALLENGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">AUTH_PARAM_LIST_START</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">AUTH_PARAM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NEXT_IN_LIST</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">AUTH_PARAM_OR_SCHEME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="tokenize">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.tokenize">[文件]</a>
+<span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">scanner</span> <span class="o">=</span> <span class="n">ALL_TOKENS</span><span class="o">.</span><span class="n">scanner</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>  <span class="c1"># type: ignore[attr-defined]</span>
+
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">scanner</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore[var-annotated]</span>
+        <span class="k">yield</span> <span class="n">spack</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">Token</span><span class="p">(</span>
+            <span class="n">TokenType</span><span class="o">.</span><span class="n">__members__</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">lastgroup</span><span class="p">],</span>  <span class="c1"># type: ignore[attr-defined]</span>
+            <span class="k">match</span><span class="o">.</span><span class="n">group</span><span class="p">(),</span>  <span class="c1"># type: ignore[attr-defined]</span>
+            <span class="k">match</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span>  <span class="c1"># type: ignore[attr-defined]</span>
+            <span class="k">match</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span>  <span class="c1"># type: ignore[attr-defined]</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Challenge">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.Challenge">[文件]</a>
+<span class="k">class</span> <span class="nc">Challenge</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;scheme&quot;</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Challenge(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Challenge</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">scheme</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="parse_www_authenticate">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.parse_www_authenticate">[文件]</a>
+<span class="k">def</span> <span class="nf">parse_www_authenticate</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Very basic parsing of www-authenticate parsing (RFC7235 section 4.1)</span>
+<span class="sd">    Notice: this omits token68 support.&quot;&quot;&quot;</span>
+
+    <span class="c1"># auth-scheme      = token</span>
+    <span class="c1"># auth-param       = token BWS &quot;=&quot; BWS ( token / quoted-string )</span>
+    <span class="c1"># challenge        = auth-scheme [ 1*SP ( token68 / #auth-param ) ]</span>
+    <span class="c1"># WWW-Authenticate = 1#challenge</span>
+
+    <span class="n">challenges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Challenge</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">_unquote</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">quoted_pair</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span>
+    <span class="n">unquote</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">_unquote</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">mode</span><span class="p">:</span> <span class="n">State</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">CHALLENGE</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+
+    <span class="n">current_challenge</span> <span class="o">=</span> <span class="n">Challenge</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">extract_auth_param</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">unquote</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">token</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">Token</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">CHALLENGE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">TOKEN</span><span class="p">:</span>
+                <span class="n">current_challenge</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM_LIST_START</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM_LIST_START</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+                <span class="n">challenges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_challenge</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">COMMA</span><span class="p">:</span>
+                <span class="c1"># Challenge without param list, followed by another challenge.</span>
+                <span class="n">challenges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_challenge</span><span class="p">)</span>
+                <span class="n">current_challenge</span> <span class="o">=</span> <span class="n">Challenge</span><span class="p">()</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">CHALLENGE</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
+                <span class="c1"># A space means it must be followed by param list</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">AUTH_PARAM</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">extract_auth_param</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">current_challenge</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">NEXT_IN_LIST</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">NEXT_IN_LIST</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+                <span class="n">challenges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_challenge</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">COMMA</span><span class="p">:</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM_OR_SCHEME</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM_OR_SCHEME</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">EOF</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">TOKEN</span><span class="p">:</span>
+                <span class="n">challenges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_challenge</span><span class="p">)</span>
+                <span class="n">current_challenge</span> <span class="o">=</span> <span class="n">Challenge</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">AUTH_PARAM_LIST_START</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">AUTH_PARAM</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">extract_auth_param</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">current_challenge</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">NEXT_IN_LIST</span>
+
+    <span class="k">return</span> <span class="n">challenges</span></div>
+
+
+
+<div class="viewcode-block" id="RealmServiceScope">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.RealmServiceScope">[文件]</a>
+<span class="k">class</span> <span class="nc">RealmServiceScope</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">realm</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">service</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="UsernamePassword">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.UsernamePassword">[文件]</a>
+<span class="k">class</span> <span class="nc">UsernamePassword</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="get_bearer_challenge">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.get_bearer_challenge">[文件]</a>
+<span class="k">def</span> <span class="nf">get_bearer_challenge</span><span class="p">(</span><span class="n">challenges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Challenge</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RealmServiceScope</span><span class="p">]:</span>
+    <span class="c1"># Find a challenge that we can handle (currently only Bearer)</span>
+    <span class="n">challenge</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">challenges</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">&quot;Bearer&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">challenge</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Get realm / service / scope from challenge</span>
+    <span class="n">realm</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">challenge</span><span class="o">.</span><span class="n">params</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;realm&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">challenge</span><span class="o">.</span><span class="n">params</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;service&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">challenge</span><span class="o">.</span><span class="n">params</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;scope&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">realm</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">service</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">RealmServiceScope</span><span class="p">(</span><span class="n">realm</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="OCIAuthHandler">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.OCIAuthHandler">[文件]</a>
+<span class="k">class</span> <span class="nc">OCIAuthHandler</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UsernamePassword</span><span class="p">]]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            credentials_provider: A function that takes a domain and may return a UsernamePassword.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">credentials_provider</span> <span class="o">=</span> <span class="n">credentials_provider</span>
+
+        <span class="c1"># Cached bearer tokens for a given domain.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_tokens</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="OCIAuthHandler.obtain_bearer_token">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.OCIAuthHandler.obtain_bearer_token">[文件]</a>
+    <span class="k">def</span> <span class="nf">obtain_bearer_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registry</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">challenge</span><span class="p">:</span> <span class="n">RealmServiceScope</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># See https://docs.docker.com/registry/spec/auth/token/</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="n">challenge</span><span class="o">.</span><span class="n">service</span><span class="p">,</span> <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">challenge</span><span class="o">.</span><span class="n">scope</span><span class="p">,</span> <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;spack&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">challenge</span><span class="o">.</span><span class="n">realm</span><span class="p">)</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">fragment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Don&#39;t send credentials over insecure transport.</span>
+        <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span> <span class="o">!=</span> <span class="s2">&quot;https&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot login to </span><span class="si">{</span><span class="n">registry</span><span class="si">}</span><span class="s2"> over insecure </span><span class="si">{</span><span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2"> connection&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlunparse</span><span class="p">(</span><span class="n">parsed</span><span class="p">))</span>
+
+        <span class="c1"># I guess we shouldn&#39;t cache this, since we don&#39;t know</span>
+        <span class="c1"># the context in which it&#39;s used (may depend on config)</span>
+        <span class="n">pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">credentials_provider</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pair</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">encoded</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pair</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">pair</span><span class="o">.</span><span class="n">password</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+                <span class="s2">&quot;utf-8&quot;</span>
+            <span class="p">)</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">add_unredirected_header</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Basic </span><span class="si">{</span><span class="n">encoded</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Do a GET request.</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+        <span class="c1"># Read the response and parse the JSON</span>
+        <span class="n">response_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="c1"># Get the token from the response</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">response_json</span><span class="p">[</span><span class="s2">&quot;token&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Remember the last obtained token for this registry</span>
+        <span class="c1"># Note: we should probably take into account realm, service and scope</span>
+        <span class="c1"># so we can store multiple tokens for the same registry.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_tokens</span><span class="p">[</span><span class="n">registry</span><span class="p">]</span> <span class="o">=</span> <span class="n">token</span>
+
+        <span class="k">return</span> <span class="n">token</span></div>
+
+
+<div class="viewcode-block" id="OCIAuthHandler.https_request">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.OCIAuthHandler.https_request">[文件]</a>
+    <span class="k">def</span> <span class="nf">https_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+        <span class="c1"># Eagerly add the bearer token to the request if no</span>
+        <span class="c1"># auth header is set yet, to avoid 401s in multiple</span>
+        <span class="c1"># requests to the same registry.</span>
+
+        <span class="c1"># Use has_header, not .headers, since there are two</span>
+        <span class="c1"># types of headers (redirected and unredirected)</span>
+        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">has_header</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">req</span>
+
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">full_url</span><span class="p">)</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_tokens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">req</span>
+
+        <span class="n">req</span><span class="o">.</span><span class="n">add_unredirected_header</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">req</span></div>
+
+
+<div class="viewcode-block" id="OCIAuthHandler.http_error_401">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.OCIAuthHandler.http_error_401">[文件]</a>
+    <span class="k">def</span> <span class="nf">http_error_401</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+        <span class="c1"># Login failed, avoid infinite recursion where we go back and</span>
+        <span class="c1"># forth between auth server and registry</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="s2">&quot;login_attempted&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">DetailedHTTPError</span><span class="p">(</span>
+                <span class="n">req</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Failed to login: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">fp</span>
+            <span class="p">)</span>
+
+        <span class="c1"># On 401 Unauthorized, parse the WWW-Authenticate header</span>
+        <span class="c1"># to determine what authentication is required</span>
+        <span class="k">if</span> <span class="s2">&quot;WWW-Authenticate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">DetailedHTTPError</span><span class="p">(</span>
+                <span class="n">req</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="s2">&quot;Cannot login to registry, missing WWW-Authenticate header&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">fp</span>
+            <span class="p">)</span>
+
+        <span class="n">header_value</span> <span class="o">=</span> <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;WWW-Authenticate&quot;</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">challenge</span> <span class="o">=</span> <span class="n">get_bearer_challenge</span><span class="p">(</span><span class="n">parse_www_authenticate</span><span class="p">(</span><span class="n">header_value</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">DetailedHTTPError</span><span class="p">(</span>
+                <span class="n">req</span><span class="p">,</span>
+                <span class="n">code</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot login to registry, malformed WWW-Authenticate header: </span><span class="si">{</span><span class="n">header_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="p">,</span>
+                <span class="n">fp</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="c1"># If there is no bearer challenge, we can&#39;t handle it</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">challenge</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">DetailedHTTPError</span><span class="p">(</span>
+                <span class="n">req</span><span class="p">,</span>
+                <span class="n">code</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot login to registry, unsupported authentication scheme: </span><span class="si">{</span><span class="n">header_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="p">,</span>
+                <span class="n">fp</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get the token from the auth handler</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obtain_bearer_token</span><span class="p">(</span>
+                <span class="n">registry</span><span class="o">=</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">get_full_url</span><span class="p">())</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span>
+                <span class="n">challenge</span><span class="o">=</span><span class="n">challenge</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">DetailedHTTPError</span><span class="p">(</span>
+                <span class="n">req</span><span class="p">,</span>
+                <span class="n">code</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot login to registry, failed to obtain bearer token: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="p">,</span>
+                <span class="n">fp</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="c1"># Add the token to the request</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">add_unredirected_header</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="s2">&quot;login_attempted&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="credentials_from_mirrors">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.credentials_from_mirrors">[文件]</a>
+<span class="k">def</span> <span class="nf">credentials_from_mirrors</span><span class="p">(</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">mirrors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">Mirror</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UsernamePassword</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter out OCI registry credentials from a list of mirrors.&quot;&quot;&quot;</span>
+
+    <span class="n">mirrors</span> <span class="o">=</span> <span class="n">mirrors</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">MirrorCollection</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">mirror</span> <span class="ow">in</span> <span class="n">mirrors</span><span class="p">:</span>
+        <span class="c1"># Prefer push credentials over fetch. Unlikely that those are different</span>
+        <span class="c1"># but our config format allows it.</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;push&quot;</span><span class="p">,</span> <span class="s2">&quot;fetch&quot;</span><span class="p">):</span>
+            <span class="n">pair</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">get_credentials</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_pair&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pair</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">url</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;oci://&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">parsed</span> <span class="o">=</span> <span class="n">ImageReference</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">url</span><span class="p">[</span><span class="mi">6</span><span class="p">:])</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">domain</span> <span class="o">==</span> <span class="n">domain</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">UsernamePassword</span><span class="p">(</span><span class="o">*</span><span class="n">pair</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="create_opener">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.create_opener">[文件]</a>
+<span class="k">def</span> <span class="nf">create_opener</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an opener that can handle OCI authentication.&quot;&quot;&quot;</span>
+    <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">OpenerDirector</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">(),</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">UnknownHandler</span><span class="p">(),</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPSHandler</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">ssl_create_default_context</span><span class="p">()),</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">SpackHTTPDefaultErrorHandler</span><span class="p">(),</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPRedirectHandler</span><span class="p">(),</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPErrorProcessor</span><span class="p">(),</span>
+        <span class="n">OCIAuthHandler</span><span class="p">(</span><span class="n">credentials_from_mirrors</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="n">opener</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">opener</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_status">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.ensure_status">[文件]</a>
+<span class="k">def</span> <span class="nf">ensure_status</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">HTTPResponse</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raise an error if the response status is not the expected one.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">status</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">DetailedHTTPError</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">(),</span> <span class="kc">None</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="default_retry">
+<a class="viewcode-back" href="../../../spack.oci.html#spack.oci.oci.default_retry">[文件]</a>
+<span class="k">def</span> <span class="nf">default_retry</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">sleep</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">sleep</span> <span class="o">=</span> <span class="n">sleep</span> <span class="ow">or</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retries</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span><span class="p">,</span> <span class="ne">TimeoutError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Retry on internal server errors, and rate limit errors</span>
+                <span class="c1"># Potentially this could take into account the Retry-After header</span>
+                <span class="c1"># if registries support it</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="n">retries</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="p">(</span><span class="mi">500</span> <span class="o">&lt;=</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">&lt;</span> <span class="mi">600</span> <span class="ow">or</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="ow">or</span> <span class="p">(</span>
+                        <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span> <span class="ne">TimeoutError</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="ne">TimeoutError</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="c1"># Exponential backoff</span>
+                    <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">raise</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

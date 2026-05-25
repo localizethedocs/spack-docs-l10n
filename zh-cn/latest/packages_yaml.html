@@ -1,0 +1,1088 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="A guide to customizing package settings in Spack using the packages.yaml file, including configuring compilers, specifying external packages, package requirements, and permissions." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2026-01-23T08:17:54+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜索" href="search.html"><link rel="next" title="Toolchains (toolchains.yaml)" href="toolchains_yaml.html"><link rel="prev" title="Spack Settings (config.yaml)" href="config_yaml.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/packages_yaml.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Package Settings (packages.yaml) - Spack 1.2.0.dev0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.2.0.dev0 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/packages_yaml.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="package-settings-packages-yaml">
+<span id="packages-config"></span><h1>Package Settings (packages.yaml)<a class="headerlink" href="#package-settings-packages-yaml" title="链接到此标题。">¶</a></h1>
+<p>Spack allows you to customize how your software is built through the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> file.
+Using it, you can make Spack prefer particular implementations of virtual dependencies (e.g., MPI or BLAS/LAPACK), or you can make it prefer to build with particular compilers.
+You can also tell Spack to use <em>external</em> software installations already present on your system.</p>
+<p>At a high level, the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> file is structured like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">package1</span><span class="p">:</span>
+    <span class="c1"># settings for package1</span>
+  <span class="nt">package2</span><span class="p">:</span>
+    <span class="c1"># settings for package2</span>
+  <span class="c1"># ...</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="c1"># settings that apply to all packages.</span>
+</pre></div>
+</div>
+<p>You can either set build preferences specifically for <em>one</em> package, or you can specify that certain settings should apply to <em>all</em> packages.
+The types of settings you can customize are described in detail below.</p>
+<p>Spack's build defaults are in the default <code class="docutils literal notranslate"><span class="pre">etc/spack/defaults/packages.yaml</span></code> file.
+You can override them in <code class="docutils literal notranslate"><span class="pre">~/.spack/packages.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">etc/spack/packages.yaml</span></code>.
+For more details on how this works, see <a class="reference internal" href="configuration.html#configuration-scopes"><span class="std std-ref">Configuration Scopes</span></a>.</p>
+<section id="external-packages">
+<span id="sec-external-packages"></span><h2>External packages<a class="headerlink" href="#external-packages" title="链接到此标题。">¶</a></h2>
+<p>Spack can be configured to use externally-installed packages rather than building its own packages.
+This may be desirable if machines ship with system packages, such as a customized MPI, which should be used instead of Spack building its own MPI.</p>
+<p>External packages are configured through the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> file.
+Here's an example of an external configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3~debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3+debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3-debug</span>
+</pre></div>
+</div>
+<p>This example lists two installations of OpenMPI, one with debug information, and one without.
+If Spack is asked to build a package that uses one of these MPIs as a dependency, it will use the pre-installed OpenMPI in the given directory.
+Note that the specified path is the top-level install prefix, not the <code class="docutils literal notranslate"><span class="pre">bin</span></code> subdirectory.</p>
+<p><code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> can also be used to specify modules to load instead of the installation prefixes.
+The following example says that module <code class="docutils literal notranslate"><span class="pre">CMake/3.7.2</span></code> provides CMake version 3.7.2.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cmake</span><span class="p">:</span>
+  <span class="nt">externals</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cmake@3.7.2</span>
+    <span class="nt">modules</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">CMake/3.7.2</span>
+</pre></div>
+</div>
+<p>Each <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> begins with a <code class="docutils literal notranslate"><span class="pre">packages:</span></code> attribute, followed by a list of package names.
+To specify externals, add an <code class="docutils literal notranslate"><span class="pre">externals:</span></code> attribute under the package name, which lists externals.
+Each external should specify a <code class="docutils literal notranslate"><span class="pre">spec:</span></code> string that should be as well-defined as reasonably possible.
+If a package lacks a spec component, such as missing a compiler or package version, then Spack will guess the missing component based on its most-favored packages, and it may guess incorrectly.</p>
+<section id="automatically-find-external-packages">
+<span id="cmd-spack-external-find"></span><h3>Automatically find external packages<a class="headerlink" href="#automatically-find-external-packages" title="链接到此标题。">¶</a></h3>
+<p>You can run the <a class="reference internal" href="command_index.html#spack-external-find"><span class="std std-ref">spack external find</span></a> command to search for system-provided packages and add them to <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>.
+After running this command your <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> may include new entries:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">cmake</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cmake@3.17.2</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr</span>
+</pre></div>
+</div>
+<p>Generally this is useful for detecting a small set of commonly-used packages; for now this is generally limited to finding build-only dependencies.
+Specific limitations include:</p>
+<ul class="simple">
+<li><p>Packages are not discoverable by default: For a package to be discoverable with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">external</span> <span class="pre">find</span></code>, it needs to add special logic.
+See <a class="reference internal" href="packaging_guide_advanced.html#make-package-findable"><span class="std std-ref">here</span></a> for more details.</p></li>
+<li><p>The logic does not search through module files, it can only detect packages with executables defined in <code class="docutils literal notranslate"><span class="pre">PATH</span></code>; you can help Spack locate externals which use module files by loading any associated modules for packages that you want Spack to know about before running <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">external</span> <span class="pre">find</span></code>.</p></li>
+<li><p>Spack does not overwrite existing entries in the package configuration: If there is an external defined for a spec at any configuration scope, then Spack will not add a new external entry (<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">blame</span> <span class="pre">packages</span></code> can help locate all external entries).</p></li>
+</ul>
+</section>
+<section id="prevent-packages-from-being-built-from-sources">
+<h3>Prevent packages from being built from sources<a class="headerlink" href="#prevent-packages-from-being-built-from-sources" title="链接到此标题。">¶</a></h3>
+<p>Adding an external spec in <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> allows Spack to use an external location, but it does not prevent Spack from building packages from sources.
+In the above example, Spack might choose for many valid reasons to start building and linking with the latest version of OpenMPI rather than continue using the pre-installed OpenMPI versions.</p>
+<p>To prevent this, the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> configuration also allows packages to be flagged as non-buildable.
+The previous example could be modified to be:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3~debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3+debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3-debug</span>
+    <span class="nt">buildable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>The addition of the <code class="docutils literal notranslate"><span class="pre">buildable</span></code> flag tells Spack that it should never build its own version of OpenMPI from sources, and it will instead always rely on a pre-built OpenMPI.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">concretizer:reuse</span></code> is on (see <a class="reference internal" href="build_settings.html#concretizer-options"><span class="std std-ref">Concretization Settings (concretizer.yaml)</span></a> for more information on that flag) pre-built specs are taken from: the local store, an upstream store, a registered buildcache and externals in <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">concretizer:reuse</span></code> is off, only external specs in <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> are included in the list of pre-built specs.</p>
+</div>
+<p>If an external module is specified as not buildable, then Spack will load the external module into the build environment which can be used for linking.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">buildable</span></code> attribute does not need to be paired with external packages.
+It could also be used alone to forbid packages that may be buggy or otherwise undesirable.</p>
+</section>
+<section id="non-buildable-virtual-packages">
+<h3>Non-buildable virtual packages<a class="headerlink" href="#non-buildable-virtual-packages" title="链接到此标题。">¶</a></h3>
+<p>Virtual packages in Spack can also be specified as not buildable, and external implementations can be provided.
+In the example above, OpenMPI is configured as not buildable, but Spack will often prefer other MPI implementations over the externally available OpenMPI.
+Spack can be configured with every MPI provider not buildable individually, but more conveniently:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpi</span><span class="p">:</span>
+    <span class="nt">buildable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3~debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3+debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3-debug</span>
+</pre></div>
+</div>
+<p>Spack can then use any of the listed external implementations of MPI to satisfy a dependency, and will choose among them depending on the compiler and architecture.</p>
+<p>In cases where the concretizer is configured to reuse specs, and other <code class="docutils literal notranslate"><span class="pre">mpi</span></code> providers (available via stores or build caches) are not desirable, Spack can be configured to require specs matching only the available externals:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpi</span><span class="p">:</span>
+    <span class="nt">buildable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">one_of</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;openmpi@1.4.3~debug&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;openmpi@1.4.3+debug&quot;</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3~debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;openmpi@1.4.3+debug&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/openmpi-1.4.3-debug</span>
+</pre></div>
+</div>
+<p>This configuration prevents any spec using MPI and originating from stores or build caches to be reused, unless it matches the requirements under <code class="docutils literal notranslate"><span class="pre">packages:mpi:require</span></code>.
+For more information on requirements see <a class="reference internal" href="#package-requirements"><span class="std std-ref">Package Requirements</span></a>.</p>
+</section>
+<section id="specifying-dependencies-among-external-packages">
+<h3>Specifying dependencies among external packages<a class="headerlink" href="#specifying-dependencies-among-external-packages" title="链接到此标题。">¶</a></h3>
+<p>External packages frequently have dependencies on other software components.
+Explicitly modeling these relationships provides Spack with a more complete representation of the software stack.
+This ensures that:</p>
+<ul class="simple">
+<li><p>Runtime environments include all necessary components.</p></li>
+<li><p>Build-time dependencies are accurately represented.</p></li>
+</ul>
+<p>This comprehensive view, in turn, enables Spack to more reliably build software that depends on these externals.</p>
+<p>Spack provides two methods for configuring dependency relationships among externals, each offering different trade-offs between conciseness and explicit control:</p>
+<ul class="simple">
+<li><p>An &quot;inline&quot; spec syntax.</p></li>
+<li><p>A structured YAML configuration that is more verbose but also more explicit.</p></li>
+</ul>
+<p>The following sections will detail both approaches.</p>
+<section id="dependencies-using-inline-spec-syntax">
+<h4>Dependencies using inline spec syntax<a class="headerlink" href="#dependencies-using-inline-spec-syntax" title="链接到此标题。">¶</a></h4>
+<p>Spack allows you to define external package dependencies using the standard spec syntax directly within your package configuration.
+This approach is concise and leverages the familiar spec syntax that you already use elsewhere in Spack.</p>
+<p>When configuring an external package with dependencies using the spec syntax, you can include dependency specifications directly in the main <code class="docutils literal notranslate"><span class="pre">spec:</span></code> field:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specification for the following DAG:</span>
+<span class="c1">#</span>
+<span class="c1"># o mpileaks@2.3</span>
+<span class="c1"># |\</span>
+<span class="c1"># | o callpath@1.0</span>
+<span class="c1"># |/</span>
+<span class="c1"># o mpich@3.0.4</span>
+<span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpileaks</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;mpileaks@2.3~debug+opt</span><span class="nv"> </span><span class="s">%mpich@3</span><span class="nv"> </span><span class="s">%callpath&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/path</span>
+  <span class="nt">callpath</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;callpath@1.0</span><span class="nv"> </span><span class="s">%mpi=mpich&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/path</span>
+  <span class="nt">mpich</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;mpich@3.0.4&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/path</span>
+</pre></div>
+</div>
+<p>In this example <code class="docutils literal notranslate"><span class="pre">mpileaks</span></code> depends on both <code class="docutils literal notranslate"><span class="pre">mpich</span></code> and <code class="docutils literal notranslate"><span class="pre">callpath</span></code>.
+Spack will parse the <code class="docutils literal notranslate"><span class="pre">mpileaks</span></code> spec string, and create the appropriate dependency relationships automatically.</p>
+<p>Users <em>need</em> to ensure that each dependency maps exactly to a single other external package.
+In case multiple externals can satisfy the same dependency, or in case no external can satisfy a dependency, Spack will error and point to the configuration line causing the issue.</p>
+<p>Whenever no information is given about the dependency type, Spack will infer it from the current package recipe.
+For instance, the dependencies in the configuration above are inferred to be of <code class="docutils literal notranslate"><span class="pre">build,link</span></code> type from the recipe of <code class="docutils literal notranslate"><span class="pre">mpileaks</span></code> and <code class="docutils literal notranslate"><span class="pre">callpath</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack -m spec --types -l --cover edges mpileaks
+<span class="go">[e]  oelprl6  [    ]  mpileaks@2.3~debug+opt+shared+static build_system=generic platform=linux os=ubuntu20.04 target=icelake</span>
+<span class="go">[e]  jdhzy2t  [bl  ]      ^callpath@1.0 build_system=generic platform=linux os=ubuntu20.04 target=icelake</span>
+<span class="go">[e]  pgem3yp  [bl  ]          ^mpich@3.0.4~debug build_system=generic platform=linux os=ubuntu20.04 target=icelake</span>
+<span class="go">[e]  pgem3yp  [bl  ]      ^mpich@3.0.4~debug build_system=generic platform=linux os=ubuntu20.04 target=icelake</span>
+</pre></div>
+</div>
+<p>When inferring the dependency types, Spack will also infer virtuals if they are not already specified.</p>
+<p>This method's conciseness comes with a strict requirement: each dependency must resolve to a single, unambiguous external package.
+This makes the approach suitable for simple or temporary configurations.
+In larger, more dynamic environments, however, it can become a maintenance challenge, as adding new external packages over time may require frequent updates to existing specs to preserve their uniqueness.</p>
+</section>
+<section id="dependencies-using-yaml-configuration">
+<h4>Dependencies using YAML configuration<a class="headerlink" href="#dependencies-using-yaml-configuration" title="链接到此标题。">¶</a></h4>
+<p>While the spec syntax offers a concise way to specify dependencies, Spack's YAML-based explicit dependency configuration provides more control and clarity, especially for complex dependency relationships.
+This approach uses the <code class="docutils literal notranslate"><span class="pre">dependencies:</span></code> field to precisely define each dependency relationship.
+The example in the previous section, written using the YAML configuration, becomes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specification for the following DAG:</span>
+<span class="c1">#</span>
+<span class="c1"># o mpileaks@2.3</span>
+<span class="c1"># |\</span>
+<span class="c1"># | o callpath@1.0</span>
+<span class="c1"># |/</span>
+<span class="c1"># o mpich@3.0.4</span>
+<span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpileaks</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;mpileaks@2.3~debug+opt&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/path</span>
+      <span class="nt">dependencies</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">callpath_id</span>
+        <span class="nt">deptypes</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">link</span>
+      <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mpich</span>
+        <span class="nt">deptypes</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;build&quot;</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;link&quot;</span>
+        <span class="nt">virtuals</span><span class="p">:</span> <span class="s">&quot;mpi&quot;</span>
+  <span class="nt">callpath</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;callpath@1.0&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/path</span>
+      <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">callpath_id</span>
+      <span class="nt">dependencies</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mpich</span>
+        <span class="nt">deptypes</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;build&quot;</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;link&quot;</span>
+        <span class="nt">virtuals</span><span class="p">:</span> <span class="s">&quot;mpi&quot;</span>
+  <span class="nt">mpich</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;mpich@3.0.4&quot;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/path</span>
+</pre></div>
+</div>
+<p>Each dependency can be specified either by:</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">spec:</span></code> that matches an available external package, like in the previous case, or by</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">id</span></code> that explicitly references another external package.</p></li>
+</ul>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">id</span></code> provides an unambiguous reference to a specific external package, which is essential for differentiating between externals that have similar specs but differ, for example, only by their installation prefix.</p>
+<p>The dependency types can be specified in the optional <code class="docutils literal notranslate"><span class="pre">deptypes</span></code> field, while virtuals can be specified in the optional <code class="docutils literal notranslate"><span class="pre">virtuals</span></code> field.
+As before, when the dependency types are not specified, Spack will infer them from the package recipe.</p>
+</section>
+</section>
+<section id="extra-attributes-for-external-packages">
+<span id="extra-attributes-for-externals"></span><h3>Extra attributes for external packages<a class="headerlink" href="#extra-attributes-for-external-packages" title="链接到此标题。">¶</a></h3>
+<p>Sometimes external packages require additional attributes to be used effectively.
+This information can be defined on a per-package basis and stored in the <code class="docutils literal notranslate"><span class="pre">extra_attributes</span></code> section of the external package configuration.
+In addition to per-package information, this section can be used to define environment modifications to be performed whenever the package is used.
+For example, if an external package is built without <code class="docutils literal notranslate"><span class="pre">rpath</span></code> support, it may require <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> settings to find its dependencies.
+This could be configured as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpich</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mpich@3.3 +hwloc</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/mpich</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">prepend_path</span><span class="p">:</span>
+            <span class="nt">LD_LIBRARY_PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/hwloc/lib64</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="configuration.html#configuration-environment-variables"><span class="std std-ref">Environment Modifications</span></a> for more information on how to configure environment modifications in Spack config files.</p>
+</section>
+<section id="configuring-system-compilers-as-external-packages">
+<span id="id1"></span><h3>Configuring system compilers as external packages<a class="headerlink" href="#configuring-system-compilers-as-external-packages" title="链接到此标题。">¶</a></h3>
+<p>In Spack, compilers are treated as packages like any other.
+This means that you can also configure system compilers as external packages and use them in Spack.</p>
+<p>Spack automatically detects system compilers and configures them in <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> for you.
+You can also run <a class="reference internal" href="command_index.html#spack-compiler-find"><span class="std std-ref">spack compiler find</span></a> to find and configure new system compilers.</p>
+<p>When configuring compilers as external packages, you need to set a few <a class="reference internal" href="#extra-attributes-for-externals"><span class="std std-ref">extra attributes</span></a> for them to work properly.
+The <code class="docutils literal notranslate"><span class="pre">compilers</span></code> extra attribute field is required to clarify which paths within the compiler prefix are used for which languages:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">gcc</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc@10.5.0 languages=&#39;c,c++,fortran&#39;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gcc-10</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/g++-10</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gfortran-10</span>
+</pre></div>
+</div>
+<p>Other fields accepted by compilers under <code class="docutils literal notranslate"><span class="pre">extra_attributes</span></code> are <code class="docutils literal notranslate"><span class="pre">flags</span></code>, <code class="docutils literal notranslate"><span class="pre">environment</span></code>, <code class="docutils literal notranslate"><span class="pre">extra_rpaths</span></code>, and <code class="docutils literal notranslate"><span class="pre">implicit_rpaths</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">gcc</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc@10.5.0 languages=&#39;c,c++,fortran&#39;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gcc-10</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/g++-10</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gfortran-10</span>
+        <span class="nt">flags</span><span class="p">:</span>
+          <span class="nt">cflags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-O3</span>
+          <span class="nt">fflags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-g -O2</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">set</span><span class="p">:</span>
+            <span class="nt">GCC_ROOT</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr</span>
+          <span class="nt">prepend_path</span><span class="p">:</span>
+            <span class="nt">PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/unusual_path_for_ld/bin</span>
+        <span class="nt">implicit_rpaths</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/usr/lib/gcc</span>
+        <span class="nt">extra_rpaths</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/usr/lib/unusual_gcc_path</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">flags</span></code> attribute specifies compiler flags to apply to every spec that depends on this compiler.
+The accepted flag types are <code class="docutils literal notranslate"><span class="pre">cflags</span></code>, <code class="docutils literal notranslate"><span class="pre">cxxflags</span></code>, <code class="docutils literal notranslate"><span class="pre">fflags</span></code>, <code class="docutils literal notranslate"><span class="pre">cppflags</span></code>, <code class="docutils literal notranslate"><span class="pre">ldflags</span></code>, and <code class="docutils literal notranslate"><span class="pre">ldlibs</span></code>.
+In the example above, every spec compiled with this compiler will pass the flags <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">-O2</span></code> to <code class="docutils literal notranslate"><span class="pre">/usr/bin/gfortran-10</span></code> and will pass the flag <code class="docutils literal notranslate"><span class="pre">-O3</span></code> to <code class="docutils literal notranslate"><span class="pre">/usr/bin/gcc-10</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">environment</span></code> attribute specifies user environment modifications to apply before every time the compiler is invoked.
+The available operations are <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">unset</span></code>, <code class="docutils literal notranslate"><span class="pre">prepend_path</span></code>, <code class="docutils literal notranslate"><span class="pre">append_path</span></code>, and <code class="docutils literal notranslate"><span class="pre">remove_path</span></code>.
+In the example above, Spack will set <code class="docutils literal notranslate"><span class="pre">GCC_ROOT=/usr</span></code> and set <code class="docutils literal notranslate"><span class="pre">PATH=/usr/unusual_path_for_ld/bin:$PATH</span></code> before handing control to the build system that will use this compiler.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">extra_rpaths</span></code> and <code class="docutils literal notranslate"><span class="pre">implicit_rpaths</span></code> fields specify additional paths to pass as rpaths to the linker when using this compiler.
+The <code class="docutils literal notranslate"><span class="pre">implicit_rpaths</span></code> field is filled in automatically by Spack when detecting compilers, and the <code class="docutils literal notranslate"><span class="pre">extra_rpaths</span></code> field is available for users to configure necessary rpaths that have not been detected by Spack.
+In addition, paths from <code class="docutils literal notranslate"><span class="pre">extra_rpaths</span></code> are added as library search paths for the linker.
+In the example above, both <code class="docutils literal notranslate"><span class="pre">/usr/lib/gcc</span></code> and <code class="docutils literal notranslate"><span class="pre">/usr/lib/unusual_gcc_path</span></code> would be added as rpaths to the linker, and <code class="docutils literal notranslate"><span class="pre">-L/usr/lib/unusual_gcc_path</span></code> would be added as well.</p>
+</section>
+</section>
+<section id="package-requirements">
+<span id="id2"></span><h2>Package Requirements<a class="headerlink" href="#package-requirements" title="链接到此标题。">¶</a></h2>
+<p>Spack can be configured to always use certain compilers, package versions, and variants during concretization through package requirements.</p>
+<p>Package requirements are useful when you find yourself repeatedly specifying the same constraints on the command line, and wish that Spack respects these constraints whether you mention them explicitly or not.
+Another use case is specifying constraints that should apply to all root specs in an environment, without having to repeat the constraint everywhere.</p>
+<p>Apart from that, requirements config is more flexible than constraints on the command line, because it can specify constraints on packages <em>when they occur</em> as a dependency.
+In contrast, on the command line it is not possible to specify constraints on dependencies while also keeping those dependencies optional.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p>FAQ: <a class="reference internal" href="frequently_asked_questions.html#faq-concretizer-precedence"><span class="std std-ref">Why does Spack pick particular versions and variants?</span></a></p>
+</div>
+<section id="requirements-syntax">
+<h3>Requirements syntax<a class="headerlink" href="#requirements-syntax" title="链接到此标题。">¶</a></h3>
+<p>The package requirements configuration is specified in <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>, keyed by package name and expressed using the Spec syntax.
+In the simplest case you can specify attributes that you always want the package to have by providing a single spec string to <code class="docutils literal notranslate"><span class="pre">require</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">libfabric</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="s">&quot;@1.13.2&quot;</span>
+</pre></div>
+</div>
+<p>In the above example, <code class="docutils literal notranslate"><span class="pre">libfabric</span></code> will always build with version 1.13.2.
+If you need to compose multiple configuration scopes <code class="docutils literal notranslate"><span class="pre">require</span></code> accepts a list of strings:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">libfabric</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;@1.13.2&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;%gcc&quot;</span>
+</pre></div>
+</div>
+<p>In this case <code class="docutils literal notranslate"><span class="pre">libfabric</span></code> will always build with version 1.13.2 <strong>and</strong> using GCC as a compiler.</p>
+<p>For more complex use cases, require accepts also a list of objects.
+These objects must have either a <code class="docutils literal notranslate"><span class="pre">any_of</span></code> or a <code class="docutils literal notranslate"><span class="pre">one_of</span></code> field, containing a list of spec strings, and they can optionally have a <code class="docutils literal notranslate"><span class="pre">when</span></code> and a <code class="docutils literal notranslate"><span class="pre">message</span></code> attribute:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">any_of</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@4.1.5&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;%c,cxx,fortran=gcc&quot;</span><span class="p p-Indicator">]</span>
+      <span class="nt">message</span><span class="p">:</span> <span class="s">&quot;in</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">only</span><span class="nv"> </span><span class="s">4.1.5</span><span class="nv"> </span><span class="s">can</span><span class="nv"> </span><span class="s">build</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">other</span><span class="nv"> </span><span class="s">compilers&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">any_of</span></code> is a list of specs.
+One of those specs must be satisfied and it is also allowed for the concretized spec to match more than one.
+In the above example, that means you could build <code class="docutils literal notranslate"><span class="pre">openmpi&#64;4.1.5%gcc</span></code>, <code class="docutils literal notranslate"><span class="pre">openmpi&#64;4.1.5%clang</span></code> or <code class="docutils literal notranslate"><span class="pre">openmpi&#64;3.9%gcc</span></code>, but not <code class="docutils literal notranslate"><span class="pre">openmpi&#64;3.9%clang</span></code>.</p>
+<p>If a custom message is provided, and the requirement is not satisfiable, Spack will print the custom error message:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack spec <span class="nc">openmpi</span><span class="kp">@3.9</span><span class="nv">%</span><span class="nc">clang</span>
+<span class="go">==&gt; Error: in this example only 4.1.5 can build with other compilers</span>
+</pre></div>
+</div>
+<p>We could express a similar requirement using the <code class="docutils literal notranslate"><span class="pre">when</span></code> attribute:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">any_of</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;%c,cxx,fortran=gcc&quot;</span><span class="p p-Indicator">]</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="s">&quot;@:4.1.4&quot;</span>
+      <span class="nt">message</span><span class="p">:</span> <span class="s">&quot;in</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">only</span><span class="nv"> </span><span class="s">4.1.5</span><span class="nv"> </span><span class="s">can</span><span class="nv"> </span><span class="s">build</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">other</span><span class="nv"> </span><span class="s">compilers&quot;</span>
+</pre></div>
+</div>
+<p>In the example above, if the version turns out to be 4.1.4 or less, we require the compiler to be GCC.
+For readability, Spack also allows a <code class="docutils literal notranslate"><span class="pre">spec</span></code> key accepting a string when there is only a single constraint:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">openmpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;%c,cxx,fortran=gcc&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="s">&quot;@:4.1.4&quot;</span>
+      <span class="nt">message</span><span class="p">:</span> <span class="s">&quot;in</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">only</span><span class="nv"> </span><span class="s">4.1.5</span><span class="nv"> </span><span class="s">can</span><span class="nv"> </span><span class="s">build</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">other</span><span class="nv"> </span><span class="s">compilers&quot;</span>
+</pre></div>
+</div>
+<p>This code snippet and the one before it are semantically equivalent.</p>
+<p>Finally, instead of <code class="docutils literal notranslate"><span class="pre">any_of</span></code> you can use <code class="docutils literal notranslate"><span class="pre">one_of</span></code> which also takes a list of specs.
+The final concretized spec must match one and only one of them:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpich</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">one_of</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;+cuda&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;+rocm&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>In the example above, that means you could build <code class="docutils literal notranslate"><span class="pre">mpich+cuda</span></code> or <code class="docutils literal notranslate"><span class="pre">mpich+rocm</span></code> but not <code class="docutils literal notranslate"><span class="pre">mpich+cuda+rocm</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">any_of</span></code> and <code class="docutils literal notranslate"><span class="pre">one_of</span></code>, the order of specs indicates a preference: items that appear earlier in the list are preferred (note that these preferences can be ignored in favor of others).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>When using a conditional requirement, Spack is allowed to actively avoid the triggering condition (the <code class="docutils literal notranslate"><span class="pre">when=...</span></code> spec) if that leads to a concrete spec with better scores in the optimization criteria.
+To check the current optimization criteria and their priorities you can run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">solve</span> <span class="pre">zlib</span></code>.</p>
+</div>
+</section>
+<section id="setting-default-requirements">
+<h3>Setting default requirements<a class="headerlink" href="#setting-default-requirements" title="链接到此标题。">¶</a></h3>
+<p>You can also set default requirements for all packages under <code class="docutils literal notranslate"><span class="pre">all</span></code> like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="s">&quot;%[when=%c]c=clang</span><span class="nv"> </span><span class="s">%[when=%cxx]cxx=clang&quot;</span>
+</pre></div>
+</div>
+<p>which means every spec will be required to use <code class="docutils literal notranslate"><span class="pre">clang</span></code> as the compiler for C and C++ code.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>The simpler config <code class="docutils literal notranslate"><span class="pre">require:</span> <span class="pre">%clang</span></code> will fail to build any package that does not include compiled code, because those packages cannot depend on <code class="docutils literal notranslate"><span class="pre">clang</span></code> (alias for <code class="docutils literal notranslate"><span class="pre">llvm+clang</span></code>).
+In most contexts, default requirements must use either conditional dependencies or a <a class="reference internal" href="toolchains_yaml.html#toolchains"><span class="std std-ref">toolchain</span></a> that combines conditional dependencies.</p>
+</div>
+<p>Requirements on variants for all packages are possible too, but note that they are only enforced for those packages that define these variants, otherwise they are disregarded.
+For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;+shared&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;+cuda&quot;</span>
+</pre></div>
+</div>
+<p>will just enforce <code class="docutils literal notranslate"><span class="pre">+shared</span></code> on <code class="docutils literal notranslate"><span class="pre">zlib</span></code>, which has a boolean <code class="docutils literal notranslate"><span class="pre">shared</span></code> variant but no <code class="docutils literal notranslate"><span class="pre">cuda</span></code> variant.</p>
+<p>Constraints in a single spec literal are always considered as a whole, so in a case like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="s">&quot;+shared</span><span class="nv"> </span><span class="s">+cuda&quot;</span>
+</pre></div>
+</div>
+<p>the default requirement will be enforced only if a package has both a <code class="docutils literal notranslate"><span class="pre">cuda</span></code> and a <code class="docutils literal notranslate"><span class="pre">shared</span></code> variant, and will never be partially enforced.</p>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">all</span></code> represents a <em>default set of requirements</em> - if there are specific package requirements, then the default requirements under <code class="docutils literal notranslate"><span class="pre">all</span></code> are disregarded.
+For example, with a configuration like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;build_type=Debug&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;%[when=%c]c=clang</span><span class="nv"> </span><span class="s">%[when=%cxx]cxx=clang&quot;</span>
+  <span class="nt">cmake</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;build_type=Debug&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;%c,cxx=gcc&quot;</span>
+</pre></div>
+</div>
+<p>Spack requires <code class="docutils literal notranslate"><span class="pre">cmake</span></code> to use <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and all other nodes (including <code class="docutils literal notranslate"><span class="pre">cmake</span></code> dependencies) to use <code class="docutils literal notranslate"><span class="pre">clang</span></code>.
+If enforcing <code class="docutils literal notranslate"><span class="pre">build_type=Debug</span></code> is needed also on <code class="docutils literal notranslate"><span class="pre">cmake</span></code>, it must be repeated in the specific <code class="docutils literal notranslate"><span class="pre">cmake</span></code> requirements.</p>
+</section>
+<section id="setting-requirements-on-virtual-specs">
+<span id="id3"></span><h3>Setting requirements on virtual specs<a class="headerlink" href="#setting-requirements-on-virtual-specs" title="链接到此标题。">¶</a></h3>
+<p>A requirement on a virtual spec applies whenever that virtual is present in the DAG.
+This can be useful for fixing which virtual provider you want to use:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="s">&quot;mvapich2</span><span class="nv"> </span><span class="s">%c,cxx,fortran=gcc&quot;</span>
+</pre></div>
+</div>
+<p>With the configuration above the only allowed <code class="docutils literal notranslate"><span class="pre">mpi</span></code> provider is <code class="docutils literal notranslate"><span class="pre">mvapich2</span></code> built with <code class="docutils literal notranslate"><span class="pre">gcc</span></code>/<code class="docutils literal notranslate"><span class="pre">g++</span></code>/<code class="docutils literal notranslate"><span class="pre">gfortran</span></code>.</p>
+<p>Requirements on the virtual spec and on the specific provider are both applied, if present.
+For instance with a configuration like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="s">&quot;mvapich2</span><span class="nv"> </span><span class="s">%c,cxx,fortran=gcc&quot;</span>
+  <span class="nt">mvapich2</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="s">&quot;~cuda&quot;</span>
+</pre></div>
+</div>
+<p>you will use <code class="docutils literal notranslate"><span class="pre">mvapich2~cuda</span> <span class="pre">%c,cxx,fortran=gcc</span></code> as an <code class="docutils literal notranslate"><span class="pre">mpi</span></code> provider.</p>
+</section>
+<section id="conflicts-and-strong-preferences">
+<span id="package-strong-preferences"></span><h3>Conflicts and strong preferences<a class="headerlink" href="#conflicts-and-strong-preferences" title="链接到此标题。">¶</a></h3>
+<p>If the semantic of requirements is too strong, you can also express &quot;strong preferences&quot; and &quot;conflicts&quot; from configuration files:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;%c,cxx=clang&quot;</span>
+    <span class="nt">conflict</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;+shared&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">prefer</span></code> and <code class="docutils literal notranslate"><span class="pre">conflict</span></code> sections can be used whenever a <code class="docutils literal notranslate"><span class="pre">require</span></code> section is allowed.
+The argument is always a list of constraints, and each constraint can be either a simple string, or a more complex object:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">conflict</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="s">&quot;%c,cxx=clang&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="s">&quot;target=x86_64_v3&quot;</span>
+      <span class="nt">message</span><span class="p">:</span> <span class="s">&quot;reason</span><span class="nv"> </span><span class="s">why</span><span class="nv"> </span><span class="s">clang</span><span class="nv"> </span><span class="s">cannot</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">used&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">spec</span></code> attribute is mandatory, while both <code class="docutils literal notranslate"><span class="pre">when</span></code> and <code class="docutils literal notranslate"><span class="pre">message</span></code> are optional.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Requirements allow for expressing both &quot;strong preferences&quot; and &quot;conflicts&quot;.
+The syntax for doing so, though, may not be immediately clear.
+For instance, if we want to prevent any package from using <code class="docutils literal notranslate"><span class="pre">%clang</span></code>, we can set:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">one_of</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;%clang&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;@:&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Since only one of the requirements must hold, and <code class="docutils literal notranslate"><span class="pre">&#64;:</span></code> is always true, the rule above is equivalent to a conflict.
+For &quot;strong preferences&quot; the same construction works, with the <code class="docutils literal notranslate"><span class="pre">any_of</span></code> policy instead of the <code class="docutils literal notranslate"><span class="pre">one_of</span></code> policy.</p>
+</div>
+</section>
+</section>
+<section id="package-preferences">
+<span id="id4"></span><h2>Package Preferences<a class="headerlink" href="#package-preferences" title="链接到此标题。">¶</a></h2>
+<p>In some cases package requirements can be too strong, and package preferences are the better option.
+Package preferences do not impose constraints on packages for particular versions or variants values, they rather only set defaults.
+The concretizer is free to change them if it must, due to other constraints, and also prefers reusing installed packages over building new ones that are a better match for preferences.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p>FAQ: <a class="reference internal" href="frequently_asked_questions.html#faq-concretizer-precedence"><span class="std std-ref">Why does Spack pick particular versions and variants?</span></a></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">providers</span></code> preferences can only be set globally under the <code class="docutils literal notranslate"><span class="pre">all</span></code> section of <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">target</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">x86_64_v3</span><span class="p p-Indicator">]</span>
+    <span class="nt">providers</span><span class="p">:</span>
+      <span class="nt">mpi</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">mvapich2</span><span class="p p-Indicator">,</span> <span class="nv">mpich</span><span class="p p-Indicator">,</span> <span class="nv">openmpi</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>These preferences override Spack's default and effectively reorder priorities when looking for the best compiler, target or virtual package provider.
+Each preference takes an ordered list of spec constraints, with earlier entries in the list being preferred over later entries.</p>
+<p>In the example above all packages prefer to target the <code class="docutils literal notranslate"><span class="pre">x86_64_v3</span></code> microarchitecture and to use <code class="docutils literal notranslate"><span class="pre">mvapich2</span></code> if they depend on <code class="docutils literal notranslate"><span class="pre">mpi</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">variants</span></code> and <code class="docutils literal notranslate"><span class="pre">version</span></code> preferences can be set under package specific sections of the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">opencv</span><span class="p">:</span>
+    <span class="nt">variants</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">+debug</span>
+  <span class="nt">gperftools</span><span class="p">:</span>
+    <span class="nt">version</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">2.2</span><span class="p p-Indicator">,</span> <span class="nv">2.4</span><span class="p p-Indicator">,</span> <span class="nv">2.3</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>In this case, the preference for <code class="docutils literal notranslate"><span class="pre">opencv</span></code> is to build with debug options, while <code class="docutils literal notranslate"><span class="pre">gperftools</span></code> prefers version 2.2 over 2.4.</p>
+<p>Any preference can be overwritten on the command line if explicitly requested.</p>
+<p>Preferences cannot overcome explicit constraints, as they only set a preferred ordering among homogeneous attribute values.
+Going back to the example, if <code class="docutils literal notranslate"><span class="pre">gperftools&#64;2.3:</span></code> was requested, then Spack will install version 2.4 since the most preferred version 2.2 is prohibited by the version constraint.</p>
+</section>
+<section id="package-permissions">
+<span id="id5"></span><h2>Package Permissions<a class="headerlink" href="#package-permissions" title="链接到此标题。">¶</a></h2>
+<p>Spack can be configured to assign permissions to the files installed by a package.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> file under <code class="docutils literal notranslate"><span class="pre">permissions</span></code>, the attributes <code class="docutils literal notranslate"><span class="pre">read</span></code>, <code class="docutils literal notranslate"><span class="pre">write</span></code>, and <code class="docutils literal notranslate"><span class="pre">group</span></code> control the package permissions.
+These attributes can be set per-package, or for all packages under <code class="docutils literal notranslate"><span class="pre">all</span></code>.
+If permissions are set under <code class="docutils literal notranslate"><span class="pre">all</span></code> and for a specific package, the package-specific settings take precedence.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">read</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code> attributes take one of <code class="docutils literal notranslate"><span class="pre">user</span></code>, <code class="docutils literal notranslate"><span class="pre">group</span></code>, and <code class="docutils literal notranslate"><span class="pre">world</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span>
+    <span class="nt">permissions</span><span class="p">:</span>
+      <span class="nt">write</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">group</span>
+      <span class="nt">group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spack</span>
+  <span class="nt">my_app</span><span class="p">:</span>
+    <span class="nt">permissions</span><span class="p">:</span>
+      <span class="nt">read</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">group</span>
+      <span class="nt">group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_team</span>
+</pre></div>
+</div>
+<p>The permissions settings describe the broadest level of access to installations of the specified packages.
+The execute permissions of the file are set to the same level as read permissions for those files that are executable.
+The default setting for <code class="docutils literal notranslate"><span class="pre">read</span></code> is <code class="docutils literal notranslate"><span class="pre">world</span></code>, and for <code class="docutils literal notranslate"><span class="pre">write</span></code> is <code class="docutils literal notranslate"><span class="pre">user</span></code>.
+In the example above, installations of <code class="docutils literal notranslate"><span class="pre">my_app</span></code> will be installed with user and group permissions but no world permissions, and owned by the group <code class="docutils literal notranslate"><span class="pre">my_team</span></code>.
+All other packages will be installed with user and group write privileges, and world read privileges.
+Those packages will be owned by the group <code class="docutils literal notranslate"><span class="pre">spack</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">group</span></code> attribute assigns a Unix-style group to a package.
+All files installed by the package will be owned by the assigned group, and the sticky group bit will be set on the install prefix and all directories inside the install prefix.
+This will ensure that even manually placed files within the install prefix are owned by the assigned group.
+If no group is assigned, Spack will allow the OS default behavior to go as expected.</p>
+</section>
+<section id="assigning-package-attributes">
+<span id="id6"></span><h2>Assigning Package Attributes<a class="headerlink" href="#assigning-package-attributes" title="链接到此标题。">¶</a></h2>
+<p>You can assign class-level attributes in the configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mpileaks</span><span class="p">:</span>
+    <span class="nt">package_attributes</span><span class="p">:</span>
+      <span class="c1"># Override existing attributes</span>
+      <span class="nt">url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">http://www.somewhereelse.com/mpileaks-1.0.tar.gz</span>
+      <span class="c1"># ... or add new ones</span>
+      <span class="nt">x</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>Attributes set this way will be accessible to any method executed in the package.py file (e.g. the <code class="docutils literal notranslate"><span class="pre">install()</span></code> method).
+Values for these attributes may be any value parseable by yaml.</p>
+<p>These can only be applied to specific packages, not &quot;all&quot; or virtual packages.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="toolchains_yaml.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Toolchains (toolchains.yaml)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="config_yaml.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Spack Settings (config.yaml)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 1月 23, 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Package Settings (packages.yaml)</a><ul>
+<li><a class="reference internal" href="#external-packages">External packages</a><ul>
+<li><a class="reference internal" href="#automatically-find-external-packages">Automatically find external packages</a></li>
+<li><a class="reference internal" href="#prevent-packages-from-being-built-from-sources">Prevent packages from being built from sources</a></li>
+<li><a class="reference internal" href="#non-buildable-virtual-packages">Non-buildable virtual packages</a></li>
+<li><a class="reference internal" href="#specifying-dependencies-among-external-packages">Specifying dependencies among external packages</a><ul>
+<li><a class="reference internal" href="#dependencies-using-inline-spec-syntax">Dependencies using inline spec syntax</a></li>
+<li><a class="reference internal" href="#dependencies-using-yaml-configuration">Dependencies using YAML configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extra-attributes-for-external-packages">Extra attributes for external packages</a></li>
+<li><a class="reference internal" href="#configuring-system-compilers-as-external-packages">Configuring system compilers as external packages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#package-requirements">Package Requirements</a><ul>
+<li><a class="reference internal" href="#requirements-syntax">Requirements syntax</a></li>
+<li><a class="reference internal" href="#setting-default-requirements">Setting default requirements</a></li>
+<li><a class="reference internal" href="#setting-requirements-on-virtual-specs">Setting requirements on virtual specs</a></li>
+<li><a class="reference internal" href="#conflicts-and-strong-preferences">Conflicts and strong preferences</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#package-preferences">Package Preferences</a></li>
+<li><a class="reference internal" href="#package-permissions">Package Permissions</a></li>
+<li><a class="reference internal" href="#assigning-package-attributes">Assigning Package Attributes</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=afd93228"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=540d3cec"></script>
+    </body>
+</html>

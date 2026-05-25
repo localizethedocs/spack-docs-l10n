@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spack Package Signing &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/signing.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Using External GPU Support" href="gpu_configuration.html" />
+    <link rel="prev" title="CI Pipelines" href="pipelines.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spack Package Signing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#risks-impact-and-threat-model">Risks, Impact and Threat Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pipeline-overview">Pipeline Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-architecture">Key Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#intermediate-ci-key">Intermediate CI Key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reputational-key">Reputational Key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-cache-format">Build Cache Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#internal-implementation">Internal Implementation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#secrets-management">Secrets Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><strong>Intermediate CI Key</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6"><strong>Reputational Key</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#protected-runners-and-reserved-tags">Protected Runners and Reserved Tags</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Spack Package Signing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/signing.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spack-package-signing">
+<span id="signing"></span><h1>Spack Package Signing<a class="headerlink" href="#spack-package-signing" title="Link to this heading"></a></h1>
+<p>The goal of package signing in Spack is to provide data integrity
+assurances around official packages produced by the automated Spack CI
+pipelines. These assurances directly address the security of Spack’s
+software supply chain by explaining why a security-conscious user can
+be reasonably justified in the belief that packages installed via Spack
+have an uninterrupted auditable trail back to change management
+decisions judged to be appropriate by the Spack maintainers. This is
+achieved through cryptographic signing of packages built by Spack CI
+pipelines based on code that has been transparently reviewed and
+approved on GitHub. This document describes the signing process for
+interested users.</p>
+<section id="risks-impact-and-threat-model">
+<span id="risks"></span><h2>Risks, Impact and Threat Model<a class="headerlink" href="#risks-impact-and-threat-model" title="Link to this heading"></a></h2>
+<p>This document addresses the approach taken to safeguard Spack’s
+reputation with regard to the integrity of the package data produced by
+Spack’s CI pipelines. It does not address issues of data confidentiality
+(Spack is intended to be largely open source) or availability (efforts
+are described elsewhere). With that said the main reputational risk can
+be broadly categorized as a loss of faith in the data integrity due to a
+breach of the private key used to sign packages. Remediation of a
+private key breach would require republishing the public key with a
+revocation certificate, generating a new signing key, an assessment and
+potential rebuild/resigning of all packages since the key was breached,
+and finally direct intervention by every spack user to update their copy
+of Spack’s public keys used for local verification.</p>
+<p>The primary threat model used in mitigating the risks of these stated
+impacts is one of individual error not malicious intent or insider
+threat. The primary objective is to avoid the above impacts by making a
+private key breach nearly impossible due to oversight or configuration
+error. Obvious and straightforward measures are taken to mitigate issues
+of malicious interference in data integrity and insider threats but
+these attack vectors are not systematically addressed. It should be hard
+to exfiltrate the private key intentionally, and almost impossible to
+leak the key by accident.</p>
+</section>
+<section id="pipeline-overview">
+<span id="overview"></span><h2>Pipeline Overview<a class="headerlink" href="#pipeline-overview" title="Link to this heading"></a></h2>
+<p>Spack pipelines build software through progressive stages where packages
+in later stages nominally depend on packages built in earlier stages.
+For both technical and design reasons these dependencies are not
+implemented through the default GitLab artifacts mechanism; instead
+built packages are uploaded to AWS S3 mirrors (buckets) where they are
+retrieved by subsequent stages in the pipeline. Two broad categories of
+pipelines exist: Pull Request (PR) pipelines and Develop/Release
+pipelines.</p>
+<ul class="simple">
+<li><p>PR pipelines are launched in response to pull requests made by
+trusted and untrusted users. Packages built on these pipelines upload
+code to quarantined AWS S3 locations which cache the built packages
+for the purposes of review and iteration on the changes proposed in
+the pull request. Packages built on PR pipelines can come from
+untrusted users so signing of these pipelines is not implemented.
+Jobs in these pipelines are executed via normal GitLab runners both
+within the AWS GitLab infrastructure and at affiliated institutions.</p></li>
+<li><p>Develop and Release pipelines <strong>sign</strong> the packages they produce and carry
+strong integrity assurances that trace back to auditable change management
+decisions. These pipelines only run after members from a trusted group of
+reviewers verify that the proposed changes in a pull request are appropriate.
+Once the PR is merged, or a release is cut, a pipeline is run on protected
+GitLab runners which provide access to the required signing keys within the
+job. Intermediary keys are used to sign packages in each stage of the
+pipeline as they are built and a final job officially signs each package
+external to any specific packages’ build environment. An intermediate key
+exists in the AWS infrastructure and for each affiliated instritution that
+maintains protected runners. The runners that execute these pipelines
+exclusively accept jobs from protected branches meaning the intermediate keys
+are never exposed to unreviewed code and the official keys are never exposed
+to any specific build environment.</p></li>
+</ul>
+</section>
+<section id="key-architecture">
+<span id="id1"></span><h2>Key Architecture<a class="headerlink" href="#key-architecture" title="Link to this heading"></a></h2>
+<p>Spack’s CI process uses public-key infrastructure (PKI) based on GNU Privacy
+Guard (gpg) keypairs to sign public releases of spack package metadata, also
+called specs. Two classes of GPG keys are involved in the process to reduce the
+impact of an individual private key compromise, these key classes are the
+<em>Intermediate CI Key</em> and <em>Reputational Key</em>. Each of these keys has signing
+sub-keys that are used exclusively for signing packages. This can be confusing
+so for the purpose of this explanation we’ll refer to Root and Signing keys.
+Each key has a private and a public component as well as one or more identities
+and zero or more signatures.</p>
+</section>
+<section id="intermediate-ci-key">
+<h2>Intermediate CI Key<a class="headerlink" href="#intermediate-ci-key" title="Link to this heading"></a></h2>
+<p>The Intermediate key class is used to sign and verify packages between stages
+within a develop or release pipeline. An intermediate key exists for the AWS
+infrastructure as well as each affiliated institution that maintains protected
+runners. These intermediate keys are made available to the GitLab execution
+environment building the package so that the package’s dependencies may be
+verified by the Signing Intermediate CI Public Key and the final package may be
+signed by the Signing Intermediate CI Private Key.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p><strong>Intermediate CI Key (GPG)</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Root Intermediate CI Private Key (RSA 4096)#</p></td>
+<td><p>Root Intermediate CI Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Signing Intermediate CI Private Key (RSA 4096)</p></td>
+<td><p>Signing Intermediate CI Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Identity: “Intermediate CI Key &lt;<a class="reference external" href="mailto:maintainers&#37;&#52;&#48;spack&#46;io">maintainers<span>&#64;</span>spack<span>&#46;</span>io</a>&gt;”</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>Signatures: None</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <em>Root intermediate CI Private Key</em>Is stripped out of the GPG key and
+stored offline completely separate from Spack’s infrastructure. This allows the
+core development team to append revocation certificates to the GPG key and
+issue new sub-keys for use in the pipeline. It is our expectation that this
+will happen on a semi regular basis. A corollary of this is that <em>this key
+should not be used to verify package integrity outside the internal CI process.</em></p>
+</section>
+<section id="reputational-key">
+<h2>Reputational Key<a class="headerlink" href="#reputational-key" title="Link to this heading"></a></h2>
+<p>The Reputational Key is the public facing key used to sign complete groups of
+development and release packages. Only one key pair exists in this class of
+keys. In contrast to the Intermediate CI Key the Reputational Key <em>should</em> be
+used to verify package integrity. At the end of develop and release pipeline a
+final pipeline job pulls down all signed package metadata built by the pipeline,
+verifies they were signed with an Intermediate CI Key, then strips the
+Intermediate CI Key signature from the package and re-signs them with the
+Signing Reputational Private Key. The officially signed packages are then
+uploaded back to the AWS S3 mirror. Please note that separating use of the
+reputational key into this final job is done to prevent leakage of the key in a
+spack package. Because the Signing Reputational Private Key is never exposed to
+a build job it cannot accidentally end up in any built package.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p><strong>Reputational Key (GPG)</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Root Reputational Private Key (RSA 4096)#</p></td>
+<td><p>Root Reputational Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Signing Reputational Private Key (RSA 4096)</p></td>
+<td><p>Signing Reputational Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Identity: “Spack Project &lt;<a class="reference external" href="mailto:maintainers&#37;&#52;&#48;spack&#46;io">maintainers<span>&#64;</span>spack<span>&#46;</span>io</a>&gt;”</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>Signatures: Signed by core development team <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>The Root Reputational Private Key is stripped out of the GPG key and stored
+offline completely separate from Spack’s infrastructure. This allows the core
+development team to append revocation certificates to the GPG key in the
+unlikely event that the Signing Reputation Private Key is compromised. In
+general it is the expectation that rotating this key will happen infrequently if
+at all. This should allow relatively transparent verification for the end-user
+community without needing deep familiarity with GnuPG or Public Key
+Infrastructure.</p>
+</section>
+<section id="build-cache-format">
+<span id="id3"></span><h2>Build Cache Format<a class="headerlink" href="#build-cache-format" title="Link to this heading"></a></h2>
+<p>A binary package consists of a metadata file unambiguously defining the
+built package (and including other details such as how to relocate it)
+and the installation directory of the package stored as a compressed
+archive file. The metadata files can either be unsigned, in which case
+the contents are simply the json-serialized concrete spec plus metadata,
+or they can be signed, in which case the json-serialized concrete spec
+plus metadata is wrapped in a gpg cleartext signature. Built package
+metadata files are named to indicate the operating system and
+architecture for which the package was built as well as the compiler
+used to build it and the packages name and version. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="o">-</span><span class="n">ubuntu18</span><span class="mf">.04</span><span class="o">-</span><span class="n">haswell</span><span class="o">-</span><span class="n">gcc</span><span class="o">-</span><span class="mf">7.5.0</span><span class="o">-</span><span class="n">zlib</span><span class="o">-</span><span class="mf">1.2.12</span><span class="o">-</span><span class="n">llv2ysfdxnppzjrt5ldybb5c52qbmoow</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">sig</span>
+</pre></div>
+</div>
+<p>would contain the concrete spec and binary metadata for a binary package
+of <code class="docutils literal notranslate"><span class="pre">zlib&#64;1.2.12</span></code>, built for the <code class="docutils literal notranslate"><span class="pre">ubuntu</span></code> operating system and <code class="docutils literal notranslate"><span class="pre">haswell</span></code>
+architecture. The id of the built package exists in the name of the file
+as well (after the package name and version) and in this case begins
+with <code class="docutils literal notranslate"><span class="pre">llv2ys</span></code>. The id distinguishes a particular built package from all
+other built packages with the same os/arch, compiler, name, and version.
+Below is an example of a signed binary package metadata file. Such a
+file would live in the <code class="docutils literal notranslate"><span class="pre">build_cache</span></code> directory of a binary mirror:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-----</span><span class="n">BEGIN</span> <span class="n">PGP</span> <span class="n">SIGNED</span> <span class="n">MESSAGE</span><span class="o">-----</span>
+<span class="n">Hash</span><span class="p">:</span> <span class="n">SHA512</span>
+
+<span class="p">{</span>
+  <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="o">&lt;</span><span class="n">concrete</span><span class="o">-</span><span class="n">spec</span><span class="o">-</span><span class="n">contents</span><span class="o">-</span><span class="n">omitted</span><span class="o">&gt;</span>
+  <span class="p">},</span>
+
+  <span class="s2">&quot;buildcache_layout_version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s2">&quot;binary_cache_checksum&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;hash_algorithm&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hash&quot;</span><span class="p">:</span> <span class="s2">&quot;4f1e46452c35a5e61bcacca205bae1bfcd60a83a399af201a29c95b7cc3e1423&quot;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="o">-----</span><span class="n">BEGIN</span> <span class="n">PGP</span> <span class="n">SIGNATURE</span><span class="o">-----</span>
+<span class="n">iQGzBAEBCgAdFiEETZn0sLle8jIrdAPLx</span><span class="o">/</span><span class="n">P</span><span class="o">+</span><span class="n">voVcifMFAmKAGvwACgkQx</span><span class="o">/</span><span class="n">P</span><span class="o">+</span><span class="n">voVc</span>
+<span class="n">ifNoVgv</span><span class="o">/</span><span class="n">VrhA</span><span class="o">+</span><span class="n">wurVs5GB9PhmMA1m5U</span><span class="o">/</span><span class="n">AfXZb4BElDRwpT8ZcTPIv5X8xtv60eyn</span>
+<span class="mi">4</span><span class="n">EOneGVbZoMThVxgev</span><span class="o">/</span><span class="n">NKARorGmhFXRqhWf</span><span class="o">+</span><span class="n">jknJZ1dicpqn</span><span class="o">/</span><span class="n">qpv34rELKUpgXU</span><span class="o">+</span>
+<span class="n">QDQ4d1P64AIdTczXe2GI9ZvhOo6</span><span class="o">+</span><span class="n">bPvK7LIsTkBbtWmopkomVxF0LcMuxAVIbA6b</span>
+<span class="mi">887</span><span class="n">yBvVO0VGlqRnkDW7nXx49r3AG2</span><span class="o">+</span><span class="n">wDcoU1f8ep8QtjOcMNaPTPJ0UnjD0VQGW6</span>
+<span class="mi">4</span><span class="n">ZFaGZWzdo45MY6tF3o5mqM7zJkVobpoW3iUz6J5tjz7H</span><span class="o">/</span><span class="n">nMlGgMkUwY9Kxp2PVH</span>
+<span class="n">qoj6Zip3LWplnl2OZyAY</span><span class="o">+</span><span class="n">vflPFdFh12Xpk4FG7Sxm</span><span class="o">/</span><span class="n">ux0r</span><span class="o">+</span><span class="n">l8tCAPvtw</span><span class="o">+</span><span class="n">G38a5P7</span>
+<span class="n">QEk2JBr8qMGKASmnRlJUkm1vwz0a95IF3S9YDfTAA2vz6HH3PtsNLFhtorfx8eBi</span>
+<span class="n">Wn5aPJAGEPOawEOvXGGbsH4cDEKPeN0n6cy1k92uPEmBLDVsdnur8q42jk5c2Qyx</span>
+<span class="n">j3DXty57</span>
+<span class="o">=</span><span class="mi">3</span><span class="n">gvm</span>
+<span class="o">-----</span><span class="n">END</span> <span class="n">PGP</span> <span class="n">SIGNATURE</span><span class="o">-----</span>
+</pre></div>
+</div>
+<p>If a user has trusted the public key associated with the private key
+used to sign the above spec file, the signature can be verified with
+gpg, as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ gpg –verify linux-ubuntu18.04-haswell-gcc-7.5.0-zlib-1.2.12-llv2ysfdxnppzjrt5ldybb5c52qbmoow.spec.json.sig
+</pre></div>
+</div>
+<p>The metadata (regardless whether signed or unsigned) contains the checksum
+of the <code class="docutils literal notranslate"><span class="pre">.spack</span></code> file containing the actual installation. The checksum should
+be compared to a checksum computed locally on the <code class="docutils literal notranslate"><span class="pre">.spack</span></code> file to ensure the
+contents have not changed since the binary spec plus metadata were signed. The
+<code class="docutils literal notranslate"><span class="pre">.spack</span></code> files are actually tarballs containing the compressed archive of the
+install tree.  These files, along with the metadata files, live within the
+<code class="docutils literal notranslate"><span class="pre">build_cache</span></code> directory of the mirror, and together are organized as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">build_cache</span><span class="o">/</span>
+  <span class="c1"># unsigned metadata (for indexing, contains sha256 of .spack file)</span>
+  <span class="o">&lt;</span><span class="n">arch</span><span class="o">&gt;-&lt;</span><span class="n">compiler</span><span class="o">&gt;-&lt;</span><span class="n">name</span><span class="o">&gt;-&lt;</span><span class="n">ver</span><span class="o">&gt;-</span><span class="mi">24</span><span class="n">zvipcqgg2wyjpvdq2ajy5jnm564hen</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">json</span>
+  <span class="c1"># clearsigned metadata (same as above, but signed)</span>
+  <span class="o">&lt;</span><span class="n">arch</span><span class="o">&gt;-&lt;</span><span class="n">compiler</span><span class="o">&gt;-&lt;</span><span class="n">name</span><span class="o">&gt;-&lt;</span><span class="n">ver</span><span class="o">&gt;-</span><span class="mi">24</span><span class="n">zvipcqgg2wyjpvdq2ajy5jnm564hen</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">sig</span>
+  <span class="o">&lt;</span><span class="n">arch</span><span class="o">&gt;/</span>
+    <span class="o">&lt;</span><span class="n">compiler</span><span class="o">&gt;/</span>
+      <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;-&lt;</span><span class="n">ver</span><span class="o">&gt;/</span>
+        <span class="c1"># tar.gz-compressed prefix (may support more compression formats later)</span>
+        <span class="o">&lt;</span><span class="n">arch</span><span class="o">&gt;-&lt;</span><span class="n">compiler</span><span class="o">&gt;-&lt;</span><span class="n">name</span><span class="o">&gt;-&lt;</span><span class="n">ver</span><span class="o">&gt;-</span><span class="mi">24</span><span class="n">zvipcqgg2wyjpvdq2ajy5jnm564hen</span><span class="o">.</span><span class="n">spack</span>
+</pre></div>
+</div>
+<p>Uncompressing and extracting the <code class="docutils literal notranslate"><span class="pre">.spack</span></code> file results in the install tree.
+This is in contrast to previous versions of spack, where the <code class="docutils literal notranslate"><span class="pre">.spack</span></code> file
+contained a (duplicated) metadata file, a signature file and a nested tarball
+containing the install tree.</p>
+</section>
+<section id="internal-implementation">
+<span id="id4"></span><h2>Internal Implementation<a class="headerlink" href="#internal-implementation" title="Link to this heading"></a></h2>
+<p>The technical implementation of the pipeline signing process includes components
+defined in Amazon Web Services, the Kubernetes cluster, at affilicated
+institutions, and the GitLab/GitLab Runner deployment. We present the technical
+implementation in two interdependent sections. The first addresses how secrets
+are managed through the lifecycle of a develop or release pipeline. The second
+section describes how Gitlab Runner and pipelines are configured and managed to
+support secure automated signing.</p>
+<section id="secrets-management">
+<h3>Secrets Management<a class="headerlink" href="#secrets-management" title="Link to this heading"></a></h3>
+<p>As stated above the Root Private Keys (intermediate and reputational)
+are stripped from the GPG keys and stored outside Spack’s
+infrastructure.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<dl class="simple">
+<dt><strong>TODO</strong></dt><dd><ul class="simple">
+<li><p>Explanation here about where and how access is handled for these keys.</p></li>
+<li><p>Both Root private keys are protected with strong passwords</p></li>
+<li><p>Who has access to these and how?</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<section id="id5">
+<h4><strong>Intermediate CI Key</strong><a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>Multiple intermediate CI signing keys exist, one Intermediate CI Key for jobs
+run in AWS, and one key for each affiliated institution (e.g. University of
+Oregon). Here we describe how the Intermediate CI Key is managed in AWS:</p>
+<p>The Intermediate CI Key (including the Signing Intermediate CI Private Key is
+exported as an ASCII armored file and stored in a Kubernetes secret called
+<code class="docutils literal notranslate"><span class="pre">spack-intermediate-ci-signing-key</span></code>. For convenience sake, this same secret
+contains an ASCII-armored export of just the <em>public</em> components of the
+Reputational Key. This secret also contains the <em>public</em> components of each of
+the affiliated institutions' Intermediate CI Key. These are potentially needed
+to verify dependent packages which may have been found in the public mirror or
+built by a protected job running on an affiliated institution's infrastructure
+in an earlier stage of the pipeline.</p>
+<p>Procedurally the <code class="docutils literal notranslate"><span class="pre">spack-intermediate-ci-signing-key</span></code> secret is used in
+the following way:</p>
+<ol class="arabic simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">large-arm-prot</span></code> or <code class="docutils literal notranslate"><span class="pre">large-x86-prot</span></code> protected runner picks up
+a job tagged <code class="docutils literal notranslate"><span class="pre">protected</span></code> from a protected GitLab branch. (See
+<a class="reference external" href="#_8bawjmgykv0b">Protected Runners and Reserved Tags</a>).</p></li>
+<li><p>Based on its configuration, the runner creates a job Pod in the
+pipeline namespace and mounts the spack-intermediate-ci-signing-key
+Kubernetes secret into the build container</p></li>
+<li><p>The Intermediate CI Key, affiliated institutions' public key and the
+Reputational Public Key are imported into a keyring by the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">gpg</span> <span class="pre">…</span></code>
+sub-command. This is initiated by the job’s build script which is created by
+the generate job at the beginning of the pipeline.</p></li>
+<li><p>Assuming the package has dependencies those specs are verified using
+the keyring.</p></li>
+<li><p>The package is built and the spec.json is generated</p></li>
+<li><p>The spec.json is signed by the keyring and uploaded to the mirror’s
+build cache.</p></li>
+</ol>
+</section>
+<section id="id6">
+<h4><strong>Reputational Key</strong><a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p>Because of the increased impact to end users in the case of a private
+key breach, the Reputational Key is managed separately from the
+Intermediate CI Keys and has additional controls. First, the Reputational
+Key was generated outside of Spack’s infrastructure and has been signed
+by the core development team. The Reputational Key (along with the
+Signing Reputational Private Key) was then ASCII armor exported to a
+file. Unlike the Intermediate CI Key this exported file is not stored as
+a base64 encoded secret in Kubernetes. Instead<em>the key file
+itself</em>is encrypted and stored in Kubernetes as the
+<code class="docutils literal notranslate"><span class="pre">spack-signing-key-encrypted</span></code> secret in the pipeline namespace.</p>
+<p>The encryption of the exported Reputational Key (including the Signing
+Reputational Private Key) is handled by <a class="reference external" href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys">AWS Key Management Store (KMS) data
+keys</a>.
+The private key material is decrypted and imported at the time of signing into a
+memory mounted temporary directory holding the keychain. The signing job uses
+the <a class="reference external" href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html">AWS Encryption SDK</a>
+(i.e. <code class="docutils literal notranslate"><span class="pre">aws-encryption-cli</span></code>) to decrypt the Reputational Key. Permission to
+decrypt the key is granted to the job Pod through a Kubernetes service account
+specifically used for this, and only this, function. Finally, for convenience
+sake, this same secret contains an ASCII-armored export of the <em>public</em>
+components of the Intermediate CI Keys and the Reputational Key. This allows the
+signing script to verify that packages were built by the pipeline (both on AWS
+or at affiliated institutions), or signed previously as a part of a different
+pipeline. This is is done <em>before</em> importing decrypting and importing the
+Signing Reputational Private Key material and officially signing the packages.</p>
+<p>Procedurally the <code class="docutils literal notranslate"><span class="pre">spack-singing-key-encrypted</span></code> secret is used in the
+following way:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">spack-package-signing-gitlab-runner</span></code> protected runner picks
+up a job tagged <code class="docutils literal notranslate"><span class="pre">notary</span></code> from a protected GitLab branch (See
+<a class="reference external" href="#_8bawjmgykv0b">Protected Runners and Reserved Tags</a>).</p></li>
+<li><p>Based on its configuration, the runner creates a job pod in the
+pipeline namespace. The job is run in a stripped down purpose-built
+image <code class="docutils literal notranslate"><span class="pre">ghcr.io/spack/notary:latest</span></code> Docker image. The runner is
+configured to only allow running jobs with this image.</p></li>
+<li><p>The runner also mounts the <code class="docutils literal notranslate"><span class="pre">spack-signing-key-encrypted</span></code> secret to
+a path on disk. Note that this becomes several files on disk, the
+public components of the Intermediate CI Keys, the public components
+of the Reputational CI, and an AWS KMS encrypted file containing the
+Singing Reputational Private Key.</p></li>
+<li><p>In addition to the secret, the runner creates a tmpfs memory mounted
+directory where the GnuPG keyring will be created to verify, and
+then resign the package specs.</p></li>
+<li><p>The job script syncs all spec.json.sig files from the build cache to
+a working directory in the job’s execution environment.</p></li>
+<li><p>The job script then runs the <code class="docutils literal notranslate"><span class="pre">sign.sh</span></code> script built into the
+notary Docker image.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">sign.sh</span></code> script imports the public components of the
+Reputational and Intermediate CI Keys and uses them to verify good
+signatures on the spec.json.sig files. If any signed spec does not
+verify the job immediately fails.</p></li>
+<li><p>Assuming all specs are verified, the <code class="docutils literal notranslate"><span class="pre">sign.sh</span></code> script then unpacks
+the spec json data from the signed file in preparation for being
+re-signed with the Reputational Key.</p></li>
+<li><p>The private components of the Reputational Key are decrypted to
+standard out using <code class="docutils literal notranslate"><span class="pre">aws-encryption-cli</span></code> directly into a <code class="docutils literal notranslate"><span class="pre">gpg</span>
+<span class="pre">–import</span> <span class="pre">…</span></code> statement which imports the key into the
+keyring mounted in-memory.</p></li>
+<li><p>The private key is then used to sign each of the json specs and the
+keyring is removed from disk.</p></li>
+<li><p>The re-signed json specs are resynced to the AWS S3 Mirror and the
+public signing of the packages for the develop or release pipeline
+that created them is complete.</p></li>
+</ol>
+<p>Non service-account access to the private components of the Reputational
+Key that are managed through access to the symmetric secret in KMS used
+to encrypt the data key (which in turn is used to encrypt the GnuPG key
+- See:<a class="reference external" href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli-examples.html#cli-example-encrypt-file">Encryption SDK
+Documentation</a>).
+A small trusted subset of the core development team are the only
+individuals with access to this symmetric key.</p>
+</section>
+</section>
+<section id="protected-runners-and-reserved-tags">
+<span id="protected-runners"></span><h3>Protected Runners and Reserved Tags<a class="headerlink" href="#protected-runners-and-reserved-tags" title="Link to this heading"></a></h3>
+<p>Spack has a large number of Gitlab Runners operating in its build farm.
+These include runners deployed in the AWS Kubernetes cluster as well as
+runners deployed at affiliated institutions. The majority of runners are
+shared runners that operate across projects in gitlab.spack.io. These
+runners pick up jobs primarily from the spack/spack project and execute
+them in PR pipelines.</p>
+<p>A small number of runners operating on AWS and at affiliated institutions are
+registered as specific <em>protected</em> runners on the spack/spack project. In
+addition to protected runners there are protected branches on the spack/spack
+project. These are the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch, any release branch (i.e. managed with
+the <code class="docutils literal notranslate"><span class="pre">releases/v*</span></code> wildcard) and any tag branch (managed with the <code class="docutils literal notranslate"><span class="pre">v*</span></code>
+wildcard) Finally Spack’s pipeline generation code reserves certain tags to make
+sure jobs are routed to the correct runners, these tags are <code class="docutils literal notranslate"><span class="pre">public</span></code>,
+<code class="docutils literal notranslate"><span class="pre">protected</span></code>, and <code class="docutils literal notranslate"><span class="pre">notary</span></code>. Understanding how all this works together to
+protect secrets and provide integrity assurances can be a little confusing so
+lets break these down:</p>
+<ul class="simple">
+<li><p><strong>Protected Branches</strong>- Protected branches in Spack prevent anyone
+other than Maintainers in GitLab from pushing code. In the case of
+Spack the only Maintainer level entity pushing code to protected
+branches is Spack bot. Protecting branches also marks them in such a
+way that Protected Runners will only run jobs from those branches</p></li>
+<li><dl class="simple">
+<dt><strong>Protected Runners</strong>- Protected Runners only run jobs from protected</dt><dd><p>branches. Because protected runners have access to secrets, it's critical
+that they not run Jobs from untrusted code (i.e. PR branches). If they did it
+would be possible for a PR branch to tag a job in such a way that a protected
+runner executed that job and mounted secrets into a code execution
+environment that had not been reviewed by Spack maintainers. Note however
+that in the absence of tagging used to route jobs, public runners <em>could</em> run
+jobs from protected branches. No secrets would be at risk of being breached
+because non-protected runners do not have access to those secrets; lack of
+secrets would, however, cause the jobs to fail.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Reserved Tags</strong>- To mitigate the issue of public runners picking up</dt><dd><p>protected jobs Spack uses a small set of “reserved” job tags (Note that these
+are <em>job</em> tags not git tags). These tags are “public”, “private”, and
+“notary.” The majority of jobs executed in Spack’s GitLab instance are
+executed via a <code class="docutils literal notranslate"><span class="pre">generate</span></code> job. The generate job code systematically ensures
+that no user defined configuration sets these tags. Instead, the <code class="docutils literal notranslate"><span class="pre">generate</span></code>
+job sets these tags based on rules related to the branch where this pipeline
+originated. If the job is a part of a pipeline on a PR branch it sets the
+<code class="docutils literal notranslate"><span class="pre">public</span></code> tag. If the job is part of a pipeline on a protected branch it
+sets the <code class="docutils literal notranslate"><span class="pre">protected</span></code> tag. Finally if the job is the package signing job and
+it is running on a pipeline that is part of a protected branch then it sets
+the <code class="docutils literal notranslate"><span class="pre">notary</span></code> tag.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Protected Runners are configured to only run jobs from protected branches. Only
+jobs running in pipelines on protected branches are tagged with <code class="docutils literal notranslate"><span class="pre">protected</span></code> or
+<code class="docutils literal notranslate"><span class="pre">notary</span></code> tags. This tightly couples jobs on protected branches to protected
+runners that provide access to the secrets required to sign the built packages.
+The secrets are can <strong>only</strong> be accessed via:</p>
+<ol class="arabic simple">
+<li><p>Runners under direct control of the core development team.</p></li>
+<li><p>Runners under direct control of trusted maintainers at affiliated institutions.</p></li>
+<li><p>By code running the automated pipeline that has been reviewed by the
+Spack maintainers and judged to be appropriate.</p></li>
+</ol>
+<p>Other attempts (either through malicious intent or incompetence) can at
+worst grab jobs intended for protected runners which will cause those
+jobs to fail alerting both Spack maintainers and the core development
+team.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>The Reputational Key has also cross signed core development team
+keys.</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="pipelines.html" class="btn btn-neutral float-left" title="CI Pipelines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="gpu_configuration.html" class="btn btn-neutral float-right" title="Using External GPU Support" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

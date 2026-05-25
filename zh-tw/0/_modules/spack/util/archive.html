@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.archive &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/archive.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.archive</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.archive 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span><span class="p">,</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">gzip</span> <span class="kn">import</span> <span class="n">GzipFile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util.symlink</span> <span class="kn">import</span> <span class="n">readlink</span>
+
+
+<div class="viewcode-block" id="ChecksumWriter">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter">[文件]</a>
+<span class="k">class</span> <span class="nc">ChecksumWriter</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BufferedIOBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checksum writer computes a checksum while writing to a file.&quot;&quot;&quot;</span>
+
+    <span class="n">myfileobj</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="o">=</span> <span class="n">fileobj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasher</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="ChecksumWriter.hexdigest">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.hexdigest">[文件]</a>
+    <span class="k">def</span> <span class="nf">hexdigest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.write">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.write">[文件]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">nbytes</span>
+
+        <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">+=</span> <span class="n">length</span>
+
+        <span class="k">return</span> <span class="n">length</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.read">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.read">[文件]</a>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">,</span> <span class="s2">&quot;read() on write-only object&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.read1">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.read1">[文件]</a>
+    <span class="k">def</span> <span class="nf">read1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">,</span> <span class="s2">&quot;read1() on write-only object&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.peek">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.peek">[文件]</a>
+    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">,</span> <span class="s2">&quot;peek() on write-only object&quot;</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="ow">is</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ChecksumWriter.close">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.close">[文件]</a>
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fileobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span>
+        <span class="k">if</span> <span class="n">fileobj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.flush">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.flush">[文件]</a>
+    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.fileno">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.fileno">[文件]</a>
+    <span class="k">def</span> <span class="nf">fileno</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.rewind">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.rewind">[文件]</a>
+    <span class="k">def</span> <span class="nf">rewind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t rewind while computing checksum&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.readable">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.readable">[文件]</a>
+    <span class="k">def</span> <span class="nf">readable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.writable">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.writable">[文件]</a>
+    <span class="k">def</span> <span class="nf">writable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.seekable">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.seekable">[文件]</a>
+    <span class="k">def</span> <span class="nf">seekable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.tell">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.tell">[文件]</a>
+    <span class="k">def</span> <span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.seek">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.seek">[文件]</a>
+    <span class="k">def</span> <span class="nf">seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">):</span>
+        <span class="c1"># In principle forward seek is possible with b&quot;0&quot; padding,</span>
+        <span class="c1"># but this is not implemented.</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">whence</span> <span class="o">==</span> <span class="n">io</span><span class="o">.</span><span class="n">SEEK_CUR</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t seek while computing checksum&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChecksumWriter.readline">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.ChecksumWriter.readline">[文件]</a>
+    <span class="k">def</span> <span class="nf">readline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">,</span> <span class="s2">&quot;readline() on write-only object&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="gzip_compressed_tarfile">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.gzip_compressed_tarfile">[文件]</a>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">gzip_compressed_tarfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a reproducible, gzip compressed tarfile, and keep track of shasums of both the</span>
+<span class="sd">    compressed and uncompressed tarfile. Reproduciblity is achived by normalizing the gzip header</span>
+<span class="sd">    (no file name and zero mtime).</span>
+
+<span class="sd">    Yields a tuple of the following:</span>
+<span class="sd">        tarfile.TarFile: tarfile object</span>
+<span class="sd">        ChecksumWriter: checksum of the gzip compressed tarfile</span>
+<span class="sd">        ChecksumWriter: checksum of the uncompressed tarfile</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create gzip compressed tarball of the install prefix</span>
+    <span class="c1"># 1) Use explicit empty filename and mtime 0 for gzip header reproducibility.</span>
+    <span class="c1">#    If the filename=&quot;&quot; is dropped, Python will use fileobj.name instead.</span>
+    <span class="c1">#    This should effectively mimick `gzip --no-name`.</span>
+    <span class="c1"># 2) On AMD Ryzen 3700X and an SSD disk, we have the following on compression speed:</span>
+    <span class="c1"># compresslevel=6 gzip default: llvm takes 4mins, roughly 2.1GB</span>
+    <span class="c1"># compresslevel=9 python default: llvm takes 12mins, roughly 2.1GB</span>
+    <span class="c1"># So we follow gzip.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span> <span class="n">ChecksumWriter</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">gzip_checksum</span><span class="p">,</span> <span class="n">closing</span><span class="p">(</span>
+        <span class="n">GzipFile</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wb&quot;</span><span class="p">,</span> <span class="n">compresslevel</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">mtime</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fileobj</span><span class="o">=</span><span class="n">gzip_checksum</span><span class="p">)</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">gzip_file</span><span class="p">,</span> <span class="n">ChecksumWriter</span><span class="p">(</span><span class="n">gzip_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">tarfile_checksum</span><span class="p">,</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">TarFile</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="o">=</span><span class="n">tarfile_checksum</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">tar</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">tar</span><span class="p">,</span> <span class="n">gzip_checksum</span><span class="p">,</span> <span class="n">tarfile_checksum</span></div>
+
+
+
+<div class="viewcode-block" id="default_path_to_name">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.default_path_to_name">[文件]</a>
+<span class="k">def</span> <span class="nf">default_path_to_name</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a path to a tarfile name, which uses posix path separators.&quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">PurePath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="c1"># Drop the leading slash on posix and the drive letter on windows, and always format as a</span>
+    <span class="c1"># posix path.</span>
+    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">PurePath</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span> <span class="k">else</span> <span class="n">p</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="reproducible_tarfile_from_prefix">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.archive.reproducible_tarfile_from_prefix">[文件]</a>
+<span class="k">def</span> <span class="nf">reproducible_tarfile_from_prefix</span><span class="p">(</span>
+    <span class="n">tar</span><span class="p">:</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">TarFile</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">include_parent_directories</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">skip</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">entry</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">path_to_name</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_path_to_name</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a tarball from a given directory. Only adds regular files, symlinks and dirs.</span>
+<span class="sd">    Skips devices, fifos. Preserves hardlinks. Normalizes permissions like git. Tar entries are</span>
+<span class="sd">    added in depth-first pre-order, with dir entries partitioned by file | dir, and sorted</span>
+<span class="sd">    lexicographically, for reproducibility. Partitioning ensures only one dir is in memory at a</span>
+<span class="sd">    time, and sorting improves compression.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tar: tarfile object opened in write mode</span>
+<span class="sd">        prefix: path to directory to tar (either absolute or relative)</span>
+<span class="sd">        include_parent_directories: whether to include every directory leading up to ``prefix`` in</span>
+<span class="sd">            the tarball</span>
+<span class="sd">        skip: function that receives a DirEntry and returns True if the entry should be skipped,</span>
+<span class="sd">            whether it is a file or directory. Default implementation does not skip anything.</span>
+<span class="sd">        path_to_name: function that converts a path string to a tarfile entry name, which should be</span>
+<span class="sd">            in posix format. Not only is it necessary to transform paths in certain cases, such as</span>
+<span class="sd">            windows path to posix format, but it can also be used to prepend a directory to each</span>
+<span class="sd">            entry even if it does not exist on the filesystem. The default implementation drops the</span>
+<span class="sd">            leading slash on posix and the drive letter on windows for absolute paths, and formats</span>
+<span class="sd">            as a posix.&quot;&quot;&quot;</span>
+
+    <span class="n">hardlink_to_tarinfo_name</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">include_parent_directories</span><span class="p">:</span>
+        <span class="n">parent_dirs</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span>
+        <span class="nb">next</span><span class="p">(</span><span class="n">parent_dirs</span><span class="p">)</span>  <span class="c1"># skip the root: slices are supported from python 3.10</span>
+        <span class="k">for</span> <span class="n">parent_dir</span> <span class="ow">in</span> <span class="n">parent_dirs</span><span class="p">:</span>
+            <span class="n">dir_info</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">TarInfo</span><span class="p">(</span><span class="n">path_to_name</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">)))</span>
+            <span class="n">dir_info</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">DIRTYPE</span>
+            <span class="n">dir_info</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="mo">0o755</span>
+            <span class="n">tar</span><span class="o">.</span><span class="n">addfile</span><span class="p">(</span><span class="n">dir_info</span><span class="p">)</span>
+
+    <span class="n">dir_stack</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">dir_stack</span><span class="p">:</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="n">dir_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="c1"># Add the dir before its contents</span>
+        <span class="n">dir_info</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">TarInfo</span><span class="p">(</span><span class="n">path_to_name</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+        <span class="n">dir_info</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">DIRTYPE</span>
+        <span class="n">dir_info</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="mo">0o755</span>
+        <span class="n">tar</span><span class="o">.</span><span class="n">addfile</span><span class="p">(</span><span class="n">dir_info</span><span class="p">)</span>
+
+        <span class="c1"># Sort by name: reproducible &amp; improves compression</span>
+        <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">entry</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">new_dirs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">skip</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="n">new_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">file_info</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">TarInfo</span><span class="p">(</span><span class="n">path_to_name</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">():</span>
+                <span class="n">file_info</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">SYMTYPE</span>
+                <span class="n">file_info</span><span class="o">.</span><span class="n">linkname</span> <span class="o">=</span> <span class="n">readlink</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                <span class="c1"># According to POSIX: &quot;the value of the file mode bits returned in the</span>
+                <span class="c1"># st_mode field of the stat structure is unspecified.&quot; So we set it to</span>
+                <span class="c1"># something sensible without lstat&#39;ing the link.</span>
+                <span class="n">file_info</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="mo">0o755</span>
+                <span class="n">tar</span><span class="o">.</span><span class="n">addfile</span><span class="p">(</span><span class="n">file_info</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_file</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="c1"># entry.stat has zero (st_ino, st_dev, st_nlink) on Windows: use lstat.</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">lstat</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+                <span class="c1"># Normalize permissions like git</span>
+                <span class="n">file_info</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="mo">0o755</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">st_mode</span> <span class="o">&amp;</span> <span class="mo">0o100</span> <span class="k">else</span> <span class="mo">0o644</span>
+
+                <span class="c1"># Deduplicate hardlinks</span>
+                <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">st_nlink</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">ident</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">st_dev</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">st_ino</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ident</span> <span class="ow">in</span> <span class="n">hardlink_to_tarinfo_name</span><span class="p">:</span>
+                        <span class="n">file_info</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">LNKTYPE</span>
+                        <span class="n">file_info</span><span class="o">.</span><span class="n">linkname</span> <span class="o">=</span> <span class="n">hardlink_to_tarinfo_name</span><span class="p">[</span><span class="n">ident</span><span class="p">]</span>
+                        <span class="n">tar</span><span class="o">.</span><span class="n">addfile</span><span class="p">(</span><span class="n">file_info</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="n">hardlink_to_tarinfo_name</span><span class="p">[</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_info</span><span class="o">.</span><span class="n">name</span>
+
+                <span class="c1"># If file not yet seen, copy it</span>
+                <span class="n">file_info</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">REGTYPE</span>
+                <span class="n">file_info</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">st_size</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">tar</span><span class="o">.</span><span class="n">addfile</span><span class="p">(</span><span class="n">file_info</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="n">dir_stack</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">new_dirs</span><span class="p">))</span>  <span class="c1"># we pop, so reverse to stay alphabetical</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

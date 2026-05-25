@@ -1,0 +1,678 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.spack_yaml &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/spack_yaml.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.spack_yaml</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.spack_yaml 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="sd">&quot;&quot;&quot;Enhanced YAML parsing for Spack.</span>
+
+<span class="sd">- ``load()`` preserves YAML Marks on returned objects -- this allows</span>
+<span class="sd">  us to access file and line information later.</span>
+
+<span class="sd">- ``Our load methods use ``OrderedDict`` class instead of YAML&#39;s</span>
+<span class="sd">  default unorderd dict.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">collections.abc</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">ruamel.yaml</span>
+<span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="kn">import</span> <span class="n">comments</span><span class="p">,</span> <span class="n">constructor</span><span class="p">,</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">representer</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util.tty.color</span> <span class="kn">import</span> <span class="n">cextra</span><span class="p">,</span> <span class="n">clen</span><span class="p">,</span> <span class="n">colorize</span>
+
+<span class="kn">import</span> <span class="nn">spack.error</span>
+
+<span class="c1"># Only export load and dump</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;dump&quot;</span><span class="p">,</span> <span class="s2">&quot;SpackYAMLError&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># Make new classes so we can add custom attributes.</span>
+<span class="c1"># Also, use OrderedDict instead of just dict.</span>
+<span class="k">class</span> <span class="nc">syaml_dict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">!r}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mappings</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">syaml_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="nb">list</span><span class="o">.</span><span class="fm">__repr__</span>
+
+
+<span class="k">class</span> <span class="nc">syaml_str</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="fm">__repr__</span>
+
+
+<span class="k">class</span> <span class="nc">syaml_int</span><span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="fm">__repr__</span>
+
+
+<span class="c1">#: mapping from syaml type -&gt; primitive type</span>
+<span class="n">syaml_types</span> <span class="o">=</span> <span class="p">{</span><span class="n">syaml_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">syaml_int</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">syaml_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">syaml_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">}</span>
+
+
+<span class="n">markable_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">syaml_types</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span><span class="n">comments</span><span class="o">.</span><span class="n">CommentedSeq</span><span class="p">,</span> <span class="n">comments</span><span class="o">.</span><span class="n">CommentedMap</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">syaml_type</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the corresponding syaml wrapper type for a primitive type.</span>
+
+<span class="sd">    Return:</span>
+<span class="sd">        (object): syaml-typed copy of object, or the obj if no wrapper</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">syaml_t</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">syaml_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">bool</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">syaml_t</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">syaml_t</span> <span class="k">else</span> <span class="n">obj</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="k">def</span> <span class="nf">markable</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether an object can be marked.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="n">markable_types</span>
+
+
+<span class="k">def</span> <span class="nf">mark</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add start and end markers to an object.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;start_mark&quot;</span><span class="p">):</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_start_mark</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">start_mark</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;_start_mark&quot;</span><span class="p">):</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_start_mark</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">_start_mark</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;end_mark&quot;</span><span class="p">):</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_end_mark</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">end_mark</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;_end_mark&quot;</span><span class="p">):</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_end_mark</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">_end_mark</span>
+
+
+<span class="k">def</span> <span class="nf">marked</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether an object has been marked by spack_yaml.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;_start_mark&quot;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">_start_mark</span>
+        <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;_end_mark&quot;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">_end_mark</span>
+    <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">OrderedLineConstructor</span><span class="p">(</span><span class="n">constructor</span><span class="o">.</span><span class="n">RoundTripConstructor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;YAML loader specifically intended for reading Spack configuration</span>
+<span class="sd">    files. It preserves order and line numbers. It also has special-purpose</span>
+<span class="sd">    logic for handling dictionary keys that indicate a Spack config</span>
+<span class="sd">    override: namely any key that contains an &quot;extra&quot; &#39;:&#39; character.</span>
+
+<span class="sd">    Mappings read in by this loader behave like an ordered dict.</span>
+<span class="sd">    Sequences, mappings, and strings also have new attributes,</span>
+<span class="sd">    ``_start_mark`` and ``_end_mark``, that preserve YAML line</span>
+<span class="sd">    information in the output data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># Override construct_yaml_* so that we can apply _start_mark/_end_mark to</span>
+    <span class="c1"># them. The superclass returns CommentedMap/CommentedSeq objects that we</span>
+    <span class="c1"># can add attributes to (and we depend on their behavior to preserve</span>
+    <span class="c1"># comments).</span>
+    <span class="c1">#</span>
+    <span class="c1"># The inherited sequence/dictionary constructors return empty instances</span>
+    <span class="c1"># and fill in with mappings later.  We preserve this behavior.</span>
+    <span class="c1">#</span>
+
+    <span class="k">def</span> <span class="nf">construct_yaml_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">construct_yaml_str</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="c1"># There is no specific marker to indicate that we are parsing a key,</span>
+        <span class="c1"># so this assumes we are talking about a Spack config override key if</span>
+        <span class="c1"># it ends with a &#39;:&#39; and does not contain a &#39;@&#39; (which can appear</span>
+        <span class="c1"># in config values that refer to Spack specs)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;@&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">syaml_str</span><span class="p">(</span><span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">value</span><span class="o">.</span><span class="n">override</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">syaml_str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">mark</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">construct_yaml_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">construct_yaml_seq</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">markable</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">mark</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">data</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">construct_yaml_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">construct_yaml_map</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">markable</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">mark</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">data</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+
+<span class="c1"># register above new constructors</span>
+<span class="n">OrderedLineConstructor</span><span class="o">.</span><span class="n">add_constructor</span><span class="p">(</span>
+    <span class="s2">&quot;tag:yaml.org,2002:map&quot;</span><span class="p">,</span> <span class="n">OrderedLineConstructor</span><span class="o">.</span><span class="n">construct_yaml_map</span>
+<span class="p">)</span>
+<span class="n">OrderedLineConstructor</span><span class="o">.</span><span class="n">add_constructor</span><span class="p">(</span>
+    <span class="s2">&quot;tag:yaml.org,2002:seq&quot;</span><span class="p">,</span> <span class="n">OrderedLineConstructor</span><span class="o">.</span><span class="n">construct_yaml_seq</span>
+<span class="p">)</span>
+<span class="n">OrderedLineConstructor</span><span class="o">.</span><span class="n">add_constructor</span><span class="p">(</span>
+    <span class="s2">&quot;tag:yaml.org,2002:str&quot;</span><span class="p">,</span> <span class="n">OrderedLineConstructor</span><span class="o">.</span><span class="n">construct_yaml_str</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">OrderedLineRepresenter</span><span class="p">(</span><span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representer that preserves ordering and formats ``syaml_*`` objects.</span>
+
+<span class="sd">    This representer preserves insertion ordering ``syaml_dict`` objects</span>
+<span class="sd">    when they&#39;re written out.  It also has some custom formatters</span>
+<span class="sd">    for ``syaml_*`` objects so that they are formatted like their</span>
+<span class="sd">    regular Python equivalents, instead of ugly YAML pyobjects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">ignore_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make the dumper NEVER print YAML aliases.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">represent_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">represent_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">syaml_str</span><span class="p">(</span><span class="s2">&quot;null&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">represent_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;override&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">override</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">represent_str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">SafeRepresenter</span><span class="p">(</span><span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">ignore_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make the dumper NEVER print YAML aliases.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="c1"># Make our special objects look like normal YAML ones.</span>
+<span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span>
+    <span class="n">syaml_dict</span><span class="p">,</span> <span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">represent_dict</span>
+<span class="p">)</span>
+<span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span>
+    <span class="n">syaml_list</span><span class="p">,</span> <span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">represent_list</span>
+<span class="p">)</span>
+<span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span>
+    <span class="n">syaml_int</span><span class="p">,</span> <span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">represent_int</span>
+<span class="p">)</span>
+<span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span>
+    <span class="n">syaml_str</span><span class="p">,</span> <span class="n">representer</span><span class="o">.</span><span class="n">RoundTripRepresenter</span><span class="o">.</span><span class="n">represent_str</span>
+<span class="p">)</span>
+<span class="n">OrderedLineRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span><span class="n">syaml_str</span><span class="p">,</span> <span class="n">OrderedLineRepresenter</span><span class="o">.</span><span class="n">represent_str</span><span class="p">)</span>
+
+
+<span class="c1">#: Max integer helps avoid passing too large a value to cyaml.</span>
+<span class="n">maxint</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">return_string_when_no_stream</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="n">func</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<div class="viewcode-block" id="dump">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.spack_yaml.dump">[文件]</a>
+<span class="nd">@return_string_when_no_stream</span>
+<span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">ConfigYAML</span><span class="p">(</span><span class="n">yaml_type</span><span class="o">=</span><span class="n">YAMLType</span><span class="o">.</span><span class="n">GENERIC_YAML</span><span class="p">)</span>
+    <span class="n">handler</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">default_flow_style</span> <span class="o">=</span> <span class="n">default_flow_style</span>
+    <span class="n">handler</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">maxint</span>
+    <span class="k">return</span> <span class="n">handler</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">file_line</span><span class="p">(</span><span class="n">mark</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a mark as &lt;file&gt;:&lt;line&gt; information.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">mark</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="n">mark</span><span class="o">.</span><span class="n">line</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mark</span><span class="o">.</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1">#: Global for interactions between LineAnnotationDumper and dump_annotated().</span>
+<span class="c1">#: This is nasty but YAML doesn&#39;t give us many ways to pass arguments --</span>
+<span class="c1">#: yaml.dump() takes a class (not an instance) and instantiates the dumper</span>
+<span class="c1">#: itself, so we can&#39;t just pass an instance</span>
+<span class="n">_ANNOTATIONS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="k">class</span> <span class="nc">LineAnnotationRepresenter</span><span class="p">(</span><span class="n">OrderedLineRepresenter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representer that generates per-line annotations.</span>
+
+<span class="sd">    Annotations are stored in the ``_annotations`` global.  After one</span>
+<span class="sd">    dump pass, the strings in ``_annotations`` will correspond one-to-one</span>
+<span class="sd">    with the lines output by the dumper.</span>
+
+<span class="sd">    LineAnnotationDumper records blame information after each line is</span>
+<span class="sd">    generated. As each line is parsed, it saves file/line info for each</span>
+<span class="sd">    object printed. At the end of each line, it creates an annotation</span>
+<span class="sd">    based on the saved mark and stores it in ``_annotations``.</span>
+
+<span class="sd">    For an example of how to use this, see ``dump_annotated()``, which</span>
+<span class="sd">    writes to a ``StringIO`` then joins the lines from that with</span>
+<span class="sd">    annotations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">represent_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Force syaml_str to be passed through with marks.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">represent_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">syaml_str</span><span class="p">(</span><span class="s2">&quot;null&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">syaml_str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">markable</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">mark</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">class</span> <span class="nc">LineAnnotationEmitter</span><span class="p">(</span><span class="n">emitter</span><span class="o">.</span><span class="n">Emitter</span><span class="p">):</span>
+    <span class="n">saved</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">_ANNOTATIONS</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="s2">&quot;KgrbmcyGRBMCY&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename_colors</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">process_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_scalar</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">marked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">write_line_break</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">write_line_break</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">saved</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_ANNOTATIONS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">colorize</span><span class="p">(</span><span class="s2">&quot;@K{---}&quot;</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="c1"># append annotations at the end of each line</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">saved</span><span class="p">:</span>
+            <span class="n">mark</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">saved</span><span class="o">.</span><span class="n">_start_mark</span>
+
+            <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename_colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mark</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">color</span><span class="p">:</span>
+                <span class="n">ncolors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename_colors</span><span class="p">)</span> <span class="o">%</span> <span class="n">ncolors</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filename_colors</span><span class="p">[</span><span class="n">mark</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;@</span><span class="si">%s</span><span class="s2">{</span><span class="si">%%</span><span class="s2">s}&quot;</span> <span class="o">%</span> <span class="n">color</span>
+            <span class="n">ann</span> <span class="o">=</span> <span class="n">fmt</span> <span class="o">%</span> <span class="n">mark</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">mark</span><span class="o">.</span><span class="n">line</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ann</span> <span class="o">+=</span> <span class="s2">&quot;:@c{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mark</span><span class="o">.</span><span class="n">line</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">_ANNOTATIONS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">colorize</span><span class="p">(</span><span class="n">ann</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_ANNOTATIONS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">YAMLType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;YAML configurations handled by Spack&quot;&quot;&quot;</span>
+
+    <span class="c1">#: Generic YAML configuration</span>
+    <span class="n">GENERIC_YAML</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="c1">#: A Spack config file with overrides</span>
+    <span class="n">SPACK_CONFIG_FILE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="c1">#: A Spack config file with line annotations</span>
+    <span class="n">ANNOTATED_SPACK_CONFIG_FILE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">ConfigYAML</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handles the loading and dumping of Spack&#39;s YAML files.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yaml_type</span><span class="p">:</span> <span class="n">YAMLType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span> <span class="o">=</span> <span class="n">ruamel</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">yaml_type</span> <span class="o">==</span> <span class="n">YAMLType</span><span class="o">.</span><span class="n">GENERIC_YAML</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">Representer</span> <span class="o">=</span> <span class="n">SafeRepresenter</span>
+        <span class="k">elif</span> <span class="n">yaml_type</span> <span class="o">==</span> <span class="n">YAMLType</span><span class="o">.</span><span class="n">ANNOTATED_SPACK_CONFIG_FILE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">Representer</span> <span class="o">=</span> <span class="n">LineAnnotationRepresenter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">Emitter</span> <span class="o">=</span> <span class="n">LineAnnotationEmitter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">Constructor</span> <span class="o">=</span> <span class="n">OrderedLineConstructor</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">Representer</span> <span class="o">=</span> <span class="n">OrderedLineRepresenter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">Constructor</span> <span class="o">=</span> <span class="n">OrderedLineConstructor</span>
+
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="n">IO</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the YAML data from a stream and returns it.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            stream: stream to load from.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SpackYAMLError: if anything goes wrong while loading</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">error</span><span class="o">.</span><span class="n">MarkedYAMLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;error parsing YAML&quot;</span>
+            <span class="n">error_mark</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">context_mark</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">context_mark</span> <span class="k">else</span> <span class="n">e</span><span class="o">.</span><span class="n">problem_mark</span>
+            <span class="k">if</span> <span class="n">error_mark</span><span class="p">:</span>
+                <span class="n">line</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="n">error_mark</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">error_mark</span><span class="o">.</span><span class="n">column</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;: near </span><span class="si">{</span><span class="n">error_mark</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">column</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;: </span><span class="si">{</span><span class="n">stream</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">problem</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="n">SpackYAMLError</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;cannot load Spack YAML configuration&quot;</span>
+            <span class="k">raise</span> <span class="n">SpackYAMLError</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dumps the YAML data to a stream.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: data to be dumped</span>
+<span class="sd">            stream: stream to dump the data into.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SpackYAMLError: if anything goes wrong while dumping</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;cannot dump Spack YAML configuration&quot;</span>
+            <span class="k">raise</span> <span class="n">SpackYAMLError</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a string representing the YAML data passed as input.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">str_or_file</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load but modify the loader instance so that it will add __line__</span>
+<span class="sd">    attributes to the returned object.&quot;&quot;&quot;</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">ConfigYAML</span><span class="p">(</span><span class="n">yaml_type</span><span class="o">=</span><span class="n">YAMLType</span><span class="o">.</span><span class="n">SPACK_CONFIG_FILE</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">handler</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">str_or_file</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.spack_yaml.load">[文件]</a>
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">ConfigYAML</span><span class="p">(</span><span class="n">yaml_type</span><span class="o">=</span><span class="n">YAMLType</span><span class="o">.</span><span class="n">GENERIC_YAML</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">handler</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@return_string_when_no_stream</span>
+<span class="k">def</span> <span class="nf">dump_config</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">blame</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">blame</span><span class="p">:</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">ConfigYAML</span><span class="p">(</span><span class="n">yaml_type</span><span class="o">=</span><span class="n">YAMLType</span><span class="o">.</span><span class="n">ANNOTATED_SPACK_CONFIG_FILE</span><span class="p">)</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">default_flow_style</span> <span class="o">=</span> <span class="n">default_flow_style</span>
+        <span class="k">return</span> <span class="n">_dump_annotated</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span>
+
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">ConfigYAML</span><span class="p">(</span><span class="n">yaml_type</span><span class="o">=</span><span class="n">YAMLType</span><span class="o">.</span><span class="n">SPACK_CONFIG_FILE</span><span class="p">)</span>
+    <span class="n">handler</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">default_flow_style</span> <span class="o">=</span> <span class="n">default_flow_style</span>
+    <span class="k">return</span> <span class="n">handler</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_dump_annotated</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">sio</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">handler</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sio</span><span class="p">)</span>
+
+    <span class="c1"># write_line_break() is not called by YAML for empty lines, so we</span>
+    <span class="c1"># skip empty lines here with \n+.</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\n+&quot;</span><span class="p">,</span> <span class="n">sio</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+
+    <span class="n">getvalue</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="n">getvalue</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">getvalue</span>
+
+    <span class="c1"># write out annotations and lines, accounting for color</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">clen</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">_ANNOTATIONS</span><span class="p">)</span>
+    <span class="n">formats</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">-</span><span class="si">%d</span><span class="s2">s  </span><span class="si">%%</span><span class="s2">s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">cextra</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">_ANNOTATIONS</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">_ANNOTATIONS</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">getvalue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">getvalue</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">sorted_dict</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Descend into data and sort all dictionary keys.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)((</span><span class="n">k</span><span class="p">,</span> <span class="n">sorted_dict</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)(</span><span class="n">sorted_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">extract_comments</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract and returns comments from some YAML data&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">comments</span><span class="o">.</span><span class="n">Comment</span><span class="o">.</span><span class="n">attrib</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">set_comments</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">data_comments</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set comments on some YAML data&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">comments</span><span class="o">.</span><span class="n">Comment</span><span class="o">.</span><span class="n">attrib</span><span class="p">,</span> <span class="n">data_comments</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">name_mark</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a mark with just a name&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">error</span><span class="o">.</span><span class="n">StringMark</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">anchorify</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">identifier</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace identical dict/list branches in tree with references to earlier instances. The YAML</span>
+<span class="sd">    serializer generate anchors for them, resulting in small yaml files.&quot;&quot;&quot;</span>
+    <span class="n">anchors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">stack</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+
+    <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="k">continue</span>
+
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="n">anchors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">anchor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">anchors</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">anchor</span>  <span class="c1"># replace with reference</span>
+
+
+<div class="viewcode-block" id="SpackYAMLError">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.spack_yaml.SpackYAMLError">[文件]</a>
+<span class="k">class</span> <span class="nc">SpackYAMLError</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when there are issues with YAML parsing.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">yaml_error</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">yaml_error</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

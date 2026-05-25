@@ -1,0 +1,861 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.unparse package &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/spack.util.unparse.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="spack.version package" href="spack.version.html" />
+    <link rel="prev" title="spack.util package" href="spack.util.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="spack.html">Spack API Docs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_short_version"><code class="docutils literal notranslate"><span class="pre">get_short_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_spack_commit"><code class="docutils literal notranslate"><span class="pre">get_spack_commit()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#spack.spack_version_info"><code class="docutils literal notranslate"><span class="pre">spack_version_info</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="spack.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.build_systems.html">spack.build_systems package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="spack.util.html">spack.util package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="spack.util.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.archive">spack.util.archive module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.compression">spack.util.compression module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.cpus">spack.util.cpus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.crypto">spack.util.crypto module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.debug">spack.util.debug module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.editor">spack.util.editor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.elf">spack.util.elf module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.environment">spack.util.environment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.executable">spack.util.executable module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.file_cache">spack.util.file_cache module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.file_permissions">spack.util.file_permissions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.filesystem">spack.util.filesystem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.format">spack.util.format module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.gcs">spack.util.gcs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.git">spack.util.git module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.gpg">spack.util.gpg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.hash">spack.util.hash module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.ld_so_conf">spack.util.ld_so_conf module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.libc">spack.util.libc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.lock">spack.util.lock module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.log_parse">spack.util.log_parse module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.module_cmd">spack.util.module_cmd module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.naming">spack.util.naming module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.package_hash">spack.util.package_hash module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.parallel">spack.util.parallel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.path">spack.util.path module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.pattern">spack.util.pattern module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.prefix">spack.util.prefix module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.s3">spack.util.s3 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.spack_json">spack.util.spack_json module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.spack_yaml">spack.util.spack_yaml module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.timer">spack.util.timer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.url">spack.util.url module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.web">spack.util.web module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spack.util.html#module-spack.util.windows_registry">spack.util.windows_registry module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.audit">spack.audit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.binary_distribution">spack.binary_distribution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.build_environment">spack.build_environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.builder">spack.builder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.caches">spack.caches module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.ci">spack.ci module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.compiler">spack.compiler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.concretize">spack.concretize module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.config">spack.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.context">spack.context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.cray_manifest">spack.cray_manifest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.database">spack.database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.dependency">spack.dependency module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.deptypes">spack.deptypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directives">spack.directives module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directives_meta">spack.directives_meta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.directory_layout">spack.directory_layout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.error">spack.error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.extensions">spack.extensions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.fetch_strategy">spack.fetch_strategy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.filesystem_view">spack.filesystem_view module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.graph">spack.graph module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.hash_types">spack.hash_types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.install_test">spack.install_test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.installer">spack.installer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.main">spack.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.mirror">spack.mirror module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.mixins">spack.mixins module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.multimethod">spack.multimethod module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package">spack.package module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_base">spack.package_base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_completions">spack.package_completions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_prefs">spack.package_prefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.package_test">spack.package_test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.parser">spack.parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.patch">spack.patch module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.paths">spack.paths module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.projections">spack.projections module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.provider_index">spack.provider_index module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.relocate">spack.relocate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.relocate_text">spack.relocate_text module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.repo">spack.repo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.report">spack.report module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.resource">spack.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.rewiring">spack.rewiring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.spec">spack.spec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.spec_list">spack.spec_list module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.stage">spack.stage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.store">spack.store module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.subprocess_context">spack.subprocess_context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.tag">spack.tag module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.tengine">spack.tengine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.traverse">spack.traverse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.url">spack.url module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.user_environment">spack.user_environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.variant">spack.variant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html#module-spack.verify">spack.verify module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="spack.html">spack package</a></li>
+          <li class="breadcrumb-item"><a href="spack.util.html">spack.util package</a></li>
+      <li class="breadcrumb-item active">spack.util.unparse package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/spack.util.unparse.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-spack.util.unparse">
+<span id="spack-util-unparse-package"></span><h1>spack.util.unparse package<a class="headerlink" href="#module-spack.util.unparse" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.util.unparse.unparse">
+<span class="sig-prename descclassname"><span class="pre">spack.util.unparse.</span></span><span class="sig-name descname"><span class="pre">unparse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py_ver_consistent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse.html#unparse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-spack.util.unparse.unparser">
+<span id="spack-util-unparse-unparser-module"></span><h2>spack.util.unparse.unparser module<a class="headerlink" href="#module-spack.util.unparse.unparser" title="Link to this heading"></a></h2>
+<p>Usage: unparse.py &lt;path to source file&gt;</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spack.util.unparse.unparser.</span></span><span class="sig-name descname"><span class="pre">Unparser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">py_ver_consistent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_avoid_backslashes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Methods in this class recursively traverse an AST and
+output source code for the abstract syntax; original formatting
+is disregarded.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.binop">
+<span class="sig-name descname"><span class="pre">binop</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Add':</span> <span class="pre">'+',</span> <span class="pre">'BitAnd':</span> <span class="pre">'&amp;',</span> <span class="pre">'BitOr':</span> <span class="pre">'|',</span> <span class="pre">'BitXor':</span> <span class="pre">'^',</span> <span class="pre">'Div':</span> <span class="pre">'/',</span> <span class="pre">'FloorDiv':</span> <span class="pre">'//',</span> <span class="pre">'LShift':</span> <span class="pre">'&lt;&lt;',</span> <span class="pre">'MatMult':</span> <span class="pre">'&#64;',</span> <span class="pre">'Mod':</span> <span class="pre">'%',</span> <span class="pre">'Mult':</span> <span class="pre">'*',</span> <span class="pre">'Pow':</span> <span class="pre">'**',</span> <span class="pre">'RShift':</span> <span class="pre">'&gt;&gt;',</span> <span class="pre">'Sub':</span> <span class="pre">'-'}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.binop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.binop_precedence">
+<span class="sig-name descname"><span class="pre">binop_precedence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'%':</span> <span class="pre">12,</span> <span class="pre">'&amp;':</span> <span class="pre">9,</span> <span class="pre">'*':</span> <span class="pre">12,</span> <span class="pre">'**':</span> <span class="pre">14,</span> <span class="pre">'+':</span> <span class="pre">11,</span> <span class="pre">'-':</span> <span class="pre">11,</span> <span class="pre">'/':</span> <span class="pre">12,</span> <span class="pre">'//':</span> <span class="pre">12,</span> <span class="pre">'&lt;&lt;':</span> <span class="pre">10,</span> <span class="pre">'&gt;&gt;':</span> <span class="pre">10,</span> <span class="pre">'&#64;':</span> <span class="pre">12,</span> <span class="pre">'^':</span> <span class="pre">8,</span> <span class="pre">'|':</span> <span class="pre">7}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.binop_precedence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.binop_rassoc">
+<span class="sig-name descname"><span class="pre">binop_rassoc</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({'**'})</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.binop_rassoc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.block">
+<span class="sig-name descname"><span class="pre">block</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.block" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.boolop_precedence">
+<span class="sig-name descname"><span class="pre">boolop_precedence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'and':</span> <span class="pre">4,</span> <span class="pre">'or':</span> <span class="pre">3}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.boolop_precedence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.boolops">
+<span class="sig-name descname"><span class="pre">boolops</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'And':</span> <span class="pre">'and',</span> <span class="pre">'Or':</span> <span class="pre">'or'}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.boolops" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.cmpops">
+<span class="sig-name descname"><span class="pre">cmpops</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Eq':</span> <span class="pre">'==',</span> <span class="pre">'Gt':</span> <span class="pre">'&gt;',</span> <span class="pre">'GtE':</span> <span class="pre">'&gt;=',</span> <span class="pre">'In':</span> <span class="pre">'in',</span> <span class="pre">'Is':</span> <span class="pre">'is',</span> <span class="pre">'IsNot':</span> <span class="pre">'is</span> <span class="pre">not',</span> <span class="pre">'Lt':</span> <span class="pre">'&lt;',</span> <span class="pre">'LtE':</span> <span class="pre">'&lt;=',</span> <span class="pre">'NotEq':</span> <span class="pre">'!=',</span> <span class="pre">'NotIn':</span> <span class="pre">'not</span> <span class="pre">in'}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.cmpops" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.delimit">
+<span class="sig-name descname"><span class="pre">delimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.delimit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.delimit" title="Link to this definition"></a></dt>
+<dd><p>A context manager for preparing the source for expressions. It adds
+<em>start</em> to the buffer and enters, after exit it adds <em>end</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.delimit_if">
+<span class="sig-name descname"><span class="pre">delimit_if</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.delimit_if"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.delimit_if" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.dispatch">
+<span class="sig-name descname"><span class="pre">dispatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.dispatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.dispatch" title="Link to this definition"></a></dt>
+<dd><p>Dispatcher function, dispatching tree type T to method _T.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.fill">
+<span class="sig-name descname"><span class="pre">fill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.fill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.fill" title="Link to this definition"></a></dt>
+<dd><p>Indent a piece of text, according to the current indentation level</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.get_precedence">
+<span class="sig-name descname"><span class="pre">get_precedence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.get_precedence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.get_precedence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.items_view">
+<span class="sig-name descname"><span class="pre">items_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traverser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.items_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.items_view" title="Link to this definition"></a></dt>
+<dd><p>Traverse and separate the given <em>items</em> with a comma and append it to
+the buffer. If <em>items</em> is a single item sequence, a trailing comma
+will be added.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.require_parens">
+<span class="sig-name descname"><span class="pre">require_parens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precedence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.require_parens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.require_parens" title="Link to this definition"></a></dt>
+<dd><p>Shortcut to adding precedence related parens</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.set_precedence">
+<span class="sig-name descname"><span class="pre">set_precedence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precedence</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.set_precedence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.set_precedence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.unop">
+<span class="sig-name descname"><span class="pre">unop</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Invert':</span> <span class="pre">'~',</span> <span class="pre">'Not':</span> <span class="pre">'not',</span> <span class="pre">'UAdd':</span> <span class="pre">'+',</span> <span class="pre">'USub':</span> <span class="pre">'-'}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.unop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.unop_precedence">
+<span class="sig-name descname"><span class="pre">unop_precedence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'+':</span> <span class="pre">13,</span> <span class="pre">'-':</span> <span class="pre">13,</span> <span class="pre">'not':</span> <span class="pre">5,</span> <span class="pre">'~':</span> <span class="pre">13}</span></em><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.unop_precedence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit">
+<span class="sig-name descname"><span class="pre">visit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit" title="Link to this definition"></a></dt>
+<dd><p>Traverse tree and write source code to output_file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_AnnAssign">
+<span class="sig-name descname"><span class="pre">visit_AnnAssign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_AnnAssign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_AnnAssign" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Assert">
+<span class="sig-name descname"><span class="pre">visit_Assert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Assert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Assert" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Assign">
+<span class="sig-name descname"><span class="pre">visit_Assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Assign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Assign" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_AsyncFor">
+<span class="sig-name descname"><span class="pre">visit_AsyncFor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_AsyncFor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_AsyncFor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_AsyncFunctionDef">
+<span class="sig-name descname"><span class="pre">visit_AsyncFunctionDef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_AsyncFunctionDef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_AsyncFunctionDef" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_AsyncWith">
+<span class="sig-name descname"><span class="pre">visit_AsyncWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_AsyncWith"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_AsyncWith" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Attribute">
+<span class="sig-name descname"><span class="pre">visit_Attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Attribute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_AugAssign">
+<span class="sig-name descname"><span class="pre">visit_AugAssign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_AugAssign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_AugAssign" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Await">
+<span class="sig-name descname"><span class="pre">visit_Await</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Await"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Await" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_BinOp">
+<span class="sig-name descname"><span class="pre">visit_BinOp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_BinOp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_BinOp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_BoolOp">
+<span class="sig-name descname"><span class="pre">visit_BoolOp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_BoolOp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_BoolOp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Break">
+<span class="sig-name descname"><span class="pre">visit_Break</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Break"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Break" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Bytes">
+<span class="sig-name descname"><span class="pre">visit_Bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Bytes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Call">
+<span class="sig-name descname"><span class="pre">visit_Call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Call" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_ClassDef">
+<span class="sig-name descname"><span class="pre">visit_ClassDef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_ClassDef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_ClassDef" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Compare">
+<span class="sig-name descname"><span class="pre">visit_Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Constant">
+<span class="sig-name descname"><span class="pre">visit_Constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Constant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Continue">
+<span class="sig-name descname"><span class="pre">visit_Continue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Continue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Continue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Delete">
+<span class="sig-name descname"><span class="pre">visit_Delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Delete" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Dict">
+<span class="sig-name descname"><span class="pre">visit_Dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Dict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_DictComp">
+<span class="sig-name descname"><span class="pre">visit_DictComp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_DictComp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_DictComp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Ellipsis">
+<span class="sig-name descname"><span class="pre">visit_Ellipsis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Ellipsis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Ellipsis" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_ExceptHandler">
+<span class="sig-name descname"><span class="pre">visit_ExceptHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_ExceptHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_ExceptHandler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Expr">
+<span class="sig-name descname"><span class="pre">visit_Expr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Expr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Expr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Expression">
+<span class="sig-name descname"><span class="pre">visit_Expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Expression" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_ExtSlice">
+<span class="sig-name descname"><span class="pre">visit_ExtSlice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_ExtSlice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_ExtSlice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_For">
+<span class="sig-name descname"><span class="pre">visit_For</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_For"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_For" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_FormattedValue">
+<span class="sig-name descname"><span class="pre">visit_FormattedValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_FormattedValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_FormattedValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_FunctionDef">
+<span class="sig-name descname"><span class="pre">visit_FunctionDef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_FunctionDef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_FunctionDef" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_GeneratorExp">
+<span class="sig-name descname"><span class="pre">visit_GeneratorExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_GeneratorExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_GeneratorExp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Global">
+<span class="sig-name descname"><span class="pre">visit_Global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Global" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_If">
+<span class="sig-name descname"><span class="pre">visit_If</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_If"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_If" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_IfExp">
+<span class="sig-name descname"><span class="pre">visit_IfExp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_IfExp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_IfExp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Import">
+<span class="sig-name descname"><span class="pre">visit_Import</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Import"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Import" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_ImportFrom">
+<span class="sig-name descname"><span class="pre">visit_ImportFrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_ImportFrom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_ImportFrom" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Index">
+<span class="sig-name descname"><span class="pre">visit_Index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Index" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Interactive">
+<span class="sig-name descname"><span class="pre">visit_Interactive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Interactive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Interactive" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_JoinedStr">
+<span class="sig-name descname"><span class="pre">visit_JoinedStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_JoinedStr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_JoinedStr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Lambda">
+<span class="sig-name descname"><span class="pre">visit_Lambda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Lambda" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_List">
+<span class="sig-name descname"><span class="pre">visit_List</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_List"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_List" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_ListComp">
+<span class="sig-name descname"><span class="pre">visit_ListComp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_ListComp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_ListComp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Match">
+<span class="sig-name descname"><span class="pre">visit_Match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Match" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchAs">
+<span class="sig-name descname"><span class="pre">visit_MatchAs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchAs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchAs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchClass">
+<span class="sig-name descname"><span class="pre">visit_MatchClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchClass" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchMapping">
+<span class="sig-name descname"><span class="pre">visit_MatchMapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchMapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchMapping" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchOr">
+<span class="sig-name descname"><span class="pre">visit_MatchOr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchOr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchOr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchSequence">
+<span class="sig-name descname"><span class="pre">visit_MatchSequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchSequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchSequence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchSingleton">
+<span class="sig-name descname"><span class="pre">visit_MatchSingleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchSingleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchSingleton" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchStar">
+<span class="sig-name descname"><span class="pre">visit_MatchStar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchStar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchStar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_MatchValue">
+<span class="sig-name descname"><span class="pre">visit_MatchValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_MatchValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_MatchValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Module">
+<span class="sig-name descname"><span class="pre">visit_Module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Module" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Name">
+<span class="sig-name descname"><span class="pre">visit_Name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_NameConstant">
+<span class="sig-name descname"><span class="pre">visit_NameConstant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_NameConstant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_NameConstant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_NamedExpr">
+<span class="sig-name descname"><span class="pre">visit_NamedExpr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_NamedExpr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_NamedExpr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Nonlocal">
+<span class="sig-name descname"><span class="pre">visit_Nonlocal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Nonlocal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Nonlocal" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Num">
+<span class="sig-name descname"><span class="pre">visit_Num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Num" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_ParamSpec">
+<span class="sig-name descname"><span class="pre">visit_ParamSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_ParamSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_ParamSpec" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Pass">
+<span class="sig-name descname"><span class="pre">visit_Pass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Pass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Pass" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Raise">
+<span class="sig-name descname"><span class="pre">visit_Raise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Raise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Raise" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Return">
+<span class="sig-name descname"><span class="pre">visit_Return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Return"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Return" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Set">
+<span class="sig-name descname"><span class="pre">visit_Set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Set" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_SetComp">
+<span class="sig-name descname"><span class="pre">visit_SetComp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_SetComp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_SetComp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Slice">
+<span class="sig-name descname"><span class="pre">visit_Slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Slice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Slice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Starred">
+<span class="sig-name descname"><span class="pre">visit_Starred</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Starred"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Starred" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Str">
+<span class="sig-name descname"><span class="pre">visit_Str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Str" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Subscript">
+<span class="sig-name descname"><span class="pre">visit_Subscript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Subscript"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Subscript" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Try">
+<span class="sig-name descname"><span class="pre">visit_Try</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Try"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Try" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Tuple">
+<span class="sig-name descname"><span class="pre">visit_Tuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Tuple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_TypeAlias">
+<span class="sig-name descname"><span class="pre">visit_TypeAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_TypeAlias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_TypeAlias" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_TypeVar">
+<span class="sig-name descname"><span class="pre">visit_TypeVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_TypeVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_TypeVar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_TypeVarTuple">
+<span class="sig-name descname"><span class="pre">visit_TypeVarTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_TypeVarTuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_TypeVarTuple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_UnaryOp">
+<span class="sig-name descname"><span class="pre">visit_UnaryOp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_UnaryOp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_UnaryOp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_While">
+<span class="sig-name descname"><span class="pre">visit_While</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_While"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_While" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_With">
+<span class="sig-name descname"><span class="pre">visit_With</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_With"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_With" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_Yield">
+<span class="sig-name descname"><span class="pre">visit_Yield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_Yield"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_Yield" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_YieldFrom">
+<span class="sig-name descname"><span class="pre">visit_YieldFrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_YieldFrom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_YieldFrom" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_alias">
+<span class="sig-name descname"><span class="pre">visit_alias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_alias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_alias" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_arg">
+<span class="sig-name descname"><span class="pre">visit_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_arg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_arg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_arguments">
+<span class="sig-name descname"><span class="pre">visit_arguments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_arguments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_comprehension">
+<span class="sig-name descname"><span class="pre">visit_comprehension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_comprehension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_comprehension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_keyword">
+<span class="sig-name descname"><span class="pre">visit_keyword</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_keyword"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_keyword" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_match_case">
+<span class="sig-name descname"><span class="pre">visit_match_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_match_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_match_case" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.visit_withitem">
+<span class="sig-name descname"><span class="pre">visit_withitem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.visit_withitem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.visit_withitem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.Unparser.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#Unparser.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.Unparser.write" title="Link to this definition"></a></dt>
+<dd><p>Append a piece of text to the current line.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.interleave">
+<span class="sig-prename descclassname"><span class="pre">spack.util.unparse.unparser.</span></span><span class="sig-name descname"><span class="pre">interleave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#interleave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.interleave" title="Link to this definition"></a></dt>
+<dd><p>Call f on each item in seq, calling inter() in between.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.is_simple_tuple">
+<span class="sig-prename descclassname"><span class="pre">spack.util.unparse.unparser.</span></span><span class="sig-name descname"><span class="pre">is_simple_tuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slice_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#is_simple_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.is_simple_tuple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.nullcontext">
+<span class="sig-prename descclassname"><span class="pre">spack.util.unparse.unparser.</span></span><span class="sig-name descname"><span class="pre">nullcontext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#nullcontext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.nullcontext" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spack.util.unparse.unparser.pnext">
+<span class="sig-prename descclassname"><span class="pre">spack.util.unparse.unparser.</span></span><span class="sig-name descname"><span class="pre">pnext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precedence</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spack/util/unparse/unparser.html#pnext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spack.util.unparse.unparser.pnext" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="spack.util.html" class="btn btn-neutral float-left" title="spack.util package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="spack.version.html" class="btn btn-neutral float-right" title="spack.version package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

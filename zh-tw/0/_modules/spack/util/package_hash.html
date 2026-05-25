@@ -1,0 +1,600 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.package_hash &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/package_hash.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.package_hash</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.package_hash 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">ast</span>
+
+<span class="kn">import</span> <span class="nn">spack.directives_meta</span>
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.fetch_strategy</span>
+<span class="kn">import</span> <span class="nn">spack.package_base</span>
+<span class="kn">import</span> <span class="nn">spack.repo</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.util.hash</span>
+<span class="kn">from</span> <span class="nn">spack.util.unparse</span> <span class="kn">import</span> <span class="n">unparse</span>
+
+
+<div class="viewcode-block" id="RemoveDocstrings">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDocstrings">[文件]</a>
+<span class="k">class</span> <span class="nc">RemoveDocstrings</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transformer that removes docstrings from a Python AST.</span>
+
+<span class="sd">    This removes *all* strings that aren&#39;t on the RHS of an assignment statement from</span>
+<span class="sd">    the body of functions, classes, and modules -- even if they&#39;re not directly after</span>
+<span class="sd">    the declaration.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RemoveDocstrings.remove_docstring">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDocstrings.remove_docstring">[文件]</a>
+    <span class="k">def</span> <span class="nf">remove_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">unused_string</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Criteria for unassigned body strings.&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Expr</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">unused_string</span><span class="p">(</span><span class="n">child</span><span class="p">)]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">node</span></div>
+
+
+<div class="viewcode-block" id="RemoveDocstrings.visit_FunctionDef">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDocstrings.visit_FunctionDef">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_FunctionDef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_docstring</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RemoveDocstrings.visit_ClassDef">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDocstrings.visit_ClassDef">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_ClassDef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_docstring</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RemoveDocstrings.visit_Module">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDocstrings.visit_Module">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_Module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_docstring</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RemoveDirectives">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives">[文件]</a>
+<span class="k">class</span> <span class="nc">RemoveDirectives</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove Spack directives from a package AST.</span>
+
+<span class="sd">    This removes Spack directives (e.g., ``depends_on``, ``conflicts``, etc.) and</span>
+<span class="sd">    metadata attributes (e.g., ``tags``, ``homepage``, ``url``) in a top-level class</span>
+<span class="sd">    definition within a ``package.py``, but it does not modify nested classes or</span>
+<span class="sd">    functions.</span>
+
+<span class="sd">    If removing directives causes a ``for``, ``with``, or ``while`` statement to have an</span>
+<span class="sd">    empty body, we remove the entire statement. Similarly, If removing directives causes</span>
+<span class="sd">    an ``if`` statement to have an empty body or ``else`` block, we&#39;ll remove the block</span>
+<span class="sd">    (or replace the body with ``pass`` if there is an ``else`` block but no body).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">):</span>
+        <span class="c1"># list of URL attributes and metadata attributes</span>
+        <span class="c1"># these will be removed from packages.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">url_attr</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">fetch_strategy</span><span class="o">.</span><span class="n">all_strategies</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata_attrs</span> <span class="o">+=</span> <span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="o">.</span><span class="n">metadata_attrs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_classdef</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># used to avoid nested classdefs</span>
+
+<div class="viewcode-block" id="RemoveDirectives.visit_Expr">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_Expr">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_Expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="c1"># Directives are represented in the AST as named function call expressions (as</span>
+        <span class="c1"># opposed to function calls through a variable callback). We remove them.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Note that changes to directives (e.g., a preferred version change or a hash</span>
+        <span class="c1"># chnage on an archive) are already represented in the spec *outside* the</span>
+        <span class="c1"># package hash.</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="kc">None</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">value</span>
+                <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">directives_meta</span><span class="o">.</span><span class="n">directive_names</span>
+            <span class="p">)</span>
+            <span class="k">else</span> <span class="n">node</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_Assign">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_Assign">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_Assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="c1"># Remove assignments to metadata attributes, b/c they don&#39;t affect the build.</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="kc">None</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">targets</span>
+                <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_attrs</span>
+            <span class="p">)</span>
+            <span class="k">else</span> <span class="n">node</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_With">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_With">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_With</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>  <span class="c1"># visit children</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="k">else</span> <span class="kc">None</span>  <span class="c1"># remove with statement if it has no body</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_For">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_For">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_For</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>  <span class="c1"># visit children</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="k">else</span> <span class="kc">None</span>  <span class="c1"># remove loop if it has no body</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_While">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_While">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_While</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>  <span class="c1"># visit children</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="k">else</span> <span class="kc">None</span>  <span class="c1"># remove loop if it has no body</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_If">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_If">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_If</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="c1"># an empty orelse is ignored by unparsing, but an empty body with a full orelse</span>
+        <span class="c1"># ends up unparsing as a syntax error, so we replace the empty body into `pass`.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">orelse</span><span class="p">:</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Pass</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># if the node has a body, it&#39;s valid python code with or without an orelse</span>
+        <span class="k">return</span> <span class="n">node</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_FunctionDef">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_FunctionDef">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_FunctionDef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="c1"># do not descend into function definitions</span>
+        <span class="k">return</span> <span class="n">node</span></div>
+
+
+<div class="viewcode-block" id="RemoveDirectives.visit_ClassDef">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.RemoveDirectives.visit_ClassDef">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_ClassDef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="c1"># packages are always top-level, and we do not descend</span>
+        <span class="c1"># into nested class defs and their attributes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_classdef</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span>
+
+        <span class="c1"># guard against recrusive class definitions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_classdef</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_classdef</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># replace class definition with `pass` if it&#39;s empty (e.g., packages that only</span>
+        <span class="c1"># have directives b/c they subclass a build system class)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Pass</span><span class="p">()]</span>
+
+        <span class="k">return</span> <span class="n">node</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TagMultiMethods">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.TagMultiMethods">[文件]</a>
+<span class="k">class</span> <span class="nc">TagMultiMethods</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeVisitor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tag @when-decorated methods in a package AST.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span>
+        <span class="c1"># map from function name to (implementation, condition_list) tuples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">methods</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="TagMultiMethods.visit_FunctionDef">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.TagMultiMethods.visit_FunctionDef">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_FunctionDef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">dec</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">decorator_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dec</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dec</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="s2">&quot;when&quot;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># evaluate spec condition for any when&#39;s</span>
+                    <span class="n">cond</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">s</span>
+
+                    <span class="c1"># Boolean literals come through like this</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># otherwise try to make a spec</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">cond_spec</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="c1"># Spec parsing failed -- we don&#39;t know what this is.</span>
+                        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Check statically whether spec satisfies the condition</span>
+                        <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">cond_spec</span><span class="p">))</span>
+
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="c1"># In this case the condition for the &#39;when&#39; decorator is</span>
+                    <span class="c1"># not a string literal (for example it may be a Python</span>
+                    <span class="c1"># variable name). We append None because we don&#39;t know</span>
+                    <span class="c1"># whether the constraint applies or not, and it should be included</span>
+                    <span class="c1"># unless some other constraint is False.</span>
+                    <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># anything defined without conditions will overwrite prior definitions</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conditions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># add all discovered conditions on this node to the node list</span>
+        <span class="n">impl_conditions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">impl_conditions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">func</span><span class="p">,</span> <span class="n">conditions</span><span class="p">))</span>
+
+        <span class="c1"># don&#39;t modify the AST -- return the untouched function node</span>
+        <span class="k">return</span> <span class="n">func</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ResolveMultiMethods">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.ResolveMultiMethods">[文件]</a>
+<span class="k">class</span> <span class="nc">ResolveMultiMethods</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove multi-methods when we know statically that they won&#39;t be used.</span>
+
+<span class="sd">    Say we have multi-methods like this::</span>
+
+<span class="sd">        class SomePackage:</span>
+<span class="sd">            def foo(self): print(&quot;implementation 1&quot;)</span>
+
+<span class="sd">            @when(&quot;@1.0&quot;)</span>
+<span class="sd">            def foo(self): print(&quot;implementation 2&quot;)</span>
+
+<span class="sd">            @when(&quot;@2.0&quot;)</span>
+<span class="sd">            @when(sys.platform == &quot;darwin&quot;)</span>
+<span class="sd">            def foo(self): print(&quot;implementation 3&quot;)</span>
+
+<span class="sd">            @when(&quot;@3.0&quot;)</span>
+<span class="sd">            def foo(self): print(&quot;implementation 4&quot;)</span>
+
+<span class="sd">    The multimethod that will be chosen at runtime depends on the package spec and on</span>
+<span class="sd">    whether we&#39;re on the darwin platform *at build time* (the darwin condition for</span>
+<span class="sd">    implementation 3 is dynamic). We know the package spec statically; we don&#39;t know</span>
+<span class="sd">    statically what the runtime environment will be. We need to include things that can</span>
+<span class="sd">    possibly affect package behavior in the package hash, and we want to exclude things</span>
+<span class="sd">    when we know that they will not affect package behavior.</span>
+
+<span class="sd">    If we&#39;re at version 4.0, we know that implementation 1 will win, because some @when</span>
+<span class="sd">    for 2, 3, and 4 will be `False`. We should only include implementation 1.</span>
+
+<span class="sd">    If we&#39;re at version 1.0, we know that implementation 2 will win, because it</span>
+<span class="sd">    overrides implementation 1.  We should only include implementation 2.</span>
+
+<span class="sd">    If we&#39;re at version 3.0, we know that implementation 4 will win, because it</span>
+<span class="sd">    overrides implementation 1 (the default), and some @when on all others will be</span>
+<span class="sd">    False.</span>
+
+<span class="sd">    If we&#39;re at version 2.0, it&#39;s a bit more complicated. We know we can remove</span>
+<span class="sd">    implementations 2 and 4, because their @when&#39;s will never be satisfied. But, the</span>
+<span class="sd">    choice between implementations 1 and 3 will happen at runtime (this is a bad example</span>
+<span class="sd">    because the spec itself has platform information, and we should prefer to use that,</span>
+<span class="sd">    but we allow arbitrary boolean expressions in @when&#39;s, so this example suffices).</span>
+<span class="sd">    For this case, we end up needing to include *both* implementation 1 and 3 in the</span>
+<span class="sd">    package hash, because either could be chosen.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">methods</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">methods</span> <span class="o">=</span> <span class="n">methods</span>
+
+<div class="viewcode-block" id="ResolveMultiMethods.resolve">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.ResolveMultiMethods.resolve">[文件]</a>
+    <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">impl_conditions</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given list of nodes and conditions, figure out which node will be chosen.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">impl</span><span class="p">,</span> <span class="n">conditions</span> <span class="ow">in</span> <span class="n">impl_conditions</span><span class="p">:</span>
+            <span class="c1"># if there&#39;s a default implementation with no conditions, remember that.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">conditions</span><span class="p">:</span>
+                <span class="n">default</span> <span class="o">=</span> <span class="n">impl</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># any known-false @when means the method won&#39;t be used</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">c</span> <span class="ow">is</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># anything with all known-true conditions will be picked if it&#39;s first</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">c</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="ow">and</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">default</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">[</span><span class="n">impl</span><span class="p">]</span>  <span class="c1"># we know the first MM will always win</span>
+                <span class="c1"># if anything dynamic comes before it we don&#39;t know if it&#39;ll win,</span>
+                <span class="c1"># so just let this result get appended</span>
+
+            <span class="c1"># anything else has to be determined dynamically, so add it to a list</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">impl</span><span class="p">)</span>
+
+        <span class="c1"># if nothing was picked, the last definition wins.</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ResolveMultiMethods.visit_FunctionDef">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.ResolveMultiMethods.visit_FunctionDef">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit_FunctionDef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="c1"># if the function def wasn&#39;t visited on the first traversal there is a problem</span>
+        <span class="k">assert</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="p">,</span> <span class="s2">&quot;Inconsistent package traversal!&quot;</span>
+
+        <span class="c1"># if the function is a multimethod, need to resolve it statically</span>
+        <span class="n">impl_conditions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="n">resolutions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">impl_conditions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span> <span class="ow">is</span> <span class="n">func</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">resolutions</span><span class="p">):</span>
+            <span class="c1"># multimethod did not resolve to this function; remove it</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># if we get here, this function is a possible resolution for a multi-method.</span>
+        <span class="c1"># it might be the only one, or there might be several that have to be evaluated</span>
+        <span class="c1"># dynamcially.  Either way, we include the function.</span>
+
+        <span class="c1"># strip the when decorators (preserve the rest)</span>
+        <span class="n">func</span><span class="o">.</span><span class="n">decorator_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">dec</span>
+            <span class="k">for</span> <span class="n">dec</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">decorator_list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">dec</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dec</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="s2">&quot;when&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">func</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="canonical_source">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.canonical_source">[文件]</a>
+<span class="k">def</span> <span class="nf">canonical_source</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">filter_multimethods</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get canonical source for a spec&#39;s package.py by unparsing its AST.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        filter_multimethods (bool): By default, filter multimethods out of the</span>
+<span class="sd">            AST if they are known statically to be unused. Supply False to disable.</span>
+<span class="sd">        source (str): Optionally provide a string to read python code from.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">unparse</span><span class="p">(</span><span class="n">package_ast</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">filter_multimethods</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">),</span> <span class="n">py_ver_consistent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="package_hash">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.package_hash">[文件]</a>
+<span class="k">def</span> <span class="nf">package_hash</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a hash of a package&#39;s canonical source code.</span>
+
+<span class="sd">    This function is used to determine whether a spec needs a rebuild when a</span>
+<span class="sd">    package&#39;s source code changes.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        source (str): Optionally provide a string to read python code from.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">canonical_source</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">filter_multimethods</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">b32_hash</span><span class="p">(</span><span class="n">source</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="package_ast">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.package_ast">[文件]</a>
+<span class="k">def</span> <span class="nf">package_ast</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">filter_multimethods</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the AST for the ``package.py`` file corresponding to ``spec``.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        filter_multimethods (bool): By default, filter multimethods out of the</span>
+<span class="sd">            AST if they are known statically to be unused. Supply False to disable.</span>
+<span class="sd">        source (str): Optionally provide a string to read python code from.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">PATH</span><span class="o">.</span><span class="n">filename_for_package_name</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># create an AST</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+    <span class="c1"># remove docstrings, comments, and directives from the package AST</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">RemoveDocstrings</span><span class="p">()</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">RemoveDirectives</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">filter_multimethods</span><span class="p">:</span>
+        <span class="c1"># visit nodes and build up a dictionary of methods (no need to assign)</span>
+        <span class="n">tagger</span> <span class="o">=</span> <span class="n">TagMultiMethods</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="n">tagger</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+        <span class="c1"># transform AST using tagged methods</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">ResolveMultiMethods</span><span class="p">(</span><span class="n">tagger</span><span class="o">.</span><span class="n">methods</span><span class="p">)</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">root</span></div>
+
+
+
+<div class="viewcode-block" id="PackageHashError">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.package_hash.PackageHashError">[文件]</a>
+<span class="k">class</span> <span class="nc">PackageHashError</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised for all errors encountered during package hashing.&quot;&quot;&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

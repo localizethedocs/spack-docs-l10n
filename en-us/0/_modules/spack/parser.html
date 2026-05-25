@@ -1,0 +1,871 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.parser &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/parser.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.parser</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.parser</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="sd">&quot;&quot;&quot;Parser for spec literals</span>
+
+<span class="sd">Here is the EBNF grammar for a spec::</span>
+
+<span class="sd">    spec          = [name] [node_options] { ^[edge_properties] node } |</span>
+<span class="sd">                    [name] [node_options] hash |</span>
+<span class="sd">                    filename</span>
+
+<span class="sd">    node          =  name [node_options] |</span>
+<span class="sd">                     [name] [node_options] hash |</span>
+<span class="sd">                     filename</span>
+
+<span class="sd">    node_options    = [@(version_list|version_pair)] [%compiler] { variant }</span>
+<span class="sd">    edge_properties = [ { bool_variant | key_value } ]</span>
+
+<span class="sd">    hash          = / id</span>
+<span class="sd">    filename      = (.|/|[a-zA-Z0-9-_]*/)([a-zA-Z0-9-_./]*)(.json|.yaml)</span>
+
+<span class="sd">    name          = id | namespace id</span>
+<span class="sd">    namespace     = { id . }</span>
+
+<span class="sd">    variant       = bool_variant | key_value | propagated_bv | propagated_kv</span>
+<span class="sd">    bool_variant  =  +id |  ~id |  -id</span>
+<span class="sd">    propagated_bv = ++id | ~~id | --id</span>
+<span class="sd">    key_value     =  id=id |  id=quoted_id</span>
+<span class="sd">    propagated_kv = id==id | id==quoted_id</span>
+
+<span class="sd">    compiler      = id [@version_list]</span>
+
+<span class="sd">    version_pair  = git_version=vid</span>
+<span class="sd">    version_list  = (version|version_range) [ { , (version|version_range)} ]</span>
+<span class="sd">    version_range = vid:vid | vid: | :vid | :</span>
+<span class="sd">    version       = vid</span>
+
+<span class="sd">    git_version   = git.(vid) | git_hash</span>
+<span class="sd">    git_hash      = [A-Fa-f0-9]{40}</span>
+
+<span class="sd">    quoted_id     = &quot; id_with_ws &quot; | &#39; id_with_ws &#39;</span>
+<span class="sd">    id_with_ws    = [a-zA-Z0-9_][a-zA-Z_0-9-.\\s]*</span>
+<span class="sd">    vid           = [a-zA-Z0-9_][a-zA-Z_0-9-.]*</span>
+<span class="sd">    id            = [a-zA-Z0-9_][a-zA-Z_0-9-]*</span>
+
+<span class="sd">Identifiers using the &lt;name&gt;=&lt;value&gt; command, such as architectures and</span>
+<span class="sd">compiler flags, require a space before the name.</span>
+
+<span class="sd">There is one context-sensitive part: ids in versions may contain &#39;.&#39;, while</span>
+<span class="sd">other ids may not.</span>
+
+<span class="sd">There is one ambiguity: since &#39;-&#39; is allowed in an id, you need to put</span>
+<span class="sd">whitespace space before -variant for it to be tokenized properly.  You can</span>
+<span class="sd">either use whitespace, or you can just use ~variant since it means the same</span>
+<span class="sd">thing.  Spack uses ~variant in directory names and in the canonical form of</span>
+<span class="sd">specs to avoid ambiguity.  Both are provided because ~ can cause shell</span>
+<span class="sd">expansion when it is the first character in an id typed on the command line.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Match</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util.tty</span> <span class="kn">import</span> <span class="n">color</span>
+
+<span class="kn">import</span> <span class="nn">spack.deptypes</span>
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.version</span>
+<span class="kn">from</span> <span class="nn">spack.error</span> <span class="kn">import</span> <span class="n">SpecSyntaxError</span>
+
+<span class="n">IS_WINDOWS</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span>
+<span class="c1">#: Valid name for specs and variants. Here we are not using</span>
+<span class="c1">#: the previous &quot;w[\w.-]*&quot; since that would match most</span>
+<span class="c1">#: characters that can be part of a word in any language</span>
+<span class="n">IDENTIFIER</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:[a-zA-Z_0-9][a-zA-Z_0-9\-]*)&quot;</span>
+<span class="n">DOTTED_IDENTIFIER</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">IDENTIFIER</span><span class="si">}</span><span class="s2">(?:\.</span><span class="si">{</span><span class="n">IDENTIFIER</span><span class="si">}</span><span class="s2">)+)&quot;</span>
+<span class="n">GIT_HASH</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:[A-Fa-f0-9]</span><span class="si">{40}</span><span class="s2">)&quot;</span>
+<span class="c1">#: Git refs include branch names, and can contain &quot;.&quot; and &quot;/&quot;</span>
+<span class="n">GIT_REF</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:[a-zA-Z_0-9][a-zA-Z_0-9./\-]*)&quot;</span>
+<span class="n">GIT_VERSION_PATTERN</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:(?:git\.(?:</span><span class="si">{</span><span class="n">GIT_REF</span><span class="si">}</span><span class="s2">))|(?:</span><span class="si">{</span><span class="n">GIT_HASH</span><span class="si">}</span><span class="s2">))&quot;</span>
+
+<span class="n">NAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a-zA-Z_0-9][a-zA-Z_0-9\-.]*&quot;</span>
+
+<span class="n">HASH</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a-zA-Z_0-9]+&quot;</span>
+
+<span class="c1">#: A filename starts either with a &quot;.&quot; or a &quot;/&quot; or a &quot;{name}/,</span>
+<span class="c1"># or on Windows, a drive letter followed by a colon and &quot;\&quot;</span>
+<span class="c1"># or &quot;.&quot; or {name}\</span>
+<span class="n">WINDOWS_FILENAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:\.|[a-zA-Z0-9-_]*</span><span class="se">\\</span><span class="s2">|[a-zA-Z]:</span><span class="se">\\</span><span class="s2">)(?:[a-zA-Z0-9-_\.</span><span class="se">\\</span><span class="s2">]*)(?:\.json|\.yaml)&quot;</span>
+<span class="n">UNIX_FILENAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:\.|\/|[a-zA-Z0-9-_]*\/)(?:[a-zA-Z0-9-_\.\/]*)(?:\.json|\.yaml)&quot;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
+    <span class="n">FILENAME</span> <span class="o">=</span> <span class="n">UNIX_FILENAME</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">FILENAME</span> <span class="o">=</span> <span class="n">WINDOWS_FILENAME</span>
+
+<span class="c1">#: These are legal values that *can* be parsed bare, without quotes on the command line.</span>
+<span class="n">VALUE</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:[a-zA-Z_0-9\-+\*.,:=\~\/</span><span class="se">\\</span><span class="s2">]+)&quot;</span>
+
+<span class="c1">#: Variant/flag values that match this can be left unquoted in Spack output</span>
+<span class="n">NO_QUOTES_NEEDED</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-zA-Z0-9,/_.-]+$&quot;</span><span class="p">)</span>
+
+<span class="c1">#: Quoted values can be *anything* in between quotes, including escaped quotes.</span>
+<span class="n">QUOTED_VALUE</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:&#39;(?:[^&#39;]|(?&lt;=</span><span class="se">\\</span><span class="s2">)&#39;)*&#39;|</span><span class="se">\&quot;</span><span class="s2">(?:[^</span><span class="se">\&quot;</span><span class="s2">]|(?&lt;=</span><span class="se">\\</span><span class="s2">)</span><span class="se">\&quot;</span><span class="s2">)*</span><span class="se">\&quot;</span><span class="s2">)&quot;</span>
+
+<span class="n">VERSION</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;=?(?:[a-zA-Z0-9_][a-zA-Z_0-9\-\.]*\b)&quot;</span>
+<span class="n">VERSION_RANGE</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:(?:</span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2">)?:(?:</span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2">(?!\s*=))?)&quot;</span>
+<span class="n">VERSION_LIST</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">VERSION_RANGE</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2">)(?:\s*,\s*(?:</span><span class="si">{</span><span class="n">VERSION_RANGE</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2">))*&quot;</span>
+
+<span class="c1">#: Regex with groups to use for splitting (optionally propagated) key-value pairs</span>
+<span class="n">SPLIT_KVP</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;^(</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">)(==?)(.*)$&quot;</span><span class="p">)</span>
+
+<span class="c1">#: Regex to strip quotes. Group 2 will be the unquoted string.</span>
+<span class="n">STRIP_QUOTES</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([&#39;</span><span class="se">\&quot;</span><span class="s2">])(.*)\1$&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="strip_quotes_and_unescape">
+<a class="viewcode-back" href="../../spack.html#spack.parser.strip_quotes_and_unescape">[docs]</a>
+<span class="k">def</span> <span class="nf">strip_quotes_and_unescape</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove surrounding single or double quotes from string, if present.&quot;&quot;&quot;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">STRIP_QUOTES</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="c1"># replace any escaped quotes with bare quotes</span>
+    <span class="n">quote</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;\</span><span class="si">{</span><span class="n">quote</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">quote</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="quote_if_needed">
+<a class="viewcode-back" href="../../spack.html#spack.parser.quote_if_needed">[docs]</a>
+<span class="k">def</span> <span class="nf">quote_if_needed</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add quotes around the value if it requires quotes.</span>
+
+<span class="sd">    This will add quotes around the value unless it matches ``NO_QUOTES_NEEDED``.</span>
+
+<span class="sd">    This adds:</span>
+<span class="sd">    * single quotes by default</span>
+<span class="sd">    * double quotes around any value that contains single quotes</span>
+
+<span class="sd">    If double quotes are used, we json-escpae the string. That is, we escape ``\\``,</span>
+<span class="sd">    ``&quot;``, and control codes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">NO_QUOTES_NEEDED</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;&#39;&quot;</span> <span class="ow">in</span> <span class="n">value</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="TokenBase">
+<a class="viewcode-back" href="../../spack.html#spack.parser.TokenBase">[docs]</a>
+<span class="k">class</span> <span class="nc">TokenBase</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for an enum type with a regex value&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># See</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__members__</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_value_</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regex</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regex</span> <span class="o">=</span> <span class="n">regex</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name_</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="TokenType">
+<a class="viewcode-back" href="../../spack.html#spack.parser.TokenType">[docs]</a>
+<span class="k">class</span> <span class="nc">TokenType</span><span class="p">(</span><span class="n">TokenBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration of the different token kinds in the spec grammar.</span>
+
+<span class="sd">    Order of declaration is extremely important, since text containing specs is parsed with a</span>
+<span class="sd">    single regex obtained by ``&quot;|&quot;.join(...)`` of all the regex in the order of declaration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Dependency</span>
+    <span class="n">START_EDGE_PROPERTIES</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:\^\[)&quot;</span>
+    <span class="n">END_EDGE_PROPERTIES</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:\])&quot;</span>
+    <span class="n">DEPENDENCY</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:\^)&quot;</span>
+    <span class="c1"># Version</span>
+    <span class="n">VERSION_HASH_PAIR</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:@(?:</span><span class="si">{</span><span class="n">GIT_VERSION_PATTERN</span><span class="si">}</span><span class="s2">)=(?:</span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="n">GIT_VERSION</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;@(?:</span><span class="si">{</span><span class="n">GIT_VERSION_PATTERN</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">VERSION</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:@\s*(?:</span><span class="si">{</span><span class="n">VERSION_LIST</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="c1"># Variants</span>
+    <span class="n">PROPAGATED_BOOL_VARIANT</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:(?:\+\+|~~|--)\s*</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">BOOL_VARIANT</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:[~+-]\s*</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">PROPAGATED_KEY_VALUE_PAIR</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">==(?:</span><span class="si">{</span><span class="n">VALUE</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">QUOTED_VALUE</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="n">KEY_VALUE_PAIR</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">=(?:</span><span class="si">{</span><span class="n">VALUE</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">QUOTED_VALUE</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="c1"># Compilers</span>
+    <span class="n">COMPILER_AND_VERSION</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:%\s*(?:</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">)(?:[\s]*)@\s*(?:</span><span class="si">{</span><span class="n">VERSION_LIST</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="n">COMPILER</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:%\s*(?:</span><span class="si">{</span><span class="n">NAME</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="c1"># FILENAME</span>
+    <span class="n">FILENAME</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">FILENAME</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="c1"># Package name</span>
+    <span class="n">FULLY_QUALIFIED_PACKAGE_NAME</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">DOTTED_IDENTIFIER</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">UNQUALIFIED_PACKAGE_NAME</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:</span><span class="si">{</span><span class="n">IDENTIFIER</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="c1"># DAG hash</span>
+    <span class="n">DAG_HASH</span> <span class="o">=</span> <span class="sa">rf</span><span class="s2">&quot;(?:/(?:</span><span class="si">{</span><span class="n">HASH</span><span class="si">}</span><span class="s2">))&quot;</span>
+    <span class="c1"># White spaces</span>
+    <span class="n">WS</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:\s+)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ErrorTokenType">
+<a class="viewcode-back" href="../../spack.html#spack.parser.ErrorTokenType">[docs]</a>
+<span class="k">class</span> <span class="nc">ErrorTokenType</span><span class="p">(</span><span class="n">TokenBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum with regexes for error analysis&quot;&quot;&quot;</span>
+
+    <span class="c1"># Unexpected character</span>
+    <span class="n">UNEXPECTED</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:.[\s]*)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Token">
+<a class="viewcode-back" href="../../spack.html#spack.parser.Token">[docs]</a>
+<span class="k">class</span> <span class="nc">Token</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents tokens; generated from input by lexer and fed to parse().&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">TokenBase</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+
+
+<span class="c1">#: List of all the regexes used to match spec parts, in order of precedence</span>
+<span class="n">TOKEN_REGEXES</span> <span class="o">=</span> <span class="p">[</span><span class="sa">rf</span><span class="s2">&quot;(?P&lt;</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">regex</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">TokenType</span><span class="p">]</span>
+<span class="c1">#: List of all valid regexes followed by error analysis regexes</span>
+<span class="n">ERROR_HANDLING_REGEXES</span> <span class="o">=</span> <span class="n">TOKEN_REGEXES</span> <span class="o">+</span> <span class="p">[</span>
+    <span class="sa">rf</span><span class="s2">&quot;(?P&lt;</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">regex</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">ErrorTokenType</span>
+<span class="p">]</span>
+<span class="c1">#: Regex to scan a valid text</span>
+<span class="n">ALL_TOKENS</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">TOKEN_REGEXES</span><span class="p">))</span>
+<span class="c1">#: Regex to analyze an invalid text</span>
+<span class="n">ANALYSIS_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ERROR_HANDLING_REGEXES</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="tokenize">
+<a class="viewcode-back" href="../../spack.html#spack.parser.tokenize">[docs]</a>
+<span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Token</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a token generator from the text passed as input.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        SpecTokenizationError: if we can&#39;t tokenize anymore, but didn&#39;t reach the</span>
+<span class="sd">            end of the input text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">scanner</span> <span class="o">=</span> <span class="n">ALL_TOKENS</span><span class="o">.</span><span class="n">scanner</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>  <span class="c1"># type: ignore[attr-defined]</span>
+    <span class="n">match</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Match</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">scanner</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># The following two assertions are to help mypy</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;unexpected value encountered during parsing. Please submit a bug report &quot;</span>
+            <span class="s2">&quot;at https://github.com/spack/spack/issues/new/choose&quot;</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">msg</span>
+        <span class="k">assert</span> <span class="n">match</span><span class="o">.</span><span class="n">lastgroup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">msg</span>
+        <span class="k">yield</span> <span class="n">Token</span><span class="p">(</span>
+            <span class="n">TokenType</span><span class="o">.</span><span class="n">__members__</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">lastgroup</span><span class="p">],</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(),</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+        <span class="c1"># We just got an empty string</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="n">scanner</span> <span class="o">=</span> <span class="n">ANALYSIS_REGEX</span><span class="o">.</span><span class="n">scanner</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>  <span class="c1"># type: ignore[attr-defined]</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">scanner</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span>  <span class="c1"># type: ignore[var-annotated]</span>
+        <span class="k">raise</span> <span class="n">SpecTokenizationError</span><span class="p">(</span><span class="n">matches</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TokenContext">
+<a class="viewcode-back" href="../../spack.html#spack.parser.TokenContext">[docs]</a>
+<span class="k">class</span> <span class="nc">TokenContext</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Token context passed around by parsers&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;token_stream&quot;</span><span class="p">,</span> <span class="s2">&quot;current_token&quot;</span><span class="p">,</span> <span class="s2">&quot;next_token&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_stream</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Token</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_stream</span> <span class="o">=</span> <span class="n">token_stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_token</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">advance</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TokenContext.advance">
+<a class="viewcode-back" href="../../spack.html#spack.parser.TokenContext.advance">[docs]</a>
+    <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Advance one token&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token_stream</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TokenContext.accept">
+<a class="viewcode-back" href="../../spack.html#spack.parser.TokenContext.accept">[docs]</a>
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">TokenType</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If the next token is of the specified kind, advance the stream and return True.</span>
+<span class="sd">        Otherwise return False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">kind</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">advance</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TokenContext.expect">
+<a class="viewcode-back" href="../../spack.html#spack.parser.TokenContext.expect">[docs]</a>
+    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">kinds</span><span class="p">:</span> <span class="n">TokenType</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_token</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="n">kinds</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SpecParser">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecParser">[docs]</a>
+<span class="k">class</span> <span class="nc">SpecParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse text into specs&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;literal_str&quot;</span><span class="p">,</span> <span class="s2">&quot;ctx&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">literal_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span> <span class="o">=</span> <span class="n">literal_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">TokenContext</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">kind</span> <span class="o">!=</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">WS</span><span class="p">,</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">literal_str</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="SpecParser.tokens">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecParser.tokens">[docs]</a>
+    <span class="k">def</span> <span class="nf">tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the entire list of token from the initial text. White spaces are</span>
+<span class="sd">        filtered out.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">kind</span> <span class="o">!=</span> <span class="n">TokenType</span><span class="o">.</span><span class="n">WS</span><span class="p">,</span> <span class="n">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="SpecParser.next_spec">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecParser.next_spec">[docs]</a>
+    <span class="k">def</span> <span class="nf">next_spec</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">initial_spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the next spec parsed from text.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            initial_spec: object where to parse the spec. If None a new one</span>
+<span class="sd">                will be created.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">            The spec that was parsed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">next_token</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">initial_spec</span>
+
+        <span class="k">def</span> <span class="nf">add_dependency</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span> <span class="o">**</span><span class="n">edge_properties</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;wrapper around root_spec._add_dependency&quot;&quot;&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">root_spec</span><span class="o">.</span><span class="n">_add_dependency</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span> <span class="o">**</span><span class="n">edge_properties</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpecError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SpecParsingError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="n">initial_spec</span> <span class="o">=</span> <span class="n">initial_spec</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">()</span>
+        <span class="n">root_spec</span> <span class="o">=</span> <span class="n">SpecNodeParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">initial_spec</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">START_EDGE_PROPERTIES</span><span class="p">):</span>
+                <span class="n">edge_properties</span> <span class="o">=</span> <span class="n">EdgeAttributeParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+                <span class="n">edge_properties</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;depflag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">edge_properties</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;virtuals&quot;</span><span class="p">,</span> <span class="p">())</span>
+                <span class="n">dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_node</span><span class="p">(</span><span class="n">root_spec</span><span class="p">)</span>
+                <span class="n">add_dependency</span><span class="p">(</span><span class="n">dependency</span><span class="p">,</span> <span class="o">**</span><span class="n">edge_properties</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">DEPENDENCY</span><span class="p">):</span>
+                <span class="n">dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_node</span><span class="p">(</span><span class="n">root_spec</span><span class="p">)</span>
+                <span class="n">add_dependency</span><span class="p">(</span><span class="n">dependency</span><span class="p">,</span> <span class="n">depflag</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">virtuals</span><span class="o">=</span><span class="p">())</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">root_spec</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_parse_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_spec</span><span class="p">):</span>
+        <span class="n">dependency</span> <span class="o">=</span> <span class="n">SpecNodeParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dependency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;the dependency sigil and any optional edge attributes must be followed by a &quot;</span>
+                <span class="s2">&quot;package name or a node attribute (version, variant, etc.)&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SpecParsingError</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">root_spec</span><span class="o">.</span><span class="n">concrete</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">RedundantSpecError</span><span class="p">(</span><span class="n">root_spec</span><span class="p">,</span> <span class="s2">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dependency</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">dependency</span>
+
+<div class="viewcode-block" id="SpecParser.all_specs">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecParser.all_specs">[docs]</a>
+    <span class="k">def</span> <span class="nf">all_specs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return all the specs that remain to be parsed&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_spec</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SpecNodeParser">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecNodeParser">[docs]</a>
+<span class="k">class</span> <span class="nc">SpecNodeParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a single spec node from a stream of tokens&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;ctx&quot;</span><span class="p">,</span> <span class="s2">&quot;has_compiler&quot;</span><span class="p">,</span> <span class="s2">&quot;has_version&quot;</span><span class="p">,</span> <span class="s2">&quot;literal_str&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">literal_str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">ctx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span> <span class="o">=</span> <span class="n">literal_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_compiler</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_version</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="SpecNodeParser.parse">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecNodeParser.parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">initial_spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a single spec node from a stream of tokens</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            initial_spec: object to be constructed</span>
+
+<span class="sd">        Return</span>
+<span class="sd">            The object passed as argument</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">next_token</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">DEPENDENCY</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">initial_spec</span>
+
+        <span class="k">if</span> <span class="n">initial_spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">initial_spec</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">()</span>
+
+        <span class="c1"># If we start with a package name we have a named spec, we cannot</span>
+        <span class="c1"># accept another package name afterwards in a node</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">UNQUALIFIED_PACKAGE_NAME</span><span class="p">):</span>
+            <span class="n">initial_spec</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">FULLY_QUALIFIED_PACKAGE_NAME</span><span class="p">):</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">namespace</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">initial_spec</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">initial_spec</span><span class="o">.</span><span class="n">namespace</span> <span class="o">=</span> <span class="n">namespace</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">FILENAME</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">FileParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">initial_spec</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">raise_parsing_error</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cause</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Raise a spec parsing error with token context.&quot;&quot;&quot;</span>
+            <span class="k">raise</span> <span class="n">SpecParsingError</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">cause</span>
+
+        <span class="k">def</span> <span class="nf">add_flag</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">propagate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Wrapper around ``Spec._add_flag()`` that adds parser context to errors raised.&quot;&quot;&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">initial_spec</span><span class="o">.</span><span class="n">_add_flag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">propagate</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">raise_parsing_error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">COMPILER</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_compiler</span><span class="p">:</span>
+                    <span class="n">raise_parsing_error</span><span class="p">(</span><span class="s2">&quot;Spec cannot have multiple compilers&quot;</span><span class="p">)</span>
+
+                <span class="n">compiler_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">initial_spec</span><span class="o">.</span><span class="n">compiler</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">CompilerSpec</span><span class="p">(</span><span class="n">compiler_name</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_compiler</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">COMPILER_AND_VERSION</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_compiler</span><span class="p">:</span>
+                    <span class="n">raise_parsing_error</span><span class="p">(</span><span class="s2">&quot;Spec cannot have multiple compilers&quot;</span><span class="p">)</span>
+
+                <span class="n">compiler_name</span><span class="p">,</span> <span class="n">compiler_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span>
+                <span class="n">initial_spec</span><span class="o">.</span><span class="n">compiler</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">CompilerSpec</span><span class="p">(</span>
+                    <span class="n">compiler_name</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">compiler_version</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_compiler</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">VERSION_HASH_PAIR</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">GIT_VERSION</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">VERSION</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_version</span><span class="p">:</span>
+                    <span class="n">raise_parsing_error</span><span class="p">(</span><span class="s2">&quot;Spec cannot have multiple versions&quot;</span><span class="p">)</span>
+
+                <span class="n">initial_spec</span><span class="o">.</span><span class="n">versions</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">VersionList</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
+                <span class="p">)</span>
+                <span class="n">initial_spec</span><span class="o">.</span><span class="n">attach_git_version_lookup</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_version</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">BOOL_VARIANT</span><span class="p">):</span>
+                <span class="n">variant_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span>
+                <span class="n">add_flag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">variant_value</span><span class="p">,</span> <span class="n">propagate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">PROPAGATED_BOOL_VARIANT</span><span class="p">):</span>
+                <span class="n">variant_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;++&quot;</span>
+                <span class="n">add_flag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">variant_value</span><span class="p">,</span> <span class="n">propagate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">KEY_VALUE_PAIR</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">SPLIT_KVP</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">match</span><span class="p">,</span> <span class="s2">&quot;SPLIT_KVP and KEY_VALUE_PAIR do not agree.&quot;</span>
+
+                <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+                <span class="n">add_flag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">strip_quotes_and_unescape</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">propagate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">PROPAGATED_KEY_VALUE_PAIR</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">SPLIT_KVP</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">match</span><span class="p">,</span> <span class="s2">&quot;SPLIT_KVP and PROPAGATED_KEY_VALUE_PAIR do not agree.&quot;</span>
+
+                <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+                <span class="n">add_flag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">strip_quotes_and_unescape</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">propagate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">DAG_HASH</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">initial_spec</span><span class="o">.</span><span class="n">abstract_hash</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">DAG_HASH</span><span class="p">)</span>
+                <span class="n">initial_spec</span><span class="o">.</span><span class="n">abstract_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">initial_spec</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FileParser">
+<a class="viewcode-back" href="../../spack.html#spack.parser.FileParser">[docs]</a>
+<span class="k">class</span> <span class="nc">FileParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a single spec from a JSON or YAML file&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;ctx&quot;</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">ctx</span>
+
+<div class="viewcode-block" id="FileParser.parse">
+<a class="viewcode-back" href="../../spack.html#spack.parser.FileParser.parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_spec</span><span class="p">:</span> <span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a spec tree from a specfile.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            initial_spec: object where to parse the spec</span>
+
+<span class="sd">        Return</span>
+<span class="sd">            The initial_spec passed as argument, once constructed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">NoSuchSpecFileError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No such spec file: &#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
+                <span class="n">spec_from_file</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spec_from_file</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">initial_spec</span><span class="o">.</span><span class="n">_dup</span><span class="p">(</span><span class="n">spec_from_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">initial_spec</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EdgeAttributeParser">
+<a class="viewcode-back" href="../../spack.html#spack.parser.EdgeAttributeParser">[docs]</a>
+<span class="k">class</span> <span class="nc">EdgeAttributeParser</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;ctx&quot;</span><span class="p">,</span> <span class="s2">&quot;literal_str&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">literal_str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">ctx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span> <span class="o">=</span> <span class="n">literal_str</span>
+
+<div class="viewcode-block" id="EdgeAttributeParser.parse">
+<a class="viewcode-back" href="../../spack.html#spack.parser.EdgeAttributeParser.parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">KEY_VALUE_PAIR</span><span class="p">):</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2"> &quot;</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2"> &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;deptypes&quot;</span><span class="p">,</span> <span class="s2">&quot;virtuals&quot;</span><span class="p">):</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s2">&quot;the only edge attributes that are currently accepted &quot;</span>
+                        <span class="s1">&#39;are &quot;deptypes&quot; and &quot;virtuals&quot;&#39;</span>
+                    <span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">SpecParsingError</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span>
+            <span class="c1"># TODO: Add code to accept bool variants here as soon as use variants are implemented</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">TokenType</span><span class="o">.</span><span class="n">END_EDGE_PROPERTIES</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;unexpected token in edge attributes&quot;</span>
+                <span class="k">raise</span> <span class="n">SpecParsingError</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">next_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal_str</span><span class="p">)</span>
+
+        <span class="c1"># Turn deptypes=... to depflag representation</span>
+        <span class="k">if</span> <span class="s2">&quot;deptypes&quot;</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+            <span class="n">deptype_string</span> <span class="o">=</span> <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;deptypes&quot;</span><span class="p">)</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;depflag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">deptypes</span><span class="o">.</span><span class="n">canonicalize</span><span class="p">(</span><span class="n">deptype_string</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">attributes</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="parse">
+<a class="viewcode-back" href="../../spack.html#spack.parser.parse">[docs]</a>
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse text into a list of strings</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text (str): text to be parsed</span>
+
+<span class="sd">    Return:</span>
+<span class="sd">        List of specs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">SpecParser</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">all_specs</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="parse_one_or_raise">
+<a class="viewcode-back" href="../../spack.html#spack.parser.parse_one_or_raise">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_one_or_raise</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">initial_spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse exactly one spec from text and return it, or raise</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text (str): text to be parsed</span>
+<span class="sd">        initial_spec: buffer where to parse the spec. If None a new one will be created.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stripped_text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">SpecParser</span><span class="p">(</span><span class="n">stripped_text</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">next_spec</span><span class="p">(</span><span class="n">initial_spec</span><span class="p">)</span>
+    <span class="n">last_token</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">current_token</span>
+
+    <span class="k">if</span> <span class="n">last_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_token</span><span class="o">.</span><span class="n">end</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stripped_text</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;a single spec was requested, but parsed more than one:&quot;</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">last_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">underline</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">last_token</span><span class="o">.</span><span class="n">end</span><span class="si">}{</span><span class="s1">&#39;^&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">last_token</span><span class="o">.</span><span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="n">color</span><span class="o">.</span><span class="n">colorize</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@*r</span><span class="se">{{</span><span class="si">{</span><span class="n">underline</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;a single spec was requested, but none was parsed:&quot;</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="SpecTokenizationError">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecTokenizationError">[docs]</a>
+<span class="k">class</span> <span class="nc">SpecTokenizationError</span><span class="p">(</span><span class="n">SpecSyntaxError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Syntax error in a spec string&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matches</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;unexpected tokens in the spec string</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">underline</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">lastgroup</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">ErrorTokenType</span><span class="o">.</span><span class="n">UNEXPECTED</span><span class="p">):</span>
+                <span class="n">underline</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;^&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">continue</span>
+            <span class="n">underline</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">message</span> <span class="o">+=</span> <span class="n">color</span><span class="o">.</span><span class="n">colorize</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@*r</span><span class="se">{{</span><span class="si">{</span><span class="n">underline</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SpecParsingError">
+<a class="viewcode-back" href="../../spack.html#spack.parser.SpecParsingError">[docs]</a>
+<span class="k">class</span> <span class="nc">SpecParsingError</span><span class="p">(</span><span class="n">SpecSyntaxError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error when parsing tokens&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">underline</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="n">token</span><span class="o">.</span><span class="n">start</span><span class="si">}{</span><span class="s1">&#39;^&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">token</span><span class="o">.</span><span class="n">start</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="n">color</span><span class="o">.</span><span class="n">colorize</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@*r</span><span class="se">{{</span><span class="si">{</span><span class="n">underline</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

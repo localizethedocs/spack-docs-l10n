@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.graph &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/graph.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.graph</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.graph 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;Functions for graphing DAGs of dependencies.</span>
+
+<span class="sd">This file contains code for graphing DAGs of software packages</span>
+<span class="sd">(i.e. Spack specs).  There are two main functions you probably care</span>
+<span class="sd">about:</span>
+
+<span class="sd">graph_ascii() will output a colored graph of a spec in ascii format,</span>
+<span class="sd">kind of like the graph git shows with &quot;git log --graph&quot;, e.g.::</span>
+
+<span class="sd">    o  mpileaks</span>
+<span class="sd">    |\</span>
+<span class="sd">    | |\</span>
+<span class="sd">    | o |  callpath</span>
+<span class="sd">    |/| |</span>
+<span class="sd">    | |\|</span>
+<span class="sd">    | |\ \</span>
+<span class="sd">    | | |\ \</span>
+<span class="sd">    | | | | o  adept-utils</span>
+<span class="sd">    | |_|_|/|</span>
+<span class="sd">    |/| | | |</span>
+<span class="sd">    o | | | |  mpi</span>
+<span class="sd">     / / / /</span>
+<span class="sd">    | | o |  dyninst</span>
+<span class="sd">    | |/| |</span>
+<span class="sd">    |/|/| |</span>
+<span class="sd">    | | |/</span>
+<span class="sd">    | o |  libdwarf</span>
+<span class="sd">    |/ /</span>
+<span class="sd">    o |  libelf</span>
+<span class="sd">     /</span>
+<span class="sd">    o  boost</span>
+
+<span class="sd">graph_dot() will output a graph of a spec (or multiple specs) in dot format.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.tty.color</span>
+
+<span class="kn">import</span> <span class="nn">spack.deptypes</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">spack.repo</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.tengine</span>
+<span class="kn">import</span> <span class="nn">spack.traverse</span>
+
+
+<div class="viewcode-block" id="find">
+<a class="viewcode-back" href="../../spack.html#spack.graph.find">[文件]</a>
+<span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">predicate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find index in seq for which predicate is True.</span>
+
+<span class="sd">    Searches the sequence and returns the index of the element for</span>
+<span class="sd">    which the predicate evaluates to True.  Returns -1 if the</span>
+<span class="sd">    predicate does not evaluate to True for any element in seq.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">elt</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">_GraphLineState</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Names of different graph line states.&quot;&quot;&quot;</span>
+
+    <span class="n">NODE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="n">COLLAPSE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="n">MERGE_RIGHT</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="n">EXPAND_RIGHT</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="n">BACK_EDGE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="AsciiGraph">
+<a class="viewcode-back" href="../../spack.html#spack.graph.AsciiGraph">[文件]</a>
+<span class="k">class</span> <span class="nc">AsciiGraph</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># These can be set after initialization or after a call to</span>
+        <span class="c1"># graph() to change behavior.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_character</span> <span class="o">=</span> <span class="s2">&quot;o&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depflag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">ALL</span>
+
+        <span class="c1"># These are colors in the order they&#39;ll be used for edges.</span>
+        <span class="c1"># See llnl.util.tty.color for details on color characters.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="s2">&quot;rgbmcyRGBMCY&quot;</span>
+
+        <span class="c1"># Internal vars are used in the graph() function and are initialized there</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_color</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Node name to color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Output stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># frontier</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_state</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># State of previous line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_index</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Index of expansion point of prev line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_indent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_write_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write a colored edge to the output stream.&quot;&quot;&quot;</span>
+        <span class="c1"># Ignore empty frontier entries (they&#39;re just collapsed)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+            <span class="k">return</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">sub</span><span class="p">]</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;@</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name_to_color</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_connect_deps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Connect dependencies to existing edges in the frontier.</span>
+
+<span class="sd">        ``deps`` are to be inserted at position i in the</span>
+<span class="sd">        frontier. This routine determines whether other open edges</span>
+<span class="sd">        should be merged with &lt;deps&gt; (if there are other open edges</span>
+<span class="sd">        pointing to the same place) or whether they should just be</span>
+<span class="sd">        inserted as a completely new open edge.</span>
+
+<span class="sd">        Open edges that are not fully expanded (i.e. those that point</span>
+<span class="sd">        at multiple places) are left intact.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        label    -- optional debug label for the connection.</span>
+
+<span class="sd">        Returns: True if the deps were connected to another edge</span>
+<span class="sd">        (i.e. the frontier did not grow) and False if the deps were</span>
+<span class="sd">        NOT already in the frontier (i.e. they were inserted and the</span>
+<span class="sd">        frontier grew).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">deps</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span>
+
+            <span class="c1"># convert a right connection into a left connection</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">deps</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect_deps</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+            <span class="n">collapse</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_state</span> <span class="o">==</span> <span class="n">_GraphLineState</span><span class="o">.</span><span class="n">EXPAND_RIGHT</span><span class="p">:</span>
+                <span class="c1"># Special case where previous line expanded and i is off by 1.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_back_edge_line</span><span class="p">([],</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;-1.5 &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">)))</span>
+                <span class="n">collapse</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Previous node also expanded here, so i is off by one.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_state</span> <span class="o">==</span> <span class="n">_GraphLineState</span><span class="o">.</span><span class="n">NODE</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_index</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># We need two lines to connect if distance &gt; 1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_back_edge_line</span><span class="p">([],</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;-1 &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)))</span>
+                    <span class="n">collapse</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_back_edge_line</span><span class="p">([</span><span class="n">j</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">collapse</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;-2 &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">deps</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">deps</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_index</span> <span class="o">=</span> <span class="n">index</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_state</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_state</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_back_edge_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prev_ends</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">collapse</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write part of a backwards edge in the graph.</span>
+
+<span class="sd">        Writes single- or multi-line backward edges in an ascii graph.</span>
+<span class="sd">        For example, a single line edge::</span>
+
+<span class="sd">            | | | | o |</span>
+<span class="sd">            | | | |/ /  &lt;-- single-line edge connects two nodes.</span>
+<span class="sd">            | | | o |</span>
+
+<span class="sd">        Or a multi-line edge (requires two calls to back_edge)::</span>
+
+<span class="sd">            | | | | o |</span>
+<span class="sd">            | |_|_|/ /   &lt;-- multi-line edge crosses vertical edges.</span>
+<span class="sd">            |/| | | |</span>
+<span class="sd">            o | | | |</span>
+
+<span class="sd">        Also handles &quot;pipelined&quot; edges, where the same line contains</span>
+<span class="sd">        parts of multiple edges::</span>
+
+<span class="sd">                      o start</span>
+<span class="sd">            | |_|_|_|/|</span>
+<span class="sd">            |/| | |_|/| &lt;-- this line has parts of 2 edges.</span>
+<span class="sd">            | | |/| | |</span>
+<span class="sd">            o   o</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">        prev_ends -- indices in frontier of previous edges that need</span>
+<span class="sd">                     to be finished on this line.</span>
+
+<span class="sd">        end -- end of the current edge on this line.</span>
+
+<span class="sd">        start -- start index of the current edge.</span>
+
+<span class="sd">        collapse -- whether the graph will be collapsing (i.e. whether</span>
+<span class="sd">                    to slant the end of the line or keep it straight)</span>
+
+<span class="sd">        label -- optional debug label to print after the line.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="n">to_pos</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Write edges up to &lt;to_pos&gt;.&quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">,</span> <span class="n">to_pos</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="o">*</span><span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">flen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prev_ends</span><span class="p">:</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)])</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;|/&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)])</span>
+
+        <span class="k">if</span> <span class="n">end</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)])</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">end</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)])</span>
+
+        <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">end</span><span class="p">)])</span>
+
+        <span class="k">if</span> <span class="n">collapse</span><span class="p">:</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">flen</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot; /&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">advance</span><span class="p">(</span><span class="n">flen</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_state</span><span class="p">(</span><span class="n">_GraphLineState</span><span class="o">.</span><span class="n">BACK_EDGE</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_node_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">@@</span><span class="si">{version}</span><span class="s2">{/hash:7}&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_node_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes a line with a node at index.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">node_character</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_label</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_state</span><span class="p">(</span><span class="n">_GraphLineState</span><span class="o">.</span><span class="n">NODE</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_collapse_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write a collapsing line after a node was added at index.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot; /&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_state</span><span class="p">(</span><span class="n">_GraphLineState</span><span class="o">.</span><span class="n">COLLAPSE</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_merge_right_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Edge at index is same as edge to right.  Merge directly with &#39;\&#39;&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_state</span><span class="p">(</span><span class="n">_GraphLineState</span><span class="o">.</span><span class="n">MERGE_RIGHT</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_expand_right_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_edge</span><span class="p">(</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_state</span><span class="p">(</span><span class="n">_GraphLineState</span><span class="o">.</span><span class="n">EXPAND_RIGHT</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AsciiGraph.write">
+<a class="viewcode-back" href="../../spack.html#spack.graph.AsciiGraph.write">[文件]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write out an ascii graph of the provided spec.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        spec -- spec to graph.  This only handles one spec at a time.</span>
+
+<span class="sd">        Optional arguments:</span>
+
+<span class="sd">        out -- file object to write out to (default is sys.stdout)</span>
+
+<span class="sd">        color -- whether to write in color.  Default is to autodetect</span>
+<span class="sd">                 based on output file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">ColorStream</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="c1"># We&#39;ll traverse the spec in topological order as we graph it.</span>
+        <span class="n">nodes_in_topological_order</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">edge</span><span class="o">.</span><span class="n">spec</span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">traverse</span><span class="o">.</span><span class="n">traverse_edges_topo</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">spec</span><span class="p">],</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depflag</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">nodes_in_topological_order</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+        <span class="c1"># Work on a copy to be nondestructive</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Colors associated with each node in the DAG.</span>
+        <span class="c1"># Edges are colored by the node they point to.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_color</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">():</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">spec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodes_in_topological_order</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Frontier tracks open edges of the graph as it&#39;s written out.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span> <span class="o">=</span> <span class="p">[[</span><span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()]]</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">:</span>
+            <span class="c1"># Find an unexpanded part of frontier</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Expand frontier until there are enough columns for all children.</span>
+
+                <span class="c1"># Figure out how many back connections there are and</span>
+                <span class="c1"># sort them so we do them in order</span>
+                <span class="n">back</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">b</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[:</span><span class="n">i</span><span class="p">],</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span> <span class="o">==</span> <span class="p">[</span><span class="n">d</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">b</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">back</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+
+                <span class="c1"># Do all back connections in sorted order so we can</span>
+                <span class="c1"># pipeline them and save space.</span>
+                <span class="k">if</span> <span class="n">back</span><span class="p">:</span>
+                    <span class="n">back</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="n">prev_ends</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">collapse_l1</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">back</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">collapse_l1</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="ow">not</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_back_edge_line</span><span class="p">(</span><span class="n">prev_ends</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">collapse_l1</span><span class="p">,</span> <span class="s2">&quot;left-1&quot;</span><span class="p">)</span>
+                            <span class="k">del</span> <span class="n">prev_ends</span><span class="p">[:]</span>
+                        <span class="n">prev_ends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+                    <span class="c1"># Check whether we did ALL the deps as back edges,</span>
+                    <span class="c1"># in which case we&#39;re done.</span>
+                    <span class="n">pop</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">collapse_l2</span> <span class="o">=</span> <span class="n">pop</span>
+                    <span class="k">if</span> <span class="n">collapse_l1</span><span class="p">:</span>
+                        <span class="n">collapse_l2</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">pop</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_back_edge_line</span><span class="p">(</span><span class="n">prev_ends</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">collapse_l2</span><span class="p">,</span> <span class="s2">&quot;left-2&quot;</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># Expand forward after doing all back connections</span>
+
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
+                        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="c1"># We need to connect to the element to the right.</span>
+                        <span class="c1"># Keep lines straight by connecting directly and</span>
+                        <span class="c1"># avoiding unnecessary expand/contract.</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_merge_right_line</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Just allow the expansion here.</span>
+                        <span class="n">dep_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="n">dep_hash</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">deps</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_expand_right_line</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_deps</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="s2">&quot;post-expand&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Handle any remaining back edges to the right</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">):</span>
+                    <span class="n">deps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect_deps</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="s2">&quot;back-from-right&quot;</span><span class="p">):</span>
+                        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Nothing to expand; add dependencies for a node.</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">nodes_in_topological_order</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+                <span class="c1"># Find the named node in the frontier and draw it.</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_node_line</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+                <span class="c1"># Replace node with its dependencies</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">edges</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">edges_to_dependencies</span><span class="p">(</span><span class="n">depflag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depflag</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
+                    <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_connect_deps</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="s2">&quot;new-deps&quot;</span><span class="p">)</span>  <span class="c1"># anywhere.</span>
+
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frontier</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_collapse_line</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="graph_ascii">
+<a class="viewcode-back" href="../../spack.html#spack.graph.graph_ascii">[文件]</a>
+<span class="k">def</span> <span class="nf">graph_ascii</span><span class="p">(</span>
+    <span class="n">spec</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">depflag</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">ALL</span>
+<span class="p">):</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">AsciiGraph</span><span class="p">()</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">node_character</span> <span class="o">=</span> <span class="n">node</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">depflag</span> <span class="o">=</span> <span class="n">depflag</span>
+
+    <span class="n">graph</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DotGraphBuilder">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DotGraphBuilder">[文件]</a>
+<span class="k">class</span> <span class="nc">DotGraphBuilder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visit edges of a graph a build DOT options for nodes and edges&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DotGraphBuilder.visit">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DotGraphBuilder.visit">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">DependencySpec</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visit an edge and builds up entries to render the graph&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_entry</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_entry</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_entry</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edge_entry</span><span class="p">(</span><span class="n">edge</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="DotGraphBuilder.node_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DotGraphBuilder.node_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">node_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a tuple of (node_id, node_options)&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Need to be implemented by derived classes&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DotGraphBuilder.edge_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DotGraphBuilder.edge_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">edge_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">DependencySpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a tuple of (parent_id, child_id, edge_options)&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Need to be implemented by derived classes&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DotGraphBuilder.context">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DotGraphBuilder.context">[文件]</a>
+    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the context to be used to render the DOT graph template&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;nodes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;edges&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="DotGraphBuilder.render">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DotGraphBuilder.render">[文件]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string with the output in DOT format&quot;&quot;&quot;</span>
+        <span class="n">environment</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">tengine</span><span class="o">.</span><span class="n">make_environment</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;misc/graph.dot&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">())</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SimpleDAG">
+<a class="viewcode-back" href="../../spack.html#spack.graph.SimpleDAG">[文件]</a>
+<span class="k">class</span> <span class="nc">SimpleDAG</span><span class="p">(</span><span class="n">DotGraphBuilder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple DOT graph, with nodes colored uniformly and edges without properties&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleDAG.node_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.SimpleDAG.node_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">node_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">format_option</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">{@version}{</span><span class="si">%c</span><span class="s2">ompiler}{/hash:7}&quot;</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(),</span> <span class="sa">f</span><span class="s1">&#39;[label=&quot;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">format_option</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;]&#39;</span></div>
+
+
+<div class="viewcode-block" id="SimpleDAG.edge_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.SimpleDAG.edge_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">edge_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">edge</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(),</span> <span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(),</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="StaticDag">
+<a class="viewcode-back" href="../../spack.html#spack.graph.StaticDag">[文件]</a>
+<span class="k">class</span> <span class="nc">StaticDag</span><span class="p">(</span><span class="n">DotGraphBuilder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DOT graph for possible dependencies&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StaticDag.node_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.StaticDag.node_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">node_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;[label=&quot;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;]&#39;</span></div>
+
+
+<div class="viewcode-block" id="StaticDag.edge_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.StaticDag.edge_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">edge_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">edge</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DAGWithDependencyTypes">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DAGWithDependencyTypes">[文件]</a>
+<span class="k">class</span> <span class="nc">DAGWithDependencyTypes</span><span class="p">(</span><span class="n">DotGraphBuilder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DOT graph with link,run nodes grouped together and edges colored according to</span>
+<span class="sd">    the dependency types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_unified_space</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DAGWithDependencyTypes.visit">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DAGWithDependencyTypes.visit">[文件]</a>
+    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">traverse</span><span class="o">.</span><span class="n">traverse_nodes</span><span class="p">([</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">],</span> <span class="n">deptype</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">LINK</span> <span class="o">|</span> <span class="n">dt</span><span class="o">.</span><span class="n">RUN</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">main_unified_space</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">())</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DAGWithDependencyTypes.node_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DAGWithDependencyTypes.node_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">node_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">node_str</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">{@version}{</span><span class="si">%c</span><span class="s2">ompiler}{/hash:7}&quot;</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[label=&quot;</span><span class="si">{</span><span class="n">node_str</span><span class="si">}</span><span class="s1">&quot;, group=&quot;build_dependencies&quot;, fillcolor=&quot;coral&quot;]&#39;</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_unified_space</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[label=&quot;</span><span class="si">{</span><span class="n">node_str</span><span class="si">}</span><span class="s1">&quot;, group=&quot;main_psid&quot;]&#39;</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(),</span> <span class="n">options</span></div>
+
+
+<div class="viewcode-block" id="DAGWithDependencyTypes.edge_entry">
+<a class="viewcode-back" href="../../spack.html#spack.graph.DAGWithDependencyTypes.edge_entry">[文件]</a>
+    <span class="k">def</span> <span class="nf">edge_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="n">colormap</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;build&quot;</span><span class="p">:</span> <span class="s2">&quot;dodgerblue&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;crimson&quot;</span><span class="p">,</span> <span class="s2">&quot;run&quot;</span><span class="p">:</span> <span class="s2">&quot;goldenrod&quot;</span><span class="p">}</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">virtuals</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; xlabel=</span><span class="se">\&quot;</span><span class="s2">virtuals=</span><span class="si">{</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">virtuals</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">edge</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(),</span>
+            <span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(),</span>
+            <span class="sa">f</span><span class="s2">&quot;[color=</span><span class="se">\&quot;</span><span class="si">{</span><span class="s1">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colormap</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">dt</span><span class="o">.</span><span class="n">flag_to_tuple</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">depflag</span><span class="p">))</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="n">label</span>
+            <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span> <span class="nf">_static_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">depflag</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
+        <span class="n">pkg_cls</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">PATH</span><span class="o">.</span><span class="n">get_pkg_class</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">possible</span> <span class="o">=</span> <span class="n">pkg_cls</span><span class="o">.</span><span class="n">possible_dependencies</span><span class="p">(</span><span class="n">expand_virtuals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">depflag</span><span class="o">=</span><span class="n">depflag</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">parent_name</span><span class="p">,</span> <span class="n">dependencies</span> <span class="ow">in</span> <span class="n">possible</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">dependency_name</span> <span class="ow">in</span> <span class="n">dependencies</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">DependencySpec</span><span class="p">(</span>
+                    <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">parent_name</span><span class="p">),</span>
+                    <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">dependency_name</span><span class="p">),</span>
+                    <span class="n">depflag</span><span class="o">=</span><span class="n">depflag</span><span class="p">,</span>
+                    <span class="n">virtuals</span><span class="o">=</span><span class="p">(),</span>
+                <span class="p">)</span>
+
+
+<div class="viewcode-block" id="static_graph_dot">
+<a class="viewcode-back" href="../../spack.html#spack.graph.static_graph_dot">[文件]</a>
+<span class="k">def</span> <span class="nf">static_graph_dot</span><span class="p">(</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">],</span> <span class="n">depflag</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TextIO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Static DOT graph with edges to all possible dependencies.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        specs: abstract specs to be represented</span>
+<span class="sd">        depflag: dependency types to consider</span>
+<span class="sd">        out: optional output stream. If None sys.stdout is used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">out</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">builder</span> <span class="o">=</span> <span class="n">StaticDag</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">_static_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">depflag</span><span class="p">):</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">builder</span><span class="o">.</span><span class="n">render</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="graph_dot">
+<a class="viewcode-back" href="../../spack.html#spack.graph.graph_dot">[文件]</a>
+<span class="k">def</span> <span class="nf">graph_dot</span><span class="p">(</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">],</span>
+    <span class="n">builder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DotGraphBuilder</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">depflag</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span>
+    <span class="n">out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TextIO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DOT graph of the concrete specs passed as input.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        specs: specs to be represented</span>
+<span class="sd">        builder: builder to use to render the graph</span>
+<span class="sd">        depflag: dependency types to consider</span>
+<span class="sd">        out: optional output stream. If None sys.stdout is used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">specs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must provide specs to graph_dot&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+
+    <span class="n">builder</span> <span class="o">=</span> <span class="n">builder</span> <span class="ow">or</span> <span class="n">SimpleDAG</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">traverse</span><span class="o">.</span><span class="n">traverse_edges</span><span class="p">(</span>
+        <span class="n">specs</span><span class="p">,</span> <span class="n">cover</span><span class="o">=</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;breadth&quot;</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="n">depflag</span>
+    <span class="p">):</span>
+        <span class="n">builder</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">builder</span><span class="o">.</span><span class="n">render</span><span class="p">())</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

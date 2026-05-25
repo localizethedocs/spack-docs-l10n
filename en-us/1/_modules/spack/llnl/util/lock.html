@@ -1,0 +1,1339 @@
+<!doctype html>
+<html class="no-js" lang="en-US" data-content_root="../../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/llnl/util/lock.html">
+        <link rel="prefetch" href="../../../../_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="../../../../_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>spack.llnl.util.lock - Spack 1.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../index.html"><div class="brand">Spack 1.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="../../../../_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="../../../../_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for spack.llnl.util.lock</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright Spack Project Developers. See COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">spack.llnl.util</span> <span class="kn">import</span> <span class="n">lang</span><span class="p">,</span> <span class="n">tty</span>
+
+<span class="kn">from</span> <span class="nn">..string</span> <span class="kn">import</span> <span class="n">plural</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">fcntl</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Lock&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockDowngradeError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockUpgradeError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockTransaction&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WriteTransaction&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ReadTransaction&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockTimeoutError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockPermissionError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LockROFileError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CantCreateLockError&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="n">ReleaseFnType</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="nb">bool</span><span class="p">]]</span>
+
+
+<span class="k">def</span> <span class="nf">true_fn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A function that always returns True.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">class</span> <span class="nc">OpenFile</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Record for keeping track of open lockfiles (with reference counting).</span>
+
+<span class="sd">    There&#39;s really only one ``OpenFile`` per inode, per process, but we record the</span>
+<span class="sd">    filehandle here as it&#39;s the thing we end up using in python code.  You can get</span>
+<span class="sd">    the file descriptor from the file handle if needed -- or we could make this track</span>
+<span class="sd">    file descriptors as well in the future.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">:</span> <span class="n">IO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fh</span> <span class="o">=</span> <span class="n">fh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refs</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">class</span> <span class="nc">OpenFileTracker</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Track open lockfiles, to minimize number of open file descriptors.</span>
+
+<span class="sd">    The ``fcntl`` locks that Spack uses are associated with an inode and a process.</span>
+<span class="sd">    This is convenient, because if a process exits, it releases its locks.</span>
+<span class="sd">    Unfortunately, this also means that if you close a file, *all* locks associated</span>
+<span class="sd">    with that file&#39;s inode are released, regardless of whether the process has any</span>
+<span class="sd">    other open file descriptors on it.</span>
+
+<span class="sd">    Because of this, we need to track open lock files so that we only close them when</span>
+<span class="sd">    a process no longer needs them.  We do this by tracking each lockfile by its</span>
+<span class="sd">    inode and process id.  This has several nice properties:</span>
+
+<span class="sd">    1. Tracking by pid ensures that, if we fork, we don&#39;t inadvertently track the parent</span>
+<span class="sd">       process&#39;s lockfiles. ``fcntl`` locks are not inherited across forks, so we&#39;ll</span>
+<span class="sd">       just track new lockfiles in the child.</span>
+<span class="sd">    2. Tracking by inode ensures that references are counted per inode, and that we don&#39;t</span>
+<span class="sd">       inadvertently close a file whose inode still has open locks.</span>
+<span class="sd">    3. Tracking by both pid and inode ensures that we only open lockfiles the minimum</span>
+<span class="sd">       number of times necessary for the locks we have.</span>
+
+<span class="sd">    Note: as mentioned elsewhere, these locks aren&#39;t thread safe -- they&#39;re designed to</span>
+<span class="sd">    work in Python and assume the GIL.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create a new ``OpenFileTracker``.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">OpenFile</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">get_fh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IO</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get a filehandle for a lockfile.</span>
+
+<span class="sd">        This routine will open writable files for read/write even if you&#39;re asking</span>
+<span class="sd">        for a shared (read-only) lock. This is so that we can upgrade to an exclusive</span>
+<span class="sd">        (write) lock later if requested.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">          path: path to lock file we want a filehandle for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Open writable files as rb+ so we can upgrade to write later</span>
+        <span class="n">os_mode</span><span class="p">,</span> <span class="n">fh_mode</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="s2">&quot;rb+&quot;</span>
+
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
+        <span class="n">open_file</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># OpenFile object, if there is one</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># stat result for the lockfile, if it exists</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># see whether we&#39;ve seen this inode/pid before</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">stat</span><span class="o">.</span><span class="n">st_dev</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_ino</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+            <span class="n">open_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">:</span>  <span class="c1"># only handle file not found</span>
+                <span class="k">raise</span>
+
+            <span class="c1"># path does not exist -- fail if we won&#39;t be able to create it</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CantCreateLockError</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># if there was no already open file, we&#39;ll need to open one</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">open_file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">):</span>
+                <span class="c1"># we know path exists but not if it&#39;s writable. If it&#39;s read-only,</span>
+                <span class="c1"># only open the file for reading (and fail if we&#39;re trying to get</span>
+                <span class="c1"># an exclusive (write) lock on it)</span>
+                <span class="n">os_mode</span><span class="p">,</span> <span class="n">fh_mode</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDONLY</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span>
+
+            <span class="n">fd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os_mode</span><span class="p">)</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">fh_mode</span><span class="p">)</span>
+            <span class="n">open_file</span> <span class="o">=</span> <span class="n">OpenFile</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+
+            <span class="c1"># if we just created the file, we&#39;ll need to get its inode here</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stat</span><span class="p">:</span>
+                <span class="n">stat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fstat</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">stat</span><span class="o">.</span><span class="n">st_dev</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_ino</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">open_file</span>
+
+        <span class="n">open_file</span><span class="o">.</span><span class="n">refs</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">open_file</span><span class="o">.</span><span class="n">fh</span>
+
+    <span class="k">def</span> <span class="nf">release_by_stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">stat</span><span class="o">.</span><span class="n">st_dev</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_ino</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+        <span class="n">open_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">open_file</span><span class="p">,</span> <span class="s2">&quot;Attempted to close non-existing inode: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_ino</span>
+
+        <span class="n">open_file</span><span class="o">.</span><span class="n">refs</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">open_file</span><span class="o">.</span><span class="n">refs</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">open_file</span><span class="o">.</span><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">release_by_fh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release_by_stat</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">fstat</span><span class="p">(</span><span class="n">fh</span><span class="o">.</span><span class="n">fileno</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="nf">purge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+
+<span class="c1">#: Open file descriptors for locks in this process. Used to prevent one process</span>
+<span class="c1">#: from opening the sam file many times for different byte range locks</span>
+<span class="n">FILE_TRACKER</span> <span class="o">=</span> <span class="n">OpenFileTracker</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_attempts_str</span><span class="p">(</span><span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">):</span>
+    <span class="c1"># Don&#39;t print anything if we succeeded on the first try</span>
+    <span class="k">if</span> <span class="n">nattempts</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">plural</span><span class="p">(</span><span class="n">nattempts</span><span class="p">,</span> <span class="s2">&quot;attempt&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot; after </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="o">.</span><span class="n">pretty_seconds</span><span class="p">(</span><span class="n">wait_time</span><span class="p">),</span> <span class="n">attempts</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">LockType</span><span class="p">:</span>
+    <span class="n">READ</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">WRITE</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="n">tid</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;READ&quot;</span>
+        <span class="k">if</span> <span class="n">tid</span> <span class="o">==</span> <span class="n">LockType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;WRITE&quot;</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_module</span><span class="p">(</span><span class="n">tid</span><span class="p">):</span>
+        <span class="n">lock</span> <span class="o">=</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_SH</span>
+        <span class="k">if</span> <span class="n">tid</span> <span class="o">==</span> <span class="n">LockType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">:</span>
+            <span class="n">lock</span> <span class="o">=</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span>
+        <span class="k">return</span> <span class="n">lock</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">op</span> <span class="o">==</span> <span class="n">LockType</span><span class="o">.</span><span class="n">READ</span> <span class="ow">or</span> <span class="n">op</span> <span class="o">==</span> <span class="n">LockType</span><span class="o">.</span><span class="n">WRITE</span>
+
+
+<div class="viewcode-block" id="Lock">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock">[docs]</a>
+<span class="k">class</span> <span class="nc">Lock</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This is an implementation of a filesystem lock using Python&#39;s lockf.</span>
+
+<span class="sd">    In Python, ``lockf`` actually calls ``fcntl``, so this should work with</span>
+<span class="sd">    any filesystem implementation that supports locking through the fcntl</span>
+<span class="sd">    calls.  This includes distributed filesystems like Lustre (when flock</span>
+<span class="sd">    is enabled) and recent NFS versions.</span>
+
+<span class="sd">    Note that this is for managing contention over resources *between*</span>
+<span class="sd">    processes and not for managing contention between threads in a process: the</span>
+<span class="sd">    functions of this object are not thread-safe. A process also must not</span>
+<span class="sd">    maintain multiple locks on the same file (or, more specifically, on</span>
+<span class="sd">    overlapping byte ranges in the same file).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">default_timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Construct a new lock on the file at ``path``.</span>
+
+<span class="sd">        By default, the lock applies to the whole file.  Optionally,</span>
+<span class="sd">        caller can specify a byte range beginning ``start`` bytes from</span>
+<span class="sd">        the start of the file and extending ``length`` bytes from there.</span>
+
+<span class="sd">        This exposes a subset of fcntl locking functionality.  It does</span>
+<span class="sd">        not currently expose the ``whence`` parameter -- ``whence`` is</span>
+<span class="sd">        always ``os.SEEK_SET`` and ``start`` is always evaluated from the</span>
+<span class="sd">        beginning of the file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path: path to the lock</span>
+<span class="sd">            start: optional byte offset at which the lock starts</span>
+<span class="sd">            length: optional number of bytes to lock</span>
+<span class="sd">            default_timeout: seconds to wait for lock attempts,</span>
+<span class="sd">                where None means to wait indefinitely</span>
+<span class="sd">            debug: debug mode specific to locking</span>
+<span class="sd">            desc: optional debug message lock description, which is</span>
+<span class="sd">                helpful for distinguishing between different Spack locks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IO</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># byte range parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="n">length</span>
+
+        <span class="c1"># enable debug mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+
+        <span class="c1"># optional debug description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">desc</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># If the user doesn&#39;t set a default timeout, or if they choose</span>
+        <span class="c1"># None, 0, etc. then lock attempts will not time out (unless the</span>
+        <span class="c1"># user sets a timeout for each attempt)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span> <span class="o">=</span> <span class="n">default_timeout</span> <span class="ow">or</span> <span class="kc">None</span>
+
+        <span class="c1"># PID and host of lock holder (only used in debug mode)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_pid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_poll_interval_generator</span><span class="p">(</span>
+        <span class="n">_wait_times</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;This implements a backoff scheme for polling a contended resource</span>
+<span class="sd">        by suggesting a succession of wait times between polls.</span>
+
+<span class="sd">        It suggests a poll interval of .1s until 2 seconds have passed,</span>
+<span class="sd">        then a poll interval of .2s until 10 seconds have passed, and finally</span>
+<span class="sd">        (for all requests after 10s) suggests a poll interval of .5s.</span>
+
+<span class="sd">        This doesn&#39;t actually track elapsed time, it estimates the waiting</span>
+<span class="sd">        time as though the caller always waits for the full length of time</span>
+<span class="sd">        suggested by this function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_requests</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">stage1</span><span class="p">,</span> <span class="n">stage2</span><span class="p">,</span> <span class="n">stage3</span> <span class="o">=</span> <span class="n">_wait_times</span> <span class="ow">or</span> <span class="p">(</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">2e-1</span><span class="p">,</span> <span class="mf">5e-1</span><span class="p">)</span>
+        <span class="n">wait_time</span> <span class="o">=</span> <span class="n">stage1</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">num_requests</span> <span class="o">&gt;=</span> <span class="mi">60</span><span class="p">:</span>  <span class="c1"># 40 * .2 = 8</span>
+                <span class="n">wait_time</span> <span class="o">=</span> <span class="n">stage3</span>
+            <span class="k">elif</span> <span class="n">num_requests</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">:</span>  <span class="c1"># 20 * .1 = 2</span>
+                <span class="n">wait_time</span> <span class="o">=</span> <span class="n">stage2</span>
+            <span class="n">num_requests</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">yield</span> <span class="n">wait_time</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Formal representation of the lock.&quot;&quot;&quot;</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">rep</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">=</span><span class="si">{1}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rep</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Readable string (with key fields) of the lock.&quot;&quot;&quot;</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">[</span><span class="si">{1}</span><span class="s2">:</span><span class="si">{2}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="s2">&quot;timeout=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span><span class="p">)</span>
+        <span class="n">activity</span> <span class="o">=</span> <span class="s2">&quot;#reads=</span><span class="si">{0}</span><span class="s2">, #writes=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;(</span><span class="si">{0}</span><span class="s2">, </span><span class="si">{1}</span><span class="s2">, </span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">activity</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;This takes a lock using POSIX locks (``fcntl.lockf``).</span>
+
+<span class="sd">        The lock is implemented as a spin lock using a nonblocking call</span>
+<span class="sd">        to ``lockf()``.</span>
+
+<span class="sd">        If the lock times out, it raises a ``LockError``. If the lock is</span>
+<span class="sd">        successfully acquired, the total wait time and the number of attempts</span>
+<span class="sd">        is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">LockType</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="n">op_str</span> <span class="o">=</span> <span class="n">LockType</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_acquiring</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> LOCK&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">op_str</span><span class="p">))</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span>
+
+        <span class="c1"># Create file and parent directories if they don&#39;t exist.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_parent_directory</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="o">=</span> <span class="n">FILE_TRACKER</span><span class="o">.</span><span class="n">get_fh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">LockType</span><span class="o">.</span><span class="n">to_module</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="o">==</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;rb&quot;</span><span class="p">:</span>
+            <span class="c1"># Attempt to upgrade to write lock w/a read-only file.</span>
+            <span class="c1"># If the file were writable, we&#39;d have opened it rb+</span>
+            <span class="k">raise</span> <span class="n">LockROFileError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> locking [</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">]: timeout </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">op_str</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">,</span> <span class="n">lang</span><span class="o">.</span><span class="n">pretty_seconds</span><span class="p">(</span><span class="n">timeout</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">poll_intervals</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">Lock</span><span class="o">.</span><span class="n">_poll_interval_generator</span><span class="p">())</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">num_attempts</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">timeout</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="n">num_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_poll_lock</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+                <span class="n">total_wait_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+                <span class="k">return</span> <span class="n">total_wait_time</span><span class="p">,</span> <span class="n">num_attempts</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">poll_intervals</span><span class="p">))</span>
+
+        <span class="c1"># TBD: Is an extra attempt after timeout needed/appropriate?</span>
+        <span class="n">num_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_poll_lock</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+            <span class="n">total_wait_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+            <span class="k">return</span> <span class="n">total_wait_time</span><span class="p">,</span> <span class="n">num_attempts</span>
+
+        <span class="n">total_wait_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="k">raise</span> <span class="n">LockTimeoutError</span><span class="p">(</span><span class="n">op_str</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">total_wait_time</span><span class="p">,</span> <span class="n">num_attempts</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_poll_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Attempt to acquire the lock in a non-blocking manner. Return whether</span>
+<span class="sd">        the locking attempt succeeds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;cannot poll a lock without the file being set&quot;</span>
+        <span class="n">module_op</span> <span class="o">=</span> <span class="n">LockType</span><span class="o">.</span><span class="n">to_module</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Try to get the lock (will raise if not available.)</span>
+            <span class="n">fcntl</span><span class="o">.</span><span class="n">lockf</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span>
+                <span class="n">module_op</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">,</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># help for debugging distributed locking</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="c1"># All locks read the owner PID and host</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_log_debug_data</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> locked </span><span class="si">{1}</span><span class="s2"> [</span><span class="si">{2}</span><span class="s2">:</span><span class="si">{3}</span><span class="s2">] (owner=</span><span class="si">{4}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">LockType</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">op</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Exclusive locks write their PID/host</span>
+                <span class="k">if</span> <span class="n">module_op</span> <span class="o">==</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_log_debug_data</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># EAGAIN and EACCES == locked by another process (so try again)</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">,</span> <span class="n">errno</span><span class="o">.</span><span class="n">EACCES</span><span class="p">):</span>
+                <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_parent_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># relative paths to lockfiles in the current directory have no parent</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;.&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># os.makedirs can fail in a number of ways when the directory already exists.</span>
+            <span class="c1"># With EISDIR, we know it exists, and others like EEXIST, EACCES, and EROFS</span>
+            <span class="c1"># are fine if we ensure that the directory exists.</span>
+            <span class="c1"># Python 3 allows an exist_ok parameter and ignores any OSError as long as</span>
+            <span class="c1"># the directory exists.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EISDIR</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">parent</span><span class="p">)):</span>
+                <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">parent</span>
+
+    <span class="k">def</span> <span class="nf">_read_log_debug_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Read PID and host data out of the file if it is there.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;cannot read debug log without the file being set&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span>
+
+        <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">pid</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">pid</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_write_log_debug_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Write PID and host data to the file, recording old values.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;cannot write debug log without the file being set&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+
+        <span class="c1"># write pid, host to disk to sync over FS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pid=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2">,host=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_unlock</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Releases a lock using POSIX locks (``fcntl.lockf``)</span>
+
+<span class="sd">        Releases the lock regardless of mode. Note that read locks may</span>
+<span class="sd">        be masquerading as write locks, but this removes either.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;cannot unlock without the file being set&quot;</span>
+        <span class="n">fcntl</span><span class="o">.</span><span class="n">lockf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">)</span>
+        <span class="n">FILE_TRACKER</span><span class="o">.</span><span class="n">release_by_fh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Lock.acquire_read">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.acquire_read">[docs]</a>
+    <span class="k">def</span> <span class="nf">acquire_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Acquires a recursive, shared lock for reading.</span>
+
+<span class="sd">        Read and write locks can be acquired and released in arbitrary</span>
+<span class="sd">        order, but the POSIX lock is held until all local read and</span>
+<span class="sd">        write locks are released.</span>
+
+<span class="sd">        Returns True if it is the first acquire and actually acquires</span>
+<span class="sd">        the POSIX lock, False if it is a nested transaction.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># can raise LockError.</span>
+            <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">(</span><span class="n">LockType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># Log if acquired, which includes counts when verbose</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_acquired</span><span class="p">(</span><span class="s2">&quot;READ LOCK&quot;</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Increment the read count for nested lock tracking</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Lock.acquire_write">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.acquire_write">[docs]</a>
+    <span class="k">def</span> <span class="nf">acquire_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Acquires a recursive, exclusive lock for writing.</span>
+
+<span class="sd">        Read and write locks can be acquired and released in arbitrary</span>
+<span class="sd">        order, but the POSIX lock is held until all local read and</span>
+<span class="sd">        write locks are released.</span>
+
+<span class="sd">        Returns True if it is the first acquire and actually acquires</span>
+<span class="sd">        the POSIX lock, False if it is a nested transaction.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># can raise LockError.</span>
+            <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">(</span><span class="n">LockType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># Log if acquired, which includes counts when verbose</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_acquired</span><span class="p">(</span><span class="s2">&quot;WRITE LOCK&quot;</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+
+            <span class="c1"># return True only if we weren&#39;t nested in a read lock.</span>
+            <span class="c1"># TODO: we may need to return two values: whether we got</span>
+            <span class="c1"># the write lock, and whether this is acquiring a read OR</span>
+            <span class="c1"># write lock for the first time. Now it returns the latter.</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Increment the write count for nested lock tracking</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Lock.is_write_locked">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.is_write_locked">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_write_locked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check if the file is write locked</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            (bool): ``True`` if the path is write locked, otherwise, ``False``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acquire_read</span><span class="p">()</span>
+
+            <span class="c1"># If we have a read lock then no other process has a write lock.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">release_read</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">LockTimeoutError</span><span class="p">:</span>
+            <span class="c1"># Another process is holding a write lock on the file</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Lock.downgrade_write_to_read">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.downgrade_write_to_read">[docs]</a>
+    <span class="k">def</span> <span class="nf">downgrade_write_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Downgrade from an exclusive write lock to a shared read.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LockDowngradeError: if this is an attempt at a nested transaction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_downgrading</span><span class="p">()</span>
+            <span class="c1"># can raise LockError.</span>
+            <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">(</span><span class="n">LockType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_downgraded</span><span class="p">(</span><span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">LockDowngradeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Lock.upgrade_read_to_write">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.upgrade_read_to_write">[docs]</a>
+    <span class="k">def</span> <span class="nf">upgrade_read_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempts to upgrade from a shared read lock to an exclusive write.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LockUpgradeError: if this is an attempt at a nested transaction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_timeout</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_upgrading</span><span class="p">()</span>
+            <span class="c1"># can raise LockError.</span>
+            <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">(</span><span class="n">LockType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_upgraded</span><span class="p">(</span><span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">LockUpgradeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Lock.release_read">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.release_read">[docs]</a>
+    <span class="k">def</span> <span class="nf">release_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">release_fn</span><span class="p">:</span> <span class="n">ReleaseFnType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Releases a read lock.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            release_fn (typing.Callable): function to call *before* the last recursive</span>
+<span class="sd">                lock (read or write) is released.</span>
+
+<span class="sd">        If the last recursive lock will be released, then this will call</span>
+<span class="sd">        release_fn and return its result (if provided), or return True</span>
+<span class="sd">        (if release_fn was not provided).</span>
+
+<span class="sd">        Otherwise, we are still nested inside some other lock, so do not</span>
+<span class="sd">        call the release_fn and, return False.</span>
+
+<span class="sd">        Does limited correctness checking: if a read lock is released</span>
+<span class="sd">        when none are held, this will raise an assertion error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="n">locktype</span> <span class="o">=</span> <span class="s2">&quot;READ LOCK&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_releasing</span><span class="p">(</span><span class="n">locktype</span><span class="p">)</span>
+
+            <span class="c1"># we need to call release_fn before releasing the lock</span>
+            <span class="n">release_fn</span> <span class="o">=</span> <span class="n">release_fn</span> <span class="ow">or</span> <span class="n">true_fn</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">release_fn</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_unlock</span><span class="p">()</span>  <span class="c1"># can raise LockError.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_released</span><span class="p">(</span><span class="n">locktype</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Lock.release_write">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.release_write">[docs]</a>
+    <span class="k">def</span> <span class="nf">release_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">release_fn</span><span class="p">:</span> <span class="n">ReleaseFnType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Releases a write lock.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            release_fn (typing.Callable): function to call before the last recursive</span>
+<span class="sd">                write is released.</span>
+
+<span class="sd">        If the last recursive *write* lock will be released, then this</span>
+<span class="sd">        will call release_fn and return its result (if provided), or</span>
+<span class="sd">        return True (if release_fn was not provided). Otherwise, we are</span>
+<span class="sd">        still nested inside some other write lock, so do not call the</span>
+<span class="sd">        release_fn, and return False.</span>
+
+<span class="sd">        Does limited correctness checking: if a read lock is released</span>
+<span class="sd">        when none are held, this will raise an assertion error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">release_fn</span> <span class="o">=</span> <span class="n">release_fn</span> <span class="ow">or</span> <span class="n">true_fn</span>
+
+        <span class="n">locktype</span> <span class="o">=</span> <span class="s2">&quot;WRITE LOCK&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_releasing</span><span class="p">(</span><span class="n">locktype</span><span class="p">)</span>
+
+            <span class="c1"># we need to call release_fn before releasing the lock</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">release_fn</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_unlock</span><span class="p">()</span>  <span class="c1"># can raise LockError.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_released</span><span class="p">(</span><span class="n">locktype</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="c1"># when the last *write* is released, we call release_fn here</span>
+            <span class="c1"># instead of immediately before releasing the lock.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">release_fn</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Lock.cleanup">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.Lock.cleanup">[docs]</a>
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reads</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">LockError</span><span class="p">(</span><span class="s2">&quot;Attempting to cleanup active lock.&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_counts_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;(reads </span><span class="si">{0}</span><span class="s2">, writes </span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writes</span><span class="p">)</span> <span class="k">if</span> <span class="n">tty</span><span class="o">.</span><span class="n">is_verbose</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_log_acquired</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locktype</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">attempts_part</span> <span class="o">=</span> <span class="n">_attempts_str</span><span class="p">(</span><span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;Acquired at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="n">locktype</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">attempts_part</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">_log_acquiring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locktype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="n">locktype</span><span class="p">,</span> <span class="s2">&quot;Acquiring&quot;</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Output lock debug messages.&quot;&quot;&quot;</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_log_downgraded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">attempts_part</span> <span class="o">=</span> <span class="n">_attempts_str</span><span class="p">(</span><span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;Downgraded at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="s2">&quot;READ LOCK&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">attempts_part</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">_log_downgrading</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="s2">&quot;WRITE LOCK&quot;</span><span class="p">,</span> <span class="s2">&quot;Downgrading&quot;</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_log_released</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locktype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;Released at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="n">locktype</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_log_releasing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locktype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="n">locktype</span><span class="p">,</span> <span class="s2">&quot;Releasing&quot;</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_log_upgraded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">attempts_part</span> <span class="o">=</span> <span class="n">_attempts_str</span><span class="p">(</span><span class="n">wait_time</span><span class="p">,</span> <span class="n">nattempts</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;Upgraded at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="s2">&quot;WRITE LOCK&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">attempts_part</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">_log_upgrading</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_msg</span><span class="p">(</span><span class="s2">&quot;READ LOCK&quot;</span><span class="p">,</span> <span class="s2">&quot;Upgrading&quot;</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_status_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locktype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">status_desc</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">{0}</span><span class="s2">] </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_counts_desc</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}{1.desc}</span><span class="s2">: </span><span class="si">{1.path}</span><span class="s2">[</span><span class="si">{1._start}</span><span class="s2">:</span><span class="si">{1._length}</span><span class="s2">] </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">locktype</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">status_desc</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LockTransaction">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.LockTransaction">[docs]</a>
+<span class="k">class</span> <span class="nc">LockTransaction</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Simple nested transaction context manager that uses a file lock.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        lock (Lock): underlying lock for this transaction to be acquired on</span>
+<span class="sd">            enter and released on exit</span>
+<span class="sd">        acquire (typing.Callable or contextlib.contextmanager): function to be called</span>
+<span class="sd">            after lock is acquired, or contextmanager to enter after acquire and leave</span>
+<span class="sd">            before release.</span>
+<span class="sd">        release (typing.Callable): function to be called before release. If</span>
+<span class="sd">            ``acquire`` is a contextmanager, this will be called *after*</span>
+<span class="sd">            exiting the nexted context and before the lock is released.</span>
+<span class="sd">        timeout (float): number of seconds to set for the timeout when</span>
+<span class="sd">            acquiring the lock (default no timeout)</span>
+
+<span class="sd">    If the ``acquire_fn`` returns a value, it is used as the return value for</span>
+<span class="sd">    ``__enter__``, allowing it to be passed as the ``as`` argument of a</span>
+<span class="sd">    ``with`` statement.</span>
+
+<span class="sd">    If ``acquire_fn`` returns a context manager, *its* ``__enter__`` function</span>
+<span class="sd">    will be called after the lock is acquired, and its ``__exit__`` function</span>
+<span class="sd">    will be called before ``release_fn`` in ``__exit__``, allowing you to</span>
+<span class="sd">    nest a context manager inside this one.</span>
+
+<span class="sd">    Timeout for lock is customizable.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lock</span><span class="p">:</span> <span class="n">Lock</span><span class="p">,</span>
+        <span class="n">acquire</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ReleaseFnType</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">release</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ReleaseFnType</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_acquire_fn</span> <span class="o">=</span> <span class="n">acquire</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_release_fn</span> <span class="o">=</span> <span class="n">release</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enter</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquire_fn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_as</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquire_fn</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="p">,</span> <span class="s2">&quot;__enter__&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">exc_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]],</span>
+        <span class="n">exc_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">],</span>
+        <span class="n">traceback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TracebackType</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">suppress</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">def</span> <span class="nf">release_fn</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release_fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release_fn</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="p">,</span> <span class="s2">&quot;__exit__&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+                <span class="n">suppress</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="n">release_fn</span><span class="p">):</span>
+            <span class="n">suppress</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">suppress</span>
+
+    <span class="k">def</span> <span class="nf">_enter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">release_fn</span><span class="p">:</span> <span class="n">ReleaseFnType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+
+
+<div class="viewcode-block" id="ReadTransaction">
+<a class="viewcode-back" href="../../../../spack.util.html#spack.util.lock.ReadTransaction">[docs]</a>
+<span class="k">class</span> <span class="nc">ReadTransaction</span><span class="p">(</span><span class="n">LockTransaction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;LockTransaction context manager that does a read and releases it.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_enter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">acquire_read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">release_fn</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release_read</span><span class="p">(</span><span class="n">release_fn</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="WriteTransaction">
+<a class="viewcode-back" href="../../../../spack.util.html#spack.util.lock.WriteTransaction">[docs]</a>
+<span class="k">class</span> <span class="nc">WriteTransaction</span><span class="p">(</span><span class="n">LockTransaction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;LockTransaction context manager that does a write and releases it.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_enter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">acquire_write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">release_fn</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release_write</span><span class="p">(</span><span class="n">release_fn</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LockError">
+<a class="viewcode-back" href="../../../../spack.util.html#spack.util.lock.LockError">[docs]</a>
+<span class="k">class</span> <span class="nc">LockError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised for any errors related to locks.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="LockDowngradeError">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.LockDowngradeError">[docs]</a>
+<span class="k">class</span> <span class="nc">LockDowngradeError</span><span class="p">(</span><span class="n">LockError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when unable to downgrade from a write to a read lock.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot downgrade lock from write to read on file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LockTimeoutError">
+<a class="viewcode-back" href="../../../../spack.util.html#spack.util.lock.LockTimeoutError">[docs]</a>
+<span class="k">class</span> <span class="nc">LockTimeoutError</span><span class="p">(</span><span class="n">LockError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when an attempt to acquire a lock times out.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock_type</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">attempts</span><span class="p">):</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;Timed out waiting for a </span><span class="si">{}</span><span class="s2"> lock after </span><span class="si">{}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">    Made </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> on file: </span><span class="si">{}</span><span class="s2">&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">lock_type</span><span class="p">,</span>
+                <span class="n">lang</span><span class="o">.</span><span class="n">pretty_seconds</span><span class="p">(</span><span class="n">time</span><span class="p">),</span>
+                <span class="n">attempts</span><span class="p">,</span>
+                <span class="s2">&quot;attempt&quot;</span> <span class="k">if</span> <span class="n">attempts</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;attempts&quot;</span><span class="p">,</span>
+                <span class="n">path</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LockUpgradeError">
+<a class="viewcode-back" href="../../../../spack.util.html#spack.util.lock.LockUpgradeError">[docs]</a>
+<span class="k">class</span> <span class="nc">LockUpgradeError</span><span class="p">(</span><span class="n">LockError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when unable to upgrade from a read to a write lock.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot upgrade lock from read to write on file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LockPermissionError">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.LockPermissionError">[docs]</a>
+<span class="k">class</span> <span class="nc">LockPermissionError</span><span class="p">(</span><span class="n">LockError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when there are permission issues with a lock.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="LockROFileError">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.LockROFileError">[docs]</a>
+<span class="k">class</span> <span class="nc">LockROFileError</span><span class="p">(</span><span class="n">LockPermissionError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Tried to take an exclusive lock on a read-only file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can&#39;t take write lock on read-only file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CantCreateLockError">
+<a class="viewcode-back" href="../../../../spack.llnl.util.html#spack.util.lock.CantCreateLockError">[docs]</a>
+<span class="k">class</span> <span class="nc">CantCreateLockError</span><span class="p">(</span><span class="n">LockPermissionError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attempt to create a lock in an unwritable location.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;cannot create lock &#39;</span><span class="si">%s</span><span class="s2">&#39;: &quot;</span> <span class="o">%</span> <span class="n">path</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;file does not exist and location is not writable&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../../_static/documentation_options.js?v=08db6fca"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=6dbb43f8"></script>
+    </body>
+</html>

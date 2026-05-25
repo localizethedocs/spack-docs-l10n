@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.cmd.checksum &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/cmd/checksum.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+          <li class="breadcrumb-item"><a href="../cmd.html">spack.cmd</a></li>
+      <li class="breadcrumb-item active">spack.cmd.checksum</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.cmd.checksum 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">llnl.string</span>
+<span class="kn">import</span> <span class="nn">llnl.util.lang</span>
+<span class="kn">from</span> <span class="nn">llnl.util</span> <span class="kn">import</span> <span class="n">tty</span>
+
+<span class="kn">import</span> <span class="nn">spack.cmd</span>
+<span class="kn">import</span> <span class="nn">spack.repo</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.stage</span>
+<span class="kn">import</span> <span class="nn">spack.util.web</span> <span class="k">as</span> <span class="nn">web_util</span>
+<span class="kn">from</span> <span class="nn">spack.cmd.common</span> <span class="kn">import</span> <span class="n">arguments</span>
+<span class="kn">from</span> <span class="nn">spack.package_base</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ManualDownloadRequiredError</span><span class="p">,</span>
+    <span class="n">PackageBase</span><span class="p">,</span>
+    <span class="n">deprecated_version</span><span class="p">,</span>
+    <span class="n">preferred_version</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">spack.util.editor</span> <span class="kn">import</span> <span class="n">editor</span>
+<span class="kn">from</span> <span class="nn">spack.util.format</span> <span class="kn">import</span> <span class="n">get_version_lines</span>
+<span class="kn">from</span> <span class="nn">spack.version</span> <span class="kn">import</span> <span class="n">StandardVersion</span><span class="p">,</span> <span class="n">Version</span>
+
+<span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;checksum available versions of a package&quot;</span>
+<span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;packaging&quot;</span>
+<span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;long&quot;</span>
+
+
+<div class="viewcode-block" id="setup_parser">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.checksum.setup_parser">[文档]</a>
+<span class="k">def</span> <span class="nf">setup_parser</span><span class="p">(</span><span class="n">subparser</span><span class="p">):</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--keep-stage&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;don&#39;t clean up staging area when command completes&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--batch&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;don&#39;t ask which versions to checksum&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--latest&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;checksum the latest available version&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--preferred&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;checksum the known Spack preferred version&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">modes_parser</span> <span class="o">=</span> <span class="n">subparser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+    <span class="n">modes_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--add-to-package&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;add new versions to package&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">modes_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--verify&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;verify known package checksums&quot;</span>
+    <span class="p">)</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name or spec (e.g. `cmake` or `cmake@3.18`)&quot;</span><span class="p">)</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;versions&quot;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;checksum these specific versions (if omitted, Spack searches for remote versions)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_common_arguments</span><span class="p">(</span><span class="n">subparser</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;jobs&quot;</span><span class="p">])</span>
+    <span class="n">subparser</span><span class="o">.</span><span class="n">epilog</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;examples:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  `spack checksum zlib@1.2` autodetects versions 1.2.0 to 1.2.13 from the remote</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  `spack checksum zlib 1.2.13` checksums exact version 1.2.13 directly without search</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="checksum">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.checksum.checksum">[文档]</a>
+<span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">package</span><span class="p">)</span>
+
+    <span class="c1"># Get the package we&#39;re going to generate checksums for</span>
+    <span class="n">pkg</span><span class="p">:</span> <span class="n">PackageBase</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">PATH</span><span class="o">.</span><span class="n">get_pkg_class</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">)(</span><span class="n">spec</span><span class="p">)</span>
+
+    <span class="c1"># Skip manually downloaded packages</span>
+    <span class="k">if</span> <span class="n">pkg</span><span class="o">.</span><span class="n">manual_download</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ManualDownloadRequiredError</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">download_instr</span><span class="p">)</span>
+
+    <span class="n">versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">StandardVersion</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">versions</span><span class="p">]</span>
+
+    <span class="c1"># Define placeholder for remote versions. This&#39;ll help reduce redundant work if we need to</span>
+    <span class="c1"># check for the existence of remote versions more than once.</span>
+    <span class="n">remote_versions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">StandardVersion</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Add latest version if requested</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">latest</span><span class="p">:</span>
+        <span class="n">remote_versions</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">fetch_remote_versions</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">jobs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">remote_versions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">versions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">remote_versions</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+    <span class="c1"># Add preferred version if requested (todo: exclude git versions)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">preferred</span><span class="p">:</span>
+        <span class="n">versions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">preferred_version</span><span class="p">(</span><span class="n">pkg</span><span class="p">))</span>
+
+    <span class="c1"># Store a dict of the form version -&gt; URL</span>
+    <span class="n">url_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">StandardVersion</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">versions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">deprecated_version</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2"> is deprecated&quot;</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">find_valid_url_for_version</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">url_dict</span><span class="p">[</span><span class="n">version</span><span class="p">]</span> <span class="o">=</span> <span class="n">url</span>
+            <span class="k">continue</span>
+        <span class="c1"># If we get here, it&#39;s because no valid url was provided by the package. Do expensive</span>
+        <span class="c1"># fallback to try to recover</span>
+        <span class="k">if</span> <span class="n">remote_versions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">remote_versions</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">fetch_remote_versions</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">jobs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">remote_versions</span><span class="p">:</span>
+            <span class="n">url_dict</span><span class="p">[</span><span class="n">version</span><span class="p">]</span> <span class="o">=</span> <span class="n">remote_versions</span><span class="p">[</span><span class="n">version</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">remote_versions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">remote_versions</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">fetch_remote_versions</span><span class="p">(</span><span class="n">concurrency</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">jobs</span><span class="p">)</span>
+        <span class="n">url_dict</span> <span class="o">=</span> <span class="n">remote_versions</span>
+
+    <span class="c1"># A spidered URL can differ from the package.py *computed* URL, pointing to different tarballs.</span>
+    <span class="c1"># For example, GitHub release pages sometimes have multiple tarballs with different shasum:</span>
+    <span class="c1"># - releases/download/1.0/&lt;pkg&gt;-1.0.tar.gz (uploaded tarball)</span>
+    <span class="c1"># - archive/refs/tags/1.0.tar.gz           (generated tarball)</span>
+    <span class="c1"># We wanna ensure that `spack checksum` and `spack install` ultimately use the same URL, so</span>
+    <span class="c1"># here we check whether the crawled and computed URLs disagree, and if so, prioritize the</span>
+    <span class="c1"># former if that URL exists (just sending a HEAD request that is).</span>
+    <span class="n">url_changed_for_version</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">version</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">possible_urls</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">all_urls_for_version</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">possible_urls</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">possible_url</span> <span class="ow">in</span> <span class="n">possible_urls</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">web_util</span><span class="o">.</span><span class="n">url_exists</span><span class="p">(</span><span class="n">possible_url</span><span class="p">):</span>
+                    <span class="n">url_dict</span><span class="p">[</span><span class="n">version</span><span class="p">]</span> <span class="o">=</span> <span class="n">possible_url</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">url_changed_for_version</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url_dict</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find any remote versions for </span><span class="si">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">url_dict</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">batch</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
+        <span class="n">filtered_url_dict</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">interactive_version_filter</span><span class="p">(</span>
+            <span class="n">url_dict</span><span class="p">,</span>
+            <span class="n">pkg</span><span class="o">.</span><span class="n">versions</span><span class="p">,</span>
+            <span class="n">url_changes</span><span class="o">=</span><span class="n">url_changed_for_version</span><span class="p">,</span>
+            <span class="n">initial_verion_filter</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">versions</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filtered_url_dict</span><span class="p">:</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">url_dict</span> <span class="o">=</span> <span class="n">filtered_url_dict</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">llnl</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">plural</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">url_dict</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;version&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">version_hashes</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">get_checksums_for_versions</span><span class="p">(</span>
+        <span class="n">url_dict</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">keep_stage</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">keep_stage</span><span class="p">,</span> <span class="n">fetch_options</span><span class="o">=</span><span class="n">pkg</span><span class="o">.</span><span class="n">fetch_options</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verify</span><span class="p">:</span>
+        <span class="n">print_checksum_status</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">version_hashes</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># convert dict into package.py version statements</span>
+    <span class="n">version_lines</span> <span class="o">=</span> <span class="n">get_version_lines</span><span class="p">(</span><span class="n">version_hashes</span><span class="p">,</span> <span class="n">url_dict</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">version_lines</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">add_to_package</span><span class="p">:</span>
+        <span class="n">add_versions_to_package</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">version_lines</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">batch</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="print_checksum_status">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.checksum.print_checksum_status">[文档]</a>
+<span class="k">def</span> <span class="nf">print_checksum_status</span><span class="p">(</span><span class="n">pkg</span><span class="p">:</span> <span class="n">PackageBase</span><span class="p">,</span> <span class="n">version_hashes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verify checksums present in version_hashes against those present</span>
+<span class="sd">    in the package&#39;s instructions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pkg (spack.package_base.PackageBase): A package class for a given package in Spack.</span>
+<span class="sd">        version_hashes (dict): A dictionary of the form: version -&gt; checksum.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">num_verified</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">version_hashes</span><span class="p">)</span>
+    <span class="n">num_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">version_hashes</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">version</span><span class="p">,</span> <span class="n">sha</span> <span class="ow">in</span> <span class="n">version_hashes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">versions</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No previous checksum&quot;</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span>
+
+        <span class="k">elif</span> <span class="n">sha</span> <span class="o">==</span> <span class="n">pkg</span><span class="o">.</span><span class="n">versions</span><span class="p">[</span><span class="n">version</span><span class="p">][</span><span class="s2">&quot;sha256&quot;</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Correct&quot;</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;=&quot;</span>
+            <span class="n">num_verified</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">sha</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+            <span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;{0:</span><span class="si">{1}</span><span class="s2">}  </span><span class="si">{2}</span><span class="s2"> </span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">),</span> <span class="n">max_len</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+    <span class="c1"># Display table of checksum results.</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verified </span><span class="si">{</span><span class="n">num_verified</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">num_total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">elide_list</span><span class="p">(</span><span class="n">results</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Terminate at the end of function to prevent additional output.</span>
+    <span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="s2">&quot;Invalid checksums found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_versions_to_package">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.checksum.add_versions_to_package">[文档]</a>
+<span class="k">def</span> <span class="nf">add_versions_to_package</span><span class="p">(</span><span class="n">pkg</span><span class="p">:</span> <span class="n">PackageBase</span><span class="p">,</span> <span class="n">version_lines</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_batch</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add checksumed versions to a package&#39;s instructions and open a user&#39;s</span>
+<span class="sd">    editor so they may double check the work of the function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pkg (spack.package_base.PackageBase): A package class for a given package in Spack.</span>
+<span class="sd">        version_lines (str): A string of rendered version lines.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get filename and path for package</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">PATH</span><span class="o">.</span><span class="n">filename_for_package_name</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">num_versions_added</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">version_statement_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([\t ]+version\([^\)]*\))&quot;</span><span class="p">)</span>
+    <span class="n">version_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\t ]+version\(\s*&quot;([^&quot;]+)&quot;[^\)]*\)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Split rendered version lines into tuple of (version, version_line)</span>
+    <span class="c1"># We reverse sort here to make sure the versions match the version_lines</span>
+    <span class="n">new_versions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ver_line</span> <span class="ow">in</span> <span class="n">version_lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">version_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">ver_line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">new_versions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Version</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="n">ver_line</span><span class="p">))</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">split_contents</span> <span class="o">=</span> <span class="n">version_statement_re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">subsection</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">split_contents</span><span class="p">):</span>
+            <span class="c1"># If there are no more versions to add we should exit</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_versions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="c1"># Check if the section contains a version</span>
+            <span class="n">contents_version</span> <span class="o">=</span> <span class="n">version_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">subsection</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">contents_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">parsed_version</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">contents_version</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">parsed_version</span> <span class="o">&lt;</span> <span class="n">new_versions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">split_contents</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_versions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot; # FIXME&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
+                    <span class="n">num_versions_added</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">elif</span> <span class="n">parsed_version</span> <span class="o">==</span> <span class="n">new_versions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">new_versions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Seek back to the start of the file so we can rewrite the file contents.</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_contents</span><span class="p">))</span>
+
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added </span><span class="si">{</span><span class="n">num_versions_added</span><span class="si">}</span><span class="s2"> new versions to </span><span class="si">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Open </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> to review the additions.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_batch</span><span class="p">:</span>
+        <span class="n">editor</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

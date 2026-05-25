@@ -1,0 +1,1075 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.build_systems.autotools &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/build_systems/autotools.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.build_systems.autotools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.build_systems.autotools 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">stat</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+
+<span class="kn">import</span> <span class="nn">spack.build_environment</span>
+<span class="kn">import</span> <span class="nn">spack.builder</span>
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.package_base</span>
+<span class="kn">from</span> <span class="nn">spack.directives</span> <span class="kn">import</span> <span class="n">build_system</span><span class="p">,</span> <span class="n">conflicts</span><span class="p">,</span> <span class="n">depends_on</span>
+<span class="kn">from</span> <span class="nn">spack.multimethod</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">spack.operating_systems.mac_os</span> <span class="kn">import</span> <span class="n">macos_version</span>
+<span class="kn">from</span> <span class="nn">spack.util.executable</span> <span class="kn">import</span> <span class="n">Executable</span>
+<span class="kn">from</span> <span class="nn">spack.version</span> <span class="kn">import</span> <span class="n">Version</span>
+
+<span class="kn">from</span> <span class="nn">._checks</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BaseBuilder</span><span class="p">,</span>
+    <span class="n">apply_macos_rpath_fixups</span><span class="p">,</span>
+    <span class="n">ensure_build_dependencies_or_raise</span><span class="p">,</span>
+    <span class="n">execute_build_time_tests</span><span class="p">,</span>
+    <span class="n">execute_install_time_tests</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="AutotoolsPackage">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsPackage">[文档]</a>
+<span class="k">class</span> <span class="nc">AutotoolsPackage</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specialized class for packages built using GNU Autotools.&quot;&quot;&quot;</span>
+
+    <span class="c1">#: This attribute is used in UI queries that need to know the build</span>
+    <span class="c1">#: system base class</span>
+    <span class="n">build_system_class</span> <span class="o">=</span> <span class="s2">&quot;AutotoolsPackage&quot;</span>
+
+    <span class="c1">#: Legacy buildsystem attribute used to deserialize and install old specs</span>
+    <span class="n">legacy_buildsystem</span> <span class="o">=</span> <span class="s2">&quot;autotools&quot;</span>
+
+    <span class="n">build_system</span><span class="p">(</span><span class="s2">&quot;autotools&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">when</span><span class="p">(</span><span class="s2">&quot;build_system=autotools&quot;</span><span class="p">):</span>
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;target=aarch64:&quot;</span><span class="p">)</span>
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;target=riscv64:&quot;</span><span class="p">)</span>
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gmake&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;platform=windows&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutotoolsPackage.flags_to_build_system_args">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsPackage.flags_to_build_system_args">[文档]</a>
+    <span class="k">def</span> <span class="nf">flags_to_build_system_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Produces a list of all command line arguments to pass specified</span>
+<span class="sd">        compiler flags to configure.&quot;&quot;&quot;</span>
+        <span class="c1"># Has to be dynamic attribute due to caching.</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;configure_flag_args&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">flag</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">flags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">values</span><span class="p">:</span>
+                <span class="n">var_name</span> <span class="o">=</span> <span class="s2">&quot;LIBS&quot;</span> <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="s2">&quot;ldlibs&quot;</span> <span class="k">else</span> <span class="n">flag</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+                <span class="n">values_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">configure_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values_str</span><span class="p">)</span>
+        <span class="c1"># Spack&#39;s fflags are meant for both F77 and FC, therefore we</span>
+        <span class="c1"># additionaly set FCFLAGS if required.</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fflags&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">values_str</span> <span class="o">=</span> <span class="s2">&quot;FCFLAGS=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">configure_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values_str</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Legacy methods (used by too many packages to change them,</span>
+    <span class="c1"># need to forward to the builder)</span>
+<div class="viewcode-block" id="AutotoolsPackage.enable_or_disable">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsPackage.enable_or_disable">[文档]</a>
+    <span class="k">def</span> <span class="nf">enable_or_disable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">enable_or_disable</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsPackage.with_or_without">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsPackage.with_or_without">[文档]</a>
+    <span class="k">def</span> <span class="nf">with_or_without</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">with_or_without</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AutotoolsBuilder">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder">[文档]</a>
+<span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="s2">&quot;autotools&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AutotoolsBuilder</span><span class="p">(</span><span class="n">BaseBuilder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The autotools builder encodes the default way of installing software built</span>
+<span class="sd">    with autotools. It has four phases that can be overridden, if need be:</span>
+
+<span class="sd">        1. :py:meth:`~.AutotoolsBuilder.autoreconf`</span>
+<span class="sd">        2. :py:meth:`~.AutotoolsBuilder.configure`</span>
+<span class="sd">        3. :py:meth:`~.AutotoolsBuilder.build`</span>
+<span class="sd">        4. :py:meth:`~.AutotoolsBuilder.install`</span>
+
+<span class="sd">    They all have sensible defaults and for many packages the only thing necessary</span>
+<span class="sd">    is to override the helper method</span>
+<span class="sd">    :meth:`~spack.build_systems.autotools.AutotoolsBuilder.configure_args`.</span>
+
+<span class="sd">    For a finer tuning you may also override:</span>
+
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+<span class="sd">        | **Method**                                    | **Purpose**        |</span>
+<span class="sd">        +===============================================+====================+</span>
+<span class="sd">        | :py:attr:`~.AutotoolsBuilder.build_targets`   | Specify ``make``   |</span>
+<span class="sd">        |                                               | targets for the    |</span>
+<span class="sd">        |                                               | build phase        |</span>
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+<span class="sd">        | :py:attr:`~.AutotoolsBuilder.install_targets` | Specify ``make``   |</span>
+<span class="sd">        |                                               | targets for the    |</span>
+<span class="sd">        |                                               | install phase      |</span>
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+<span class="sd">        | :py:meth:`~.AutotoolsBuilder.check`           | Run  build time    |</span>
+<span class="sd">        |                                               | tests if required  |</span>
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Phases of a GNU Autotools package</span>
+    <span class="n">phases</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;autoreconf&quot;</span><span class="p">,</span> <span class="s2">&quot;configure&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Names associated with package methods in the old build-system format</span>
+    <span class="n">legacy_methods</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;configure_args&quot;</span><span class="p">,</span> <span class="s2">&quot;check&quot;</span><span class="p">,</span> <span class="s2">&quot;installcheck&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Names associated with package attributes in the old build-system format</span>
+    <span class="n">legacy_attributes</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;archive_files&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;patch_libtool&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;build_targets&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;install_targets&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;build_time_test_callbacks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;install_time_test_callbacks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;force_autoreconf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;autoreconf_extra_args&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;install_libtool_archives&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;patch_config_files&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;configure_directory&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;configure_abs_path&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;build_directory&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;autoreconf_search_path_args&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1">#: Whether to update ``libtool`` (e.g. for Arm/Clang/Fujitsu/NVHPC compilers)</span>
+    <span class="n">patch_libtool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1">#: Targets for ``make`` during the :py:meth:`~.AutotoolsBuilder.build` phase</span>
+    <span class="n">build_targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">#: Targets for ``make`` during the :py:meth:`~.AutotoolsBuilder.install` phase</span>
+    <span class="n">install_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+
+    <span class="c1">#: Callback names for build-time test</span>
+    <span class="n">build_time_test_callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;check&quot;</span><span class="p">]</span>
+
+    <span class="c1">#: Callback names for install-time test</span>
+    <span class="n">install_time_test_callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;installcheck&quot;</span><span class="p">]</span>
+
+    <span class="c1">#: Set to true to force the autoreconf step even if configure is present</span>
+    <span class="n">force_autoreconf</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1">#: Options to be passed to autoreconf when using the default implementation</span>
+    <span class="n">autoreconf_extra_args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1">#: If False deletes all the .la files in the prefix folder after the installation.</span>
+    <span class="c1">#: If True instead it installs them.</span>
+    <span class="n">install_libtool_archives</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">patch_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether to update old ``config.guess`` and ``config.sub`` files</span>
+<span class="sd">        distributed with the tarball.</span>
+
+<span class="sd">        This currently only applies to ``ppc64le:``, ``aarch64:``, and</span>
+<span class="sd">        ``riscv64`` target architectures.</span>
+
+<span class="sd">        The substitutes are taken from the ``gnuconfig`` package, which is</span>
+<span class="sd">        automatically added as a build dependency for these architectures. In case</span>
+<span class="sd">        system versions of these config files are required, the ``gnuconfig`` package</span>
+<span class="sd">        can be marked external, with a prefix pointing to the directory containing the</span>
+<span class="sd">        system ``config.guess`` and ``config.sub`` files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;target=ppc64le:&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;target=aarch64:&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;target=riscv64:&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_removed_la_files_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;File containing the list of removed libtool archives&quot;&quot;&quot;</span>
+        <span class="n">build_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="n">build_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">build_dir</span><span class="p">,</span> <span class="s2">&quot;removed_la_files.txt&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">archive_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Files to archive for packages based on autotools&quot;&quot;&quot;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;config.log&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">install_libtool_archives</span><span class="p">:</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_removed_la_files_log</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">files</span>
+
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;autoreconf&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_do_patch_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Some packages ship with older config.guess/config.sub files and need to</span>
+<span class="sd">        have these updated when installed on a newer architecture.</span>
+
+<span class="sd">        In particular, config.guess fails for PPC64LE for version prior to a</span>
+<span class="sd">        2013-06-10 build date (automake 1.13.4) and for AArch64 and RISC-V.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_config_files</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># TODO: Expand this to select the &#39;config.sub&#39;-compatible architecture</span>
+        <span class="c1"># for each platform (e.g. &#39;config.sub&#39; doesn&#39;t accept &#39;power9le&#39;, but</span>
+        <span class="c1"># does accept &#39;ppc64le&#39;).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;target=ppc64le:&quot;</span><span class="p">):</span>
+            <span class="n">config_arch</span> <span class="o">=</span> <span class="s2">&quot;ppc64le&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;target=aarch64:&quot;</span><span class="p">):</span>
+            <span class="n">config_arch</span> <span class="o">=</span> <span class="s2">&quot;aarch64&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;target=riscv64:&quot;</span><span class="p">):</span>
+            <span class="n">config_arch</span> <span class="o">=</span> <span class="s2">&quot;riscv64&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config_arch</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
+
+        <span class="k">def</span> <span class="nf">runs_ok</span><span class="p">(</span><span class="n">script_abs_path</span><span class="p">):</span>
+            <span class="c1"># Construct the list of arguments for the call</span>
+            <span class="n">additional_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;config.sub&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">config_arch</span><span class="p">]}</span>
+            <span class="n">script_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">script_abs_path</span><span class="p">)</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">script_abs_path</span><span class="p">]</span> <span class="o">+</span> <span class="n">additional_args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">script_name</span><span class="p">,</span> <span class="p">[])</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Get the list of files that needs to be patched</span>
+        <span class="n">to_be_patched</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;config.sub&quot;</span><span class="p">,</span> <span class="s2">&quot;config.guess&quot;</span><span class="p">])</span>
+        <span class="n">to_be_patched</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">to_be_patched</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">runs_ok</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
+
+        <span class="c1"># If there are no files to be patched, return early</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">to_be_patched</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Otherwise, require `gnuconfig` to be a build dependency</span>
+        <span class="n">ensure_build_dependencies_or_raise</span><span class="p">(</span>
+            <span class="n">spec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">],</span> <span class="n">error_msg</span><span class="o">=</span><span class="s2">&quot;Cannot patch config files&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Get the config files we need to patch (config.sub / config.guess).</span>
+        <span class="n">to_be_found</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">to_be_patched</span><span class="p">))</span>
+        <span class="n">gnuconfig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">]</span>
+        <span class="n">gnuconfig_dir</span> <span class="o">=</span> <span class="n">gnuconfig</span><span class="o">.</span><span class="n">prefix</span>
+
+        <span class="c1"># An external gnuconfig may not not have a prefix.</span>
+        <span class="k">if</span> <span class="n">gnuconfig_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">InstallError</span><span class="p">(</span>
+                <span class="s2">&quot;Spack could not find substitutes for GNU config files because no &quot;</span>
+                <span class="s2">&quot;prefix is available for the `gnuconfig` package. Make sure you set a &quot;</span>
+                <span class="s2">&quot;prefix path instead of modules for external `gnuconfig`.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">candidates</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">gnuconfig_dir</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">to_be_found</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># For external packages the user may have specified an incorrect prefix.</span>
+        <span class="c1"># otherwise the installation is just corrupt.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Spack could not find `config.guess` and `config.sub` &quot;</span>
+                <span class="s2">&quot;files in the `gnuconfig` prefix `</span><span class="si">{0}</span><span class="s2">`. This means the &quot;</span>
+                <span class="s2">&quot;`gnuconfig` package is broken&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gnuconfig_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">gnuconfig</span><span class="o">.</span><span class="n">external</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="s2">&quot; or the `gnuconfig` package prefix is misconfigured as&quot;</span> <span class="s2">&quot; an external package&quot;</span>
+                <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">InstallError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Filter working substitutes</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="n">runs_ok</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
+        <span class="n">substitutes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="n">config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+            <span class="n">substitutes</span><span class="p">[</span><span class="n">config_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">candidate</span>
+            <span class="n">to_be_found</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># Check that we found everything we needed</span>
+        <span class="k">if</span> <span class="n">to_be_found</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">Spack could not find working replacements for the following autotools config</span>
+<span class="s2">files: </span><span class="si">{0}</span><span class="s2">.</span>
+
+<span class="s2">To resolve this problem, please try the following:</span>
+<span class="s2">1. Try to rebuild with `patch_config_files = False` in the package `</span><span class="si">{1}</span><span class="s2">`, to</span>
+<span class="s2">   rule out that Spack tries to replace config files not used by the build.</span>
+<span class="s2">2. Verify that the `gnuconfig` package is up-to-date.</span>
+<span class="s2">3. On some systems you need to use system-provided `config.guess` and `config.sub`</span>
+<span class="s2">   files. In this case, mark `gnuconfig` as an non-buildable external package,</span>
+<span class="s2">   and set the prefix to the directory containing the `config.guess` and</span>
+<span class="s2">   `config.sub` files.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">InstallError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">to_be_found</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="c1"># Copy the good files over the bad ones</span>
+        <span class="k">for</span> <span class="n">abs_path</span> <span class="ow">in</span> <span class="n">to_be_patched</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span><span class="o">.</span><span class="n">st_mode</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">abs_path</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IWUSR</span><span class="p">)</span>
+            <span class="n">fs</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">substitutes</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">abs_path</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">abs_path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_before</span><span class="p">(</span><span class="s2">&quot;configure&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_patch_usr_bin_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;On NixOS file is not available in /usr/bin/file. Patch configure</span>
+<span class="sd">        scripts to use file from path.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;nixos&quot;</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">FileFilter</span><span class="p">(</span>
+                <span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">is_exe</span><span class="p">,</span> <span class="n">fs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;configure&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">keep_modification_time</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">filenames</span><span class="p">):</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;/usr/bin/file&quot;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_before</span><span class="p">(</span><span class="s2">&quot;configure&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_set_autotools_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Many autotools builds use a version of mknod.m4 that fails when</span>
+<span class="sd">        running as root unless FORCE_UNSAFE_CONFIGURE is set to 1.</span>
+
+<span class="sd">        We set this to 1 and expect the user to take responsibility if</span>
+<span class="sd">        they are running as root. They have to anyway, as this variable</span>
+<span class="sd">        doesn&#39;t actually prevent configure from doing bad things as root.</span>
+<span class="sd">        Without it, configure just fails halfway through, but it can</span>
+<span class="sd">        still run things *before* this check. Forcing this just removes a</span>
+<span class="sd">        nuisance -- this is not circumventing any real protection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;FORCE_UNSAFE_CONFIGURE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_before</span><span class="p">(</span><span class="s2">&quot;configure&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_do_patch_libtool_configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Patch bugs that propagate from libtool macros into &quot;configure&quot; and</span>
+<span class="sd">        further into &quot;libtool&quot;. Note that patches that can be fixed by patching</span>
+<span class="sd">        &quot;libtool&quot; directly should be implemented in the _do_patch_libtool method</span>
+<span class="sd">        below.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Exit early if we are required not to patch libtool-related problems:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_libtool</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">FileFilter</span><span class="p">(</span>
+            <span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">is_exe</span><span class="p">,</span> <span class="n">fs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;configure&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="c1"># There are distributed automatically generated files that depend on the configure script</span>
+        <span class="c1"># and require additional tools for rebuilding.</span>
+        <span class="c1"># See https://github.com/spack/spack/pull/30768#issuecomment-1219329860</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">keep_modification_time</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">filenames</span><span class="p">):</span>
+            <span class="c1"># Fix parsing of compiler output when collecting predeps and postdeps</span>
+            <span class="c1"># https://lists.gnu.org/archive/html/bug-libtool/2016-03/msg00003.html</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^(\s*if test x-L = )(&quot;\$p&quot; \|\|\s*)$&#39;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\1x\2&quot;</span><span class="p">)</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^(\s*test x-R = )(&quot;\$p&quot;)(; then\s*)$&#39;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;\1x\2 || test x-l = x&quot;$p&quot;\3&#39;</span>
+            <span class="p">)</span>
+            <span class="c1"># Support Libtool 2.4.2 and older:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^(\s*test \$p = &quot;-R&quot;)(; then\s*)$&#39;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;\1 || test x-l = x&quot;$p&quot;\2&#39;</span><span class="p">)</span>
+            <span class="c1"># Configure scripts generated with libtool &lt; 2.5.4 have a faulty test for the</span>
+            <span class="c1"># -single_module linker flag. A deprecation warning makes it think the default is</span>
+            <span class="c1"># -multi_module, triggering it to use problematic linker flags (such as ld -r). The</span>
+            <span class="c1"># linker default is `-single_module` from (ancient) macOS 10.4, so override by setting</span>
+            <span class="c1"># `lt_cv_apple_cc_single_mod=yes`. See the fix in libtool commit</span>
+            <span class="c1"># 82f7f52123e4e7e50721049f7fa6f9b870e09c9d.</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s2">&quot;lt_cv_apple_cc_single_mod=no&quot;</span><span class="p">,</span> <span class="s2">&quot;lt_cv_apple_cc_single_mod=yes&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;configure&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_do_patch_libtool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If configure generates a &quot;libtool&quot; script that does not correctly</span>
+<span class="sd">        detect the compiler (and patch_libtool is set), patch in the correct</span>
+<span class="sd">        values for libtool variables.</span>
+
+<span class="sd">        The generated libtool script supports mixed compilers through tags:</span>
+<span class="sd">        ``libtool --tag=CC/CXX/FC/...```. For each tag there is a block with variables,</span>
+<span class="sd">        which defines what flags to pass to the compiler. The default variables (which</span>
+<span class="sd">        are used by the default tag CC) are set in a block enclosed by</span>
+<span class="sd">        ``# ### {BEGIN,END} LIBTOOL CONFIG``. For non-default tags, there are</span>
+<span class="sd">        corresponding blocks ``# ### {BEGIN,END} LIBTOOL TAG CONFIG: {CXX,FC,F77}`` at</span>
+<span class="sd">        the end of the file (after the exit command). libtool evals these blocks.</span>
+<span class="sd">        Whenever we need to update variables that the configure script got wrong</span>
+<span class="sd">        (for example cause it did not recognize the compiler), we should properly scope</span>
+<span class="sd">        those changes to these tags/blocks so they only apply to the compiler we care</span>
+<span class="sd">        about. Below, ``start_at`` and ``stop_at`` are used for that.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Exit early if we are required not to patch libtool:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_libtool</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">FileFilter</span><span class="p">(</span>
+            <span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">is_exe</span><span class="p">,</span> <span class="n">fs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;libtool&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Exit early if there is nothing to patch:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">filenames</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">markers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cc&quot;</span><span class="p">:</span> <span class="s2">&quot;LIBTOOL CONFIG&quot;</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cxx&quot;</span><span class="p">,</span> <span class="s2">&quot;fc&quot;</span><span class="p">,</span> <span class="s2">&quot;f77&quot;</span><span class="p">]:</span>
+            <span class="n">markers</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;LIBTOOL TAG CONFIG: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+
+        <span class="c1"># Replace empty linker flag prefixes:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nag&quot;</span><span class="p">:</span>
+            <span class="c1"># Nag is mixed with gcc and g++, which are recognized correctly.</span>
+            <span class="c1"># Therefore, we change only Fortran values:</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fc&quot;</span><span class="p">,</span> <span class="s2">&quot;f77&quot;</span><span class="p">]:</span>
+                <span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^wl=&quot;&quot;$&#39;</span><span class="p">,</span>
+                    <span class="n">repl</span><span class="o">=</span><span class="s1">&#39;wl=&quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">linker_arg</span><span class="p">),</span>
+                    <span class="n">start_at</span><span class="o">=</span><span class="s2">&quot;# ### BEGIN </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">),</span>
+                    <span class="n">stop_at</span><span class="o">=</span><span class="s2">&quot;# ### END </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">),</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^wl=&quot;&quot;$&#39;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="s1">&#39;wl=&quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">linker_arg</span><span class="p">))</span>
+
+        <span class="c1"># Replace empty PIC flag values:</span>
+        <span class="k">for</span> <span class="n">cc</span><span class="p">,</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">markers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^pic_flag=&quot;&quot;$&#39;</span><span class="p">,</span>
+                <span class="n">repl</span><span class="o">=</span><span class="s1">&#39;pic_flag=&quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_pic_flag&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+                <span class="p">),</span>
+                <span class="n">start_at</span><span class="o">=</span><span class="s2">&quot;# ### BEGIN </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">),</span>
+                <span class="n">stop_at</span><span class="o">=</span><span class="s2">&quot;# ### END </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Other compiler-specific patches:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;fj&quot;</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;-nostdlib&quot;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">rehead</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;/\S*/&quot;</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">&quot;fjhpctag\.o&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;fjcrt0\.o&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;fjlang08\.o&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;fjomp\.o&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;crti\.o&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;crtbeginS\.o&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;crtendS\.o&quot;</span><span class="p">,</span>
+            <span class="p">]:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="n">rehead</span> <span class="o">+</span> <span class="n">o</span><span class="p">),</span> <span class="n">repl</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nag&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fc&quot;</span><span class="p">,</span> <span class="s2">&quot;f77&quot;</span><span class="p">]:</span>
+                <span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
+                <span class="n">start_at</span> <span class="o">=</span> <span class="s2">&quot;# ### BEGIN </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span>
+                <span class="n">stop_at</span> <span class="o">=</span> <span class="s2">&quot;# ### END </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span>
+                <span class="c1"># Libtool 2.4.2 does not know the shared flag:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\$CC -shared&quot;</span><span class="p">,</span>
+                    <span class="n">repl</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\$CC -Wl,-shared&quot;</span><span class="p">,</span>
+                    <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">start_at</span><span class="o">=</span><span class="n">start_at</span><span class="p">,</span>
+                    <span class="n">stop_at</span><span class="o">=</span><span class="n">stop_at</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="c1"># Libtool does not know how to inject whole archives</span>
+                <span class="c1"># (e.g. https://github.com/pmodels/mpich/issues/4358):</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^whole_archive_flag_spec=&quot;</span><span class="se">\\</span><span class="s1">\$({?wl}?)--whole-archive&#39;</span>
+                    <span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\$convenience </span><span class="se">\\</span><span class="s1">\$\1--no-whole-archive&quot;$&#39;</span><span class="p">,</span>
+                    <span class="n">repl</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;whole_archive_flag_spec=&quot;\$\1--whole-archive&#39;</span>
+                    <span class="sa">r</span><span class="s2">&quot;\`for conv in \$convenience</span><span class="se">\\\\\&quot;\\\\\&quot;</span><span class="s2">; do test -n </span><span class="se">\\\\\&quot;</span><span class="s2">\$conv</span><span class="se">\\\\\&quot;</span><span class="s2"> &amp;&amp; &quot;</span>
+                    <span class="sa">r</span><span class="s2">&quot;new_convenience=</span><span class="se">\\\\\&quot;</span><span class="s2">\$new_convenience,\$conv</span><span class="se">\\\\\&quot;</span><span class="s2">; done; &quot;</span>
+                    <span class="sa">r</span><span class="s1">&#39;func_echo_all </span><span class="se">\\\\</span><span class="s1">\&quot;\$new_convenience</span><span class="se">\\\\</span><span class="s1">\&quot;\` \$\1--no-whole-archive&quot;&#39;</span><span class="p">,</span>
+                    <span class="n">start_at</span><span class="o">=</span><span class="n">start_at</span><span class="p">,</span>
+                    <span class="n">stop_at</span><span class="o">=</span><span class="n">stop_at</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="c1"># The compiler requires special treatment in certain cases:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(with_gcc=.*)$&quot;</span><span class="p">,</span>
+                    <span class="n">repl</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">1</span><span class="se">\n\n</span><span class="s2"># Is the compiler the NAG compiler?</span><span class="se">\n</span><span class="s2">with_nag=yes&quot;</span><span class="p">,</span>
+                    <span class="n">start_at</span><span class="o">=</span><span class="n">start_at</span><span class="p">,</span>
+                    <span class="n">stop_at</span><span class="o">=</span><span class="n">stop_at</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Disable the special treatment for gcc and g++:</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="s2">&quot;cxx&quot;</span><span class="p">]:</span>
+                <span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(with_gcc=.*)$&quot;</span><span class="p">,</span>
+                    <span class="n">repl</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">1</span><span class="se">\n\n</span><span class="s2"># Is the compiler the NAG compiler?</span><span class="se">\n</span><span class="s2">with_nag=no&quot;</span><span class="p">,</span>
+                    <span class="n">start_at</span><span class="o">=</span><span class="s2">&quot;# ### BEGIN </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">),</span>
+                    <span class="n">stop_at</span><span class="o">=</span><span class="s2">&quot;# ### END </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">marker</span><span class="p">),</span>
+                <span class="p">)</span>
+
+            <span class="c1"># The compiler does not support -pthread flag, which might come</span>
+            <span class="c1"># from the inherited linker flags. We prepend the flag with -Wl,</span>
+            <span class="c1"># before using it:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(\s*)(for tmp_inherited_linker_flag in \$tmp_inherited_linker_flags; &quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;do\s*)$&quot;</span><span class="p">,</span>
+                <span class="n">repl</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">1if test &quot;x$with_nag&quot; = xyes; then</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">1  revert_nag_pthread=$tmp_inherited_linker_flags</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">1  tmp_inherited_linker_flags=&quot;</span>
+                <span class="s2">&quot;`$ECHO </span><span class="se">\&quot;</span><span class="s2">$tmp_inherited_linker_flags</span><span class="se">\&quot;</span><span class="s2"> | $SED &#39;s% -pthread% -Wl,-pthread</span><span class="si">%g</span><span class="s2">&#39;`</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">1  test x&quot;$revert_nag_pthread&quot; = x&quot;$tmp_inherited_linker_flags&quot; &amp;&amp; &#39;</span>
+                <span class="s2">&quot;revert_nag_pthread=no || revert_nag_pthread=yes</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">1fi</span><span class="se">\n\\</span><span class="s2">1</span><span class="se">\\</span><span class="s2">2&quot;</span><span class="p">,</span>
+                <span class="n">start_at</span><span class="o">=</span><span class="s1">&#39;if test -n &quot;$inherited_linker_flags&quot;; then&#39;</span><span class="p">,</span>
+                <span class="n">stop_at</span><span class="o">=</span><span class="s1">&#39;case &quot; $new_inherited_linker_flags &quot; in&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># And revert the modification to produce &#39;*.la&#39; files that can be</span>
+            <span class="c1"># used with gcc (normally, we do not install the files but they can</span>
+            <span class="c1"># still be used during the building):</span>
+            <span class="n">start_at</span> <span class="o">=</span> <span class="s1">&#39;# Time to change all our &quot;foo.ltframework&quot; stuff back to &quot;-framework foo&quot;&#39;</span>
+            <span class="n">stop_at</span> <span class="o">=</span> <span class="s2">&quot;# installed libraries to the beginning of the library search list&quot;</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;(\s*)(# move library search paths that coincide with paths to not &quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;yet\s*)$&quot;</span><span class="p">,</span>
+                <span class="n">repl</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">1test x&quot;$with_nag$revert_nag_pthread&quot; = xyesyes &amp;&amp;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">1  new_inherited_linker_flags=`$ECHO &quot; $new_inherited_linker_flags&quot; | &#39;</span>
+                <span class="s2">&quot;$SED &#39;s% -Wl,-pthread% -pthread</span><span class="si">%g</span><span class="s2">&#39;`</span><span class="se">\n\\</span><span class="s2">1</span><span class="se">\\</span><span class="s2">2&quot;</span><span class="p">,</span>
+                <span class="n">start_at</span><span class="o">=</span><span class="n">start_at</span><span class="p">,</span>
+                <span class="n">stop_at</span><span class="o">=</span><span class="n">stop_at</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">configure_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the directory where &#39;configure&#39; resides.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">source_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">configure_abs_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Absolute path to configure</span>
+        <span class="n">configure_abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_directory</span><span class="p">),</span> <span class="s2">&quot;configure&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">configure_abs_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">build_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override to provide another place to build the package&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">configure_directory</span>
+
+<div class="viewcode-block" id="AutotoolsBuilder.delete_configure_to_force_update">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.delete_configure_to_force_update">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_before</span><span class="p">(</span><span class="s2">&quot;autoreconf&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">delete_configure_to_force_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_autoreconf</span><span class="p">:</span>
+            <span class="n">fs</span><span class="o">.</span><span class="n">force_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_abs_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.autoreconf">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.autoreconf">[文档]</a>
+    <span class="k">def</span> <span class="nf">autoreconf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Not needed usually, configure should be already there&quot;&quot;&quot;</span>
+
+        <span class="c1"># If configure exists nothing needs to be done</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_abs_path</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Else try to regenerate it, which requires a few build dependencies</span>
+        <span class="n">ensure_build_dependencies_or_raise</span><span class="p">(</span>
+            <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;autoconf&quot;</span><span class="p">,</span> <span class="s2">&quot;automake&quot;</span><span class="p">,</span> <span class="s2">&quot;libtool&quot;</span><span class="p">],</span>
+            <span class="n">error_msg</span><span class="o">=</span><span class="s2">&quot;Cannot generate configure&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Configure script not found: trying to generate it&quot;</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;*********************************************************&quot;</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;* If the default procedure fails, consider implementing *&quot;</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;*        a custom AUTORECONF phase in the package       *&quot;</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;*********************************************************&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_directory</span><span class="p">):</span>
+            <span class="c1"># This line is what is needed most of the time</span>
+            <span class="c1"># --install, --verbose, --force</span>
+            <span class="n">autoreconf_args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-ivf&quot;</span><span class="p">]</span>
+            <span class="n">autoreconf_args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoreconf_search_path_args</span>
+            <span class="n">autoreconf_args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoreconf_extra_args</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">autoreconf</span><span class="p">(</span><span class="o">*</span><span class="n">autoreconf_args</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">autoreconf_search_path_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search path includes for autoreconf. Add an -I flag for all `aclocal` dirs</span>
+<span class="sd">        of build deps, skips the default path of automake, move external include</span>
+<span class="sd">        flags to the back, since they might pull in unrelated m4 files shadowing</span>
+<span class="sd">        spack dependencies.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_autoreconf_search_path_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutotoolsBuilder.set_configure_or_die">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.set_configure_or_die">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;autoreconf&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_configure_or_die</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure the presence of a &quot;configure&quot; script, or raise. If the &quot;configure&quot;</span>
+<span class="sd">        is found, a module level attribute is set.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">             RuntimeError: if the &quot;configure&quot; script is not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if the &quot;configure&quot; script is there. If not raise a RuntimeError.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_abs_path</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;configure script not found in </span><span class="si">{0}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_directory</span><span class="p">))</span>
+
+        <span class="c1"># Monkey-patch the configure script in the corresponding module</span>
+        <span class="n">globals_for_pkg</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">build_environment</span><span class="o">.</span><span class="n">ModuleChangePropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="p">)</span>
+        <span class="n">globals_for_pkg</span><span class="o">.</span><span class="n">configure</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configure_abs_path</span><span class="p">)</span>
+        <span class="n">globals_for_pkg</span><span class="o">.</span><span class="n">propagate_changes_to_mro</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.configure_args">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.configure_args">[文档]</a>
+    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of all the arguments that must be passed to configure,</span>
+<span class="sd">        except ``--prefix`` which will be pre-pended to the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.configure">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.configure">[文档]</a>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run &quot;configure&quot;, with the arguments specified by the builder and an</span>
+<span class="sd">        appropriately set prefix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;configure_flag_args&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">options</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;--prefix=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">)]</span>
+        <span class="n">options</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configure_args</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.build">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.build">[文档]</a>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run &quot;make&quot; on the build targets specified by the builder.&quot;&quot;&quot;</span>
+        <span class="c1"># See https://autotools.io/automake/silent.html</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;V=1&quot;</span><span class="p">]</span>
+        <span class="n">params</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_targets</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.install">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.install">[文档]</a>
+    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run &quot;make&quot; on the install targets specified by the builder.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">install_targets</span><span class="p">)</span></div>
+
+
+    <span class="n">spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">)(</span><span class="n">execute_build_time_tests</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutotoolsBuilder.check">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.check">[文档]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run &quot;make&quot; on the ``test`` and ``check`` targets, if found.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_make_target_execute</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_make_target_execute</span><span class="p">(</span><span class="s2">&quot;check&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_activate_or_not</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">activation_word</span><span class="p">,</span> <span class="n">deactivation_word</span><span class="p">,</span> <span class="n">activation_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function contain the current implementation details of</span>
+<span class="sd">        :meth:`~spack.build_systems.autotools.AutotoolsBuilder.with_or_without` and</span>
+<span class="sd">        :meth:`~spack.build_systems.autotools.AutotoolsBuilder.enable_or_disable`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): name of the option that is being activated or not</span>
+<span class="sd">            activation_word (str): the default activation word (&#39;with&#39; in the</span>
+<span class="sd">                case of ``with_or_without``)</span>
+<span class="sd">            deactivation_word (str): the default deactivation word (&#39;without&#39;</span>
+<span class="sd">                in the case of ``with_or_without``)</span>
+<span class="sd">            activation_value (typing.Callable): callable that accepts a single</span>
+<span class="sd">                value. This value is either one of the allowed values for a</span>
+<span class="sd">                multi-valued variant or the name of a bool-valued variant.</span>
+<span class="sd">                Returns the parameter to be used when the value is activated.</span>
+
+<span class="sd">                The special value &#39;prefix&#39; can also be assigned and will return</span>
+<span class="sd">                ``spec[name].prefix`` as activation parameter.</span>
+<span class="sd">            variant (str): name of the variant that is being processed</span>
+<span class="sd">                           (if different from option name)</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Given a package with:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                variant(&#39;foo&#39;, values=(&#39;x&#39;, &#39;y&#39;), description=&#39;&#39;)</span>
+<span class="sd">                variant(&#39;bar&#39;, default=True, description=&#39;&#39;)</span>
+<span class="sd">                variant(&#39;ba_z&#39;, default=True, description=&#39;&#39;)</span>
+
+<span class="sd">            calling this function like:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                _activate_or_not(</span>
+<span class="sd">                    &#39;foo&#39;, &#39;with&#39;, &#39;without&#39;, activation_value=&#39;prefix&#39;</span>
+<span class="sd">                )</span>
+<span class="sd">                _activate_or_not(&#39;bar&#39;, &#39;with&#39;, &#39;without&#39;)</span>
+<span class="sd">                _activate_or_not(&#39;ba-z&#39;, &#39;with&#39;, &#39;without&#39;, variant=&#39;ba_z&#39;)</span>
+
+<span class="sd">            will generate the following configuration options:</span>
+
+<span class="sd">            .. code-block:: console</span>
+
+<span class="sd">                --with-x=&lt;prefix-to-x&gt; --without-y --with-bar --with-ba-z</span>
+
+<span class="sd">            for ``&lt;spec-name&gt; foo=x +bar``</span>
+
+<span class="sd">        Note: returns an empty list when the variant is conditional and its condition</span>
+<span class="sd">              is not met.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of strings that corresponds to the activation/deactivation</span>
+<span class="sd">            of the variant that has been processed</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: if name is not among known variants</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">activation_value</span> <span class="o">==</span> <span class="s2">&quot;prefix&quot;</span><span class="p">:</span>
+            <span class="n">activation_value</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">spec</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
+
+        <span class="n">variant</span> <span class="o">=</span> <span class="n">variant</span> <span class="ow">or</span> <span class="n">name</span>
+
+        <span class="c1"># Defensively look that the name passed as argument is among variants</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">has_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; is not a variant of &quot;</span><span class="si">{1}</span><span class="s1">&quot;&#39;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># Create a list of pairs. Each pair includes a configuration</span>
+        <span class="c1"># option and whether or not that option is activated</span>
+        <span class="n">vdef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">get_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">vdef</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">((</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
+            <span class="c1"># BoolValuedVariant carry information about a single option.</span>
+            <span class="c1"># Nonetheless, for uniformity of treatment we&#39;ll package them</span>
+            <span class="c1"># in an iterable of one element.</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;+</span><span class="si">{</span><span class="n">variant</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># &quot;feature_values&quot; is used to track values which correspond to</span>
+            <span class="c1"># features which can be enabled or disabled as understood by the</span>
+            <span class="c1"># package&#39;s build system. It excludes values which have special</span>
+            <span class="c1"># meanings and do not correspond to features (e.g. &quot;none&quot;)</span>
+            <span class="n">feature_values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">vdef</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="s2">&quot;feature_values&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">vdef</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">[(</span><span class="n">value</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">variant</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">feature_values</span><span class="p">]</span>
+
+        <span class="c1"># For each allowed value in the list of values</span>
+        <span class="k">for</span> <span class="n">option_value</span><span class="p">,</span> <span class="n">activated</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="c1"># Search for an override in the package for this value</span>
+            <span class="n">override_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_or_</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">activation_word</span><span class="p">,</span> <span class="n">deactivation_word</span><span class="p">,</span> <span class="n">option_value</span>
+            <span class="p">)</span>
+            <span class="n">line_generator</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">override_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="n">override_name</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="c1"># If not available use a sensible default</span>
+            <span class="k">if</span> <span class="n">line_generator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+                <span class="k">def</span> <span class="nf">_default_generator</span><span class="p">(</span><span class="n">is_activated</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">is_activated</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;--</span><span class="si">{0}</span><span class="s2">-</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">activation_word</span><span class="p">,</span> <span class="n">option_value</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">activation_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">activation_value</span><span class="p">(</span>
+                            <span class="n">option_value</span>
+                        <span class="p">):</span>  <span class="c1"># NOQA=ignore=E501</span>
+                            <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">activation_value</span><span class="p">(</span><span class="n">option_value</span><span class="p">))</span>
+                        <span class="k">return</span> <span class="n">line</span>
+                    <span class="k">return</span> <span class="s2">&quot;--</span><span class="si">{0}</span><span class="s2">-</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">deactivation_word</span><span class="p">,</span> <span class="n">option_value</span><span class="p">)</span>
+
+                <span class="n">line_generator</span> <span class="o">=</span> <span class="n">_default_generator</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_generator</span><span class="p">(</span><span class="n">activated</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">args</span>
+
+<div class="viewcode-block" id="AutotoolsBuilder.with_or_without">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.with_or_without">[文档]</a>
+    <span class="k">def</span> <span class="nf">with_or_without</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">activation_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspects a variant and returns the arguments that activate</span>
+<span class="sd">        or deactivate the selected feature(s) for the configure options.</span>
+
+<span class="sd">        This function works on all type of variants. For bool-valued variants</span>
+<span class="sd">        it will return by default ``--with-{name}`` or ``--without-{name}``.</span>
+<span class="sd">        For other kinds of variants it will cycle over the allowed values and</span>
+<span class="sd">        return either ``--with-{value}`` or ``--without-{value}``.</span>
+
+<span class="sd">        If activation_value is given, then for each possible value of the</span>
+<span class="sd">        variant, the option ``--with-{value}=activation_value(value)`` or</span>
+<span class="sd">        ``--without-{value}`` will be added depending on whether or not</span>
+<span class="sd">        ``variant=value`` is in the spec.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): name of a valid multi-valued variant</span>
+<span class="sd">            activation_value (typing.Callable): callable that accepts a single</span>
+<span class="sd">                value and returns the parameter to be used leading to an entry</span>
+<span class="sd">                of the type ``--with-{name}={parameter}``.</span>
+
+<span class="sd">                The special value &#39;prefix&#39; can also be assigned and will return</span>
+<span class="sd">                ``spec[name].prefix`` as activation parameter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of arguments to configure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_activate_or_not</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="s2">&quot;without&quot;</span><span class="p">,</span> <span class="n">activation_value</span><span class="p">,</span> <span class="n">variant</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.enable_or_disable">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.enable_or_disable">[文档]</a>
+    <span class="k">def</span> <span class="nf">enable_or_disable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">activation_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as</span>
+<span class="sd">        :meth:`~spack.build_systems.autotools.AutotoolsBuilder.with_or_without`</span>
+<span class="sd">        but substitute ``with`` with ``enable`` and ``without`` with ``disable``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): name of a valid multi-valued variant</span>
+<span class="sd">            activation_value (typing.Callable): if present accepts a single value</span>
+<span class="sd">                and returns the parameter to be used leading to an entry of the</span>
+<span class="sd">                type ``--enable-{name}={parameter}``</span>
+
+<span class="sd">                The special value &#39;prefix&#39; can also be assigned and will return</span>
+<span class="sd">                ``spec[name].prefix`` as activation parameter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of arguments to configure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_activate_or_not</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;enable&quot;</span><span class="p">,</span> <span class="s2">&quot;disable&quot;</span><span class="p">,</span> <span class="n">activation_value</span><span class="p">,</span> <span class="n">variant</span><span class="p">)</span></div>
+
+
+    <span class="n">spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)(</span><span class="n">execute_install_time_tests</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutotoolsBuilder.installcheck">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.installcheck">[文档]</a>
+    <span class="k">def</span> <span class="nf">installcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run &quot;make&quot; on the ``installcheck`` target, if found.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_make_target_execute</span><span class="p">(</span><span class="s2">&quot;installcheck&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.remove_libtool_archives">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.remove_libtool_archives">[文档]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">remove_libtool_archives</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove all .la files in prefix sub-folders if the package sets</span>
+<span class="sd">        ``install_libtool_archives`` to be False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If .la files are to be installed there&#39;s nothing to do</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">install_libtool_archives</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Remove the files and create a log of what was removed</span>
+        <span class="n">libtool_files</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">prefix</span><span class="p">),</span> <span class="s2">&quot;*.la&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">safe_remove</span><span class="p">(</span><span class="o">*</span><span class="n">libtool_files</span><span class="p">):</span>
+            <span class="n">fs</span><span class="o">.</span><span class="n">mkdirp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_removed_la_files_log</span><span class="p">))</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_removed_la_files_log</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">libtool_files</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="AutotoolsBuilder.setup_build_environment">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.autotools.AutotoolsBuilder.setup_build_environment">[文档]</a>
+    <span class="k">def</span> <span class="nf">setup_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span> <span class="ow">and</span> <span class="n">macos_version</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;11&quot;</span><span class="p">):</span>
+            <span class="c1"># Many configure files rely on matching &#39;10.*&#39; for macOS version</span>
+            <span class="c1"># detection and fail to add flags if it shows as version 11.</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;MACOSX_DEPLOYMENT_TARGET&quot;</span><span class="p">,</span> <span class="s2">&quot;10.16&quot;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># On macOS, force rpaths for shared library IDs and remove duplicate rpaths</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;platform=darwin&quot;</span><span class="p">)(</span><span class="n">apply_macos_rpath_fixups</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_autoreconf_search_path_args</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
+    <span class="n">dirs_seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">flags_spack</span><span class="p">,</span> <span class="n">flags_external</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+    <span class="c1"># We don&#39;t want to add an include flag for automake&#39;s default search path.</span>
+    <span class="k">for</span> <span class="n">automake</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">dependencies</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;automake&quot;</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">automake</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">share</span><span class="o">.</span><span class="n">aclocal</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISDIR</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">st_mode</span><span class="p">):</span>
+                <span class="n">dirs_seen</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="o">.</span><span class="n">st_ino</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">st_dev</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">dependencies</span><span class="p">(</span><span class="n">deptype</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">dep</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">share</span><span class="o">.</span><span class="n">aclocal</span>
+        <span class="c1"># Skip non-existing aclocal paths</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># Skip things seen before, as well as non-dirs.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">st_ino</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">st_dev</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dirs_seen</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISDIR</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">st_mode</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">dirs_seen</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="o">.</span><span class="n">st_ino</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">st_dev</span><span class="p">))</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="n">flags_external</span> <span class="k">if</span> <span class="n">dep</span><span class="o">.</span><span class="n">external</span> <span class="k">else</span> <span class="n">flags_spack</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-I&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">flags_spack</span> <span class="o">+</span> <span class="n">flags_external</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

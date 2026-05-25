@@ -1,0 +1,581 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>llnl.util.tty.pty &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/llnl/util/tty/pty.html" />
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html">
+            
+              <img src="../../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../tty.html">llnl.util.tty</a></li>
+      <li class="breadcrumb-item active">llnl.util.tty.pty</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>llnl.util.tty.pty 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="sd">&quot;&quot;&quot;The pty module handles pseudo-terminals.</span>
+
+<span class="sd">Currently, the infrastructure here is only used to test llnl.util.tty.log.</span>
+
+<span class="sd">If this is used outside a testing environment, we will want to reconsider</span>
+<span class="sd">things like timeouts in ``ProcessController.wait()``, which are set to</span>
+<span class="sd">get tests done quickly, not to avoid high CPU usage.</span>
+
+<span class="sd">Note: The functionality in this module is unsupported on Windows</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.tty.log</span> <span class="k">as</span> <span class="nn">log</span>
+
+<span class="kn">from</span> <span class="nn">spack.util.executable</span> <span class="kn">import</span> <span class="n">which</span>
+
+<span class="n">termios</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">termios</span> <span class="k">as</span> <span class="nn">term_mod</span>
+
+    <span class="n">termios</span> <span class="o">=</span> <span class="n">term_mod</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="ProcessController">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController">[文件]</a>
+<span class="k">class</span> <span class="nc">ProcessController</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around some fundamental process control operations.</span>
+
+<span class="sd">    This allows one process (the controller) to drive another (the</span>
+<span class="sd">    minion) similar to the way a shell would, by sending signals and I/O.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">controller_fd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sleep_time</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a controller to manipulate the process with id ``pid``</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pid (int): id of process to control</span>
+<span class="sd">            controller_fd (int): controller fd attached to pid&#39;s stdin</span>
+<span class="sd">            timeout (int): time in seconds for wait operations to time out</span>
+<span class="sd">                (default 1 second)</span>
+<span class="sd">            sleep_time (int): time to sleep after signals, to control the</span>
+<span class="sd">                signal rate of the controller (default 1e-1)</span>
+<span class="sd">            debug (bool): whether ``horizontal_line()`` and ``status()`` should</span>
+<span class="sd">                produce output when called (default False)</span>
+
+<span class="sd">        ``sleep_time`` allows the caller to insert delays after calls</span>
+<span class="sd">        that signal or modify the controlled process. Python behaves very</span>
+<span class="sd">        poorly if signals arrive too fast, and drowning a Python process</span>
+<span class="sd">        with a Python handler with signals can kill the process and hang</span>
+<span class="sd">        our tests, so we throttle this a closer-to-interactive rate.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">pid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pgid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpgid</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller_fd</span> <span class="o">=</span> <span class="n">controller_fd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="n">sleep_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+
+        <span class="c1"># we need the ps command to wait for process statuses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ps</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s2">&quot;ps&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProcessController.get_canon_echo_attrs">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.get_canon_echo_attrs">[文件]</a>
+    <span class="k">def</span> <span class="nf">get_canon_echo_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get echo and canon attributes of the terminal of controller_fd.&quot;&quot;&quot;</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller_fd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">termios</span><span class="o">.</span><span class="n">ICANON</span><span class="p">),</span> <span class="nb">bool</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">termios</span><span class="o">.</span><span class="n">ECHO</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.horizontal_line">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.horizontal_line">[文件]</a>
+    <span class="k">def</span> <span class="nf">horizontal_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Labled horizontal line for debugging.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;------------------------------------------- </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.status">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.status">[文件]</a>
+    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print debug message with status info for the minion.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">canon</span><span class="p">,</span> <span class="n">echo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_canon_echo_attrs</span><span class="p">()</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="s2">&quot;canon: </span><span class="si">%s</span><span class="s2">, echo: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;on&quot;</span> <span class="k">if</span> <span class="n">canon</span> <span class="k">else</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span> <span class="k">if</span> <span class="n">echo</span> <span class="k">else</span> <span class="s2">&quot;off&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;input: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_on</span><span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;bg: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.input_on">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.input_on">[文件]</a>
+    <span class="k">def</span> <span class="nf">input_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if keyboard input is enabled on the controller_fd pty.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_canon_echo_attrs</span><span class="p">()</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.background">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.background">[文件]</a>
+    <span class="k">def</span> <span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if pgid is in a background pgroup of controller_fd&#39;s tty.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pgid</span> <span class="o">!=</span> <span class="n">os</span><span class="o">.</span><span class="n">tcgetpgrp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller_fd</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.tstp">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.tstp">[文件]</a>
+    <span class="k">def</span> <span class="nf">tstp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send SIGTSTP to the controlled process.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p">(</span><span class="s2">&quot;tstp&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">killpg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pgid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGTSTP</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.cont">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.cont">[文件]</a>
+    <span class="k">def</span> <span class="nf">cont</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p">(</span><span class="s2">&quot;cont&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">killpg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pgid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGCONT</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.fg">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.fg">[文件]</a>
+    <span class="k">def</span> <span class="nf">fg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p">(</span><span class="s2">&quot;fg&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">log</span><span class="o">.</span><span class="n">ignore_signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTTOU</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">tcsetpgrp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller_fd</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpgid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">))</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.bg">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.bg">[文件]</a>
+    <span class="k">def</span> <span class="nf">bg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p">(</span><span class="s2">&quot;bg&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">log</span><span class="o">.</span><span class="n">ignore_signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTTOU</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">tcsetpgrp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller_fd</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpgrp</span><span class="p">())</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.write">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.write">[文件]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byte_string</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p">(</span><span class="s2">&quot;write &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">byte_string</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller_fd</span><span class="p">,</span> <span class="n">byte_string</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.wait">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.wait">[文件]</a>
+    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">condition</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">condition</span><span class="p">():</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">condition</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.wait_enabled">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.wait_enabled">[文件]</a>
+    <span class="k">def</span> <span class="nf">wait_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_on</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.wait_disabled">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.wait_disabled">[文件]</a>
+    <span class="k">def</span> <span class="nf">wait_disabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_on</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.wait_disabled_fg">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.wait_disabled_fg">[文件]</a>
+    <span class="k">def</span> <span class="nf">wait_disabled_fg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_on</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.proc_status">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.proc_status">[文件]</a>
+    <span class="k">def</span> <span class="nf">proc_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">),</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.wait_stopped">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.wait_stopped">[文件]</a>
+    <span class="k">def</span> <span class="nf">wait_stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proc_status</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ProcessController.wait_running">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.ProcessController.wait_running">[文件]</a>
+    <span class="k">def</span> <span class="nf">wait_running</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proc_status</span><span class="p">())</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PseudoShell">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.PseudoShell">[文件]</a>
+<span class="k">class</span> <span class="nc">PseudoShell</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets up controller and minion processes with a PTY.</span>
+
+<span class="sd">    You can create a ``PseudoShell`` if you want to test how some</span>
+<span class="sd">    function responds to terminal input.  This is a pseudo-shell from a</span>
+<span class="sd">    job control perspective; ``controller_function`` and ``minion_function``</span>
+<span class="sd">    are set up with a pseudoterminal (pty) so that the controller can drive</span>
+<span class="sd">    the minion through process control signals and I/O.</span>
+
+<span class="sd">    The two functions should have signatures like this::</span>
+
+<span class="sd">        def controller_function(proc, ctl, **kwargs)</span>
+<span class="sd">        def minion_function(**kwargs)</span>
+
+<span class="sd">    ``controller_function`` is spawned in its own process and passed three</span>
+<span class="sd">    arguments:</span>
+
+<span class="sd">    proc</span>
+<span class="sd">        the ``multiprocessing.Process`` object representing the minion</span>
+<span class="sd">    ctl</span>
+<span class="sd">        a ``ProcessController`` object tied to the minion</span>
+<span class="sd">    kwargs</span>
+<span class="sd">        keyword arguments passed from ``PseudoShell.start()``.</span>
+
+<span class="sd">    ``minion_function`` is only passed ``kwargs`` delegated from</span>
+<span class="sd">    ``PseudoShell.start()``.</span>
+
+<span class="sd">    The ``ctl.controller_fd`` will have its ``controller_fd`` connected to</span>
+<span class="sd">    ``sys.stdin`` in the minion process. Both processes will share the</span>
+<span class="sd">    same ``sys.stdout`` and ``sys.stderr`` as the process instantiating</span>
+<span class="sd">    ``PseudoShell``.</span>
+
+<span class="sd">    Here are the relationships between processes created::</span>
+
+<span class="sd">        ._________________________________________________________.</span>
+<span class="sd">        | Minion Process                                          | pid     2</span>
+<span class="sd">        | - runs minion_function                                  | pgroup  2</span>
+<span class="sd">        |_________________________________________________________| session 1</span>
+<span class="sd">            ^</span>
+<span class="sd">            | create process with controller_fd connected to stdin</span>
+<span class="sd">            | stdout, stderr are the same as caller</span>
+<span class="sd">        ._________________________________________________________.</span>
+<span class="sd">        | Controller Process                                      | pid     1</span>
+<span class="sd">        | - runs controller_function                              | pgroup  1</span>
+<span class="sd">        | - uses ProcessController and controller_fd to           | session 1</span>
+<span class="sd">        |   control minion                                        |</span>
+<span class="sd">        |_________________________________________________________|</span>
+<span class="sd">            ^</span>
+<span class="sd">            | create process</span>
+<span class="sd">            | stdin, stdout, stderr are the same as caller</span>
+<span class="sd">        ._________________________________________________________.</span>
+<span class="sd">        | Caller                                                  |  pid     0</span>
+<span class="sd">        | - Constructs, starts, joins PseudoShell                 |  pgroup  0</span>
+<span class="sd">        | - provides controller_function, minion_function         |  session 0</span>
+<span class="sd">        |_________________________________________________________|</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controller_function</span><span class="p">,</span> <span class="n">minion_function</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller_function</span> <span class="o">=</span> <span class="n">controller_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minion_function</span> <span class="o">=</span> <span class="n">minion_function</span>
+
+        <span class="c1"># these can be optionally set to change defaults</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller_timeout</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<div class="viewcode-block" id="PseudoShell.start">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.PseudoShell.start">[文件]</a>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start the controller and minion processes.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            kwargs (dict): arbitrary keyword arguments that will be</span>
+<span class="sd">                passed to controller and minion functions</span>
+
+<span class="sd">        The controller process will create the minion, then call</span>
+<span class="sd">        ``controller_function``.  The minion process will call</span>
+<span class="sd">        ``minion_function``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proc</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">PseudoShell</span><span class="o">.</span><span class="n">_set_up_and_run_controller_function</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">controller_function</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">minion_function</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">controller_timeout</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PseudoShell.join">
+<a class="viewcode-back" href="../../../../llnl.util.tty.html#llnl.util.tty.pty.PseudoShell.join">[文件]</a>
+    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for the minion process to finish, and return its exit code.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">exitcode</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_up_and_run_minion_function</span><span class="p">(</span>
+        <span class="n">tty_name</span><span class="p">,</span> <span class="n">stdout_fd</span><span class="p">,</span> <span class="n">stderr_fd</span><span class="p">,</span> <span class="n">ready</span><span class="p">,</span> <span class="n">minion_function</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Minion process wrapper for PseudoShell.</span>
+
+<span class="sd">        Handles the mechanics of setting up a PTY, then calls</span>
+<span class="sd">        ``minion_function``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># new process group, like a command or pipeline launched by a shell</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">setpgrp</span><span class="p">()</span>
+
+        <span class="c1"># take controlling terminal and set up pty IO</span>
+        <span class="n">stdin_fd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tty_name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="n">stdin_fd</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="n">stdout_fd</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="n">stderr_fd</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">stdin_fd</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;minion: stdin.isatty(): </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">isatty</span><span class="p">())</span>
+
+        <span class="c1"># tell the parent that we&#39;re really running</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;minion: ready!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">ready</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">minion_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_up_and_run_controller_function</span><span class="p">(</span>
+        <span class="n">controller_function</span><span class="p">,</span> <span class="n">minion_function</span><span class="p">,</span> <span class="n">controller_timeout</span><span class="p">,</span> <span class="n">sleep_time</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a pty, spawn a minion process, execute controller_function.</span>
+
+<span class="sd">        Handles the mechanics of setting up a PTY, then calls</span>
+<span class="sd">        ``controller_function``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">setsid</span><span class="p">()</span>  <span class="c1"># new session; this process is the controller</span>
+
+        <span class="n">controller_fd</span><span class="p">,</span> <span class="n">minion_fd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">openpty</span><span class="p">()</span>
+        <span class="n">pty_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">ttyname</span><span class="p">(</span><span class="n">minion_fd</span><span class="p">)</span>
+
+        <span class="c1"># take controlling terminal</span>
+        <span class="n">pty_fd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pty_name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">pty_fd</span><span class="p">)</span>
+
+        <span class="n">ready</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">minion_process</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">PseudoShell</span><span class="o">.</span><span class="n">_set_up_and_run_minion_function</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">pty_name</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">ready</span><span class="p">,</span> <span class="n">minion_function</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">minion_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># wait for subprocess to be running and connected.</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">ready</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pid:        </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pgid:       </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">getpgrp</span><span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;sid:        </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">getsid</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;tcgetpgrp:  </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">tcgetpgrp</span><span class="p">(</span><span class="n">controller_fd</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">minion_pgid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpgid</span><span class="p">(</span><span class="n">minion_process</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;minion pid:  </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">minion_process</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;minion pgid: </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">minion_pgid</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;minion sid:  </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">getsid</span><span class="p">(</span><span class="n">minion_process</span><span class="o">.</span><span class="n">pid</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="c1"># set up controller to ignore SIGTSTP, like a shell</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTSTP</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_IGN</span><span class="p">)</span>
+
+        <span class="c1"># call the controller function once the minion is ready</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">controller</span> <span class="o">=</span> <span class="n">ProcessController</span><span class="p">(</span>
+                <span class="n">minion_process</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">controller_fd</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">controller</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">controller_timeout</span>
+            <span class="n">controller</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="n">sleep_time</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">controller_function</span><span class="p">(</span><span class="n">minion_process</span><span class="p">,</span> <span class="n">controller</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+        <span class="n">minion_process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="c1"># return whether either the parent or minion failed</span>
+        <span class="k">return</span> <span class="n">error</span> <span class="ow">or</span> <span class="n">minion_process</span><span class="o">.</span><span class="n">exitcode</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

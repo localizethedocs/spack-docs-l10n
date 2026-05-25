@@ -1,0 +1,570 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.build_systems.cached_cmake &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/build_systems/cached_cmake.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.build_systems.cached_cmake</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.build_systems.cached_cmake</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">collections.abc</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+
+<span class="kn">import</span> <span class="nn">spack.builder</span>
+
+<span class="kn">from</span> <span class="nn">.cmake</span> <span class="kn">import</span> <span class="n">CMakeBuilder</span><span class="p">,</span> <span class="n">CMakePackage</span>
+
+
+<div class="viewcode-block" id="spec_uses_toolchain">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.spec_uses_toolchain">[docs]</a>
+<span class="k">def</span> <span class="nf">spec_uses_toolchain</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
+    <span class="n">gcc_toolchain_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;.*gcc-toolchain.*&quot;</span><span class="p">)</span>
+    <span class="n">using_toolchain</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">gcc_toolchain_regex</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">compiler_flags</span><span class="p">[</span><span class="s2">&quot;cxxflags&quot;</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">using_toolchain</span></div>
+
+
+
+<div class="viewcode-block" id="cmake_cache_path">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.cmake_cache_path">[docs]</a>
+<span class="k">def</span> <span class="nf">cmake_cache_path</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a string for a cmake cache variable&quot;&quot;&quot;</span>
+    <span class="n">force_str</span> <span class="o">=</span> <span class="s2">&quot; FORCE&quot;</span> <span class="k">if</span> <span class="n">force</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="s1">&#39;set(</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; CACHE PATH &quot;</span><span class="si">{2}</span><span class="s1">&quot;</span><span class="si">{3}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">force_str</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cmake_cache_string">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.cmake_cache_string">[docs]</a>
+<span class="k">def</span> <span class="nf">cmake_cache_string</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a string for a cmake cache variable&quot;&quot;&quot;</span>
+    <span class="n">force_str</span> <span class="o">=</span> <span class="s2">&quot; FORCE&quot;</span> <span class="k">if</span> <span class="n">force</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="s1">&#39;set(</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; CACHE STRING &quot;</span><span class="si">{2}</span><span class="s1">&quot;</span><span class="si">{3}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">force_str</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cmake_cache_option">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.cmake_cache_option">[docs]</a>
+<span class="k">def</span> <span class="nf">cmake_cache_option</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">boolean_value</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a string for a cmake configuration option&quot;&quot;&quot;</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;ON&quot;</span> <span class="k">if</span> <span class="n">boolean_value</span> <span class="k">else</span> <span class="s2">&quot;OFF&quot;</span>
+    <span class="n">force_str</span> <span class="o">=</span> <span class="s2">&quot; FORCE&quot;</span> <span class="k">if</span> <span class="n">force</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="s1">&#39;set(</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> CACHE BOOL &quot;</span><span class="si">{2}</span><span class="s1">&quot;</span><span class="si">{3}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">force_str</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cmake_cache_filepath">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.cmake_cache_filepath">[docs]</a>
+<span class="k">def</span> <span class="nf">cmake_cache_filepath</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a string for a cmake cache variable of type FILEPATH&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s1">&#39;set(</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; CACHE FILEPATH &quot;</span><span class="si">{2}</span><span class="s1">&quot;)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder">[docs]</a>
+<span class="k">class</span> <span class="nc">CachedCMakeBuilder</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="p">):</span>
+    <span class="c1">#: Phases of a Cached CMake package</span>
+    <span class="c1">#: Note: the initconfig phase is used for developer builds as a final phase to stop on</span>
+    <span class="n">phases</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;initconfig&quot;</span><span class="p">,</span> <span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Names associated with package methods in the old build-system format</span>
+    <span class="n">legacy_methods</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">legacy_methods</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="s2">&quot;initconfig_compiler_entries&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;initconfig_mpi_entries&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;initconfig_hardware_entries&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;std_initconfig_entries&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;initconfig_package_entries&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1">#: Names associated with package attributes in the old build-system format</span>
+    <span class="n">legacy_attributes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">legacy_attributes</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="s2">&quot;cache_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cache_path&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cache_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">-</span><span class="si">{1}</span><span class="s2">-</span><span class="si">{2}</span><span class="s2">@</span><span class="si">{3}</span><span class="s2">.cmake&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">architecture</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cache_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">source_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_name</span><span class="p">)</span>
+
+    <span class="c1"># Implement a version of the define_from_variant for Cached packages</span>
+<div class="viewcode-block" id="CachedCMakeBuilder.define_cmake_cache_from_variant">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.define_cmake_cache_from_variant">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_cmake_cache_from_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmake_var</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a Cached CMake field from the given variant&#39;s value.</span>
+<span class="sd">        See define_from_variant in lib/spack/spack/build_systems/cmake.py package</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">variant</span> <span class="o">=</span> <span class="n">cmake_var</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">has_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; is not a variant of &quot;</span><span class="si">{1}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="n">variant</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">cmake_cache_option</span><span class="p">(</span><span class="n">cmake_var</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">cmake_cache_string</span><span class="p">(</span><span class="n">cmake_var</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">field</span></div>
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder.initconfig_compiler_entries">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.initconfig_compiler_entries">[docs]</a>
+    <span class="k">def</span> <span class="nf">initconfig_compiler_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># This will tell cmake to use the Spack compiler wrappers when run</span>
+        <span class="c1"># through Spack, but use the underlying compiler when run outside of</span>
+        <span class="c1"># Spack</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span>
+
+        <span class="c1"># Fortran compiler is optional</span>
+        <span class="k">if</span> <span class="s2">&quot;FC&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">spack_fc_entry</span> <span class="o">=</span> <span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_Fortran_COMPILER&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;FC&quot;</span><span class="p">])</span>
+            <span class="n">system_fc_entry</span> <span class="o">=</span> <span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_Fortran_COMPILER&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">fc</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spack_fc_entry</span> <span class="o">=</span> <span class="s2">&quot;# No Fortran compiler defined in spec&quot;</span>
+            <span class="n">system_fc_entry</span> <span class="o">=</span> <span class="s2">&quot;# No Fortran compiler defined in spec&quot;</span>
+
+        <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;# Compilers&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;# Compiler Spec: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">compiler</span><span class="p">),</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;if(DEFINED ENV</span><span class="si">{SPACK_CC}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_C_COMPILER&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CC&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_CXX_COMPILER&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CXX&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">spack_fc_entry</span><span class="p">,</span>
+            <span class="s2">&quot;else()</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_C_COMPILER&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">cc</span><span class="p">),</span>
+            <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_CXX_COMPILER&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">cxx</span><span class="p">),</span>
+            <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">system_fc_entry</span><span class="p">,</span>
+            <span class="s2">&quot;endif()</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">flags</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">compiler_flags</span>
+
+        <span class="c1"># use global spack compiler flags</span>
+        <span class="n">cppflags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;cppflags&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cppflags</span><span class="p">:</span>
+            <span class="c1"># avoid always ending up with &quot; &quot; with no flags defined</span>
+            <span class="n">cppflags</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">cflags</span> <span class="o">=</span> <span class="n">cppflags</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;cflags&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cflags</span><span class="p">:</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_C_FLAGS&quot;</span><span class="p">,</span> <span class="n">cflags</span><span class="p">))</span>
+        <span class="n">cxxflags</span> <span class="o">=</span> <span class="n">cppflags</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;cxxflags&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cxxflags</span><span class="p">:</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_CXX_FLAGS&quot;</span><span class="p">,</span> <span class="n">cxxflags</span><span class="p">))</span>
+        <span class="n">fflags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;fflags&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">fflags</span><span class="p">:</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_Fortran_FLAGS&quot;</span><span class="p">,</span> <span class="n">fflags</span><span class="p">))</span>
+
+        <span class="c1"># Cmake has different linker arguments for different build types.</span>
+        <span class="c1"># We specify for each of them.</span>
+        <span class="k">if</span> <span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldflags&quot;</span><span class="p">]:</span>
+            <span class="n">ld_flags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldflags&quot;</span><span class="p">])</span>
+            <span class="n">ld_format_string</span> <span class="o">=</span> <span class="s2">&quot;CMAKE_</span><span class="si">{0}</span><span class="s2">_LINKER_FLAGS&quot;</span>
+            <span class="c1"># CMake has separate linker arguments for types of builds.</span>
+            <span class="c1"># &#39;ldflags&#39; should not be used with CMAKE_STATIC_LINKER_FLAGS which</span>
+            <span class="c1"># is used by the archiver, so don&#39;t include &quot;STATIC&quot; in this loop:</span>
+            <span class="k">for</span> <span class="n">ld_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;EXE&quot;</span><span class="p">,</span> <span class="s2">&quot;MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;SHARED&quot;</span><span class="p">]:</span>
+                <span class="n">ld_string</span> <span class="o">=</span> <span class="n">ld_format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ld_type</span><span class="p">)</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="n">ld_string</span><span class="p">,</span> <span class="n">ld_flags</span><span class="p">))</span>
+
+        <span class="c1"># CMake has libs options separated by language. Apply ours to each.</span>
+        <span class="k">if</span> <span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldlibs&quot;</span><span class="p">]:</span>
+            <span class="n">libs_flags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldlibs&quot;</span><span class="p">])</span>
+            <span class="n">libs_format_string</span> <span class="o">=</span> <span class="s2">&quot;CMAKE_</span><span class="si">{0}</span><span class="s2">_STANDARD_LIBRARIES&quot;</span>
+            <span class="n">langs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;CXX&quot;</span><span class="p">,</span> <span class="s2">&quot;Fortran&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">lang</span> <span class="ow">in</span> <span class="n">langs</span><span class="p">:</span>
+                <span class="n">libs_string</span> <span class="o">=</span> <span class="n">libs_format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="n">libs_string</span><span class="p">,</span> <span class="n">libs_flags</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">entries</span></div>
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder.initconfig_mpi_entries">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.initconfig_mpi_entries">[docs]</a>
+    <span class="k">def</span> <span class="nf">initconfig_mpi_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;^mpi&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;# MPI&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;MPI_C_COMPILER&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mpicc</span><span class="p">))</span>
+        <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;MPI_CXX_COMPILER&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mpicxx</span><span class="p">))</span>
+        <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;MPI_Fortran_COMPILER&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mpifc</span><span class="p">))</span>
+
+        <span class="c1"># Check for slurm</span>
+        <span class="n">using_slurm</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">slurm_checks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;+slurm&quot;</span><span class="p">,</span> <span class="s2">&quot;schedulers=slurm&quot;</span><span class="p">,</span> <span class="s2">&quot;process_managers=slurm&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">variant</span><span class="p">)</span> <span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">slurm_checks</span><span class="p">):</span>
+            <span class="n">using_slurm</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Determine MPIEXEC</span>
+        <span class="k">if</span> <span class="n">using_slurm</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">external</span><span class="p">:</span>
+                <span class="c1"># Heuristic until we have dependents on externals</span>
+                <span class="n">mpiexec</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/srun&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mpiexec</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;slurm&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="p">,</span> <span class="s2">&quot;srun&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">package</span><span class="p">,</span> <span class="s2">&quot;mpiexec&quot;</span><span class="p">):</span>
+            <span class="n">mpiexec</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">mpiexec</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mpiexec</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="p">,</span> <span class="s2">&quot;mpirun&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mpiexec</span><span class="p">):</span>
+                <span class="n">mpiexec</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;mpi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="p">,</span> <span class="s2">&quot;mpiexec&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mpiexec</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unable to determine MPIEXEC, </span><span class="si">%s</span><span class="s2"> tests may fail&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;# </span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># starting with cmake 3.10, FindMPI expects MPIEXEC_EXECUTABLE</span>
+            <span class="c1"># vs the older versions which expect MPIEXEC</span>
+            <span class="k">if</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;cmake&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3.10:&quot;</span><span class="p">):</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;MPIEXEC_EXECUTABLE&quot;</span><span class="p">,</span> <span class="n">mpiexec</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;MPIEXEC&quot;</span><span class="p">,</span> <span class="n">mpiexec</span><span class="p">))</span>
+
+        <span class="c1"># Determine MPIEXEC_NUMPROC_FLAG</span>
+        <span class="k">if</span> <span class="n">using_slurm</span><span class="p">:</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;MPIEXEC_NUMPROC_FLAG&quot;</span><span class="p">,</span> <span class="s2">&quot;-n&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;MPIEXEC_NUMPROC_FLAG&quot;</span><span class="p">,</span> <span class="s2">&quot;-np&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">entries</span></div>
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder.initconfig_hardware_entries">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.initconfig_hardware_entries">[docs]</a>
+    <span class="k">def</span> <span class="nf">initconfig_hardware_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span>
+
+        <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;# Hardware&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Provide standard CMake arguments for dependent CachedCMakePackages</span>
+        <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;^cuda&quot;</span><span class="p">):</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">30</span><span class="p">))</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;# Cuda&quot;</span><span class="p">)</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">30</span><span class="p">))</span>
+
+            <span class="n">cudatoolkitdir</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;cuda&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CUDAToolkit_ROOT&quot;</span><span class="p">,</span> <span class="n">cudatoolkitdir</span><span class="p">))</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_CUDA_COMPILER&quot;</span><span class="p">,</span> <span class="s2">&quot;$</span><span class="si">{CUDAToolkit_ROOT}</span><span class="s2">/bin/nvcc&quot;</span><span class="p">))</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CMAKE_CUDA_HOST_COMPILER&quot;</span><span class="p">,</span> <span class="s2">&quot;$</span><span class="si">{CMAKE_CXX_COMPILER}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="c1"># Include the deprecated CUDA_TOOLKIT_ROOT_DIR for supporting BLT packages</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;CUDA_TOOLKIT_ROOT_DIR&quot;</span><span class="p">,</span> <span class="n">cudatoolkitdir</span><span class="p">))</span>
+
+            <span class="c1"># CUDA_FLAGS</span>
+            <span class="n">cuda_flags</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;cuda_arch=none&quot;</span><span class="p">):</span>
+                <span class="n">cuda_archs</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;cuda_arch&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_CUDA_ARCHITECTURES&quot;</span><span class="p">,</span> <span class="n">cuda_archs</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">spec_uses_toolchain</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
+                <span class="n">cuda_flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-Xcompiler </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec_uses_toolchain</span><span class="p">(</span><span class="n">spec</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_CUDA_FLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cuda_flags</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;+rocm&quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">30</span><span class="p">))</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;# ROCm&quot;</span><span class="p">)</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">30</span><span class="p">))</span>
+
+            <span class="c1"># Explicitly setting HIP_ROOT_DIR may be a patch that is no longer necessary</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_path</span><span class="p">(</span><span class="s2">&quot;HIP_ROOT_DIR&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;hip&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span><span class="p">)))</span>
+            <span class="n">llvm_bin</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;llvm-amdgpu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span>
+            <span class="n">llvm_prefix</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;llvm-amdgpu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
+            <span class="c1"># Some ROCm systems seem to point to /&lt;path&gt;/rocm-&lt;ver&gt;/ and</span>
+            <span class="c1"># others point to /&lt;path&gt;/rocm-&lt;ver&gt;/llvm</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">llvm_prefix</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;llvm&quot;</span><span class="p">:</span>
+                <span class="n">llvm_bin</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">llvm_prefix</span><span class="p">,</span> <span class="s2">&quot;llvm/bin/&quot;</span><span class="p">)</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">cmake_cache_filepath</span><span class="p">(</span><span class="s2">&quot;CMAKE_HIP_COMPILER&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">llvm_bin</span><span class="p">,</span> <span class="s2">&quot;clang++&quot;</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">archs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;amdgpu_target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">archs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+                <span class="n">arch_str</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archs</span><span class="p">)</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_HIP_ARCHITECTURES&quot;</span><span class="p">,</span> <span class="n">arch_str</span><span class="p">))</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;AMDGPU_TARGETS&quot;</span><span class="p">,</span> <span class="n">arch_str</span><span class="p">))</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;GPU_TARGETS&quot;</span><span class="p">,</span> <span class="n">arch_str</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">entries</span></div>
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder.std_initconfig_entries">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.std_initconfig_entries">[docs]</a>
+    <span class="k">def</span> <span class="nf">std_initconfig_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmake_prefix_path_env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">]</span>
+        <span class="n">cmake_prefix_path</span> <span class="o">=</span> <span class="n">cmake_prefix_path_env</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;# !!!! This is a generated file, edit at own risk !!!!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="s2">&quot;# CMake executable path: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;cmake&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">path</span><span class="p">),</span>
+            <span class="s2">&quot;#------------------</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>
+            <span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">,</span> <span class="n">cmake_prefix_path</span><span class="p">),</span>
+            <span class="n">cmake_cache_string</span><span class="p">(</span><span class="s2">&quot;CMAKE_INSTALL_RPATH_USE_LINK_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_cmake_cache_from_variant</span><span class="p">(</span><span class="s2">&quot;CMAKE_BUILD_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;build_type&quot;</span><span class="p">),</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder.initconfig_package_entries">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.initconfig_package_entries">[docs]</a>
+    <span class="k">def</span> <span class="nf">initconfig_package_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is to be overwritten by the package&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="CachedCMakeBuilder.initconfig">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.initconfig">[docs]</a>
+    <span class="k">def</span> <span class="nf">initconfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="n">cache_entries</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">std_initconfig_entries</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">initconfig_compiler_entries</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">initconfig_mpi_entries</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">initconfig_hardware_entries</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">initconfig_package_entries</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">cache_entries</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">entry</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">std_cmake_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">std_cmake_args</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;-C&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_path</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">args</span>
+
+<div class="viewcode-block" id="CachedCMakeBuilder.install_cmake_cache">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakeBuilder.install_cmake_cache">[docs]</a>
+    <span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">install_cmake_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fs</span><span class="o">.</span><span class="n">mkdirp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">share</span><span class="o">.</span><span class="n">cmake</span><span class="p">)</span>
+        <span class="n">fs</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">share</span><span class="o">.</span><span class="n">cmake</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CachedCMakePackage">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakePackage">[docs]</a>
+<span class="k">class</span> <span class="nc">CachedCMakePackage</span><span class="p">(</span><span class="n">CMakePackage</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specialized class for packages built using CMake initial cache.</span>
+
+<span class="sd">    This feature of CMake allows packages to increase reproducibility,</span>
+<span class="sd">    especially between Spack- and manual builds. It also allows packages to</span>
+<span class="sd">    sidestep certain parsing bugs in extremely long ``cmake`` commands, and to</span>
+<span class="sd">    avoid system limits on the length of the command line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CMakeBuilder</span> <span class="o">=</span> <span class="n">CachedCMakeBuilder</span>
+
+<div class="viewcode-block" id="CachedCMakePackage.flag_handler">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cached_cmake.CachedCMakePackage.flag_handler">[docs]</a>
+    <span class="k">def</span> <span class="nf">flag_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;cflags&quot;</span><span class="p">,</span> <span class="s2">&quot;cxxflags&quot;</span><span class="p">,</span> <span class="s2">&quot;cppflags&quot;</span><span class="p">,</span> <span class="s2">&quot;fflags&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>  <span class="c1"># handled in the cmake cache</span>
+        <span class="k">return</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

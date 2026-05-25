@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.filesystem &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/filesystem.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.filesystem</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.filesystem 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utilities for interacting with files,</span>
+<span class="sd">like those in llnl.util.filesystem, but which require logic from spack.util</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util</span> <span class="kn">import</span> <span class="n">tty</span>
+<span class="kn">from</span> <span class="nn">llnl.util.filesystem</span> <span class="kn">import</span> <span class="n">edit_in_place_through_temporary_file</span>
+<span class="kn">from</span> <span class="nn">llnl.util.lang</span> <span class="kn">import</span> <span class="n">memoized</span>
+
+<span class="kn">from</span> <span class="nn">spack.util.executable</span> <span class="kn">import</span> <span class="n">Executable</span><span class="p">,</span> <span class="n">which</span>
+
+
+<span class="k">def</span> <span class="nf">_ensure_file_on_win</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensures the file command is available on Windows</span>
+<span class="sd">    If not, it is bootstrapped.</span>
+<span class="sd">    No-op on all other platforms&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="kn">import</span> <span class="nn">spack.bootstrap</span>
+
+    <span class="k">with</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_bootstrap_configuration</span><span class="p">():</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_file_in_path_or_raise</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="file_command">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.filesystem.file_command">[文件]</a>
+<span class="nd">@memoized</span>
+<span class="k">def</span> <span class="nf">file_command</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates entry point to `file` system command with provided arguments&quot;&quot;&quot;</span>
+    <span class="n">_ensure_file_on_win</span><span class="p">()</span>
+    <span class="n">file_cmd</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">file_cmd</span><span class="o">.</span><span class="n">add_default_arg</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">file_cmd</span></div>
+
+
+
+<span class="nd">@memoized</span>
+<span class="k">def</span> <span class="nf">_get_mime_type</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate method to call `file` system command to aquire mime type</span>
+<span class="sd">    for a specified path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="c1"># -h option (no-dereference) does not exist in Windows</span>
+        <span class="k">return</span> <span class="n">file_command</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="s2">&quot;--mime-type&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">file_command</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--mime-type&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="mime_type">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.filesystem.mime_type">[文件]</a>
+<span class="k">def</span> <span class="nf">mime_type</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the mime type and subtype of a file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: file to be analyzed</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple containing the MIME type and subtype</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">_get_mime_type</span><span class="p">()(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;==&gt; &quot;</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+    <span class="nb">type</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">subtype</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">type</span><span class="p">,</span> <span class="n">subtype</span></div>
+
+
+
+<div class="viewcode-block" id="fix_darwin_install_name">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.filesystem.fix_darwin_install_name">[文件]</a>
+<span class="k">def</span> <span class="nf">fix_darwin_install_name</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix install name of dynamic libraries on Darwin to have full path.</span>
+
+<span class="sd">    There are two parts of this task:</span>
+
+<span class="sd">    1. Use ``install_name(&#39;-id&#39;, ...)`` to change install name of a single lib</span>
+<span class="sd">    2. Use ``install_name(&#39;-change&#39;, ...)`` to change the cross linking between</span>
+<span class="sd">       libs. The function assumes that all libraries are in one folder and</span>
+<span class="sd">       currently won&#39;t follow subfolders.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        path (str): directory in which .dylib files are located</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">libs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;*.dylib&quot;</span><span class="p">))</span>
+    <span class="n">install_name_tool</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;install_name_tool&quot;</span><span class="p">)</span>
+    <span class="n">otool</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;otool&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">lib</span> <span class="ow">in</span> <span class="n">libs</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-id&quot;</span><span class="p">,</span> <span class="n">lib</span><span class="p">]</span>
+        <span class="n">long_deps</span> <span class="o">=</span> <span class="n">otool</span><span class="p">(</span><span class="s2">&quot;-L&quot;</span><span class="p">,</span> <span class="n">lib</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="n">dep</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">::]</span> <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">long_deps</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="c1"># fix all dependencies:</span>
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">libs</span><span class="p">:</span>
+                <span class="c1"># We really want to check for either</span>
+                <span class="c1">#     dep == os.path.basename(loc)   or</span>
+                <span class="c1">#     dep == join_path(builddir, os.path.basename(loc)),</span>
+                <span class="c1"># but we don&#39;t know builddir (nor how symbolic links look</span>
+                <span class="c1"># in builddir). We thus only compare the basenames.</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">loc</span><span class="p">):</span>
+                    <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="s2">&quot;-change&quot;</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">loc</span><span class="p">))</span>
+                    <span class="k">break</span>
+
+        <span class="k">with</span> <span class="n">edit_in_place_through_temporary_file</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+            <span class="n">install_name_tool</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

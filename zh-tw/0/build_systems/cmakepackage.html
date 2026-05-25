@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMake &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/build_systems/cmakepackage.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cbf116e0"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜尋" href="../search.html" />
+    <link rel="next" title="CachedCMake" href="cachedcmakepackage.html" />
+    <link rel="prev" title="Autotools" href="autotoolspackage.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../ltd-provenance.js"></script>
+<script type="text/javascript" src="../ltd-current.js"></script>
+<script type="text/javascript" src="../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_systems.html">Build Systems</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CMake</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phases">Phases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#important-files">Important files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-system-dependencies">Build system dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#finding-cmake-flags">Finding cmake flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-flags-to-cmake">Adding flags to cmake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmake-arguments-provided-by-spack">CMake arguments provided by Spack</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cmake-install-prefix"><code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cmake-prefix-path"><code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cmake-build-type"><code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cmake-install-rpath-and-cmake-install-rpath-use-link-path-on"><code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH</span></code> and <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH_USE_LINK_PATH=ON</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#generators">Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmakelists-txt-in-a-sub-directory">CMakeLists.txt in a sub-directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-out-of-source">Building out of source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-and-install-targets">Build and install targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-documentation">External documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intelpackage.html">Intel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourceforgepackage.html">Sourceforge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../build_systems.html">Build Systems</a></li>
+      <li class="breadcrumb-item active">CMake</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/build_systems/cmakepackage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cmake">
+<span id="cmakepackage"></span><h1>CMake<a class="headerlink" href="#cmake" title="連結到這個標頭"></a></h1>
+<p>Like Autotools, CMake is a widely-used build-script generator. Designed
+by Kitware, CMake is the most popular build system for new C, C++, and
+Fortran projects, and many older projects are switching to it as well.</p>
+<p>Unlike Autotools, CMake can generate build scripts for builders other
+than Make: Ninja, Visual Studio, etc. It is therefore cross-platform,
+whereas Autotools is Unix-only.</p>
+<section id="phases">
+<h2>Phases<a class="headerlink" href="#phases" title="連結到這個標頭"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">CMakeBuilder</span></code> and <code class="docutils literal notranslate"><span class="pre">CMakePackage</span></code> base classes come with the following phases:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span></code> - generate the Makefile</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code> - build the package</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">install</span></code> - install the package</p></li>
+</ol>
+<p>By default, these phases run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>spack-build
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>spack-build
+<span class="gp">$ </span>cmake<span class="w"> </span>..<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>/path/to/installation/prefix
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make<span class="w"> </span><span class="nb">test</span><span class="w">  </span><span class="c1"># optional</span>
+<span class="gp">$ </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+<p>A few more flags are passed to <code class="docutils literal notranslate"><span class="pre">cmake</span></code> by default, including flags
+for setting the build type and flags for locating dependencies. Of
+course, you may need to add a few arguments yourself.</p>
+</section>
+<section id="important-files">
+<h2>Important files<a class="headerlink" href="#important-files" title="連結到這個標頭"></a></h2>
+<p>A CMake-based package can be identified by the presence of a
+<code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file. This file defines the build flags that can be
+passed to the cmake invocation, as well as linking instructions. If
+you are familiar with CMake, it can prove very useful for determining
+dependencies and dependency version requirements.</p>
+<p>One thing to look for is the <code class="docutils literal notranslate"><span class="pre">cmake_minimum_required</span></code> function:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">2.8.12</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This means that CMake 2.8.12 is the earliest release that will work.
+You should specify this in a <code class="docutils literal notranslate"><span class="pre">depends_on</span></code> statement.</p>
+<p>CMake-based packages may also contain <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> in subdirectories.
+This modularization helps to manage complex builds in a hierarchical
+fashion. Sometimes these nested <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> require additional
+dependencies not mentioned in the top-level file.</p>
+<p>There's also usually a <code class="docutils literal notranslate"><span class="pre">cmake</span></code> or <code class="docutils literal notranslate"><span class="pre">CMake</span></code> directory containing
+additional macros, find scripts, etc. These may prove useful in
+determining dependency version requirements.</p>
+</section>
+<section id="build-system-dependencies">
+<h2>Build system dependencies<a class="headerlink" href="#build-system-dependencies" title="連結到這個標頭"></a></h2>
+<p>Every package that uses the CMake build system requires a <code class="docutils literal notranslate"><span class="pre">cmake</span></code>
+dependency. Since this is always the case, the <code class="docutils literal notranslate"><span class="pre">CMakePackage</span></code> base
+class already contains:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you need to specify a particular version requirement, you can
+override this in your package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cmake@2.8.12:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="finding-cmake-flags">
+<h2>Finding cmake flags<a class="headerlink" href="#finding-cmake-flags" title="連結到這個標頭"></a></h2>
+<p>To get a list of valid flags that can be passed to <code class="docutils literal notranslate"><span class="pre">cmake</span></code>, run the
+following command in the directory that contains <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>.<span class="w"> </span>-LAH
+</pre></div>
+</div>
+<p>CMake will start by checking for compilers and dependencies. Eventually
+it will begin to list build options. You'll notice that most of the
+build options at the top are prefixed with <code class="docutils literal notranslate"><span class="pre">CMAKE_</span></code>. You can safely
+ignore most of these options as Spack already sets them for you. This
+includes flags needed to locate dependencies, RPATH libraries, set the
+installation directory, and set the build type.</p>
+<p>The rest of the flags are the ones you should consider adding to your
+package. They often include flags to enable/disable support for certain
+features and locate specific dependencies. One thing you'll notice that
+makes CMake different from Autotools is that CMake has an understanding
+of build flag hierarchy. That is, certain flags will not display unless
+their parent flag has been selected. For example, flags to specify the
+<code class="docutils literal notranslate"><span class="pre">lib</span></code> and <code class="docutils literal notranslate"><span class="pre">include</span></code> directories for a package might not appear
+unless CMake found the dependency it was looking for. You may need to
+manually specify certain flags to explore the full depth of supported
+build flags, or check the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> yourself.</p>
+</section>
+<section id="adding-flags-to-cmake">
+<h2>Adding flags to cmake<a class="headerlink" href="#adding-flags-to-cmake" title="連結到這個標頭"></a></h2>
+<p>To add additional flags to the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> call, simply override the
+<code class="docutils literal notranslate"><span class="pre">cmake_args</span></code> function. The following example defines values for the flags
+<code class="docutils literal notranslate"><span class="pre">WHATEVER</span></code>, <code class="docutils literal notranslate"><span class="pre">ENABLE_BROKEN_FEATURE</span></code>, <code class="docutils literal notranslate"><span class="pre">DETECT_HDF5</span></code>, and <code class="docutils literal notranslate"><span class="pre">THREADS</span></code> with
+and without the <a class="reference internal" href="../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.define" title="spack.build_systems.cmake.CMakeBuilder.define"><code class="xref py py-meth docutils literal notranslate"><span class="pre">define()</span></code></a> and
+<a class="reference internal" href="../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.define_from_variant" title="spack.build_systems.cmake.CMakeBuilder.define_from_variant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">define_from_variant()</span></code></a> helper functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cmake_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;-DWHATEVER:STRING=somevalue&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;ENABLE_BROKEN_FEATURE&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_from_variant</span><span class="p">(</span><span class="s2">&quot;DETECT_HDF5&quot;</span><span class="p">,</span> <span class="s2">&quot;hdf5&quot;</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_from_variant</span><span class="p">(</span><span class="s2">&quot;THREADS&quot;</span><span class="p">),</span> <span class="c1"># True if +threads</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">args</span>
+</pre></div>
+</div>
+<p>Spack supports CMake defines from conditional variants too. Whenever the condition on
+the variant is not met, <code class="docutils literal notranslate"><span class="pre">define_from_variant()</span></code> will simply return an empty string,
+and CMake simply ignores the empty command line argument. For example the following</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;@2.0:&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">cmake_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+   <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">define_from_variant</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;example&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>will generate <code class="docutils literal notranslate"><span class="pre">'cmake'</span> <span class="pre">'-DEXAMPLE=ON'</span> <span class="pre">...</span></code> when <cite>&#64;2.0: +example</cite> is met, but will
+result in <code class="docutils literal notranslate"><span class="pre">'cmake'</span> <span class="pre">''</span> <span class="pre">...</span></code> when the spec version is below <code class="docutils literal notranslate"><span class="pre">2.0</span></code>.</p>
+</section>
+<section id="cmake-arguments-provided-by-spack">
+<h2>CMake arguments provided by Spack<a class="headerlink" href="#cmake-arguments-provided-by-spack" title="連結到這個標頭"></a></h2>
+<p>The following default arguments are controlled by Spack:</p>
+<section id="cmake-install-prefix">
+<h3><code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code><a class="headerlink" href="#cmake-install-prefix" title="連結到這個標頭"></a></h3>
+<p>Is set to the the package's install directory.</p>
+</section>
+<section id="cmake-prefix-path">
+<h3><code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code><a class="headerlink" href="#cmake-prefix-path" title="連結到這個標頭"></a></h3>
+<p>CMake finds dependencies through calls to <code class="docutils literal notranslate"><span class="pre">find_package()</span></code>, <code class="docutils literal notranslate"><span class="pre">find_program()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">find_library()</span></code>, <code class="docutils literal notranslate"><span class="pre">find_file()</span></code>, and <code class="docutils literal notranslate"><span class="pre">find_path()</span></code>, which use a list of search
+paths from <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>. Spack sets this variable to a list of prefixes of the
+spec's transitive dependencies.</p>
+<p>For troubleshooting cases where CMake fails to find a dependency, add the
+<code class="docutils literal notranslate"><span class="pre">--debug-find</span></code> flag to <code class="docutils literal notranslate"><span class="pre">cmake_args</span></code>.</p>
+</section>
+<section id="cmake-build-type">
+<h3><code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code><a class="headerlink" href="#cmake-build-type" title="連結到這個標頭"></a></h3>
+<p>Every CMake-based package accepts a <code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE</span></code> flag to
+dictate which level of optimization to use. In order to ensure
+uniformity across packages, the <code class="docutils literal notranslate"><span class="pre">CMakePackage</span></code> base class adds
+a variant to control this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span><span class="s2">&quot;build_type&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;RelWithDebInfo&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;CMake build type&quot;</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Debug&quot;</span><span class="p">,</span> <span class="s2">&quot;Release&quot;</span><span class="p">,</span> <span class="s2">&quot;RelWithDebInfo&quot;</span><span class="p">,</span> <span class="s2">&quot;MinSizeRel&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>However, not every CMake package accepts all four of these options.
+Grep the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file to see if the default values are
+missing or replaced. For example, the
+<a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/dealii/package.py">dealii</a>
+package overrides the default variant with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span><span class="s2">&quot;build_type&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;DebugRelease&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The build type to build&quot;</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Debug&quot;</span><span class="p">,</span> <span class="s2">&quot;Release&quot;</span><span class="p">,</span> <span class="s2">&quot;DebugRelease&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For more information on <code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code>, see:
+<a class="reference external" href="https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html">https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html</a></p>
+</section>
+<section id="cmake-install-rpath-and-cmake-install-rpath-use-link-path-on">
+<h3><code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH</span></code> and <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH_USE_LINK_PATH=ON</span></code><a class="headerlink" href="#cmake-install-rpath-and-cmake-install-rpath-use-link-path-on" title="連結到這個標頭"></a></h3>
+<p>CMake uses different RPATHs during the build and after installation, so that executables
+can locate the libraries they're linked to during the build, and installed executables
+do not have RPATHs to build directories. In Spack, we have to make sure that RPATHs are
+set properly after installation.</p>
+<p>Spack sets <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH</span></code> to a list of <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/lib</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/lib64</span></code>
+directories of the spec's link-type dependencies. Apart from that, it sets
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON</span></code>, which should add RPATHs for directories of
+linked libraries not in the directories covered by <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH</span></code>.</p>
+<p>Usually it's enough to set only <code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON</span></code>, but the
+reason to provide both options is that packages may dynamically open shared libraries,
+which CMake cannot detect. In those cases, the RPATHs from <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_RPATH</span></code> are
+used as search paths.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Some packages provide stub libraries, which contain an interface for linking without
+an implementation. When using such libraries, it's best to override the option
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF</span></code> in <code class="docutils literal notranslate"><span class="pre">cmake_args</span></code>, so that stub libraries
+are not used at runtime.</p>
+</div>
+</section>
+</section>
+<section id="generators">
+<h2>Generators<a class="headerlink" href="#generators" title="連結到這個標頭"></a></h2>
+<p>CMake and Autotools are build-script generation tools; they &quot;generate&quot;
+the Makefiles that are used to build a software package. CMake actually
+supports multiple generators, not just Makefiles. Another common
+generator is Ninja. To switch to the Ninja generator, simply add:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span><span class="p">(</span><span class="s2">&quot;ninja&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CMakePackage</span></code> defaults to &quot;Unix Makefiles&quot;. If you switch to the
+Ninja generator, make sure to add:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;ninja&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to the package as well. Aside from that, you shouldn't need to do
+anything else. Spack will automatically detect that you are using
+Ninja and run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>..<span class="w"> </span>-G<span class="w"> </span>Ninja
+<span class="gp">$ </span>ninja
+<span class="gp">$ </span>ninja<span class="w"> </span>install
+</pre></div>
+</div>
+<p>Spack currently only supports &quot;Unix Makefiles&quot; and &quot;Ninja&quot; as valid
+generators, but it should be simple to add support for alternative
+generators. For more information on CMake generators, see:
+<a class="reference external" href="https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html">https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html</a></p>
+</section>
+<section id="cmakelists-txt-in-a-sub-directory">
+<h2>CMakeLists.txt in a sub-directory<a class="headerlink" href="#cmakelists-txt-in-a-sub-directory" title="連結到這個標頭"></a></h2>
+<p>Occasionally, developers will hide their source code and <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>
+in a subdirectory like <code class="docutils literal notranslate"><span class="pre">src</span></code>. If this happens, Spack won't
+be able to automatically detect the build system properly when running
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">create</span></code>. You will have to manually change the package base
+class and tell Spack where <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> resides. You can do this
+like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">root_cmakelists_dir</span> <span class="o">=</span> <span class="s2">&quot;src&quot;</span>
+</pre></div>
+</div>
+<p>Note that this path is relative to the root of the extracted tarball,
+not to the <code class="docutils literal notranslate"><span class="pre">build_directory</span></code>. It defaults to the current directory.</p>
+</section>
+<section id="building-out-of-source">
+<h2>Building out of source<a class="headerlink" href="#building-out-of-source" title="連結到這個標頭"></a></h2>
+<p>By default, Spack builds every <code class="docutils literal notranslate"><span class="pre">CMakePackage</span></code> in a <code class="docutils literal notranslate"><span class="pre">spack-build</span></code>
+sub-directory. If, for whatever reason, you would like to build in a
+different sub-directory, simply override <code class="docutils literal notranslate"><span class="pre">build_directory</span></code> like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_directory</span> <span class="o">=</span> <span class="s2">&quot;my-build&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="build-and-install-targets">
+<h2>Build and install targets<a class="headerlink" href="#build-and-install-targets" title="連結到這個標頭"></a></h2>
+<p>For most CMake packages, the usual:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+<p>is sufficient to install the package. However, if you need to run
+make with any other targets, for example, to build an optional
+library or build the documentation, you can add these like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">]</span>
+<span class="n">install_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="連結到這個標頭"></a></h2>
+<p>CMake-based packages typically provide unit testing via the
+<code class="docutils literal notranslate"><span class="pre">test</span></code> target. If you build your software with <code class="docutils literal notranslate"><span class="pre">--test=root</span></code>,
+Spack will check for the presence of a <code class="docutils literal notranslate"><span class="pre">test</span></code> target in the
+Makefile and run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> for you. If you want to run a
+different test instead, simply override the <code class="docutils literal notranslate"><span class="pre">check</span></code> method.</p>
+</section>
+<section id="external-documentation">
+<h2>External documentation<a class="headerlink" href="#external-documentation" title="連結到這個標頭"></a></h2>
+<p>For more information on the CMake build system, see:
+<a class="reference external" href="https://cmake.org/cmake/help/latest/">https://cmake.org/cmake/help/latest/</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="autotoolspackage.html" class="btn btn-neutral float-left" title="Autotools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cachedcmakepackage.html" class="btn btn-neutral float-right" title="CachedCMake" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

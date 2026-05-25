@@ -1,0 +1,1132 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="A guide for developers and administrators on contributing new packages, features, or bug fixes to Spack, covering Git workflows, pull requests, and continuous integration testing." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2026-01-23T08:17:54+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜索" href="search.html"><link rel="next" title="Developer Guide" href="developer_guide.html"><link rel="prev" title="Packaging Roles and Responsibilities" href="roles_and_responsibilities.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/contribution_guide.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Contribution Guide - Spack 1.2.0.dev0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.2.0.dev0 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/contribution_guide.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="contribution-guide">
+<span id="id1"></span><h1>Contribution Guide<a class="headerlink" href="#contribution-guide" title="链接到此标题。">¶</a></h1>
+<p>This guide is intended for developers or administrators who want to contribute a new package, feature, or bug fix to Spack.
+It assumes that you have at least some familiarity with Git and GitHub.
+The guide will show a few examples of contributing workflows and discuss the granularity of pull requests (PRs).
+It will also discuss the tests your PR must pass in order to be accepted into Spack.</p>
+<p>First, what is a PR?
+Quoting <a class="reference external" href="https://www.atlassian.com/git/tutorials/making-a-pull-request/">Bitbucket's tutorials</a>:</p>
+<blockquote>
+<div><p>Pull requests are a mechanism for a developer to notify team members that they have <strong>completed a feature</strong>.
+The pull request is more than just a notification -- it's a dedicated forum for discussing the proposed feature.</p>
+</div></blockquote>
+<p>Important is <strong>completed feature</strong>.
+The changes one proposes in a PR should correspond to one feature, bug fix, extension, etc.
+One can create PRs with changes relevant to different ideas; however, reviewing such PRs becomes tedious and error-prone.
+If possible, try to follow the <strong>one-PR-one-package/feature</strong> rule.</p>
+<section id="branches">
+<h2>Branches<a class="headerlink" href="#branches" title="链接到此标题。">¶</a></h2>
+<p>Spack's <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch has the latest contributions.
+Nearly all pull requests should start from <code class="docutils literal notranslate"><span class="pre">develop</span></code> and target <code class="docutils literal notranslate"><span class="pre">develop</span></code>.</p>
+<p>There is a branch for each major release series.
+Release branches originate from <code class="docutils literal notranslate"><span class="pre">develop</span></code> and have tags for each point release in the series.
+For example, <code class="docutils literal notranslate"><span class="pre">releases/v0.14</span></code> has tags for <code class="docutils literal notranslate"><span class="pre">v0.14.0</span></code>, <code class="docutils literal notranslate"><span class="pre">v0.14.1</span></code>, <code class="docutils literal notranslate"><span class="pre">v0.14.2</span></code>, etc., versions of Spack.
+We backport important bug fixes to these branches, but we do not advance the package versions or make other changes that would change the way Spack concretizes dependencies.
+Currently, the maintainers manage these branches by cherry-picking from <code class="docutils literal notranslate"><span class="pre">develop</span></code>.
+See <a class="reference internal" href="developer_guide.html#releases"><span class="std std-ref">Releases</span></a> for more information.</p>
+</section>
+<section id="continuous-integration">
+<h2>Continuous Integration<a class="headerlink" href="#continuous-integration" title="链接到此标题。">¶</a></h2>
+<p>Spack uses <a class="reference external" href="https://docs.github.com/en/actions">GitHub Actions</a> for Continuous Integration (CI) testing.
+This means that every time you submit a pull request, a series of tests will be run to make sure you did not accidentally introduce any bugs into Spack.
+<strong>Your PR will not be accepted until it passes all of these tests.</strong>
+While you can certainly wait for the results of these tests after submitting a PR, we recommend that you run them locally to speed up the review process.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Oftentimes, CI will fail for reasons other than a problem with your PR.
+For example, <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, <code class="docutils literal notranslate"><span class="pre">pip</span></code>, or <code class="docutils literal notranslate"><span class="pre">brew</span></code> (Homebrew) might fail to download one of the dependencies for the test suite, or a transient bug might cause the unit tests to timeout.
+If any job fails, click the &quot;Details&quot; link and click on the test(s) that is failing.
+If it does not look like it is failing for reasons related to your PR, you have two options.
+If you have write permissions for the Spack repository, you should see a &quot;Restart workflow&quot; button on the right-hand side.
+If not, you can close and reopen your PR to rerun all of the tests.
+If the same test keeps failing, there may be a problem with your PR.
+If you notice that every recent PR is failing with the same error message, it may be that an issue occurred with the CI infrastructure, or one of Spack's dependencies put out a new release that is causing problems.
+If this is the case, please file an issue.</p>
+</div>
+<p>We currently test against Python 3.6 and up on both macOS and Linux and perform three types of tests:</p>
+<section id="unit-tests">
+<span id="cmd-spack-unit-test"></span><h3>Unit Tests<a class="headerlink" href="#unit-tests" title="链接到此标题。">¶</a></h3>
+<p>Unit tests ensure that core Spack features like fetching or spec resolution are working as expected.
+If your PR only adds new packages or modifies existing ones, there's very little chance that your changes could cause the unit tests to fail.
+However, if you make changes to Spack's core libraries, you should run the unit tests to make sure you didn't break anything.</p>
+<p>Since they test things like fetching from VCS repos, the unit tests require <a class="reference external" href="https://git-scm.com/">git</a>, <a class="reference external" href="https://www.mercurial-scm.org/">mercurial</a>, and <a class="reference external" href="https://subversion.apache.org/">subversion</a> to run.
+Make sure these are installed on your system and can be found in your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.
+All of these can be installed with Spack or with your system package manager.</p>
+<p>To run <em>all</em> of the unit tests, use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack unit-test
+</pre></div>
+</div>
+<p>These tests may take several minutes to complete.
+If you know you are only modifying a single Spack feature, you can run subsets of tests at a time.
+For example, this would run all the tests in <code class="docutils literal notranslate"><span class="pre">lib/spack/spack/test/architecture.py</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack unit-test lib/spack/spack/test/architecture.py
+</pre></div>
+</div>
+<p>And this would run the <code class="docutils literal notranslate"><span class="pre">test_platform</span></code> test from that file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack unit-test lib/spack/spack/test/architecture.py::test_platform
+</pre></div>
+</div>
+<p>This allows you to develop iteratively: make a change, test that change, make another change, test that change, etc.
+We use <a class="reference external" href="http://pytest.org/">pytest</a> as our tests framework, and these types of arguments are just passed to the <code class="docutils literal notranslate"><span class="pre">pytest</span></code> command underneath.
+See <a class="reference external" href="https://doc.pytest.org/en/latest/how-to/usage.html#specifying-which-tests-to-run">the pytest docs</a> for more details on test selection syntax.</p>
+<p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">unit-test</span></code> has a few special options that can help you understand what tests are available.
+To get a list of all available unit test files, run:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack unit-test --list
+lib/spack/spack/test/architecture.py                             lib/spack/spack/test/directory_layout.py
+lib/spack/spack/test/audit.py                                    lib/spack/spack/test/entry_points.py
+lib/spack/spack/test/binary_distribution.py                      lib/spack/spack/test/environment/mutate.py
+lib/spack/spack/test/bootstrap.py                                lib/spack/spack/test/environment_modifications.py
+lib/spack/spack/test/build_distribution.py                       lib/spack/spack/test/error_messages.py
+...
+</pre></div>
+</div>
+<p>To see a more detailed list of available unit tests, use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">unit-test</span> <span class="pre">--list-long</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack unit-test --list-long
+lib/spack/spack/test/architecture.py::
+    test_arch_spec_container_semantic  test_operating_system_conversion_to_dict          test_user_input_combination
+    test_concretize_target_ranges      test_platform
+    test_default_os_and_target         test_satisfy_strict_constraint_when_not_concrete
+
+lib/spack/spack/test/audit.py::
+    test_audit_configs  test_audit_packages  test_audit_packages_https  test_config_audits  test_package_audits
+
+lib/spack/spack/test/binary_distribution.py::
+    test_FetchCacheError_only_accepts_lists_of_errors
+...
+</pre></div>
+</div>
+<p>And to see the fully qualified names of all tests, use <code class="docutils literal notranslate"><span class="pre">--list-names</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack unit-test --list-names
+lib/spack/spack/test/architecture.py::test_arch_spec_container_semantic
+lib/spack/spack/test/architecture.py::test_concretize_target_ranges
+lib/spack/spack/test/architecture.py::test_default_os_and_target
+lib/spack/spack/test/architecture.py::test_operating_system_conversion_to_dict
+lib/spack/spack/test/architecture.py::test_platform
+...
+</pre></div>
+</div>
+<p>You can combine these with <code class="docutils literal notranslate"><span class="pre">pytest</span></code> arguments to restrict which tests you want to know about.
+For example, to see just the tests in <code class="docutils literal notranslate"><span class="pre">architecture.py</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack unit-test --list-long lib/spack/spack/test/architecture.py
+lib/spack/spack/test/architecture.py::
+    test_arch_spec_container_semantic  test_operating_system_conversion_to_dict          test_user_input_combination
+    test_concretize_target_ranges      test_platform
+    test_default_os_and_target         test_satisfy_strict_constraint_when_not_concrete
+</pre></div>
+</div>
+<p>You can also combine any of these options with a <code class="docutils literal notranslate"><span class="pre">pytest</span></code> keyword search.
+See the <a class="reference external" href="https://doc.pytest.org/en/latest/how-to/usage.html#specifying-which-tests-to-run">pytest usage documentation</a> for more details on test selection syntax.
+For example, to see the names of all tests that have &quot;spec&quot; or &quot;concretize&quot; somewhere in their names:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack unit-test --list-names -k &quot;spec and concretize&quot;
+lib/spack/spack/test/cmd/build_env.py::test_concretize_user_specs_together
+lib/spack/spack/test/cmd/build_env.py::test_concretized_specs_and_include_concrete
+lib/spack/spack/test/cmd/build_env.py::test_dependency_propagation_in_environments
+lib/spack/spack/test/cmd/build_env.py::test_roundtrip_spack_yaml_with_comments
+lib/spack/spack/test/cmd/build_env.py::test_static_analysis_in_environments
+lib/spack/spack/test/cmd/build_env.py::test_toolchain_definitions_are_allowed
+lib/spack/spack/test/cmd/build_env.py::test_virtual_spec_concretize_together
+lib/spack/spack/test/cmd/mirror.py::TestMirrorCreate::test_all_specs_with_all_versions_dont_concretize
+lib/spack/spack/test/cmd/spec.py::test_spec_concretizer_args
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_best_effort_coconcretize
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_best_effort_coconcretize_preferences
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_concrete_specs_are_not_modified_on_reuse
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_concretize_propagate_specified_variant
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_conflicts_in_spec
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_exclude_specs_from_reuse
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_external_package_versions
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_git_ref_version_is_equivalent_to_specified_version
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_include_specs_from_externals_and_libcs
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_installed_specs_disregard_conflicts
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_mv_variants_disjoint_sets_from_spec
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_no_conflict_in_external_specs
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_no_matching_compiler_specs
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_result_specs_is_not_empty
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_reuse_does_not_overwrite_dev_specs
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_reuse_specs_from_non_available_compilers
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_simultaneous_concretization_of_specs
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_spec_flags_maintain_order
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_spec_with_build_dep_from_json
+lib/spack/spack/test/concretization/core.py::TestConcretize::test_unsolved_specs_raises_error
+lib/spack/spack/test/concretization/core.py::TestConcretizeSeparately::test_specifying_different_versions_build_deps
+lib/spack/spack/test/spec_dag.py::TestSpecDag::test_concretize_deptypes
+lib/spack/spack/test/spec_dag.py::TestSpecDag::test_copy_concretized
+lib/spack/spack/test/spec_semantics.py::test_concretize_partial_old_dag_hash_spec
+lib/spack/spack/test/spec_semantics.py::test_intersects_and_satisfies_on_concretized_spec
+</pre></div>
+</div>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">pytest</span></code> captures the output of all unit tests, and it will print any captured output for failed tests.
+Sometimes it is helpful to see your output interactively while the tests run (e.g., if you add print statements to unit tests).
+To see the output <em>live</em>, use the <code class="docutils literal notranslate"><span class="pre">-s</span></code> argument to <code class="docutils literal notranslate"><span class="pre">pytest</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack unit-test -s --list-long lib/spack/spack/test/architecture.py::test_platform
+</pre></div>
+</div>
+<p>Unit tests are crucial to making sure bugs are not introduced into Spack.
+If you are modifying core Spack libraries or adding new functionality, please add new unit tests for your feature and consider strengthening existing tests.
+You will likely be asked to do this if you submit a pull request to the Spack project on GitHub.
+Check out the <a class="reference external" href="http://pytest.org/">pytest documentation</a> and feel free to ask for guidance on how to write tests!</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>You may notice the <code class="docutils literal notranslate"><span class="pre">share/spack/qa/run-unit-tests</span></code> script in the repository.
+This script is designed for CI.
+It runs the unit tests and reports coverage statistics back to Codecov.
+If you want to run the unit tests yourself, we suggest you use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">unit-test</span></code>.</p>
+</div>
+</section>
+<section id="style-tests">
+<h3>Style Tests<a class="headerlink" href="#style-tests" title="链接到此标题。">¶</a></h3>
+<p>Spack uses <a class="reference external" href="http://flake8.pycqa.org/en/latest/">Flake8</a> to test for <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> conformance and <a class="reference external" href="https://mypy.readthedocs.io/en/stable/">mypy</a> for type checking.
+PEP 8 is a series of style guides for Python that provide suggestions for everything from variable naming to indentation.
+In order to limit the number of PRs that were mostly style changes, we decided to enforce PEP 8 conformance.
+Your PR needs to comply with PEP 8 in order to be accepted, and if it modifies the Spack library, it needs to successfully type-check with mypy as well.</p>
+<p>Testing for compliance with Spack's style is easy.
+Simply run the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">style</span></code> command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack style
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">style</span></code> has a couple advantages over running the tools by hand:</p>
+<ol class="arabic simple">
+<li><p>It only tests files that you have modified since branching off of <code class="docutils literal notranslate"><span class="pre">develop</span></code>.</p></li>
+<li><p>It works regardless of what directory you are in.</p></li>
+<li><p>It automatically adds approved exemptions from the <code class="docutils literal notranslate"><span class="pre">flake8</span></code> checks.
+For example, URLs are often longer than 80 characters, so we exempt them from line length checks.
+We also exempt lines that start with <code class="docutils literal notranslate"><span class="pre">homepage</span> <span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">url</span> <span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">version()</span></code>, <code class="docutils literal notranslate"><span class="pre">variant()</span></code>, <code class="docutils literal notranslate"><span class="pre">depends_on()</span></code>, and <code class="docutils literal notranslate"><span class="pre">extends()</span></code> in <code class="docutils literal notranslate"><span class="pre">package.py</span></code> files.
+This is now also possible when directly running Flake8 if you can use the <code class="docutils literal notranslate"><span class="pre">spack</span></code> formatter plugin included with Spack.</p></li>
+</ol>
+<p>More approved Flake8 exemptions can be found <a class="reference external" href="https://github.com/spack/spack/blob/develop/.flake8">here</a>.</p>
+<p>If all is well, you'll see something like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>run-flake8-tests
+<span class="go">Dependencies found.</span>
+<span class="go">=======================================================</span>
+<span class="go">flake8: running flake8 code checks on spack.</span>
+
+<span class="go">Modified files:</span>
+
+<span class="go">  var/spack/repos/spack_repo/builtin/packages/hdf5/package.py</span>
+<span class="go">  var/spack/repos/spack_repo/builtin/packages/hdf/package.py</span>
+<span class="go">  var/spack/repos/spack_repo/builtin/packages/netcdf/package.py</span>
+<span class="go">=======================================================</span>
+<span class="go">Flake8 checks were clean.</span>
+</pre></div>
+</div>
+<p>However, if you are not compliant with PEP 8, Flake8 will complain:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">var/spack/repos/spack_repo/builtin/packages/netcdf/package.py:26: [F401] &#39;os&#39; imported but unused</span>
+<span class="go">var/spack/repos/spack_repo/builtin/packages/netcdf/package.py:61: [E303] too many blank lines (2)</span>
+<span class="go">var/spack/repos/spack_repo/builtin/packages/netcdf/package.py:106: [E501] line too long (92 &gt; 79 characters)</span>
+<span class="go">Flake8 found errors.</span>
+</pre></div>
+</div>
+<p>Most of the error messages are straightforward, but if you do not understand what they mean, just ask questions about them when you submit your PR.
+The line numbers will change if you add or delete lines, so simply run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">style</span></code> again to update them.</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>Try fixing Flake8 errors in reverse order.
+This eliminates the need for multiple runs of <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">style</span></code> just to re-compute line numbers and makes it much easier to fix errors directly off of the CI output.</p>
+</div>
+</section>
+<section id="documentation-tests">
+<h3>Documentation Tests<a class="headerlink" href="#documentation-tests" title="链接到此标题。">¶</a></h3>
+<p>Spack uses <a class="reference external" href="https://www.sphinx-doc.org/en/stable/">Sphinx</a> to build its documentation.
+In order to prevent things like broken links and missing imports, we added documentation tests that build the documentation and fail if there are any warning or error messages.</p>
+<p>Building the documentation requires several dependencies:</p>
+<ul class="simple">
+<li><p>sphinx</p></li>
+<li><p>sphinxcontrib-programoutput</p></li>
+<li><p>sphinx-rtd-theme</p></li>
+<li><p>graphviz</p></li>
+<li><p>git</p></li>
+<li><p>mercurial</p></li>
+<li><p>subversion</p></li>
+</ul>
+<p>All of these can be installed with Spack, e.g.:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install py-sphinx py-sphinxcontrib-programoutput py-sphinx-rtd-theme graphviz git mercurial subversion
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Sphinx has <a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/py-sphinx/package.py">several required dependencies</a>.
+If you are using a Python from Spack and you installed <code class="docutils literal notranslate"><span class="pre">py-sphinx</span></code> and friends, you need to make them available to your Python interpreter.
+The easiest way to do this is to run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack load py-sphinx py-sphinx-rtd-theme py-sphinxcontrib-programoutput
+</pre></div>
+</div>
+<p>so that all of the dependencies are added to <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>.
+If you see an error message like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Extension error:</span>
+<span class="go">Could not import extension sphinxcontrib.programoutput (exception: No module named sphinxcontrib.programoutput)</span>
+<span class="go">make: *** [html] Error 1</span>
+</pre></div>
+</div>
+<p>that means Sphinx could not find <code class="docutils literal notranslate"><span class="pre">py-sphinxcontrib-programoutput</span></code> in your <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>.</p>
+</div>
+<p>Once all of the dependencies are installed, you can try building the documentation:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> path/to/spack/lib/spack/docs/
+<span class="gp">$ </span>make clean
+<span class="gp">$ </span>make
+</pre></div>
+</div>
+<p>If you see any warning or error messages, you will have to correct those before your PR is accepted.
+If you are editing the documentation, you should be running the documentation tests to make sure there are no errors.
+Documentation changes can result in some obfuscated warning messages.
+If you do not understand what they mean, feel free to ask when you submit your PR.</p>
+</section>
+<section id="gitlab-ci">
+<span id="spack-builders-and-pipelines"></span><h3>GitLab CI<a class="headerlink" href="#gitlab-ci" title="链接到此标题。">¶</a></h3>
+<section id="build-cache-stacks">
+<h4>Build Cache Stacks<a class="headerlink" href="#build-cache-stacks" title="链接到此标题。">¶</a></h4>
+<p>Spack welcomes the contribution of software stacks of interest to the community.
+These stacks are used to test package recipes and generate publicly available build caches.
+Spack uses GitLab CI for managing the orchestration of build jobs.</p>
+<section id="gitlab-entry-point">
+<h5>GitLab Entry Point<a class="headerlink" href="#gitlab-entry-point" title="链接到此标题。">¶</a></h5>
+<p>Add a stack entry point to <code class="docutils literal notranslate"><span class="pre">share/spack/gitlab/cloud_pipelines/.gitlab-ci.yml</span></code>.
+There are two stages required for each new stack: the generation stage and the build stage.</p>
+<p>The generate stage is defined using the job template <code class="docutils literal notranslate"><span class="pre">.generate</span></code> configured with environment variables defining the name of the stack in <code class="docutils literal notranslate"><span class="pre">SPACK_CI_STACK_NAME</span></code>, the platform (<code class="docutils literal notranslate"><span class="pre">SPACK_TARGET_PLATFORM</span></code>) and architecture (<code class="docutils literal notranslate"><span class="pre">SPACK_TARGET_ARCH</span></code>) configuration, and the tags associated with the class of runners to build on.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SPACK_CI_STACK_NAME</span></code> must match the name of the directory containing the stack's <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The platform and architecture variables are specified in order to select the correct configurations from the generic configurations used in Spack CI.
+The configurations currently available are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.cray_rhel_zen4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.cray_sles_zen4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.darwin_aarch64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.darwin_x86_64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_aarch64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_icelake</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_neoverse_n1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_neoverse_v1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_neoverse_v2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_skylake</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_x86_64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.linux_x86_64_v4</span></code></p></li>
+</ul>
+<p>New configurations can be added to accommodate new platforms and architectures.</p>
+</div>
+<p>The build stage is defined as a trigger job that consumes the GitLab CI pipeline generated in the generate stage for this stack.
+Build stage jobs use the <code class="docutils literal notranslate"><span class="pre">.build</span></code> job template, which handles the basic configuration.</p>
+<p>An example entry point for a new stack called <code class="docutils literal notranslate"><span class="pre">my-super-cool-stack</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">.my-super-cool-stack</span><span class="p">:</span>
+  <span class="nt">extends</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;.linux_x86_64_v3&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">variables</span><span class="p">:</span>
+    <span class="nt">SPACK_CI_STACK_NAME</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-super-cool-stack</span>
+    <span class="nt">tags</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;all&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;tags&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;your&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;job&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;needs&quot;</span><span class="p p-Indicator">]</span>
+
+<span class="nt">my-super-cool-stack-generate</span><span class="p">:</span>
+  <span class="nt">extends</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;.generate&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;.my-super-cool-stack&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-super-cool-stack-image:0.0.1</span>
+
+<span class="nt">my-super-cool-stack-build</span><span class="p">:</span>
+  <span class="nt">extends</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;.build&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;.my-super-cool-stack&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">trigger</span><span class="p">:</span>
+    <span class="nt">include</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">artifact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jobs_scratch_dir/cloud-ci-pipeline.yml</span>
+      <span class="nt">job</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-super-cool-stack-generate</span>
+    <span class="nt">strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">depend</span>
+  <span class="nt">needs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">artifacts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">job</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-super-cool-stack-generate</span>
+</pre></div>
+</div>
+</section>
+<section id="stack-configuration">
+<h5>Stack Configuration<a class="headerlink" href="#stack-configuration" title="链接到此标题。">¶</a></h5>
+<p>The stack configuration is a Spack environment file with two additional sections added.
+Stack configurations should be located in <code class="docutils literal notranslate"><span class="pre">share/spack/gitlab/cloud_pipelines/stacks/&lt;stack_name&gt;/spack.yaml</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ci</span></code> section is generally used to define stack-specific mappings such as image or tags.
+For more information on what can go into the <code class="docutils literal notranslate"><span class="pre">ci</span></code> section, refer to the docs on pipelines.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cdash</span></code> section is used for defining where to upload the results of builds.
+Spack configures most of the details for posting pipeline results to <a class="reference external" href="https://cdash.spack.io/index.php?project=Spack+Testing">cdash.spack.io</a>.
+The only requirement in the stack configuration is to define a <code class="docutils literal notranslate"><span class="pre">build-group</span></code> that is unique; this is usually the long name of the stack.</p>
+<p>An example stack that builds <code class="docutils literal notranslate"><span class="pre">zlib</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">view</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">packages</span><span class="p">:</span>
+    <span class="nt">all</span><span class="p">:</span>
+      <span class="nt">require</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;%gcc&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;target=x86_64_v3&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">zlib</span>
+
+  <span class="nt">ci</span><span class="p">:</span>
+    <span class="nt">pipeline-gen</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">build-job</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-super-cool-stack-image:0.0.1</span>
+
+  <span class="nt">cdash</span><span class="p">:</span>
+    <span class="nt">build-group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">My Super Cool Stack</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">image</span></code> used in the <code class="docutils literal notranslate"><span class="pre">*-generate</span></code> job must match exactly the <code class="docutils literal notranslate"><span class="pre">image</span></code> used in the <code class="docutils literal notranslate"><span class="pre">build-job</span></code>.
+When the images do not match, the build job may fail.</p>
+</div>
+</section>
+</section>
+<section id="registering-runners">
+<h4>Registering Runners<a class="headerlink" href="#registering-runners" title="链接到此标题。">¶</a></h4>
+<p>Contributing computational resources to Spack's CI build farm is one way to help expand the capabilities and offerings of the public Spack build caches.
+Currently, Spack utilizes Linux runners from AWS, Google, and the University of Oregon (UO).</p>
+<p>Runners require four key pieces:</p>
+<ul class="simple">
+<li><p>Runner Registration Token</p></li>
+<li><p>Accurate tags</p></li>
+<li><p>OIDC Authentication script</p></li>
+<li><p>GPG keys</p></li>
+</ul>
+<p>Minimum GitLab Runner Version: <code class="docutils literal notranslate"><span class="pre">16.1.0</span></code> <a class="reference external" href="https://docs.gitlab.com/runner/install/">Installation instructions</a></p>
+<section id="registration-token">
+<h5>Registration Token<a class="headerlink" href="#registration-token" title="链接到此标题。">¶</a></h5>
+<p>The first step to contribute new runners is to open an issue in the <a class="reference external" href="https://github.com/spack/spack-infrastructure/issues/new?assignees=&amp;labels=runner-registration&amp;projects=&amp;template=runner_registration.yml">Spack infrastructure</a> project.
+This will be reported to the Spack infrastructure team, who will guide users through the process of registering new runners for Spack CI.</p>
+<p>The information needed to register a runner is the motivation for the new resources, a semi-detailed description of the runner, and finally the point of contact for maintaining the software on the runner.</p>
+<p>The point of contact will then work with the infrastructure team to obtain runner registration token(s) for interacting with Spack's GitLab instance.
+Once the runner is active, this point of contact will also be responsible for updating the GitLab runner software to keep pace with Spack's GitLab.</p>
+</section>
+<section id="tagging">
+<h5>Tagging<a class="headerlink" href="#tagging" title="链接到此标题。">¶</a></h5>
+<p>In the initial stages of runner registration, it is important to <strong>exclude</strong> the special tag <code class="docutils literal notranslate"><span class="pre">spack</span></code>.
+This will prevent the new runner(s) from being picked up for production CI jobs while it is configured and evaluated.
+Once it is determined that the runner is ready for production use, the <code class="docutils literal notranslate"><span class="pre">spack</span></code> tag will be added.</p>
+<p>Because GitLab has no concept of tag exclusion, runners that provide specialized resources also require specialized tags.
+For example, a basic CPU-only x86_64 runner may have a tag <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> associated with it.
+However, a runner containing a CUDA-capable GPU may have the tag <code class="docutils literal notranslate"><span class="pre">x86_64-cuda</span></code> to denote that it should only be used for packages that will benefit from a CUDA-capable resource.</p>
+</section>
+<section id="oidc">
+<h5>OIDC<a class="headerlink" href="#oidc" title="链接到此标题。">¶</a></h5>
+<p>Spack runners use OIDC authentication for connecting to the appropriate AWS bucket, which is used for coordinating the communication of binaries between build jobs.
+In order to configure OIDC authentication, Spack CI runners use a Python script with minimal dependencies.
+This script can be configured for runners as seen here using the <code class="docutils literal notranslate"><span class="pre">pre_build_script</span></code>.</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[[runners]]</span>
+  <span class="n">pre_build_script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">  echo &#39;Executing Spack pre-build setup script&#39;</span>
+
+<span class="s2">  for cmd in &quot;${PY3:-}&quot; python3 python; do</span>
+<span class="s2">    if command -v &gt; /dev/null &quot;$cmd&quot;; then</span>
+<span class="s2">      export PY3=&quot;$(command -v &quot;$cmd&quot;)&quot;</span>
+<span class="s2">      break</span>
+<span class="s2">    fi</span>
+<span class="s2">  done</span>
+
+<span class="s2">  if [ -z &quot;${PY3:-}&quot; ]; then</span>
+<span class="s2">    echo &quot;Unable to find python3 executable&quot;</span>
+<span class="s2">    exit 1</span>
+<span class="s2">  fi</span>
+
+<span class="s2">  $PY3 -c &quot;import urllib.request; urllib.request.urlretrieve(&#39;https://raw.githubusercontent.com/spack/spack-infrastructure/main/scripts/gitlab_runner_pre_build/pre_build.py&#39;, &#39;pre_build.py&#39;)&quot;</span>
+<span class="s2">  $PY3 pre_build.py &gt; envvars</span>
+
+<span class="s2">  . ./envvars</span>
+<span class="s2">  rm -f envvars</span>
+<span class="s2">  unset GITLAB_OIDC_TOKEN</span>
+<span class="s2">  &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="gpg-keys">
+<h5>GPG Keys<a class="headerlink" href="#gpg-keys" title="链接到此标题。">¶</a></h5>
+<p>Runners that may be utilized for <code class="docutils literal notranslate"><span class="pre">protected</span></code> CI require the registration of an intermediate signing key that can be used to sign packages.
+For more information on package signing, read <a class="reference internal" href="signing.html#key-architecture"><span class="std std-ref">Key Architecture</span></a>.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="coverage">
+<h2>Coverage<a class="headerlink" href="#coverage" title="链接到此标题。">¶</a></h2>
+<p>Spack uses <a class="reference external" href="https://codecov.io/">Codecov</a> to generate and report unit test coverage.
+This helps us tell what percentage of lines of code in Spack are covered by unit tests.
+Although code covered by unit tests can still contain bugs, it is much less error-prone than code that is not covered by unit tests.</p>
+<p>Codecov provides <a class="reference external" href="https://github.com/codecov/sourcegraph-codecov">browser extensions</a> for Google Chrome and Firefox.
+These extensions integrate with GitHub and allow you to see coverage line-by-line when viewing the Spack repository.
+If you are new to Spack, a great way to get started is to write unit tests to increase coverage!</p>
+<p>Unlike with CI on GitHub Actions, Codecov tests are not required to pass in order for your PR to be merged.
+If you modify core Spack libraries, we would greatly appreciate unit tests that cover these changed lines.
+Otherwise, we have no way of knowing whether or not your changes introduce a bug.
+If you make substantial changes to the core, we may request unit tests to increase coverage.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>If the only files you modified are package files, we do not care about coverage on your PR.
+You may notice that the Codecov tests fail even though you did not modify any core files.
+This means that Spack's overall coverage has increased since you branched off of <code class="docutils literal notranslate"><span class="pre">develop</span></code>.
+This is a good thing!
+If you really want to get the Codecov tests to pass, you can rebase off of the latest <code class="docutils literal notranslate"><span class="pre">develop</span></code>, but again, this is not required.</p>
+</div>
+</section>
+<section id="git-workflows">
+<h2>Git Workflows<a class="headerlink" href="#git-workflows" title="链接到此标题。">¶</a></h2>
+<p>Spack is still in the beta stages of development.
+Most of our users run off of the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch, and fixes and new features are constantly being merged.
+So, how do you keep up-to-date with upstream while maintaining your own local differences and contributing PRs to Spack?</p>
+<section id="branching">
+<h3>Branching<a class="headerlink" href="#branching" title="链接到此标题。">¶</a></h3>
+<p>The easiest way to contribute a pull request is to make all of your changes on new branches.
+Make sure your <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch is up-to-date and create a new branch off of it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout develop
+<span class="gp">$ </span>git pull upstream develop
+<span class="gp">$ </span>git branch &lt;descriptive_branch_name&gt;
+<span class="gp">$ </span>git checkout &lt;descriptive_branch_name&gt;
+</pre></div>
+</div>
+<p>Here we assume that the local <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch tracks the upstream <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch of Spack.
+This is not a requirement, and you could also do the same with remote branches.
+But for some, it is more convenient to have a local branch that tracks upstream.</p>
+<p>Normally, we prefer that commits pertaining to a package <code class="docutils literal notranslate"><span class="pre">&lt;package-name&gt;</span></code> have a message in the format <code class="docutils literal notranslate"><span class="pre">&lt;package-name&gt;:</span> <span class="pre">descriptive</span> <span class="pre">message</span></code>.
+It is important to add a descriptive message so that others who might be looking at your changes later (in a year or maybe two) can understand the rationale behind them.</p>
+<p>Now, you can make your changes while keeping the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch clean.
+Edit a few files and commit them by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git add &lt;files_to_be_part_of_the_commit&gt;
+<span class="gp">$ </span>git commit --message &lt;descriptive_message_of_this_particular_commit&gt;
+</pre></div>
+</div>
+<p>Next, push it to your remote fork and create a PR:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git push origin &lt;descriptive_branch_name&gt; --set-upstream
+</pre></div>
+</div>
+<p>GitHub provides a <a class="reference external" href="https://help.github.com/articles/about-pull-requests/">tutorial</a> on how to file a pull request.
+When you send the request, make <code class="docutils literal notranslate"><span class="pre">develop</span></code> the destination branch.</p>
+<p>If you need this change immediately and do not have time to wait for your PR to be merged, you can always work on this branch.
+But if you have multiple PRs, another option is to maintain a &quot;Frankenstein&quot; branch that combines all of your other branches:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git co develop
+<span class="gp">$ </span>git branch &lt;your_modified_develop_branch&gt;
+<span class="gp">$ </span>git checkout &lt;your_modified_develop_branch&gt;
+<span class="gp">$ </span>git merge &lt;descriptive_branch_name&gt;
+</pre></div>
+</div>
+<p>This can be done with each new PR you submit.
+Just make sure to keep this local branch up-to-date with the upstream <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch too.</p>
+</section>
+<section id="cherry-picking">
+<h3>Cherry-Picking<a class="headerlink" href="#cherry-picking" title="链接到此标题。">¶</a></h3>
+<p>What if you made some changes to your local modified <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch and already committed them, but later decided to contribute them to Spack?
+You can use cherry-picking to create a new branch with only these commits.</p>
+<p>First, check out your local modified <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout &lt;your_modified_develop_branch&gt;
+</pre></div>
+</div>
+<p>Now, get the hashes of the commits you want from the output of <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git log
+</pre></div>
+</div>
+<p>Next, create a new branch off of the upstream <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch and copy the commits that you want in your PR:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout develop
+<span class="gp">$ </span>git pull upstream develop
+<span class="gp">$ </span>git branch &lt;descriptive_branch_name&gt;
+<span class="gp">$ </span>git checkout &lt;descriptive_branch_name&gt;
+<span class="gp">$ </span>git cherry-pick &lt;hash&gt;
+<span class="gp">$ </span>git push origin &lt;descriptive_branch_name&gt; --set-upstream
+</pre></div>
+</div>
+<p>Now you can create a PR from the web interface of GitHub.
+The net result is as follows:</p>
+<ol class="arabic simple">
+<li><p>You patched your local version of Spack and can use it further.</p></li>
+<li><p>You &quot;cherry-picked&quot; these changes into a standalone branch and submitted it as a PR upstream.</p></li>
+</ol>
+<p>Should you have several commits to contribute, you could follow the same procedure by getting hashes of all of them and cherry-picking them to the PR branch.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>It is important that whenever you change something that might be of importance upstream, create a pull request as soon as possible.
+Do not wait for weeks or months to do this, because:</p>
+<ol class="arabic simple">
+<li><p>you might forget why you modified certain files.</p></li>
+<li><p>it could get difficult to isolate this change into a standalone, clean PR.</p></li>
+</ol>
+</div>
+</section>
+<section id="rebasing">
+<h3>Rebasing<a class="headerlink" href="#rebasing" title="链接到此标题。">¶</a></h3>
+<p>Other developers are constantly making contributions to Spack, possibly on the same files that your PR changed.
+If their PR is merged before yours, it can create a merge conflict.
+This means that your PR can no longer be automatically merged without a chance of breaking your changes.
+In this case, you will be asked to rebase on top of the latest upstream <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch.</p>
+<p>First, make sure your <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch is up-to-date:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout develop
+<span class="gp">$ </span>git pull upstream develop
+</pre></div>
+</div>
+<p>Now, we need to switch to the branch you submitted for your PR and rebase it on top of <code class="docutils literal notranslate"><span class="pre">develop</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout &lt;descriptive_branch_name&gt;
+<span class="gp">$ </span>git rebase develop
+</pre></div>
+</div>
+<p>Git will likely ask you to resolve conflicts.
+Edit the file that it says cannot be merged automatically and resolve the conflict.
+Then, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git add &lt;file_that_could_not_be_merged&gt;
+<span class="gp">$ </span>git rebase --continue
+</pre></div>
+</div>
+<p>You may have to repeat this process multiple times until all conflicts are resolved.
+Once this is done, simply force push your rebased branch to your remote fork:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git push --force origin &lt;descriptive_branch_name&gt;
+</pre></div>
+</div>
+</section>
+<section id="rebasing-with-cherry-pick">
+<h3>Rebasing with cherry-pick<a class="headerlink" href="#rebasing-with-cherry-pick" title="链接到此标题。">¶</a></h3>
+<p>You can also perform a rebase using <code class="docutils literal notranslate"><span class="pre">cherry-pick</span></code>.
+First, create a temporary backup branch:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout &lt;descriptive_branch_name&gt;
+<span class="gp">$ </span>git branch tmp
+</pre></div>
+</div>
+<p>If anything goes wrong, you can always go back to your <code class="docutils literal notranslate"><span class="pre">tmp</span></code> branch.
+Now, look at the logs and save the hashes of any commits you would like to keep:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git log
+</pre></div>
+</div>
+<p>Next, go back to the original branch and reset it to <code class="docutils literal notranslate"><span class="pre">develop</span></code>.
+Before doing so, make sure that your local <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch is up-to-date with upstream:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git checkout develop
+<span class="gp">$ </span>git pull upstream develop
+<span class="gp">$ </span>git checkout &lt;descriptive_branch_name&gt;
+<span class="gp">$ </span>git reset --hard develop
+</pre></div>
+</div>
+<p>Now you can cherry-pick relevant commits:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git cherry-pick &lt;hash1&gt;
+<span class="gp">$ </span>git cherry-pick &lt;hash2&gt;
+</pre></div>
+</div>
+<p>Push the modified branch to your fork:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git push --force origin &lt;descriptive_branch_name&gt;
+</pre></div>
+</div>
+<p>If everything looks good, delete the backup branch:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git branch --delete --force tmp
+</pre></div>
+</div>
+</section>
+<section id="re-writing-history">
+<h3>Re-writing History<a class="headerlink" href="#re-writing-history" title="链接到此标题。">¶</a></h3>
+<p>Sometimes you may end up on a branch that has diverged so much from <code class="docutils literal notranslate"><span class="pre">develop</span></code> that it cannot easily be rebased.
+If the current commit history is more of an experimental nature and only the net result is important, you may rewrite the history.</p>
+<p>First, merge upstream <code class="docutils literal notranslate"><span class="pre">develop</span></code> and reset your branch to it.
+On the branch in question, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git merge develop
+<span class="gp">$ </span>git reset develop
+</pre></div>
+</div>
+<p>At this point, your branch will point to the same commit as <code class="docutils literal notranslate"><span class="pre">develop</span></code>, and thereby the two are indistinguishable.
+However, all the files that were previously modified will stay as such.
+In other words, you do not lose the changes you made.
+Changes can be reviewed by looking at diffs:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git status
+<span class="gp">$ </span>git diff
+</pre></div>
+</div>
+<p>The next step is to rewrite the history by adding files and creating commits:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git add &lt;files_to_be_part_of_commit&gt;
+<span class="gp">$ </span>git commit --message &lt;descriptive_message&gt;
+</pre></div>
+</div>
+<p>After all changed files are committed, you can push the branch to your fork and create a PR:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git push origin --set-upstream
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="developer_guide.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Developer Guide</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="roles_and_responsibilities.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Packaging Roles and Responsibilities</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 1月 23, 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Contribution Guide</a><ul>
+<li><a class="reference internal" href="#branches">Branches</a></li>
+<li><a class="reference internal" href="#continuous-integration">Continuous Integration</a><ul>
+<li><a class="reference internal" href="#unit-tests">Unit Tests</a></li>
+<li><a class="reference internal" href="#style-tests">Style Tests</a></li>
+<li><a class="reference internal" href="#documentation-tests">Documentation Tests</a></li>
+<li><a class="reference internal" href="#gitlab-ci">GitLab CI</a><ul>
+<li><a class="reference internal" href="#build-cache-stacks">Build Cache Stacks</a><ul>
+<li><a class="reference internal" href="#gitlab-entry-point">GitLab Entry Point</a></li>
+<li><a class="reference internal" href="#stack-configuration">Stack Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registering-runners">Registering Runners</a><ul>
+<li><a class="reference internal" href="#registration-token">Registration Token</a></li>
+<li><a class="reference internal" href="#tagging">Tagging</a></li>
+<li><a class="reference internal" href="#oidc">OIDC</a></li>
+<li><a class="reference internal" href="#gpg-keys">GPG Keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coverage">Coverage</a></li>
+<li><a class="reference internal" href="#git-workflows">Git Workflows</a><ul>
+<li><a class="reference internal" href="#branching">Branching</a></li>
+<li><a class="reference internal" href="#cherry-picking">Cherry-Picking</a></li>
+<li><a class="reference internal" href="#rebasing">Rebasing</a></li>
+<li><a class="reference internal" href="#rebasing-with-cherry-pick">Rebasing with cherry-pick</a></li>
+<li><a class="reference internal" href="#re-writing-history">Re-writing History</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=afd93228"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=540d3cec"></script>
+    </body>
+</html>

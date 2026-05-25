@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.compilers.msvc &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/compilers/msvc.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+          <li class="breadcrumb-item"><a href="../compilers.html">spack.compilers</a></li>
+      <li class="breadcrumb-item active">spack.compilers.msvc</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.compilers.msvc 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">archspec.cpu</span>
+
+<span class="kn">import</span> <span class="nn">spack.compiler</span>
+<span class="kn">import</span> <span class="nn">spack.operating_systems.windows_os</span>
+<span class="kn">import</span> <span class="nn">spack.platforms</span>
+<span class="kn">import</span> <span class="nn">spack.util.executable</span>
+<span class="kn">from</span> <span class="nn">spack.compiler</span> <span class="kn">import</span> <span class="n">Compiler</span>
+<span class="kn">from</span> <span class="nn">spack.error</span> <span class="kn">import</span> <span class="n">SpackError</span>
+<span class="kn">from</span> <span class="nn">spack.version</span> <span class="kn">import</span> <span class="n">Version</span><span class="p">,</span> <span class="n">VersionRange</span>
+
+<span class="n">FC_PATH</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="CmdCall">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.CmdCall">[文件]</a>
+<span class="k">class</span> <span class="nc">CmdCall</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compose a call to `cmd` for an ordered series of cmd commands/scripts&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cmds</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmds</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;Attempting to run commands from CMD without specifying commands.</span>
+<span class="sd">                Please add commands to be run.&quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span> <span class="o">=</span> <span class="n">cmds</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_line</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>  <span class="c1"># novermin</span>
+        <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-16le&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">)</span>  <span class="c1"># novermin</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cmd_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base_call</span> <span class="o">=</span> <span class="s2">&quot;cmd /u /c &quot;</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="s2">&quot; &amp;&amp; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">command_str</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">])</span>
+        <span class="c1"># If multiple commands are being invoked by a single subshell</span>
+        <span class="c1"># they must be encapsulated by a double quote. Always double</span>
+        <span class="c1"># quote to be sure of proper handling</span>
+        <span class="c1"># cmd will properly resolve nested double quotes as needed</span>
+        <span class="c1">#</span>
+        <span class="c1"># `set`` writes out the active env to the subshell stdout,</span>
+        <span class="c1"># and in this context we are always trying to obtain env</span>
+        <span class="c1"># state so it should always be appended</span>
+        <span class="k">return</span> <span class="n">base_call</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">commands</span><span class="si">}</span><span class="s1"> &amp;&amp; set&quot;&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="VarsInvocation">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.VarsInvocation">[文件]</a>
+<span class="k">class</span> <span class="nc">VarsInvocation</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_script</span> <span class="o">=</span> <span class="n">script</span>
+
+<div class="viewcode-block" id="VarsInvocation.command_str">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.VarsInvocation.command_str">[文件]</a>
+    <span class="k">def</span> <span class="nf">command_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_script</span><span class="si">}</span><span class="s1">&quot;&#39;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">script</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_script</span></div>
+
+
+
+<div class="viewcode-block" id="VCVarsInvocation">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.VCVarsInvocation">[文件]</a>
+<span class="k">class</span> <span class="nc">VCVarsInvocation</span><span class="p">(</span><span class="n">VarsInvocation</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">arch</span><span class="p">,</span> <span class="n">msvc_version</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VCVarsInvocation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">script</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arch</span> <span class="o">=</span> <span class="n">arch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_msvc_version</span> <span class="o">=</span> <span class="n">msvc_version</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sdk_ver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Accessor for Windows SDK version property</span>
+
+<span class="sd">        Note: This property may not be set by</span>
+<span class="sd">        the calling context and as such this property will</span>
+<span class="sd">        return an empty string</span>
+
+<span class="sd">        This property will ONLY be set if the SDK package</span>
+<span class="sd">        is a dependency somewhere in the Spack DAG of the package</span>
+<span class="sd">        for which we are constructing an MSVC compiler env.</span>
+<span class="sd">        Otherwise this property should be unset to allow the VCVARS</span>
+<span class="sd">        script to use its internal heuristics to determine appropriate</span>
+<span class="sd">        SDK version</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sdk_ver&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sdk_ver</span> <span class="o">+</span> <span class="s2">&quot;.0&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@sdk_ver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sdk_ver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sdk_ver</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">arch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arch</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vcvars_ver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;-vcvars_ver=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_msvc_version</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="VCVarsInvocation.command_str">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.VCVarsInvocation.command_str">[文件]</a>
+    <span class="k">def</span> <span class="nf">command_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">VCVarsInvocation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">command_str</span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">script</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sdk_ver</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vcvars_ver</span><span class="si">}</span><span class="s2">&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_valid_fortran_pth">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.get_valid_fortran_pth">[文件]</a>
+<span class="k">def</span> <span class="nf">get_valid_fortran_pth</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assign maximum available fortran compiler version&quot;&quot;&quot;</span>
+    <span class="c1"># TODO (johnwparent): validate compatibility w/ try compiler</span>
+    <span class="c1"># functionality when added</span>
+    <span class="n">sort_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">fc_ver</span><span class="p">:</span> <span class="n">Version</span><span class="p">(</span><span class="n">fc_ver</span><span class="p">)</span>
+    <span class="n">sort_fc_ver</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">FC_PATH</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_fn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">FC_PATH</span><span class="p">[</span><span class="n">sort_fc_ver</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">if</span> <span class="n">sort_fc_ver</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Msvc">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.Msvc">[文件]</a>
+<span class="k">class</span> <span class="nc">Msvc</span><span class="p">(</span><span class="n">Compiler</span><span class="p">):</span>
+    <span class="c1"># Named wrapper links within build_env_path</span>
+    <span class="c1"># Due to the challenges of supporting compiler wrappers</span>
+    <span class="c1"># in Windows, we leave these blank, and dynamically compute</span>
+    <span class="c1"># based on proper versions of MSVC from there</span>
+    <span class="c1"># pending acceptance of #28117 for full support using</span>
+    <span class="c1"># compiler wrappers</span>
+    <span class="n">link_paths</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cc&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;cxx&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;f77&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;fc&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+
+    <span class="c1">#: Compiler argument that produces version information</span>
+    <span class="n">version_argument</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># For getting ifx&#39;s version, call it with version_argument</span>
+    <span class="c1"># and ignore the error code</span>
+    <span class="n">ignore_version_errors</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1">#: Regex used to extract version from compiler&#39;s output</span>
+    <span class="n">version_regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;([1-9][0-9]*\.[0-9]*\.[0-9]*)&quot;</span>
+    <span class="c1"># The MSVC compiler class overrides this to prevent instances</span>
+    <span class="c1"># of erroneous matching on executable names that cannot be msvc</span>
+    <span class="c1"># compilers</span>
+    <span class="n">suffixes</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">is_supported_on_platform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spack</span><span class="o">.</span><span class="n">platforms</span><span class="o">.</span><span class="n">Windows</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># This positional argument &quot;paths&quot; is later parsed and process by the base class</span>
+        <span class="c1"># via the call to `super` later in this method</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">latest_fc</span> <span class="o">=</span> <span class="n">get_valid_fortran_pth</span><span class="p">()</span>
+        <span class="n">new_pth</span> <span class="o">=</span> <span class="p">[</span><span class="n">pth</span> <span class="k">if</span> <span class="n">pth</span> <span class="k">else</span> <span class="n">latest_fc</span> <span class="k">for</span> <span class="n">pth</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]</span>
+        <span class="n">paths</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">new_pth</span>
+        <span class="c1"># Initialize, deferring to base class but then adding the vcvarsallfile</span>
+        <span class="c1"># file based on compiler executable path.</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># To use the MSVC compilers, VCVARS must be invoked</span>
+        <span class="c1"># VCVARS is located at a fixed location, referencable</span>
+        <span class="c1"># idiomatically by the following relative path from the</span>
+        <span class="c1"># compiler.</span>
+        <span class="c1"># Spack first finds the compilers via VSWHERE</span>
+        <span class="c1"># and stores their path, but their respective VCVARS</span>
+        <span class="c1"># file must be invoked before useage.</span>
+        <span class="n">env_cmds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">compiler_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc</span><span class="p">),</span> <span class="s2">&quot;../../../../../..&quot;</span><span class="p">)</span>
+        <span class="n">vcvars_script_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compiler_root</span><span class="p">,</span> <span class="s2">&quot;Auxiliary&quot;</span><span class="p">,</span> <span class="s2">&quot;Build&quot;</span><span class="p">,</span> <span class="s2">&quot;vcvars64.bat&quot;</span><span class="p">)</span>
+        <span class="c1"># get current platform architecture and format for vcvars argument</span>
+        <span class="n">arch</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">platforms</span><span class="o">.</span><span class="n">real_host</span><span class="p">()</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">arch</span> <span class="o">=</span> <span class="n">arch</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">archspec</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">host</span><span class="p">()</span><span class="o">.</span><span class="n">family</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">:</span>
+            <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;amd64&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vcvars_call</span> <span class="o">=</span> <span class="n">VCVarsInvocation</span><span class="p">(</span><span class="n">vcvars_script_path</span><span class="p">,</span> <span class="n">arch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">msvc_version</span><span class="p">)</span>
+        <span class="n">env_cmds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vcvars_call</span><span class="p">)</span>
+        <span class="c1"># Below is a check for a valid fortran path</span>
+        <span class="c1"># paths has c, cxx, fc, and f77 paths in that order</span>
+        <span class="c1"># paths[2] refers to the fc path and is a generic check</span>
+        <span class="c1"># for a fortran compiler</span>
+        <span class="k">if</span> <span class="n">paths</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+
+            <span class="k">def</span> <span class="nf">get_oneapi_root</span><span class="p">(</span><span class="n">pth</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;From within a prefix known to be a oneAPI path</span>
+<span class="sd">                determine the oneAPI root path from arbitrary point</span>
+<span class="sd">                under root</span>
+
+<span class="sd">                Args:</span>
+<span class="sd">                    pth: path prefixed within oneAPI root</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">pth</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">while</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;oneAPI&quot;</span><span class="p">:</span>
+                    <span class="n">pth</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">pth</span>
+
+            <span class="c1"># If this found, it sets all the vars</span>
+            <span class="n">oneapi_root</span> <span class="o">=</span> <span class="n">get_oneapi_root</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">oneapi_root</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-oneAPI Fortran compiler </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="si">}</span><span class="s2"> assigned to MSVC&quot;</span><span class="p">)</span>
+            <span class="n">oneapi_root_setvars</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">oneapi_root</span><span class="p">,</span> <span class="s2">&quot;setvars.bat&quot;</span><span class="p">)</span>
+            <span class="c1"># some oneAPI exes return a version more precise than their</span>
+            <span class="c1"># install paths specify, so we determine path from</span>
+            <span class="c1"># the install path rather than the fc executable itself</span>
+            <span class="n">numver</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\d+\.\d+(?:\.\d+)?&quot;</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;((?:</span><span class="si">{</span><span class="n">numver</span><span class="si">}</span><span class="s2">)|(?:latest))&quot;</span>
+            <span class="n">version_from_path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">oneapi_version_setvars</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">oneapi_root</span><span class="p">,</span> <span class="s2">&quot;compiler&quot;</span><span class="p">,</span> <span class="n">version_from_path</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">,</span> <span class="s2">&quot;vars.bat&quot;</span>
+            <span class="p">)</span>
+            <span class="c1"># order matters here, the specific version env must be invoked first,</span>
+            <span class="c1"># otherwise it will be ignored if the root setvars sets up the oneapi</span>
+            <span class="c1"># env first</span>
+            <span class="n">env_cmds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">VarsInvocation</span><span class="p">(</span><span class="n">oneapi_version_setvars</span><span class="p">),</span> <span class="n">VarsInvocation</span><span class="p">(</span><span class="n">oneapi_root_setvars</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msvc_compiler_environment</span> <span class="o">=</span> <span class="n">CmdCall</span><span class="p">(</span><span class="o">*</span><span class="n">env_cmds</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cxx11_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;/std:c++11&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cxx14_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;/std:c++14&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cxx17_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;/std:c++17&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cxx20_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;/std:c++20&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">c11_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;/std:c11&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">c17_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;/std:c17&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">msvc_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the VCToolset version *NOT* the actual version of the cl compiler</span>
+<span class="sd">        For CL version, query `Msvc.cl_version`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Msvc</span><span class="o">.</span><span class="n">version_regex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">short_msvc_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the shorthand VCToolset version of form</span>
+<span class="sd">        MSVC&lt;short-ver&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;MSVC&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vc_toolset_ver</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vc_toolset_ver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The toolset version is the version of the combined set of cl and link</span>
+<span class="sd">        This typically relates directly to VS version i.e. VS 2022 is v143</span>
+<span class="sd">        VS 19 is v142, etc.</span>
+<span class="sd">        This value is defined by the first three digits of the major + minor</span>
+<span class="sd">        version of the VS toolset (143 for 14.3x.bbbbb). Traditionally the</span>
+<span class="sd">        minor version has remained a static two digit number for a VS release</span>
+<span class="sd">        series, however, as of VS22, this is no longer true, both</span>
+<span class="sd">        14.4x.bbbbb and 14.3x.bbbbb are considered valid VS22 VC toolset</span>
+<span class="sd">        versions due to a change in toolset minor version sentiment.</span>
+
+<span class="sd">        This is *NOT* the full version, for that see</span>
+<span class="sd">        Msvc.msvc_version or MSVC.platform_toolset_ver for the</span>
+<span class="sd">        raw platform toolset version</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msvc_version</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">joined</span><span class="o">.</span><span class="n">string</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ver</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">platform_toolset_ver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is the platform toolset version of current MSVC compiler</span>
+<span class="sd">        i.e. 142. The platform toolset is the targeted MSVC library/compiler</span>
+<span class="sd">        versions by compilation (this is different from the VC Toolset)</span>
+
+
+<span class="sd">        This is different from the VC toolset version as established</span>
+<span class="sd">        by `short_msvc_version`, but typically are represented by the same</span>
+<span class="sd">        three digit value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Typically VS toolset version and platform toolset versions match</span>
+        <span class="c1"># VS22 introduces the first divergence of VS toolset version</span>
+        <span class="c1"># (144 for &quot;recent&quot; releases) and platform toolset version (143)</span>
+        <span class="c1"># so it needs additional handling until MS releases v144</span>
+        <span class="c1"># (assuming v144 is also for VS22)</span>
+        <span class="c1"># or adds better support for detection</span>
+        <span class="c1"># TODO: (johnwparent) Update this logic for the next platform toolset</span>
+        <span class="c1"># or VC toolset version update</span>
+        <span class="n">toolset_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vc_toolset_ver</span>
+        <span class="n">vs22_toolset</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">toolset_ver</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;142&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">toolset_ver</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">vs22_toolset</span> <span class="k">else</span> <span class="s2">&quot;143&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">visual_studio_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The four digit Visual Studio version (i.e. 2019 or 2022)</span>
+
+<span class="sd">        Note: This differs from the msvc version or toolset version as</span>
+<span class="sd">        those properties track the compiler and build tools version</span>
+<span class="sd">        respectively, whereas this tracks the VS release associated</span>
+<span class="sd">        with a given MSVC compiler.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[0-9]</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compiler_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns version object for given compiler&quot;&quot;&quot;</span>
+        <span class="c1"># ignore_errors below is true here due to ifx&#39;s</span>
+        <span class="c1"># non zero return code if it is not provided</span>
+        <span class="c1"># and input file</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">Msvc</span><span class="o">.</span><span class="n">version_regex</span><span class="p">,</span>
+                <span class="n">spack</span><span class="o">.</span><span class="n">compiler</span><span class="o">.</span><span class="n">get_compiler_version_output</span><span class="p">(</span>
+                    <span class="n">compiler</span><span class="p">,</span> <span class="n">version_arg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">),</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cl_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cl toolset version&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiler_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ifx_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ifx compiler version associated with this version of MSVC&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiler_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vs_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># The MSVC install root is located at a fix level above the compiler</span>
+        <span class="c1"># and is referenceable idiomatically via the pattern below</span>
+        <span class="c1"># this should be consistent accross versions</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc</span><span class="p">,</span> <span class="s2">&quot;../../../../../../../..&quot;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Msvc.setup_custom_environment">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.Msvc.setup_custom_environment">[文件]</a>
+    <span class="k">def</span> <span class="nf">setup_custom_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set environment variables for MSVC using the</span>
+<span class="sd">        Microsoft-provided script.&quot;&quot;&quot;</span>
+        <span class="c1"># Set the build environment variables for spack. Just using</span>
+        <span class="c1"># subprocess.call() doesn&#39;t work since that operates in its own</span>
+        <span class="c1"># environment which is destroyed (along with the adjusted variables)</span>
+        <span class="c1"># once the process terminates. So go the long way around: examine</span>
+        <span class="c1"># output, sort into dictionary, use that to make the build</span>
+        <span class="c1"># environment.</span>
+
+        <span class="c1"># vcvars can target specific sdk versions, force it to pick up concretized sdk</span>
+        <span class="c1"># version, if needed by spec</span>
+        <span class="k">if</span> <span class="n">pkg</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;win-sdk&quot;</span> <span class="ow">and</span> <span class="s2">&quot;win-sdk&quot;</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vcvars_call</span><span class="o">.</span><span class="n">sdk_ver</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;win-sdk&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">string</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msvc_compiler_environment</span><span class="p">()</span>
+        <span class="n">int_env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">value</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">env_var</span> <span class="ow">in</span> <span class="n">int_env</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">int_env</span><span class="p">[</span><span class="n">env_var</span><span class="p">]:</span>
+                <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">env_var</span><span class="p">,</span> <span class="n">int_env</span><span class="p">[</span><span class="n">env_var</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">env</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span><span class="n">env_var</span><span class="p">,</span> <span class="n">int_env</span><span class="p">[</span><span class="n">env_var</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">))</span>
+
+        <span class="c1"># certain versions of ifx (2021.3.0:2023.1.0) do not play well with env:TMP</span>
+        <span class="c1"># that has a &quot;.&quot; character in the path</span>
+        <span class="c1"># Work around by pointing tmp to the stage for the duration of the build</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="ow">and</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">))</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span>
+            <span class="n">VersionRange</span><span class="p">(</span><span class="s2">&quot;2021.3.0&quot;</span><span class="p">,</span> <span class="s2">&quot;2023.1.0&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">new_tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;TMP&quot;</span><span class="p">,</span> <span class="n">new_tmp</span><span class="p">)</span>
+
+        <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;CC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;CXX&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxx</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;FC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;F77&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f77</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Msvc.fc_version">
+<a class="viewcode-back" href="../../../spack.compilers.html#spack.compilers.msvc.Msvc.fc_version">[文件]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fc_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="n">fc_ver</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">default_version</span><span class="p">(</span><span class="n">fc</span><span class="p">)</span>
+        <span class="n">FC_PATH</span><span class="p">[</span><span class="n">fc_ver</span><span class="p">]</span> <span class="o">=</span> <span class="n">fc</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sps</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">operating_systems</span><span class="o">.</span><span class="n">windows_os</span><span class="o">.</span><span class="n">WindowsOs</span><span class="p">()</span><span class="o">.</span><span class="n">compiler_search_paths</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span>
+                <span class="s2">&quot;Windows compiler search paths not established, &quot;</span>
+                <span class="s2">&quot;please report this behavior to github.com/spack/spack&quot;</span>
+            <span class="p">)</span>
+        <span class="n">clp</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">executable</span><span class="o">.</span><span class="n">which_string</span><span class="p">(</span><span class="s2">&quot;cl&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">sps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">default_version</span><span class="p">(</span><span class="n">clp</span><span class="p">)</span> <span class="k">if</span> <span class="n">clp</span> <span class="k">else</span> <span class="n">fc_ver</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

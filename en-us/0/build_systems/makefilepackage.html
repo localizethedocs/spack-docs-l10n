@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Makefile &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/build_systems/makefilepackage.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Maven" href="mavenpackage.html" />
+    <link rel="prev" title="Build Systems" href="../build_systems.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../ltd-provenance.js"></script>
+<script type="text/javascript" src="../ltd-current.js"></script>
+<script type="text/javascript" src="../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_systems.html">Build Systems</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Makefile</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phases">Phases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#important-files">Important files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-system-dependencies">Build system dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#types-of-makefile-packages">Types of Makefile packages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-line-arguments">Command-line arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#edit-makefile">Edit Makefile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#config-file">Config file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#variables-to-watch-out-for">Variables to watch out for</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#makefiles-in-a-sub-directory">Makefiles in a sub-directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-installation">Manual installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-documentation">External documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intelpackage.html">Intel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourceforgepackage.html">Sourceforge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../build_systems.html">Build Systems</a></li>
+      <li class="breadcrumb-item active">Makefile</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/build_systems/makefilepackage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="makefile">
+<span id="makefilepackage"></span><h1>Makefile<a class="headerlink" href="#makefile" title="Link to this heading"></a></h1>
+<p>The most primitive build system a package can use is a plain Makefile.
+Makefiles are simple to write for small projects, but they usually
+require you to edit the Makefile to set platform and compiler-specific
+variables.</p>
+<section id="phases">
+<h2>Phases<a class="headerlink" href="#phases" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">MakefileBuilder</span></code> and <code class="docutils literal notranslate"><span class="pre">MakefilePackage</span></code> base classes come with 3 phases:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edit</span></code> - edit the Makefile</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code> - build the project</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">install</span></code> - install the project</p></li>
+</ol>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">edit</span></code> does nothing, but you can override it to replace
+hard-coded Makefile variables. The <code class="docutils literal notranslate"><span class="pre">build</span></code> and <code class="docutils literal notranslate"><span class="pre">install</span></code> phases
+run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>make
+<span class="gp">$ </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+</section>
+<section id="important-files">
+<h2>Important files<a class="headerlink" href="#important-files" title="Link to this heading"></a></h2>
+<p>The main file that matters for a <code class="docutils literal notranslate"><span class="pre">MakefilePackage</span></code> is the Makefile.
+This file will be named one of the following ways:</p>
+<ul class="simple">
+<li><p>GNUmakefile (only works with GNU Make)</p></li>
+<li><p>Makefile (most common)</p></li>
+<li><p>makefile</p></li>
+</ul>
+<p>Some Makefiles also <em>include</em> other configuration files. Check for an
+<code class="docutils literal notranslate"><span class="pre">include</span></code> directive in the Makefile.</p>
+</section>
+<section id="build-system-dependencies">
+<h2>Build system dependencies<a class="headerlink" href="#build-system-dependencies" title="Link to this heading"></a></h2>
+<p>Spack assumes that the operating system will have a valid <code class="docutils literal notranslate"><span class="pre">make</span></code> utility
+installed already, so you don’t need to add a dependency on <code class="docutils literal notranslate"><span class="pre">make</span></code>.
+However, if the package uses a <code class="docutils literal notranslate"><span class="pre">GNUmakefile</span></code> or the developers recommend
+using GNU Make, you should add a dependency on <code class="docutils literal notranslate"><span class="pre">gmake</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gmake&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="types-of-makefile-packages">
+<h2>Types of Makefile packages<a class="headerlink" href="#types-of-makefile-packages" title="Link to this heading"></a></h2>
+<p>Most of the work involved in packaging software that uses Makefiles
+involves overriding or replacing hard-coded variables. Many packages
+make the mistake of hard-coding compilers, usually for GCC or Intel.
+This is fine if you happen to be using that particular compiler, but
+Spack is designed to work with <em>any</em> compiler, and you need to ensure
+that this is the case.</p>
+<p>Depending on how the Makefile is designed, there are 4 common strategies
+that can be used to set or override the appropriate variables:</p>
+<section id="environment-variables">
+<h3>Environment variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h3>
+<p>Make has multiple types of
+<a class="reference external" href="https://www.gnu.org/software/make/manual/make.html#Setting">assignment operators</a>.
+Some Makefiles use <code class="docutils literal notranslate"><span class="pre">=</span></code> to assign variables. The only way to override
+these variables is to edit the Makefile or override them on the
+command-line. However, Makefiles that use <code class="docutils literal notranslate"><span class="pre">?=</span></code> for assignment honor
+environment variables. Since Spack already sets <code class="docutils literal notranslate"><span class="pre">CC</span></code>, <code class="docutils literal notranslate"><span class="pre">CXX</span></code>, <code class="docutils literal notranslate"><span class="pre">F77</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">FC</span></code>, you won’t need to worry about setting these variables. If
+there are any other variables you need to set, you can do this in the
+<code class="docutils literal notranslate"><span class="pre">setup_build_environment</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_build_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;PREFIX&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;BLASLIB&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;blas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">ld_flags</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/cbench/package.py">cbench</a>
+is a good example of a simple package that does this, while
+<a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/esmf/package.py">esmf</a>
+is a good example of a more complex package.</p>
+</section>
+<section id="command-line-arguments">
+<h3>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Link to this heading"></a></h3>
+<p>If the Makefile ignores environment variables, the next thing to try
+is command-line arguments. You can do this by overriding the
+<code class="docutils literal notranslate"><span class="pre">build_targets</span></code> attribute. If you don’t need access to the spec,
+you can do this like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CC=cc&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>If you do need access to the spec, you can create a property like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">build_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s2">&quot;CC=cc&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;BLASLIB=</span><span class="si">{</span><span class="n">spec</span><span class="p">[</span><span class="s1">&#39;blas&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">ld_flags</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/cloverleaf/package.py">cloverleaf</a>
+is a good example of a package that uses this strategy.</p>
+</section>
+<section id="edit-makefile">
+<h3>Edit Makefile<a class="headerlink" href="#edit-makefile" title="Link to this heading"></a></h3>
+<p>Some Makefiles are just plain stubborn and will ignore command-line
+variables. The only way to ensure that these packages build correctly
+is to directly edit the Makefile. Spack provides a <code class="docutils literal notranslate"><span class="pre">FileFilter</span></code> class
+and a <code class="docutils literal notranslate"><span class="pre">filter</span></code> method to help with this. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">makefile</span> <span class="o">=</span> <span class="n">FileFilter</span><span class="p">(</span><span class="s2">&quot;Makefile&quot;</span><span class="p">)</span>
+
+    <span class="n">makefile</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*CC\s*=.*&quot;</span><span class="p">,</span>  <span class="sa">f</span><span class="s2">&quot;CC = </span><span class="si">{</span><span class="n">spack_cc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">makefile</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*CXX\s*=.*&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;CXX = </span><span class="si">{</span><span class="n">spack_cxx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">makefile</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*F77\s*=.*&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;F77 = </span><span class="si">{</span><span class="n">spack_f77</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">makefile</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*FC\s*=.*&quot;</span><span class="p">,</span>  <span class="sa">f</span><span class="s2">&quot;FC = </span><span class="si">{</span><span class="n">spack_fc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/stream/package.py">stream</a>
+is a good example of a package that involves editing a Makefile to set
+the appropriate variables.</p>
+</section>
+<section id="config-file">
+<h3>Config file<a class="headerlink" href="#config-file" title="Link to this heading"></a></h3>
+<p>More complex packages often involve Makefiles that <em>include</em> a
+configuration file. These configuration files are primarily composed
+of variables relating to the compiler, platform, and the location of
+dependencies or names of libraries. Since these config files are
+dependent on the compiler and platform, you will often see entire
+directories of examples for common compilers and architectures. Use
+these examples to help determine what possible values to use.</p>
+<p>If the config file is long and only contains one or two variables
+that need to be modified, you can use the technique above to edit
+the config file. However, if you end up needing to modify most of
+the variables, it may be easier to write a new file from scratch.</p>
+<p>If each variable is independent of each other, a dictionary works
+well for storing variables:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;CC&quot;</span><span class="p">:</span> <span class="s2">&quot;cc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MAKE&quot;</span><span class="p">:</span> <span class="s2">&quot;make&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;+blas&quot;</span><span class="p">):</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;BLAS_LIBS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;blas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">joined</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;make.inc&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">inc</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">inc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/elk/package.py">elk</a>
+is a good example of a package that uses a dictionary to store
+configuration variables.</p>
+<p>If the order of variables is important, it may be easier to store
+them in a list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">&quot;INSTALL_DIR = </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INCLUDE_DIR = $(INSTALL_DIR)/include&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LIBRARY_DIR = $(INSTALL_DIR)/lib&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;make.inc&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">inc</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">inc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/hpl/package.py">hpl</a>
+is a good example of a package that uses a list to store
+configuration variables.</p>
+</section>
+</section>
+<section id="variables-to-watch-out-for">
+<h2>Variables to watch out for<a class="headerlink" href="#variables-to-watch-out-for" title="Link to this heading"></a></h2>
+<p>The following is a list of common variables to watch out for. The first
+two sections are
+<a class="reference external" href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html">implicit variables</a>
+defined by Make and will always use the same name, while the rest are
+user-defined variables and may vary from package to package.</p>
+<ul>
+<li><p><strong>Compilers</strong></p>
+<p>This includes variables such as <code class="docutils literal notranslate"><span class="pre">CC</span></code>, <code class="docutils literal notranslate"><span class="pre">CXX</span></code>, <code class="docutils literal notranslate"><span class="pre">F77</span></code>, <code class="docutils literal notranslate"><span class="pre">F90</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">FC</span></code>, as well as variables related to MPI compiler wrappers,
+like <code class="docutils literal notranslate"><span class="pre">MPICC</span></code> and friends.</p>
+</li>
+<li><p><strong>Compiler flags</strong></p>
+<p>This includes variables for specific compilers, like <code class="docutils literal notranslate"><span class="pre">CFLAGS</span></code>,
+<code class="docutils literal notranslate"><span class="pre">CXXFLAGS</span></code>, <code class="docutils literal notranslate"><span class="pre">F77FLAGS</span></code>, <code class="docutils literal notranslate"><span class="pre">F90FLAGS</span></code>, <code class="docutils literal notranslate"><span class="pre">FCFLAGS</span></code>, and <code class="docutils literal notranslate"><span class="pre">CPPFLAGS</span></code>.
+These variables are often hard-coded to contain flags specific to a
+certain compiler. If these flags don’t work for every compiler,
+you may want to consider filtering them.</p>
+</li>
+<li><p><strong>Variables that enable or disable features</strong></p>
+<p>This includes variables like <code class="docutils literal notranslate"><span class="pre">MPI</span></code>, <code class="docutils literal notranslate"><span class="pre">OPENMP</span></code>, <code class="docutils literal notranslate"><span class="pre">PIC</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>. These flags often require you to create a variant
+so that you can either build with or without MPI support, for
+example. These flags are often compiler-dependent. You should
+replace them with the appropriate compiler flags, such as
+<code class="docutils literal notranslate"><span class="pre">self.compiler.openmp_flag</span></code> or <code class="docutils literal notranslate"><span class="pre">self.compiler.pic_flag</span></code>.</p>
+</li>
+<li><p><strong>Platform flags</strong></p>
+<p>These flags control the type of architecture that the executable
+is compiler for. Watch out for variables like <code class="docutils literal notranslate"><span class="pre">PLAT</span></code> or <code class="docutils literal notranslate"><span class="pre">ARCH</span></code>.</p>
+</li>
+<li><p><strong>Dependencies</strong></p>
+<p>Look out for variables that sound like they could be used to
+locate dependencies, such as <code class="docutils literal notranslate"><span class="pre">JAVA_HOME</span></code>, <code class="docutils literal notranslate"><span class="pre">JPEG_ROOT</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">ZLIBDIR</span></code>. Also watch out for variables that control linking,
+such as <code class="docutils literal notranslate"><span class="pre">LIBS</span></code>, <code class="docutils literal notranslate"><span class="pre">LDFLAGS</span></code>, and <code class="docutils literal notranslate"><span class="pre">INCLUDES</span></code>. These variables
+need to be set to the installation prefix of a dependency, or
+to the correct linker flags to link to that dependency.</p>
+</li>
+<li><p><strong>Installation prefix</strong></p>
+<p>If your Makefile has an <code class="docutils literal notranslate"><span class="pre">install</span></code> target, it needs some way of
+knowing where to install. By default, many packages install to
+<code class="docutils literal notranslate"><span class="pre">/usr</span></code> or <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>. Since many Spack users won’t have
+sudo privileges, it is imperative that each package is installed
+to the proper prefix. Look for variables like <code class="docutils literal notranslate"><span class="pre">PREFIX</span></code> or
+<code class="docutils literal notranslate"><span class="pre">INSTALL</span></code>.</p>
+</li>
+</ul>
+</section>
+<section id="makefiles-in-a-sub-directory">
+<h2>Makefiles in a sub-directory<a class="headerlink" href="#makefiles-in-a-sub-directory" title="Link to this heading"></a></h2>
+<p>Not every package places their Makefile in the root of the package
+tarball. If the Makefile is in a sub-directory like <code class="docutils literal notranslate"><span class="pre">src</span></code>, you
+can tell Spack where to locate it like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_directory</span> <span class="o">=</span> <span class="s2">&quot;src&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-installation">
+<h2>Manual installation<a class="headerlink" href="#manual-installation" title="Link to this heading"></a></h2>
+<p>Not every Makefile includes an <code class="docutils literal notranslate"><span class="pre">install</span></code> target. If this is the
+case, you can override the default <code class="docutils literal notranslate"><span class="pre">install</span></code> method to manually
+install the package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">mkdir</span><span class="p">(</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span>
+    <span class="n">install</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span>
+    <span class="n">install_tree</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="external-documentation">
+<h2>External documentation<a class="headerlink" href="#external-documentation" title="Link to this heading"></a></h2>
+<p>For more information on reading and writing Makefiles, see:
+<a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">https://www.gnu.org/software/make/manual/make.html</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../build_systems.html" class="btn btn-neutral float-left" title="Build Systems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mavenpackage.html" class="btn btn-neutral float-right" title="Maven" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

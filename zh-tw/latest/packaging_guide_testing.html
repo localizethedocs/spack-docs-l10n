@@ -1,0 +1,1365 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="A guide to adding tests to Spack packages to ensure correct installation and functionality." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2026-01-23T08:17:54+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜尋" href="search.html"><link rel="next" title="Packaging Guide: advanced topics" href="packaging_guide_advanced.html"><link rel="prev" title="Packaging Guide: customizing the build" href="packaging_guide_build.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/packaging_guide_testing.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Packaging Guide: testing installations - Spack 1.2.0.dev0 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.2.0.dev0 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/packaging_guide_testing.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="packaging_guide_creation.html"><span class="doc">1. Creation</span></a></p></td>
+<td><p><a class="reference internal" href="packaging_guide_build.html"><span class="doc">2. Build</span></a></p></td>
+<td><p><strong>3. Testing</strong></p></td>
+<td><p><a class="reference internal" href="packaging_guide_advanced.html"><span class="doc">4. Advanced</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="packaging-guide-testing-installations">
+<h1>Packaging Guide: testing installations<a class="headerlink" href="#packaging-guide-testing-installations" title="連結到這個標頭">¶</a></h1>
+<p>In this part of the packaging guide we will cover how to ensure your package builds correctly by adding tests to it.</p>
+<section id="checking-an-installation">
+<span id="id1"></span><h2>Checking an installation<a class="headerlink" href="#checking-an-installation" title="連結到這個標頭">¶</a></h2>
+<p>A package that <em>appears</em> to install successfully does not mean it is actually installed correctly or will continue to work indefinitely.
+There are a number of possible points of failure so Spack provides features for checking the software along the way.</p>
+<p>Failures can occur during and after the installation process.
+The build may start, but the software may not end up fully installed.
+The installed software may not work at all, or may not work as expected.
+The software may work after being installed, but due to changes on the system, may stop working days, weeks, or months after being installed.</p>
+<p>This section describes Spack's support for checks that can be performed during and after its installation.
+The former checks are referred to as <code class="docutils literal notranslate"><span class="pre">build-time</span> <span class="pre">tests</span></code> and the latter as <code class="docutils literal notranslate"><span class="pre">stand-alone</span> <span class="pre">(or</span> <span class="pre">smoke)</span> <span class="pre">tests</span></code>.</p>
+<section id="build-time-tests">
+<span id="id2"></span><h3>Build-time tests<a class="headerlink" href="#build-time-tests" title="連結到這個標頭">¶</a></h3>
+<p>Spack infers the status of a build based on the contents of the install prefix.
+Success is assumed if anything (e.g., a file or directory) is written after <code class="docutils literal notranslate"><span class="pre">install()</span></code> completes.
+Otherwise, the build is assumed to have failed.
+However, the presence of install prefix contents is not a sufficient indicator of success so Spack supports the addition of tests that can be performed during <cite>spack install</cite> processing.</p>
+<p>Consider a simple Autotools build using the following commands:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./configure --prefix<span class="o">=</span>/path/to/installation/prefix
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make install
+</pre></div>
+</div>
+<p>Standard Autotools and CMake do not write anything to the prefix from the <code class="docutils literal notranslate"><span class="pre">configure</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span></code> commands.
+Files are only written from the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> after the build completes.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>If you want to learn more about <code class="docutils literal notranslate"><span class="pre">Autotools</span></code> and <code class="docutils literal notranslate"><span class="pre">CMake</span></code> packages in Spack, refer to <a class="reference internal" href="build_systems/autotoolspackage.html#autotoolspackage"><span class="std std-ref">AutotoolsPackage</span></a> and <a class="reference internal" href="build_systems/cmakepackage.html#cmakepackage"><span class="std std-ref">CMakePackage</span></a>, respectively.</p>
+</div>
+<p>What can you do to check that the build is progressing satisfactorily?
+If there are specific files and/or directories expected of a successful installation, you can add basic, fast <code class="docutils literal notranslate"><span class="pre">sanity</span> <span class="pre">checks</span></code>.
+You can also add checks to be performed after one or more installation phases.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Build-time tests are performed when the <code class="docutils literal notranslate"><span class="pre">--test</span></code> option is passed to <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Build-time test failures result in a failed installation of the software.</p>
+</div>
+<section id="adding-sanity-checks">
+<span id="sanity-checks"></span><h4>Adding sanity checks<a class="headerlink" href="#adding-sanity-checks" title="連結到這個標頭">¶</a></h4>
+<p>Unfortunately, many builds of scientific software modify the installation prefix <strong>before</strong> <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>.
+Builds like this can falsely report success when an error occurs before the installation is complete.
+Simple sanity checks can be used to identify files and/or directories that are required of a successful installation.
+Spack checks for the presence of the files and directories after <code class="docutils literal notranslate"><span class="pre">install()</span></code> runs.</p>
+<p>If any of the listed files or directories are missing, then the build will fail and the install prefix will be removed.
+If they all exist, then Spack considers the build successful from a sanity check perspective and keeps the prefix in place.</p>
+<p>For example, the sanity checks for the <code class="docutils literal notranslate"><span class="pre">reframe</span></code> package below specify that eight paths must exist within the installation prefix after the <code class="docutils literal notranslate"><span class="pre">install</span></code> method completes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Reframe</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="c1"># sanity check</span>
+    <span class="n">sanity_check_is_file</span> <span class="o">=</span> <span class="p">[</span><span class="n">join_path</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">,</span> <span class="s2">&quot;reframe&quot;</span><span class="p">)]</span>
+    <span class="n">sanity_check_is_dir</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;bin&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;config&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;docs&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;reframe&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;tutorials&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;unittests&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cscs-checks&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>When you run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code> with tests enabled, Spack will ensure that a successfully installed package has the required files and/or directories.</p>
+<p>For example, running:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install --test=root <span class="nc">reframe</span>
+</pre></div>
+</div>
+<p>results in Spack checking that the installation created the following <strong>file</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.bin.reframe</span></code></p></li>
+</ul>
+<p>and the following <strong>directories</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.bin</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.config</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.docs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.reframe</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.tutorials</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.unittests</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.prefix.cscs-checks</span></code></p></li>
+</ul>
+<p>If <strong>any</strong> of these paths are missing, then Spack considers the installation to have failed.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>You <strong>MUST</strong> use <code class="docutils literal notranslate"><span class="pre">sanity_check_is_file</span></code> to specify required files and <code class="docutils literal notranslate"><span class="pre">sanity_check_is_dir</span></code> for required directories.</p>
+</div>
+</section>
+<section id="adding-installation-phase-tests">
+<span id="install-phase-tests"></span><h4>Adding installation phase tests<a class="headerlink" href="#adding-installation-phase-tests" title="連結到這個標頭">¶</a></h4>
+<p>Sometimes packages appear to build &quot;correctly&quot; only to have runtime behavior issues discovered at a later stage, such as after a full software stack relying on them has been built.
+Checks can be performed at different phases of the package installation to possibly avoid these types of problems.
+Some checks are built-in to different build systems, while others will need to be added to the package.</p>
+<p>Built-in installation phase tests are provided by packages inheriting from select <a class="reference internal" href="build_systems.html#build-systems"><span class="std std-ref">build systems</span></a>, where naming conventions are used to identify typical test identifiers for those systems.
+In general, you won't need to add anything to your package to take advantage of these tests if your software's build system complies with the convention; otherwise, you'll want or need to override the post-phase method to perform other checks.</p>
+<div class="table-wrapper docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Built-in installation phase tests</span><a class="headerlink" href="#id3" title="連結到這個表格">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Build System Class</p></th>
+<th class="head"><p>Post-Build Phase Method (Runs)</p></th>
+<th class="head"><p>Post-Install Phase Method (Runs)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/autotoolspackage.html#autotoolspackage"><span class="std std-ref">AutotoolsPackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">installcheck</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">installcheck</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="build_systems/cachedcmakepackage.html#cachedcmakepackage"><span class="std std-ref">CachedCMakePackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>)</p></td>
+<td><p>Not applicable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/cmakepackage.html#cmakepackage"><span class="std std-ref">CMakePackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>)</p></td>
+<td><p>Not applicable</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="build_systems/makefilepackage.html#makefilepackage"><span class="std std-ref">MakefilePackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">installcheck</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">installcheck</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/mesonpackage.html#mesonpackage"><span class="std std-ref">MesonPackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code>)</p></td>
+<td><p>Not applicable</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="build_systems/perlpackage.html#perlpackage"><span class="std std-ref">PerlPackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>)</p></td>
+<td><p>Not applicable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/pythonpackage.html#pythonpackage"><span class="std std-ref">PythonPackage</span></a></p></td>
+<td><p>Not applicable</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_imports</span></code> (module imports)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="build_systems/qmakepackage.html#qmakepackage"><span class="std std-ref">QMakePackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">check</span></code> (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code>)</p></td>
+<td><p>Not applicable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/sconspackage.html#sconspackage"><span class="std std-ref">SConsPackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">build_test</span></code> (must be overridden)</p></td>
+<td><p>Not applicable</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="build_systems/sippackage.html#sippackage"><span class="std std-ref">SIPPackage</span></a></p></td>
+<td><p>Not applicable</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_imports</span></code> (module imports)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/wafpackage.html#wafpackage"><span class="std std-ref">WafPackage</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">build_test</span></code> (must be overridden)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">install_test</span></code> (must be overridden)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">Libelf</span></code> package inherits from <code class="docutils literal notranslate"><span class="pre">AutotoolsPackage</span></code> and its <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> has a standard <code class="docutils literal notranslate"><span class="pre">check</span></code> target.
+So Spack will automatically run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code> after the <code class="docutils literal notranslate"><span class="pre">build</span></code> phase when it is installed using the <code class="docutils literal notranslate"><span class="pre">--test</span></code> option, such as:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install --test=root <span class="nc">libelf</span>
+</pre></div>
+</div>
+<p>In addition to overriding any built-in build system installation phase tests, you can write your own install phase tests.
+You will need to use two decorators for each phase test method:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">run_after</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">on_package_attributes</span></code></p></li>
+</ul>
+<p>The first decorator tells Spack when in the installation process to run your test method installation process; namely <em>after</em> the provided installation phase.
+The second decorator tells Spack to only run the checks when the <code class="docutils literal notranslate"><span class="pre">--test</span></code> option is provided on the command line.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Be sure to place the directives above your test method in the order <code class="docutils literal notranslate"><span class="pre">run_after</span></code> <em>then</em> <code class="docutils literal notranslate"><span class="pre">on_package_attributes</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>You also want to be sure the package supports the phase you use in the <code class="docutils literal notranslate"><span class="pre">run_after</span></code> directive.
+For example, <code class="docutils literal notranslate"><span class="pre">PackageBase</span></code> only supports the <code class="docutils literal notranslate"><span class="pre">install</span></code> phase while the <code class="docutils literal notranslate"><span class="pre">AutotoolsPackage</span></code> and <code class="docutils literal notranslate"><span class="pre">MakefilePackage</span></code> support both <code class="docutils literal notranslate"><span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">build</span></code> phases.</p>
+</div>
+<p>Assuming both <code class="docutils literal notranslate"><span class="pre">build</span></code> and <code class="docutils literal notranslate"><span class="pre">install</span></code> phases are available, you can add additional checks to be performed after each of those phases based on the skeleton provided below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YourMakefilePackage</span><span class="p">(</span><span class="n">MakefilePackage</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="nd">@run_after</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+    <span class="nd">@on_package_attributes</span><span class="p">(</span><span class="n">run_tests</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">check_build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Add your custom post-build phase tests</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="nd">@on_package_attributes</span><span class="p">(</span><span class="n">run_tests</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">check_install</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Add your custom post-install phase tests</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>You could also schedule work to be done <strong>before</strong> a given phase using the <code class="docutils literal notranslate"><span class="pre">run_before</span></code> decorator.</p>
+</div>
+<p>By way of a concrete example, the <code class="docutils literal notranslate"><span class="pre">reframe</span></code> package mentioned previously has a simple installation phase check that runs the installed executable.
+The check is implemented as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Reframe</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="c1"># check if we can run reframe</span>
+    <span class="nd">@run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="nd">@on_package_attributes</span><span class="p">(</span><span class="n">run_tests</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">check_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">source_path</span><span class="p">):</span>
+            <span class="n">reframe</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">reframe</span><span class="p">)</span>
+            <span class="n">reframe</span><span class="p">(</span><span class="s2">&quot;-l&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="checking-build-time-test-results">
+<h4>Checking build-time test results<a class="headerlink" href="#checking-build-time-test-results" title="連結到這個標頭">¶</a></h4>
+<p>Checking the results of these tests after running <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">--test</span></code> can be done by viewing the spec's <code class="docutils literal notranslate"><span class="pre">install-time-test-log.txt</span></code> file whose location will depend on whether the spec installed successfully.</p>
+<p>A successful installation results in the build and stage logs being copied to the <code class="docutils literal notranslate"><span class="pre">.spack</span></code> subdirectory of the spec's prefix.
+For example,</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install --test=root <span class="nc">zlib</span><span class="kp">@1.2.13</span>
+<span class="go">...</span>
+<span class="go">[+] /home/user/spack/opt/spack/linux-rhel8-broadwell/gcc-10.3.1/zlib-1.2.13-tehu6cbsujufa2tb6pu3xvc6echjstv6</span>
+<span class="gp">$ </span>cat /home/user/spack/opt/spack/linux-rhel8-broadwell/gcc-10.3.1/zlib-1.2.13-tehu6cbsujufa2tb6pu3xvc6echjstv6/.spack/install-time-test-log.txt
+</pre></div>
+</div>
+<p>If the installation fails due to build-time test failures, then both logs will be left in the build stage directory as illustrated below:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install --test=root <span class="nc">zlib</span><span class="kp">@1.2.13</span>
+<span class="go">...</span>
+<span class="go">See build log for details:</span>
+<span class="go">  /var/tmp/user/spack-stage/spack-stage-zlib-1.2.13-lxfsivs4htfdewxe7hbi2b3tekj4make/spack-build-out.txt</span>
+
+<span class="gp">$ </span>cat /var/tmp/user/spack-stage/spack-stage-zlib-1.2.13-lxfsivs4htfdewxe7hbi2b3tekj4make/install-time-test-log.txt
+</pre></div>
+</div>
+</section>
+</section>
+<section id="stand-alone-tests">
+<span id="cmd-spack-test"></span><h3>Stand-alone tests<a class="headerlink" href="#stand-alone-tests" title="連結到這個標頭">¶</a></h3>
+<p>While build-time tests are integrated with the installation process, stand-alone tests are expected to run days, weeks, even months after the software is installed.
+The goal is to provide a mechanism for gaining confidence that packages work as installed <strong>and</strong> <em>continue</em> to work as the underlying software evolves.
+Packages can add and inherit stand-alone tests.
+The <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span></code> command is used for stand-alone testing.</p>
+<div class="admonition-stand-alone-test-methods-should-complete-within-a-few-minutes admonition">
+<p class="admonition-title">Stand-alone test methods should complete within a few minutes.</p>
+<p>Execution speed is important since these tests are intended to quickly assess whether installed specs work on the system.
+Spack cannot spare resources for more extensive testing of packages included in CI stacks.</p>
+<p>Consequently, stand-alone tests should run relatively quickly -- as in on the order of at most a few minutes -- while testing at least key aspects of the installed software.
+Save more extensive testing for other tools.</p>
+</div>
+<p>Tests are defined in the package using methods with names beginning <code class="docutils literal notranslate"><span class="pre">test_</span></code>.
+This allows Spack to support multiple independent checks, or parts.
+Files needed for testing, such as source, data, and expected outputs, may be saved from the build and/or stored with the package in the repository.
+Regardless of origin, these files are automatically copied to the spec's test stage directory prior to execution of the test method(s).
+Spack also provides helper functions to facilitate common processing.</p>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p><strong>The status of stand-alone tests can be used to guide follow-up testing efforts.</strong></p>
+<p>Passing stand-alone tests justifies performing more thorough testing, such as running extensive unit or regression tests or tests that run at scale, when available.
+These tests are outside of the scope of Spack packaging.</p>
+<p>Failing stand-alone tests indicate problems with the installation and, therefore, no reason to proceed with more resource-intensive tests until the failures have been investigated.</p>
+</div>
+<section id="configuring-the-test-stage-directory">
+<span id="configure-test-stage"></span><h4>Configuring the test stage directory<a class="headerlink" href="#configuring-the-test-stage-directory" title="連結到這個標頭">¶</a></h4>
+<p>Stand-alone tests utilize a test stage directory to build, run, and track tests in the same way Spack uses a build stage directory to install software.
+The default test stage root directory, <code class="docutils literal notranslate"><span class="pre">$HOME/.spack/test</span></code>, is defined in <a class="reference internal" href="config_yaml.html#config-yaml"><span class="std std-ref">config.yaml</span></a>.
+This location is customizable by adding or changing the <code class="docutils literal notranslate"><span class="pre">test_stage</span></code> path such that:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">test_stage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/test/stage</span>
+</pre></div>
+</div>
+<p>Packages can use the <code class="docutils literal notranslate"><span class="pre">self.test_suite.stage</span></code> property to access the path.</p>
+<div class="admonition-each-spec-being-tested-has-its-own-test-stage-directory admonition">
+<p class="admonition-title">Each spec being tested has its own test stage directory.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">config:test_stage</span></code> option is the path to the root of a <strong>test suite</strong>'s stage directories.</p>
+<p>Other package properties that provide paths to spec-specific subdirectories and files are described in <a class="reference internal" href="#accessing-files"><span class="std std-ref">Finding package- and test-related files</span></a>.</p>
+</div>
+</section>
+<section id="adding-stand-alone-tests">
+<span id="adding-standalone-tests"></span><h4>Adding stand-alone tests<a class="headerlink" href="#adding-stand-alone-tests" title="連結到這個標頭">¶</a></h4>
+<p>Test recipes are defined in the package using methods with names beginning <code class="docutils literal notranslate"><span class="pre">test_</span></code>.
+This allows for the implementation of multiple independent tests.
+Each method has access to the information Spack tracks on the package, such as options, compilers, and dependencies, supporting the customization of tests to the build.
+Standard Python <code class="docutils literal notranslate"><span class="pre">assert</span></code> statements and other error reporting mechanisms can be used.
+These exceptions are automatically caught and reported as test failures.</p>
+<p>Each test method is an <em>implicit test part</em> named by the method.
+Its purpose is the method's docstring.
+Providing a meaningful purpose for the test gives context that can aid debugging.
+Spack outputs both the name and purpose at the start of test execution so it's also important that the docstring/purpose be brief.</p>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>We recommend naming test methods so it is clear <em>what</em> is being tested.
+For example, if a test method is building and/or running an executable called <code class="docutils literal notranslate"><span class="pre">example</span></code>, then call the method <code class="docutils literal notranslate"><span class="pre">test_example</span></code>.
+This, together with a similarly meaningful test purpose, will aid test comprehension, debugging, and maintainability.</p>
+</div>
+<p>Stand-alone tests run in an environment that provides access to information on the installed software, such as build options, dependencies, and compilers.
+Build options and dependencies are accessed using the same spec checks used by build recipes.
+Examples of checking <a class="reference internal" href="packaging_guide_creation.html#variants"><span class="std std-ref">variant settings</span></a> and <a class="reference internal" href="packaging_guide_build.html#spec-objects"><span class="std std-ref">spec constraints</span></a> can be found at the provided links.</p>
+<div class="admonition-spack-automatically-sets-up-the-test-stage-directory-and-environment admonition">
+<p class="admonition-title">Spack automatically sets up the test stage directory and environment.</p>
+<p>Spack automatically creates the test stage directory and copies relevant files <em>prior to</em> running tests.
+It can also ensure build dependencies are available <strong>if</strong> necessary.</p>
+<p>The path to the test stage is configurable (see <a class="reference internal" href="#configure-test-stage"><span class="std std-ref">Configuring the test stage directory</span></a>).</p>
+<p>Files that Spack knows to copy are those saved from the build (see <a class="reference internal" href="#cache-extra-test-sources"><span class="std std-ref">Saving build- and install-time files</span></a>) and those added to the package repository (see <a class="reference internal" href="#cache-custom-files"><span class="std std-ref">Adding custom files</span></a>).</p>
+<p>Spack will use the value of the <code class="docutils literal notranslate"><span class="pre">test_requires_compiler</span></code> property to determine whether it needs to also set up build dependencies (see <a class="reference internal" href="#test-build-tests"><span class="std std-ref">Building and running test executables</span></a>).</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">MyPackage</span></code> package below provides two basic test examples: <code class="docutils literal notranslate"><span class="pre">test_example</span></code> and <code class="docutils literal notranslate"><span class="pre">test_example2</span></code>.
+The first runs the installed <code class="docutils literal notranslate"><span class="pre">example</span></code> and ensures its output contains an expected string.
+The second runs <code class="docutils literal notranslate"><span class="pre">example2</span></code> without checking output so is only concerned with confirming the executable runs successfully.
+If the installed spec is not expected to have <code class="docutils literal notranslate"><span class="pre">example2</span></code>, then the check at the top of the method will raise a special <code class="docutils literal notranslate"><span class="pre">SkipTest</span></code> exception, which is captured to facilitate reporting skipped test parts to tools like CDash.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyPackage</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ensure installed example works&quot;&quot;&quot;</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Done.&quot;</span>
+        <span class="n">example</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">example</span><span class="p">)</span>
+
+        <span class="c1"># Capture stdout and stderr from running the Executable</span>
+        <span class="c1"># and check that the expected output was produced.</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">example</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">out</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Expected &#39;</span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">&#39; in the output&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_example2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;run installed example2&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@:1.0&quot;</span><span class="p">):</span>
+            <span class="c1"># Raise SkipTest to ensure flagging the test as skipped for</span>
+            <span class="c1"># test reporting purposes.</span>
+            <span class="k">raise</span> <span class="n">SkipTest</span><span class="p">(</span><span class="s2">&quot;Test is only available for v1.1 on&quot;</span><span class="p">)</span>
+
+        <span class="n">example2</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">example2</span><span class="p">)</span>
+        <span class="n">example2</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output showing the identification of each test part after running the tests is illustrated below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack <span class="nb">test</span> run --alias mypackage mypackage@2.0
+<span class="go">==&gt; Spack test mypackage</span>
+<span class="go">...</span>
+<span class="gp">$ </span>spack <span class="nb">test</span> results -l mypackage
+<span class="go">==&gt; Results for test suite &#39;mypackage&#39;:</span>
+<span class="go">...</span>
+<span class="go">==&gt; [2024-03-10-16:03:56.625439] test: test_example: ensure installed example works</span>
+<span class="go">...</span>
+<span class="go">PASSED: MyPackage::test_example</span>
+<span class="go">==&gt; [2024-03-10-16:03:56.625439] test: test_example2: run installed example2</span>
+<span class="go">...</span>
+<span class="go">PASSED: MyPackage::test_example2</span>
+</pre></div>
+</div>
+<div class="admonition-do-not-implement-tests-that-must-run-in-the-installation-prefix admonition">
+<p class="admonition-title">Do NOT implement tests that must run in the installation prefix.</p>
+<p>Use of the package spec's installation prefix for building and running tests is <strong>strongly discouraged</strong>.
+Doing so causes permission errors for shared spack instances <em>and</em> facilities that install the software in read-only file systems or directories.</p>
+<p>Instead, start these test methods by explicitly copying the needed files from the installation prefix to the test stage directory.
+Note the test stage directory is the current directory when the test is executed with the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code> command.</p>
+</div>
+<div class="admonition-test-methods-for-library-packages-should-build-test-executables admonition">
+<p class="admonition-title">Test methods for library packages should build test executables.</p>
+<p>Stand-alone tests for library packages <em>should</em> build test executables that utilize the <em>installed</em> library.
+Doing so ensures the tests follow a similar build process that users of the library would follow.</p>
+<p>For more information on how to do this, see <a class="reference internal" href="#test-build-tests"><span class="std std-ref">Building and running test executables</span></a>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>If you want to see more examples from packages with stand-alone tests, run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">pkg</span> <span class="pre">grep</span> <span class="pre">&quot;def\stest&quot;</span> <span class="pre">|</span> <span class="pre">sed</span> <span class="pre">&quot;s/\/package.py.*//g&quot;</span> <span class="pre">|</span> <span class="pre">sort</span> <span class="pre">-u</span></code> from the command line to get a list of the packages.</p>
+</div>
+</section>
+<section id="adding-stand-alone-test-parts">
+<span id="adding-standalone-test-parts"></span><h4>Adding stand-alone test parts<a class="headerlink" href="#adding-stand-alone-test-parts" title="連結到這個標頭">¶</a></h4>
+<p>Sometimes dependencies between steps of a test lend themselves to being broken into parts.
+Tracking the pass/fail status of each part can aid debugging.
+Spack provides a <code class="docutils literal notranslate"><span class="pre">test_part</span></code> context manager for use within test methods.</p>
+<p>Each test part is independently run, tracked, and reported.
+Test parts are executed in the order they appear.
+If one fails, subsequent test parts are still performed even if they would also fail.
+This allows tools like CDash to track and report the status of test parts across runs.
+The pass/fail status of the enclosing test is derived from the statuses of the embedded test parts.</p>
+<div class="admonition-test-method-and-test-part-names-must-be-unique admonition">
+<p class="admonition-title">Test method and test part names <strong>must</strong> be unique.</p>
+<p>Test results reporting requires that test methods and embedded test parts within a package have unique names.</p>
+</div>
+<p>The signature for <code class="docutils literal notranslate"><span class="pre">test_part</span></code> is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_part</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">test_name</span><span class="p">,</span> <span class="n">purpose</span><span class="p">,</span> <span class="n">work_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>where each argument has the following meaning:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">pkg</span></code> is an instance of the package for the spec under test.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_name</span></code> is the name of the test part, which must start with <code class="docutils literal notranslate"><span class="pre">test_</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">purpose</span></code> is a brief description used as a heading for the test part.</p>
+<p>Output from the test is written to a test log file allowing the test name and purpose to be searched for test part confirmation and debugging.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">work_dir</span></code> is the path to the directory in which the test will run.</p>
+<p>The default of <code class="docutils literal notranslate"><span class="pre">None</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;.&quot;</span></code>, corresponds to the spec's test stage (i.e., <code class="docutils literal notranslate"><span class="pre">self.test_suite.test_dir_for_spec(self.spec)</span></code>).</p>
+</li>
+</ul>
+<div class="admonition-start-test-part-names-with-the-name-of-the-enclosing-test admonition">
+<p class="admonition-title">Start test part names with the name of the enclosing test.</p>
+<p>We <strong>highly recommend</strong> starting the names of test parts with the name of the enclosing test.
+Doing so helps with the comprehension, readability and debugging of test results.</p>
+</div>
+<p>Suppose <code class="docutils literal notranslate"><span class="pre">MyPackage</span></code> installs multiple executables that need to run in a specific order since the outputs from one are inputs of others.
+Further suppose we want to add an integration test that runs the executables in order.
+We can accomplish this goal by implementing a stand-alone test method consisting of test parts for each executable as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyPackage</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_series</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;run setup, perform, and report&quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="n">test_part</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;test_series_setup&quot;</span><span class="p">,</span> <span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;setup operation&quot;</span><span class="p">):</span>
+            <span class="n">exe</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">setup</span><span class="p">)</span>
+            <span class="n">exe</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">test_part</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;test_series_run&quot;</span><span class="p">,</span> <span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;perform operation&quot;</span><span class="p">):</span>
+            <span class="n">exe</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+            <span class="n">exe</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">test_part</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;test_series_report&quot;</span><span class="p">,</span> <span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;generate report&quot;</span><span class="p">):</span>
+            <span class="n">exe</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+            <span class="n">exe</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The result is <code class="docutils literal notranslate"><span class="pre">test_series</span></code> runs the following executable in order: <code class="docutils literal notranslate"><span class="pre">setup</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, and <code class="docutils literal notranslate"><span class="pre">report</span></code>.
+In this case no options are passed to any of the executables and no outputs from running them are checked.
+Consequently, the implementation could be simplified with a for-loop as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyPackage</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_series</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;execute series setup, run, and report&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">exe</span><span class="p">,</span> <span class="n">reason</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;setup&quot;</span><span class="p">,</span> <span class="s2">&quot;setup operation&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;perform operation&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">,</span> <span class="s2">&quot;generate report&quot;</span><span class="p">),</span>
+        <span class="p">]:</span>
+            <span class="k">with</span> <span class="n">test_part</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;test_series_</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">purpose</span><span class="o">=</span><span class="n">reason</span><span class="p">):</span>
+                <span class="n">exe</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exe</span><span class="p">))</span>
+                <span class="n">exe</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In both cases, since we're using a context manager, each test part in <code class="docutils literal notranslate"><span class="pre">test_series</span></code> will execute regardless of the status of the other test parts.</p>
+<p>Now let's look at the output from running the stand-alone tests where the second test part, <code class="docutils literal notranslate"><span class="pre">test_series_run</span></code>, fails.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack <span class="nb">test</span> run --alias mypackage mypackage@1.0
+<span class="go">==&gt; Spack test mypackage</span>
+<span class="go">...</span>
+<span class="gp">$ </span>spack <span class="nb">test</span> results -l mypackage
+<span class="go">==&gt; Results for test suite &#39;mypackage&#39;:</span>
+<span class="go">...</span>
+<span class="go">==&gt; [2024-03-10-16:03:56.625204] test: test_series: execute series setup, run, and report</span>
+<span class="go">==&gt; [2024-03-10-16:03:56.625439] test: test_series_setup: setup operation</span>
+<span class="go">...</span>
+<span class="go">PASSED: MyPackage::test_series_setup</span>
+<span class="go">==&gt; [2024-03-10-16:03:56.625555] test: test_series_run: perform operation</span>
+<span class="go">...</span>
+<span class="go">FAILED: MyPackage::test_series_run</span>
+<span class="go">==&gt; [2024-03-10-16:03:57.003456] test: test_series_report: generate report</span>
+<span class="go">...</span>
+<span class="go">FAILED: MyPackage::test_series_report</span>
+<span class="go">FAILED: MyPackage::test_series</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>Since test parts depended on the success of previous parts, we see that the failure of one results in the failure of subsequent checks and the overall result of the test method, <code class="docutils literal notranslate"><span class="pre">test_series</span></code>, is failure.</p>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>If you want to see more examples from packages using <code class="docutils literal notranslate"><span class="pre">test_part</span></code>, run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">pkg</span> <span class="pre">grep</span> <span class="pre">&quot;test_part(&quot;</span> <span class="pre">|</span> <span class="pre">sed</span> <span class="pre">&quot;s/\/package.py.*//g&quot;</span> <span class="pre">|</span> <span class="pre">sort</span> <span class="pre">-u</span></code> from the command line to get a list of the packages.</p>
+</div>
+</section>
+<section id="building-and-running-test-executables">
+<span id="test-build-tests"></span><h4>Building and running test executables<a class="headerlink" href="#building-and-running-test-executables" title="連結到這個標頭">¶</a></h4>
+<div class="admonition-reuse-build-time-sources-and-small-input-data-sets-when-possible admonition">
+<p class="admonition-title">Reuse build-time sources and (small) input data sets when possible.</p>
+<p>We <strong>highly recommend</strong> reusing build-time test sources and pared down input files for testing installed software.
+These files are easier to keep synchronized with software capabilities when they reside within the software's repository.
+More information on saving files from the installation process can be found at <a class="reference internal" href="#cache-extra-test-sources"><span class="std std-ref">Saving build- and install-time files</span></a>.</p>
+<p>If that is not possible, you can add test-related files to the package repository (see <a class="reference internal" href="#cache-custom-files"><span class="std std-ref">Adding custom files</span></a>).
+It will be important to remember to maintain them so they work across listed or supported versions of the package.</p>
+</div>
+<p>Packages that build libraries are good examples of cases where you'll want to build test executables from the installed software before running them.
+Doing so requires you to let Spack know it needs to load the package's compiler configuration.
+This is accomplished by setting the package's <code class="docutils literal notranslate"><span class="pre">test_requires_compiler</span></code> property to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="admonition-test-requires-compiler-true-is-required-to-build-test-executables admonition">
+<p class="admonition-title"><code class="docutils literal notranslate"><span class="pre">test_requires_compiler</span> <span class="pre">=</span> <span class="pre">True</span></code> is required to build test executables.</p>
+<p>Setting the property to <code class="docutils literal notranslate"><span class="pre">True</span></code> ensures access to the compiler through canonical environment variables (e.g., <code class="docutils literal notranslate"><span class="pre">CC</span></code>, <code class="docutils literal notranslate"><span class="pre">CXX</span></code>, <code class="docutils literal notranslate"><span class="pre">FC</span></code>, <code class="docutils literal notranslate"><span class="pre">F77</span></code>).
+It also gives access to build dependencies like <code class="docutils literal notranslate"><span class="pre">cmake</span></code> through their <code class="docutils literal notranslate"><span class="pre">spec</span> <span class="pre">objects</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">self.spec[&quot;cmake&quot;].prefix.bin.cmake</span></code> for the path or <code class="docutils literal notranslate"><span class="pre">self.spec[&quot;cmake&quot;].command</span></code> for the <code class="docutils literal notranslate"><span class="pre">Executable</span></code> instance).</p>
+<p>Be sure to add the property at the top of the package class under other properties like the <code class="docutils literal notranslate"><span class="pre">homepage</span></code>.</p>
+</div>
+<p>The example below, which ignores how <code class="docutils literal notranslate"><span class="pre">cxx-example.cpp</span></code> is acquired, illustrates the basic process of compiling a test executable using the installed library before running it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyLibrary</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="n">test_requires_compiler</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_cxx_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;build and run cxx-example&quot;&quot;&quot;</span>
+        <span class="n">exe</span> <span class="o">=</span> <span class="s2">&quot;cxx-example&quot;</span>
+        <span class="o">...</span>
+        <span class="n">cxx</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CXX&quot;</span><span class="p">])</span>
+        <span class="n">cxx</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">lib</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;-I</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">include</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s2">.cpp&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="n">exe</span><span class="p">)</span>
+        <span class="n">cxx_example</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span>
+        <span class="n">cxx_example</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Typically the files used to build and/or run test executables are either cached from the installation (see <a class="reference internal" href="#cache-extra-test-sources"><span class="std std-ref">Saving build- and install-time files</span></a>) or added to the package repository (see <a class="reference internal" href="#cache-custom-files"><span class="std std-ref">Adding custom files</span></a>).
+There is nothing preventing the use of both.</p>
+</section>
+<section id="saving-build-and-install-time-files">
+<span id="cache-extra-test-sources"></span><h4>Saving build- and install-time files<a class="headerlink" href="#saving-build-and-install-time-files" title="連結到這個標頭">¶</a></h4>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">cache_extra_test_sources</span></code> helper routine to copy directories and/or files from the source build stage directory to the package's installation directory.
+Spack will automatically copy these files for you when it sets up the test stage directory and before it begins running the tests.</p>
+<p>The signature for <code class="docutils literal notranslate"><span class="pre">cache_extra_test_sources</span></code> is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cache_extra_test_sources</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">srcs</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>where each argument has the following meaning:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pkg</span></code> is an instance of the package for the spec under test.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">srcs</span></code> is a string <em>or</em> a list of strings corresponding to the paths of subdirectories and/or files needed for stand-alone testing.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Paths provided in the <code class="docutils literal notranslate"><span class="pre">srcs</span></code> argument <strong>must be relative</strong> to the staged source directory.
+They will be copied to the equivalent relative location under the test stage directory prior to test execution.</p>
+</div>
+<p>Contents of subdirectories and files are copied to a special test cache subdirectory of the installation prefix.
+They are automatically copied to the appropriate relative paths under the test stage directory prior to executing stand-alone tests.</p>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p><em>Perform test-related conversions once when copying files.</em></p>
+<p>If one or more of the copied files needs to be modified to reference the installed software, it is recommended that those changes be made to the cached files <strong>once</strong> in the post-<code class="docutils literal notranslate"><span class="pre">install</span></code> copy method <strong>after</strong> the call to <code class="docutils literal notranslate"><span class="pre">cache_extra_test_sources</span></code>.
+This will reduce the amount of unnecessary work in the test method <strong>and</strong> avoid problems running stand-alone tests in shared instances and facility deployments.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">filter_file</span></code> function can be quite useful for such changes (see <a class="reference internal" href="packaging_guide_build.html#file-filtering"><span class="std std-ref">File filtering functions</span></a>).</p>
+</div>
+<p>Below is a basic example of a test that relies on files from the installation.
+This package method reuses the contents of the <code class="docutils literal notranslate"><span class="pre">examples</span></code> subdirectory, which is assumed to have all of the files necessary to allow <code class="docutils literal notranslate"><span class="pre">make</span></code> to compile and link <code class="docutils literal notranslate"><span class="pre">foo.c</span></code> and <code class="docutils literal notranslate"><span class="pre">bar.c</span></code> against the package's installed library.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyLibPackage</span><span class="p">(</span><span class="n">MakefilePackage</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="nd">@run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">copy_test_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cache_extra_test_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;examples&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;build and run the examples&quot;&quot;&quot;</span>
+        <span class="n">examples_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_suite</span><span class="o">.</span><span class="n">current_test_cache_dir</span><span class="o">.</span><span class="n">examples</span>
+        <span class="k">with</span> <span class="n">working_dir</span><span class="p">(</span><span class="n">examples_dir</span><span class="p">):</span>
+            <span class="n">make</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s2">&quot;make&quot;</span><span class="p">)</span>
+            <span class="n">make</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">program</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">]:</span>
+                <span class="k">with</span> <span class="n">test_part</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;test_example_</span><span class="si">{</span><span class="n">program</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">purpose</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ensure </span><span class="si">{</span><span class="n">program</span><span class="si">}</span><span class="s2"> runs&quot;</span><span class="p">):</span>
+                    <span class="n">exe</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+                    <span class="n">exe</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In this case, <code class="docutils literal notranslate"><span class="pre">copy_test_files</span></code> copies the associated files from the build stage to the package's test cache directory under the installation prefix.
+Running <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code> for the package results in Spack copying the directory and its contents to the test stage directory.
+The <code class="docutils literal notranslate"><span class="pre">working_dir</span></code> context manager ensures the commands within it are executed from the <code class="docutils literal notranslate"><span class="pre">examples_dir</span></code>.
+The test builds the software using <code class="docutils literal notranslate"><span class="pre">make</span></code> before running each executable, <code class="docutils literal notranslate"><span class="pre">foo</span></code> and <code class="docutils literal notranslate"><span class="pre">bar</span></code>, as independent test parts.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>The method name <code class="docutils literal notranslate"><span class="pre">copy_test_files</span></code> here is for illustration purposes.
+You are free to use a name that is better suited to your package.</p>
+<p>The key to copying files for stand-alone testing at build time is use of the <code class="docutils literal notranslate"><span class="pre">run_after</span></code> directive, which ensures the associated files are copied <strong>after</strong> the provided build stage (<code class="docutils literal notranslate"><span class="pre">install</span></code>) when the installation prefix <strong>and</strong> files are available.</p>
+<p>The test method uses the path contained in the package's <code class="docutils literal notranslate"><span class="pre">self.test_suite.current_test_cache_dir</span></code> property for the root directory of the copied files.
+In this case, that's the <code class="docutils literal notranslate"><span class="pre">examples</span></code> subdirectory.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>If you want to see more examples from packages that cache build files, run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">pkg</span> <span class="pre">grep</span> <span class="pre">cache_extra_test_sources</span> <span class="pre">|</span> <span class="pre">sed</span> <span class="pre">&quot;s/\/package.py.*//g&quot;</span> <span class="pre">|</span> <span class="pre">sort</span> <span class="pre">-u</span></code> from the command line to get a list of the packages.</p>
+</div>
+</section>
+<section id="adding-custom-files">
+<span id="cache-custom-files"></span><h4>Adding custom files<a class="headerlink" href="#adding-custom-files" title="連結到這個標頭">¶</a></h4>
+<p>Sometimes it is helpful or necessary to include custom files for building and/or checking the results of tests as part of the package.
+Examples of the types of files that might be useful are:</p>
+<ul class="simple">
+<li><p>test source files</p></li>
+<li><p>test input files</p></li>
+<li><p>test build scripts</p></li>
+<li><p>expected test outputs</p></li>
+</ul>
+<p>While obtaining such files from the software repository is preferred (see <a class="reference internal" href="#cache-extra-test-sources"><span class="std std-ref">Saving build- and install-time files</span></a>), there are circumstances where doing so is not feasible such as when the software is not being actively maintained.
+When test files cannot be obtained from the repository or there is a need to supplement files that can, Spack supports the inclusion of additional files under the <code class="docutils literal notranslate"><span class="pre">test</span></code> subdirectory of the package in the Spack repository.</p>
+<p>The following example assumes a <code class="docutils literal notranslate"><span class="pre">custom-example.c</span></code> is saved in <code class="docutils literal notranslate"><span class="pre">MyLibrary</span></code> package's <code class="docutils literal notranslate"><span class="pre">test</span></code> subdirectory.
+It also assumes the program simply needs to be compiled and linked against the installed <code class="docutils literal notranslate"><span class="pre">MyLibrary</span></code> software.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyLibrary</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="n">test_requires_compiler</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_custom_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;build and run custom-example&quot;&quot;&quot;</span>
+        <span class="n">src_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_suite</span><span class="o">.</span><span class="n">current_test_data_dir</span>
+        <span class="n">exe</span> <span class="o">=</span> <span class="s2">&quot;custom-example&quot;</span>
+
+        <span class="k">with</span> <span class="n">working_dir</span><span class="p">(</span><span class="n">src_dir</span><span class="p">):</span>
+            <span class="n">cc</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CC&quot;</span><span class="p">])</span>
+            <span class="n">cc</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">lib</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;-I</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">include</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s2">.cpp&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="n">exe</span><span class="p">)</span>
+
+            <span class="n">custom_example</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span>
+            <span class="n">custom_example</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In this case, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code> for the package results in Spack copying the contents of the <code class="docutils literal notranslate"><span class="pre">test</span></code> subdirectory to the test stage directory path in <code class="docutils literal notranslate"><span class="pre">self.test_suite.current_test_data_dir</span></code> before calling <code class="docutils literal notranslate"><span class="pre">test_custom_example</span></code>.
+Use of the <code class="docutils literal notranslate"><span class="pre">working_dir</span></code> context manager ensures the commands to build and run the program are performed from within the appropriate subdirectory of the test stage.</p>
+</section>
+<section id="reading-expected-output-from-a-file">
+<span id="expected-test-output-from-file"></span><h4>Reading expected output from a file<a class="headerlink" href="#reading-expected-output-from-a-file" title="連結到這個標頭">¶</a></h4>
+<p>The helper function <code class="docutils literal notranslate"><span class="pre">get_escaped_text_output</span></code> is available for packages to retrieve properly formatted text from a file potentially containing special characters.</p>
+<p>The signature for <code class="docutils literal notranslate"><span class="pre">get_escaped_text_output</span></code> is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_escaped_text_output</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">filename</span></code> is the path to the file containing the expected output.</p>
+<p>The path provided to <code class="docutils literal notranslate"><span class="pre">filename</span></code> for one of the copied custom files (<a class="reference internal" href="#cache-custom-files"><span class="std std-ref">custom file</span></a>) is in the path rooted at <code class="docutils literal notranslate"><span class="pre">self.test_suite.current_test_data_dir</span></code>.</p>
+<p>The example below shows how to reference both the custom database (<code class="docutils literal notranslate"><span class="pre">packages.db</span></code>) and expected output (<code class="docutils literal notranslate"><span class="pre">dump.out</span></code>) files Spack copies to the test stage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="k">class</span> <span class="nc">Sqlite</span><span class="p">(</span><span class="n">AutotoolsPackage</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;check example table dump&quot;&quot;&quot;</span>
+        <span class="n">test_data_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_suite</span><span class="o">.</span><span class="n">current_test_data_dir</span>
+        <span class="n">db_filename</span> <span class="o">=</span> <span class="n">test_data_dir</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;packages.db&quot;</span><span class="p">)</span>
+        <span class="o">...</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="n">get_escaped_text_output</span><span class="p">(</span><span class="n">test_data_dir</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;dump.out&quot;</span><span class="p">))</span>
+        <span class="n">sqlite3</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">sqlite3</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="p">(</span><span class="n">db_filename</span><span class="p">,</span> <span class="s2">&quot;.dump&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">expected</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">out</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected &#39;</span><span class="si">{</span><span class="n">exp</span><span class="si">}</span><span class="s2">&#39; in output&quot;</span>
+</pre></div>
+</div>
+<p>If the files were instead cached from installing the software, the paths to the two files would be found under the <code class="docutils literal notranslate"><span class="pre">self.test_suite.current_test_cache_dir</span></code> directory as shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;check example table dump&quot;&quot;&quot;</span>
+    <span class="n">test_cache_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_suite</span><span class="o">.</span><span class="n">current_test_cache_dir</span>
+    <span class="n">db_filename</span> <span class="o">=</span> <span class="n">test_cache_dir</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;packages.db&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">get_escaped_text_output</span><span class="p">(</span><span class="n">test_cache_dir</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;dump.out&quot;</span><span class="p">))</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>Alternatively, if both files had been installed by the software into the <code class="docutils literal notranslate"><span class="pre">share/tests</span></code> subdirectory of the installation prefix, the paths to the two files would be referenced as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;check example table dump&quot;&quot;&quot;</span>
+    <span class="n">db_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">share</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;packages.db&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">get_escaped_text_output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">share</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;dump.out&quot;</span><span class="p">))</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="comparing-expected-to-actual-outputs">
+<span id="check-outputs"></span><h4>Comparing expected to actual outputs<a class="headerlink" href="#comparing-expected-to-actual-outputs" title="連結到這個標頭">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">check_outputs</span></code> helper routine is available for packages to ensure multiple expected outputs from running an executable are contained within the actual outputs.</p>
+<p>The signature for <code class="docutils literal notranslate"><span class="pre">check_outputs</span></code> is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check_outputs</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>where each argument has the expected type and meaning:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">expected</span></code> is a string or list of strings containing the expected (raw) output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">actual</span></code> is a string containing the actual output from executing the command.</p></li>
+</ul>
+<p>Invoking the method is the equivalent of:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">check</span> <span class="ow">in</span> <span class="n">expected</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">check</span><span class="p">,</span> <span class="n">actual</span><span class="p">):</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected &#39;</span><span class="si">{</span><span class="n">check</span><span class="si">}</span><span class="s2">&#39; in output &#39;</span><span class="si">{</span><span class="n">actual</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>If you want to see more examples from packages that use this helper, run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">pkg</span> <span class="pre">grep</span> <span class="pre">check_outputs</span> <span class="pre">|</span> <span class="pre">sed</span> <span class="pre">&quot;s/\/package.py.*//g&quot;</span> <span class="pre">|</span> <span class="pre">sort</span> <span class="pre">-u</span></code> from the command line to get a list of the packages.</p>
+</div>
+</section>
+<section id="finding-package-and-test-related-files">
+<span id="accessing-files"></span><h4>Finding package- and test-related files<a class="headerlink" href="#finding-package-and-test-related-files" title="連結到這個標頭">¶</a></h4>
+<p>You may need to access files from one or more locations when writing stand-alone tests.
+This can happen if the software's repository does not include test source files or includes them but has no way to build the executables using the installed headers and libraries.
+In these cases you may need to reference the files relative to one or more root directories.
+The table below lists relevant path properties and provides additional examples of their use.
+See <a class="reference internal" href="#expected-test-output-from-file"><span class="std std-ref">Reading expected output from a file</span></a> for examples of accessing files saved from the software repository, package repository, and installation.</p>
+<div class="table-wrapper docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Directory-to-property mapping</span><a class="headerlink" href="#id4" title="連結到這個表格">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Root Directory</p></th>
+<th class="head"><p>Package Property</p></th>
+<th class="head"><p>Example(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Package (Spec) Installation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.prefix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.prefix.include</span></code>, <code class="docutils literal notranslate"><span class="pre">self.prefix.lib</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Dependency Installation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.spec[&quot;&lt;dependency-package&gt;&quot;].prefix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.spec[&quot;trilinos&quot;].prefix.include</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Test Suite Stage</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.test_suite.stage</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">join_path(self.test_suite.stage,</span> <span class="pre">&quot;results.txt&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Spec's Test Stage</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.test_suite.test_dir_for_spec(&lt;spec&gt;)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.test_suite.test_dir_for_spec(self.spec)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Current Spec's Build-time Files</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.test_suite.current_test_cache_dir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">join_path(self.test_suite.current_test_cache_dir.examples,</span> <span class="pre">&quot;foo.c&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Current Spec's Custom Test Files</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">self.test_suite.current_test_data_dir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">join_path(self.test_suite.current_test_data_dir,</span> <span class="pre">&quot;hello.f90&quot;)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="inheriting-stand-alone-tests">
+<span id="inheriting-tests"></span><h4>Inheriting stand-alone tests<a class="headerlink" href="#inheriting-stand-alone-tests" title="連結到這個標頭">¶</a></h4>
+<p>Stand-alone tests defined in parent (e.g., <a class="reference internal" href="build_systems.html#build-systems"><span class="std std-ref">Build Systems</span></a>) and virtual (e.g., <a class="reference internal" href="packaging_guide_creation.html#virtual-dependencies"><span class="std std-ref">Virtual dependencies</span></a>) packages are executed by packages that inherit from or provide interface implementations for those packages, respectively.</p>
+<p>The table below summarizes the stand-alone tests that will be executed along with those implemented in the package itself.</p>
+<div class="table-wrapper docutils container" id="id5">
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Inherited/provided stand-alone tests</span><a class="headerlink" href="#id5" title="連結到這個表格">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parent/Provider Package</p></th>
+<th class="head"><p>Stand-alone Tests</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/c">C</a></p></td>
+<td><p>Compiles <code class="docutils literal notranslate"><span class="pre">hello.c</span></code> and runs it</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/cxx">Cxx</a></p></td>
+<td><p>Compiles and runs several <code class="docutils literal notranslate"><span class="pre">hello</span></code> programs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/fortran">Fortran</a></p></td>
+<td><p>Compiles and runs <code class="docutils literal notranslate"><span class="pre">hello</span></code> programs (<code class="docutils literal notranslate"><span class="pre">F</span></code> and <code class="docutils literal notranslate"><span class="pre">f90</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/mpi">Mpi</a></p></td>
+<td><p>Compiles and runs <code class="docutils literal notranslate"><span class="pre">mpi_hello</span></code> (<code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">fortran</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="build_systems/pythonpackage.html#pythonpackage"><span class="std std-ref">PythonPackage</span></a></p></td>
+<td><p>Imports modules listed in the <code class="docutils literal notranslate"><span class="pre">self.import_modules</span></code> property with defaults derived from the tarball</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="build_systems/sippackage.html#sippackage"><span class="std std-ref">SipPackage</span></a></p></td>
+<td><p>Imports modules listed in the <code class="docutils literal notranslate"><span class="pre">self.import_modules</span></code> property with defaults derived from the tarball</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These tests are very basic so it is important that package developers and maintainers provide additional stand-alone tests customized to the package.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Any package that implements a test method with the same name as an inherited method will override the inherited method.
+If that is not the goal and you are not explicitly calling and adding functionality to the inherited method for the test, then make sure that all test methods and embedded test parts have unique test names.</p>
+</div>
+<p>One example of a package that adds its own stand-alone tests to those &quot;inherited&quot; by the virtual package it provides an implementation for is the <a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/openmpi/package.py">OpenMPI package</a>.</p>
+<p>Below are snippets from running and viewing the stand-alone test results for <code class="docutils literal notranslate"><span class="pre">openmpi</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack <span class="nb">test</span> run --alias openmpi openmpi@4.1.4
+<span class="go">==&gt; Spack test openmpi</span>
+<span class="go">==&gt; Testing package openmpi-4.1.4-ubmrigj</span>
+<span class="go">============================== 1 passed of 1 spec ==============================</span>
+
+<span class="gp">$ </span>spack <span class="nb">test</span> results -l openmpi
+<span class="go">==&gt; Results for test suite &#39;openmpi&#39;:</span>
+<span class="go">==&gt; test specs:</span>
+<span class="go">==&gt;   openmpi-4.1.4-ubmrigj PASSED</span>
+<span class="go">==&gt; Testing package openmpi-4.1.4-ubmrigj</span>
+<span class="go">==&gt; [2023-03-10-16:03:56.160361] Installing $spack/opt/spack/linux-rhel7-broadwell/gcc-8.3.1/openmpi-4.1.4-ubmrigjrqcafh3hffqcx7yz2nc5jstra/.spack/test to $test_stage/xez37ekynfbi4e7h4zdndfemzufftnym/openmpi-4.1.4-ubmrigj/cache/openmpi</span>
+<span class="go">==&gt; [2023-03-10-16:03:56.625204] test: test_bin: test installed binaries</span>
+<span class="go">==&gt; [2023-03-10-16:03:56.625439] test: test_bin_mpirun: run and check output of mpirun</span>
+<span class="go">==&gt; [2023-03-10-16:03:56.629807] &#39;$spack/opt/spack/linux-rhel7-broadwell/gcc-8.3.1/openmpi-4.1.4-ubmrigjrqcafh3hffqcx7yz2nc5jstra/bin/mpirun&#39; &#39;-n&#39; &#39;1&#39; &#39;ls&#39; &#39;..&#39;</span>
+<span class="go">openmpi-4.1.4-ubmrigj            repo</span>
+<span class="go">openmpi-4.1.4-ubmrigj-test-out.txt  test_suite.lock</span>
+<span class="go">PASSED: test_bin_mpirun</span>
+<span class="go">...</span>
+<span class="go">==&gt; [2023-03-10-16:04:01.486977] test: test_version_oshcc: ensure version of oshcc is 8.3.1</span>
+<span class="go">SKIPPED: test_version_oshcc: oshcc is not installed</span>
+<span class="go">...</span>
+<span class="go">==&gt; [2023-03-10-16:04:02.215227] Completed testing</span>
+<span class="go">==&gt; [2023-03-10-16:04:02.215597]</span>
+<span class="go">======================== SUMMARY: openmpi-4.1.4-ubmrigj ========================</span>
+<span class="go">Openmpi::test_bin_mpirun .. PASSED</span>
+<span class="go">Openmpi::test_bin_ompi_info .. PASSED</span>
+<span class="go">Openmpi::test_bin_oshmem_info .. SKIPPED</span>
+<span class="go">Openmpi::test_bin_oshrun .. SKIPPED</span>
+<span class="go">Openmpi::test_bin_shmemrun .. SKIPPED</span>
+<span class="go">Openmpi::test_bin .. PASSED</span>
+<span class="go">...</span>
+<span class="go">============================== 1 passed of 1 spec ==============================</span>
+</pre></div>
+</div>
+</section>
+<section id="spack-test-list">
+<span id="cmd-spack-test-list"></span><h4><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">list</span></code><a class="headerlink" href="#spack-test-list" title="連結到這個標頭">¶</a></h4>
+<p>Packages available for install testing can be found using the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">list</span></code> command.
+The command outputs all installed packages that have defined stand-alone test methods.</p>
+<p>Alternatively you can use the <code class="docutils literal notranslate"><span class="pre">--all</span></code> option to get a list of all packages that have stand-alone test methods even if the packages are not installed.</p>
+<p>For more information, refer to <a class="reference internal" href="command_index.html#spack-test-list"><span class="std std-ref">spack test list</span></a>.</p>
+</section>
+<section id="spack-test-run">
+<span id="cmd-spack-test-run"></span><h4><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code><a class="headerlink" href="#spack-test-run" title="連結到這個標頭">¶</a></h4>
+<p>Install tests can be run for one or more installed packages using the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code> command.
+A <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">suite</span></code> is created for all of the provided specs.
+The command accepts the same arguments provided to <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code> (see <a class="reference internal" href="spec_syntax.html#sec-specs"><span class="std std-ref">Spec Syntax</span></a>).
+If no specs are provided the command tests all specs in the active environment or all specs installed in the Spack instance if no environment is active.</p>
+<p>Test suites can be named using the <code class="docutils literal notranslate"><span class="pre">--alias</span></code> option.
+Unaliased test suites use the content hash of their specs as their name.</p>
+<p>Some of the more commonly used debugging options are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--fail-fast</span></code> stops testing each package after the first failure</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fail-first</span></code> stops testing packages after the first failure</p></li>
+</ul>
+<p>Test output is written to a text log file by default, though <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">cdash</span></code> are outputs available through the <code class="docutils literal notranslate"><span class="pre">--log-format</span></code> option.</p>
+<p>For more information, refer to <a class="reference internal" href="command_index.html#spack-test-run"><span class="std std-ref">spack test run</span></a>.</p>
+</section>
+<section id="spack-test-results">
+<span id="cmd-spack-test-results"></span><h4><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">results</span></code><a class="headerlink" href="#spack-test-results" title="連結到這個標頭">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">results</span></code> command shows results for all completed test suites by default.
+The alias or content hash can be provided to limit reporting to the corresponding test suite.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--logs</span></code> option includes the output generated by the associated test(s) to facilitate debugging.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--failed</span></code> option limits results shown to that of the failed tests, if any, of matching packages.</p>
+<p>For more information, refer to <a class="reference internal" href="command_index.html#spack-test-results"><span class="std std-ref">spack test results</span></a>.</p>
+</section>
+<section id="spack-test-find">
+<span id="cmd-spack-test-find"></span><h4><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">find</span></code><a class="headerlink" href="#spack-test-find" title="連結到這個標頭">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">find</span></code> command lists the aliases or content hashes of all test suites whose results are available.</p>
+<p>For more information, refer to <a class="reference internal" href="command_index.html#spack-test-find"><span class="std std-ref">spack test find</span></a>.</p>
+</section>
+<section id="spack-test-remove">
+<span id="cmd-spack-test-remove"></span><h4><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">remove</span></code><a class="headerlink" href="#spack-test-remove" title="連結到這個標頭">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">remove</span></code> command removes test suites to declutter the test stage directory.
+You are prompted to confirm the removal of each test suite <strong>unless</strong> you use the <code class="docutils literal notranslate"><span class="pre">--yes-to-all</span></code> option.</p>
+<p>For more information, refer to <a class="reference internal" href="command_index.html#spack-test-remove"><span class="std std-ref">spack test remove</span></a>.</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="packaging_guide_advanced.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Packaging Guide: advanced topics</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="packaging_guide_build.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Packaging Guide: customizing the build</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 1月 23, 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Packaging Guide: testing installations</a><ul>
+<li><a class="reference internal" href="#checking-an-installation">Checking an installation</a><ul>
+<li><a class="reference internal" href="#build-time-tests">Build-time tests</a><ul>
+<li><a class="reference internal" href="#adding-sanity-checks">Adding sanity checks</a></li>
+<li><a class="reference internal" href="#adding-installation-phase-tests">Adding installation phase tests</a></li>
+<li><a class="reference internal" href="#checking-build-time-test-results">Checking build-time test results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stand-alone-tests">Stand-alone tests</a><ul>
+<li><a class="reference internal" href="#configuring-the-test-stage-directory">Configuring the test stage directory</a></li>
+<li><a class="reference internal" href="#adding-stand-alone-tests">Adding stand-alone tests</a></li>
+<li><a class="reference internal" href="#adding-stand-alone-test-parts">Adding stand-alone test parts</a></li>
+<li><a class="reference internal" href="#building-and-running-test-executables">Building and running test executables</a></li>
+<li><a class="reference internal" href="#saving-build-and-install-time-files">Saving build- and install-time files</a></li>
+<li><a class="reference internal" href="#adding-custom-files">Adding custom files</a></li>
+<li><a class="reference internal" href="#reading-expected-output-from-a-file">Reading expected output from a file</a></li>
+<li><a class="reference internal" href="#comparing-expected-to-actual-outputs">Comparing expected to actual outputs</a></li>
+<li><a class="reference internal" href="#finding-package-and-test-related-files">Finding package- and test-related files</a></li>
+<li><a class="reference internal" href="#inheriting-stand-alone-tests">Inheriting stand-alone tests</a></li>
+<li><a class="reference internal" href="#spack-test-list"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#spack-test-run"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code></a></li>
+<li><a class="reference internal" href="#spack-test-results"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">results</span></code></a></li>
+<li><a class="reference internal" href="#spack-test-find"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">find</span></code></a></li>
+<li><a class="reference internal" href="#spack-test-remove"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">remove</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=dfc612df"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>

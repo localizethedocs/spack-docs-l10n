@@ -1,0 +1,942 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.cmd.mirror &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/cmd/mirror.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+          <li class="breadcrumb-item"><a href="../cmd.html">spack.cmd</a></li>
+      <li class="breadcrumb-item active">spack.cmd.mirror</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.cmd.mirror 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.lang</span> <span class="k">as</span> <span class="nn">lang</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty.colify</span> <span class="k">as</span> <span class="nn">colify</span>
+
+<span class="kn">import</span> <span class="nn">spack.caches</span>
+<span class="kn">import</span> <span class="nn">spack.cmd</span>
+<span class="kn">import</span> <span class="nn">spack.concretize</span>
+<span class="kn">import</span> <span class="nn">spack.config</span>
+<span class="kn">import</span> <span class="nn">spack.environment</span> <span class="k">as</span> <span class="nn">ev</span>
+<span class="kn">import</span> <span class="nn">spack.mirror</span>
+<span class="kn">import</span> <span class="nn">spack.repo</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.util.web</span> <span class="k">as</span> <span class="nn">web_util</span>
+<span class="kn">from</span> <span class="nn">spack.cmd.common</span> <span class="kn">import</span> <span class="n">arguments</span>
+<span class="kn">from</span> <span class="nn">spack.error</span> <span class="kn">import</span> <span class="n">SpackError</span>
+
+<span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;manage mirrors (source and binary)&quot;</span>
+<span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;config&quot;</span>
+<span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;long&quot;</span>
+
+
+<div class="viewcode-block" id="setup_parser">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.setup_parser">[文件]</a>
+<span class="k">def</span> <span class="nf">setup_parser</span><span class="p">(</span><span class="n">subparser</span><span class="p">):</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_common_arguments</span><span class="p">(</span><span class="n">subparser</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;no_checksum&quot;</span><span class="p">])</span>
+
+    <span class="n">sp</span> <span class="o">=</span> <span class="n">subparser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;SUBCOMMAND&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;mirror_command&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create</span>
+    <span class="n">create_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;create&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_create</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--directory&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;directory in which to create mirror&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--all&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;mirror all versions of all packages in Spack, or all packages&quot;</span>
+        <span class="s2">&quot; in the current environment if there is an active environment&quot;</span>
+        <span class="s2">&quot; (this requires significant time and space)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;--file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;file with specs of packages to put in mirror&quot;</span><span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--exclude-file&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;specs which Spack should not try to add to a mirror&quot;</span>
+        <span class="s2">&quot; (listed in a file, one per line)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--exclude-specs&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;specs which Spack should not try to add to a mirror (specified on command line)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--skip-unstable-versions&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;don&#39;t cache versions unless they identify a stable (unchanging) source code&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-D&quot;</span><span class="p">,</span> <span class="s2">&quot;--dependencies&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;also fetch all dependencies&quot;</span>
+    <span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--versions-per-spec&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the number of versions to fetch for each spec, choose &#39;all&#39; to&quot;</span>
+        <span class="s2">&quot; retrieve all versions of each package&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">create_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--private&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;for a private mirror, include non-redistributable packages&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_common_arguments</span><span class="p">(</span><span class="n">create_parser</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;specs&quot;</span><span class="p">])</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_concretizer_args</span><span class="p">(</span><span class="n">create_parser</span><span class="p">)</span>
+
+    <span class="c1"># Destroy</span>
+    <span class="n">destroy_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_destroy</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+    <span class="n">destroy_target</span> <span class="o">=</span> <span class="n">destroy_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">destroy_target</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--mirror-name&quot;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;mirror_name&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;find mirror to destroy by name&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">destroy_target</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--mirror-url&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;mirror_url&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;find mirror to destroy by url&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add</span>
+    <span class="n">add_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_add</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">add_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;mnemonic name for mirror&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;mirror&quot;</span><span class="p">)</span>
+    <span class="n">add_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;url of mirror directory from &#39;spack mirror create&#39;&quot;</span><span class="p">)</span>
+    <span class="n">add_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--scope&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="n">arguments</span><span class="o">.</span><span class="n">ConfigScope</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">(),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;configuration scope to modify&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">add_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--type&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;specify the mirror type: for both binary &quot;</span>
+            <span class="s2">&quot;and source use `--type binary --type source` (default)&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">add_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--autopush&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;set mirror to push automatically after installation&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">add_parser_signed</span> <span class="o">=</span> <span class="n">add_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">add_parser_signed</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--unsigned&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;do not require signing and signature verification when pushing and installing from &quot;</span>
+        <span class="s2">&quot;this build cache&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;signed&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">add_parser_signed</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--signed&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;require signing and signature verification when pushing and installing from this &quot;</span>
+        <span class="s2">&quot;build cache&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;signed&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_connection_args</span><span class="p">(</span><span class="n">add_parser</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># Remove</span>
+    <span class="n">remove_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rm&quot;</span><span class="p">],</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_remove</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">remove_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;mnemonic name for mirror&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;mirror&quot;</span><span class="p">)</span>
+    <span class="n">remove_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--scope&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="n">arguments</span><span class="o">.</span><span class="n">ConfigScope</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">(),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;configuration scope to modify&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Set-Url</span>
+    <span class="n">set_url_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;set-url&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_set_url</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">set_url_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;mnemonic name for mirror&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;mirror&quot;</span><span class="p">)</span>
+    <span class="n">set_url_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;url of mirror directory from &#39;spack mirror create&#39;&quot;</span><span class="p">)</span>
+    <span class="n">set_url_push_or_fetch</span> <span class="o">=</span> <span class="n">set_url_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">set_url_push_or_fetch</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--push&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;set only the URL used for uploading&quot;</span>
+    <span class="p">)</span>
+    <span class="n">set_url_push_or_fetch</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--fetch&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;set only the URL used for downloading&quot;</span>
+    <span class="p">)</span>
+    <span class="n">set_url_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--scope&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="n">arguments</span><span class="o">.</span><span class="n">ConfigScope</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">(),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;configuration scope to modify&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_connection_args</span><span class="p">(</span><span class="n">set_url_parser</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Set</span>
+    <span class="n">set_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_set</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">set_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;mnemonic name for mirror&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;mirror&quot;</span><span class="p">)</span>
+    <span class="n">set_parser_push_or_fetch</span> <span class="o">=</span> <span class="n">set_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">set_parser_push_or_fetch</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--push&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;modify just the push connection details&quot;</span>
+    <span class="p">)</span>
+    <span class="n">set_parser_push_or_fetch</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--fetch&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;modify just the fetch connection details&quot;</span>
+    <span class="p">)</span>
+    <span class="n">set_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--type&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;specify the mirror type: for both binary &quot;</span>
+            <span class="s2">&quot;and source use `--type binary --type source`&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">set_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--url&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;url of mirror directory from &#39;spack mirror create&#39;&quot;</span><span class="p">)</span>
+    <span class="n">set_parser_autopush</span> <span class="o">=</span> <span class="n">set_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">set_parser_autopush</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--autopush&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;set mirror to push automatically after installation&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;autopush&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">set_parser_autopush</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--no-autopush&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;set mirror to not push automatically after installation&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;autopush&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">set_parser_unsigned</span> <span class="o">=</span> <span class="n">set_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">set_parser_unsigned</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--unsigned&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;do not require signing and signature verification when pushing and installing from &quot;</span>
+        <span class="s2">&quot;this build cache&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;signed&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">set_parser_unsigned</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--signed&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;require signing and signature verification when pushing and installing from this &quot;</span>
+        <span class="s2">&quot;build cache&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;signed&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">set_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--scope&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="n">arguments</span><span class="o">.</span><span class="n">ConfigScope</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">(),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;configuration scope to modify&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_connection_args</span><span class="p">(</span><span class="n">set_parser</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># List</span>
+    <span class="n">list_parser</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">mirror_list</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">list_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--scope&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">arguments</span><span class="o">.</span><span class="n">ConfigScope</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;configuration scope to read from&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_configure_access_pair</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">,</span> <span class="n">id_tok</span><span class="p">,</span> <span class="n">id_variable_tok</span><span class="p">,</span> <span class="n">secret_tok</span><span class="p">,</span> <span class="n">secret_variable_tok</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure the access_pair options&quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if any of the arguments are set to update this access_pair.</span>
+    <span class="c1"># If none are set, then skip computing the new access pair</span>
+    <span class="n">args_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">id_tok</span><span class="p">)</span>
+    <span class="n">args_id_variable</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">id_variable_tok</span><span class="p">)</span>
+    <span class="n">args_secret</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">secret_tok</span><span class="p">)</span>
+    <span class="n">args_secret_variable</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">secret_variable_tok</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">args_id</span><span class="p">,</span> <span class="n">args_id_variable</span><span class="p">,</span> <span class="n">args_secret</span><span class="p">,</span> <span class="n">args_secret_variable</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_default_value</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">default</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">id_</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span> <span class="k">else</span> <span class="n">default</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">default</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_default_variable</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">default</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id_</span> <span class="o">+</span> <span class="s2">&quot;_variable&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">id_</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">id_variable</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">secret</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">secret_variable</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Get the value/default value if the argument of the inverse</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args_id_variable</span><span class="p">:</span>
+        <span class="n">id_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">id_tok</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_default_value</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args_id</span><span class="p">:</span>
+        <span class="n">id_variable</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">id_variable_tok</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_default_variable</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args_secret_variable</span><span class="p">:</span>
+        <span class="n">secret</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">secret_tok</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_default_value</span><span class="p">(</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args_secret</span><span class="p">:</span>
+        <span class="n">secret_variable</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">secret_variable_tok</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_default_variable</span><span class="p">(</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">id_</span> <span class="ow">or</span> <span class="n">id_variable</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">secret</span> <span class="ow">or</span> <span class="n">secret_variable</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">secret</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">id_</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span><span class="s2">&quot;Cannot add mirror with a variable id and text secret&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="p">[</span><span class="n">id_</span><span class="p">,</span> <span class="n">secret</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">((</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">id_</span><span class="p">)</span> <span class="k">if</span> <span class="n">id_</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;id_variable&quot;</span><span class="p">,</span> <span class="n">id_variable</span><span class="p">)),</span>
+                    <span class="p">(</span><span class="s2">&quot;secret_variable&quot;</span><span class="p">,</span> <span class="n">secret_variable</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">id_</span> <span class="ow">or</span> <span class="n">id_variable</span> <span class="ow">or</span> <span class="n">secret</span> <span class="ow">or</span> <span class="n">secret_variable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">id_arg_tok</span> <span class="o">=</span> <span class="n">id_tok</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+            <span class="n">secret_arg_tok</span> <span class="o">=</span> <span class="n">secret_tok</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Expected both parts of the access pair to be specified. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(i.e. --</span><span class="si">{</span><span class="n">id_arg_tok</span><span class="si">}</span><span class="s2"> and --</span><span class="si">{</span><span class="n">secret_arg_tok</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="mirror_add">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_add">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_add</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;add a mirror to Spack&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">s3_access_key_id</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_key_secret</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_key_id_variable</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_key_secret_variable</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token_variable</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_profile</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_endpoint_url</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">type</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">oci_username</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">oci_password</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">oci_username_variable</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">oci_password_variable</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">autopush</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">signed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">url</span><span class="p">}</span>
+        <span class="c1"># S3 Connection</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_key_secret</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Configuring mirror secrets as plain text with --s3-access-key-secret is &quot;</span>
+                <span class="s2">&quot;deprecated. Use --s3-access-key-secret-variable instead&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">oci_password</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Configuring mirror secrets as plain text with --oci-password is deprecated. &quot;</span>
+                <span class="s2">&quot;Use --oci-password-variable instead&quot;</span>
+            <span class="p">)</span>
+        <span class="n">access_pair</span> <span class="o">=</span> <span class="n">_configure_access_pair</span><span class="p">(</span>
+            <span class="n">args</span><span class="p">,</span>
+            <span class="s2">&quot;s3_access_key_id&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;s3_access_key_id_variable&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;s3_access_key_secret&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;s3_access_key_secret_variable&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">access_pair</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;access_pair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">access_pair</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token_variable</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;access_token_variable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token_variable</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_profile</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_profile</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_endpoint_url</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;endpoint_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_endpoint_url</span>
+
+        <span class="c1"># OCI Connection</span>
+        <span class="n">access_pair</span> <span class="o">=</span> <span class="n">_configure_access_pair</span><span class="p">(</span>
+            <span class="n">args</span><span class="p">,</span> <span class="s2">&quot;oci_username&quot;</span><span class="p">,</span> <span class="s2">&quot;oci_username_variable&quot;</span><span class="p">,</span> <span class="s2">&quot;oci_password&quot;</span><span class="p">,</span> <span class="s2">&quot;oci_password_variable&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">access_pair</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;access_pair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">access_pair</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">type</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">type</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">type</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">autopush</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;autopush&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">autopush</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">signed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">[</span><span class="s2">&quot;signed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">signed</span>
+        <span class="n">mirror</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">Mirror</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mirror</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">Mirror</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mirror</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mirror_remove">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_remove">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_remove</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;remove a mirror by name&quot;&quot;&quot;</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_configure_mirror</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">mirrors</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mirrors&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mirrors</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No mirror found with name </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">entry</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">Mirror</span><span class="p">(</span><span class="n">mirrors</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;fetch&quot;</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">fetch</span> <span class="k">else</span> <span class="s2">&quot;push&quot;</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">push</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">changes</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">url</span>
+
+    <span class="n">default_access_pair</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_get_value</span><span class="p">(</span><span class="s2">&quot;access_pair&quot;</span><span class="p">,</span> <span class="n">direction</span> <span class="ow">or</span> <span class="s2">&quot;fetch&quot;</span><span class="p">)</span>
+    <span class="c1"># TODO: Init access_pair args with the fetch/push/base values in the current mirror state</span>
+    <span class="n">access_pair</span> <span class="o">=</span> <span class="n">_configure_access_pair</span><span class="p">(</span>
+        <span class="n">args</span><span class="p">,</span>
+        <span class="s2">&quot;s3_access_key_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;s3_access_key_id_variable&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;s3_access_key_secret&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;s3_access_key_secret_variable&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">default_access_pair</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">access_pair</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;access_pair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">access_pair</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_access_token</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_profile</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_profile</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_endpoint_url</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;endpoint_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">s3_endpoint_url</span>
+    <span class="n">access_pair</span> <span class="o">=</span> <span class="n">_configure_access_pair</span><span class="p">(</span>
+        <span class="n">args</span><span class="p">,</span>
+        <span class="s2">&quot;oci_username&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;oci_username_variable&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;oci_password&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;oci_password_variable&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">default_access_pair</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">access_pair</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;access_pair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">access_pair</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;signed&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;signed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">signed</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;autopush&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;autopush&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">autopush</span>
+
+    <span class="c1"># argparse cannot distinguish between --binary and --no-binary when same dest :(</span>
+    <span class="c1"># notice that set-url does not have these args, so getattr</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">type</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">type</span>
+
+    <span class="n">changed</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">changes</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
+        <span class="n">mirrors</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;mirrors&quot;</span><span class="p">,</span> <span class="n">mirrors</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;No changes made to mirror </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="mirror_set">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_set">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_set</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;configure the connection details of a mirror&quot;&quot;&quot;</span>
+    <span class="n">_configure_mirror</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mirror_set_url">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_set_url">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_set_url</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the URL of a mirror&quot;&quot;&quot;</span>
+    <span class="n">_configure_mirror</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mirror_list">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_list">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_list</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;print out available mirrors to the console&quot;&quot;&quot;</span>
+
+    <span class="n">mirrors</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">MirrorCollection</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mirrors</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;No mirrors configured.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">mirrors</span><span class="o">.</span><span class="n">display</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="specs_from_text_file">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.specs_from_text_file">[文件]</a>
+<span class="k">def</span> <span class="nf">specs_from_text_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">concretize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of specs read from a text file.</span>
+
+<span class="sd">    The file should contain one spec per line.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): name of the file containing the abstract specs.</span>
+<span class="sd">        concretize (bool): if True concretize the specs before returning</span>
+<span class="sd">            the list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">specs_in_file</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">specs_in_file</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">specs_in_file</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">parse_specs</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">specs_in_file</span><span class="p">),</span> <span class="n">concretize</span><span class="o">=</span><span class="n">concretize</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="concrete_specs_from_user">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.concrete_specs_from_user">[文件]</a>
+<span class="k">def</span> <span class="nf">concrete_specs_from_user</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the list of concrete specs that the user wants to mirror. The list</span>
+<span class="sd">    is passed either from command line or from a text file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">specs</span> <span class="o">=</span> <span class="n">concrete_specs_from_cli_or_file</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">specs</span> <span class="o">=</span> <span class="n">extend_with_additional_versions</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">num_versions</span><span class="o">=</span><span class="n">versions_per_spec</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dependencies</span><span class="p">:</span>
+        <span class="n">specs</span> <span class="o">=</span> <span class="n">extend_with_dependencies</span><span class="p">(</span><span class="n">specs</span><span class="p">)</span>
+    <span class="n">specs</span> <span class="o">=</span> <span class="n">filter_externals</span><span class="p">(</span><span class="n">specs</span><span class="p">)</span>
+    <span class="n">specs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">specs</span><span class="p">))</span>
+    <span class="n">specs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">version</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">specs</span></div>
+
+
+
+<div class="viewcode-block" id="extend_with_additional_versions">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.extend_with_additional_versions">[文件]</a>
+<span class="k">def</span> <span class="nf">extend_with_additional_versions</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">num_versions</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num_versions</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">get_all_versions</span><span class="p">(</span><span class="n">specs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">get_matching_versions</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">num_versions</span><span class="o">=</span><span class="n">num_versions</span><span class="p">)</span>
+    <span class="n">mirror_specs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">concretized</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mirror_specs</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">mirror_specs</span></div>
+
+
+
+<div class="viewcode-block" id="filter_externals">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.filter_externals">[文件]</a>
+<span class="k">def</span> <span class="nf">filter_externals</span><span class="p">(</span><span class="n">specs</span><span class="p">):</span>
+    <span class="n">specs</span><span class="p">,</span> <span class="n">external_specs</span> <span class="o">=</span> <span class="n">lang</span><span class="o">.</span><span class="n">stable_partition</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">predicate_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">external</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">external_specs</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Skipping </span><span class="si">{0}</span><span class="s2"> as it is an external spec.&quot;</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">cshort_spec</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">specs</span></div>
+
+
+
+<div class="viewcode-block" id="extend_with_dependencies">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.extend_with_dependencies">[文件]</a>
+<span class="k">def</span> <span class="nf">extend_with_dependencies</span><span class="p">(</span><span class="n">specs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extend the input list by adding all the dependencies explicitly.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">traverse</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="concrete_specs_from_cli_or_file">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.concrete_specs_from_cli_or_file">[文件]</a>
+<span class="k">def</span> <span class="nf">concrete_specs_from_cli_or_file</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Concretizing input specs&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">spack</span><span class="o">.</span><span class="n">concretize</span><span class="o">.</span><span class="n">disable_compiler_existence_check</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">specs</span><span class="p">:</span>
+            <span class="n">specs</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">parse_specs</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">specs</span><span class="p">,</span> <span class="n">concretize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">specs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span><span class="s2">&quot;unable to parse specs from command line&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="n">specs</span> <span class="o">=</span> <span class="n">specs_from_text_file</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">concretize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">specs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span><span class="s2">&quot;unable to parse specs from file &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">specs</span></div>
+
+
+
+<div class="viewcode-block" id="IncludeFilter">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.IncludeFilter">[文件]</a>
+<span class="k">class</span> <span class="nc">IncludeFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclude_specs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">exclude_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exclude_specs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">specs_from_text_file</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">exclude_file</span><span class="p">,</span> <span class="n">concretize</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">exclude_specs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exclude_specs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">parse_specs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">exclude_specs</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">private</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">private</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_not_license_excluded</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_not_cmdline_excluded</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+
+    <span class="k">def</span> <span class="nf">_not_license_excluded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the spec is for a private mirror, or as long as the</span>
+<span class="sd">        package does not explicitly forbid redistributing source.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">private</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">package_class</span><span class="o">.</span><span class="n">redistribute_source</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Skip adding </span><span class="si">{0}</span><span class="s2"> to mirror: the package.py file&quot;</span>
+                <span class="s2">&quot; indicates that a public mirror should not contain&quot;</span>
+                <span class="s2">&quot; it.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_not_cmdline_excluded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if a spec was not explicitly excluded by the user.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude_specs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="concrete_specs_from_environment">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.concrete_specs_from_environment">[文件]</a>
+<span class="k">def</span> <span class="nf">concrete_specs_from_environment</span><span class="p">():</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">active_environment</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">env</span><span class="p">,</span> <span class="s2">&quot;an active environment is required&quot;</span>
+    <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">all_specs</span><span class="p">()</span>
+    <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">filter_externals</span><span class="p">(</span><span class="n">mirror_specs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mirror_specs</span></div>
+
+
+
+<div class="viewcode-block" id="all_specs_with_all_versions">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.all_specs_with_all_versions">[文件]</a>
+<span class="k">def</span> <span class="nf">all_specs_with_all_versions</span><span class="p">():</span>
+    <span class="n">specs</span> <span class="o">=</span> <span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">all_package_names</span><span class="p">()]</span>
+    <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">get_all_versions</span><span class="p">(</span><span class="n">specs</span><span class="p">)</span>
+    <span class="n">mirror_specs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">version</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mirror_specs</span></div>
+
+
+
+<div class="viewcode-block" id="versions_per_spec">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.versions_per_spec">[文件]</a>
+<span class="k">def</span> <span class="nf">versions_per_spec</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return how many versions should be mirrored per spec.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">versions_per_spec</span><span class="p">:</span>
+        <span class="n">num_versions</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">versions_per_spec</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="n">num_versions</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">num_versions</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">versions_per_spec</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;--versions-per-spec&#39; must be a number or &#39;all&#39;,&quot;</span>
+                <span class="s2">&quot; got &#39;</span><span class="si">{0}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">versions_per_spec</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">num_versions</span></div>
+
+
+
+<div class="viewcode-block" id="process_mirror_stats">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.process_mirror_stats">[文件]</a>
+<span class="k">def</span> <span class="nf">process_mirror_stats</span><span class="p">(</span><span class="n">present</span><span class="p">,</span> <span class="n">mirrored</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">present</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">mirrored</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span>
+        <span class="s2">&quot;Archive stats:&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;  </span><span class="si">%-4d</span><span class="s2"> already present&quot;</span> <span class="o">%</span> <span class="n">p</span><span class="p">,</span>
+        <span class="s2">&quot;  </span><span class="si">%-4d</span><span class="s2"> added&quot;</span> <span class="o">%</span> <span class="n">m</span><span class="p">,</span>
+        <span class="s2">&quot;  </span><span class="si">%-4d</span><span class="s2"> failed to fetch.&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed downloads:&quot;</span><span class="p">)</span>
+        <span class="n">colify</span><span class="o">.</span><span class="n">colify</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">cformat</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">{@version}&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">error</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mirror_create">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_create">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_create</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;create a directory to be used as a spack mirror, and fill it with package archives&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">specs</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span>
+            <span class="s2">&quot;cannot specify specs on command line if you chose to mirror all specs with &#39;--all&#39;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span>
+            <span class="s2">&quot;cannot specify specs with a file if you chose to mirror all specs with &#39;--all&#39;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">specs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span><span class="s2">&quot;cannot specify specs with a file AND on command line&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">specs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span>
+            <span class="s2">&quot;no packages were specified.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;To mirror all packages, use the &#39;--all&#39; option &quot;</span>
+            <span class="s2">&quot;(this will require significant time and space).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">versions_per_spec</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SpackError</span><span class="p">(</span>
+            <span class="s2">&quot;cannot specify &#39;--versions_per-spec&#39; and &#39;--all&#39; together&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;The option &#39;--all&#39; already implies mirroring all versions for each package.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># When no directory is provided, the source dir is used</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">directory</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">caches</span><span class="o">.</span><span class="n">fetch_cache_location</span><span class="p">()</span>
+
+    <span class="n">mirror_specs</span><span class="p">,</span> <span class="n">mirror_fn</span> <span class="o">=</span> <span class="n">_specs_and_action</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">mirror_fn</span><span class="p">(</span><span class="n">mirror_specs</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">skip_unstable_versions</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">skip_unstable_versions</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_specs_and_action</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">include_fn</span> <span class="o">=</span> <span class="n">IncludeFilter</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">all</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ev</span><span class="o">.</span><span class="n">active_environment</span><span class="p">():</span>
+        <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">all_specs_with_all_versions</span><span class="p">()</span>
+        <span class="n">mirror_fn</span> <span class="o">=</span> <span class="n">create_mirror_for_all_specs</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">all</span> <span class="ow">and</span> <span class="n">ev</span><span class="o">.</span><span class="n">active_environment</span><span class="p">():</span>
+        <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">concrete_specs_from_environment</span><span class="p">()</span>
+        <span class="n">mirror_fn</span> <span class="o">=</span> <span class="n">create_mirror_for_individual_specs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mirror_specs</span> <span class="o">=</span> <span class="n">concrete_specs_from_user</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">mirror_fn</span> <span class="o">=</span> <span class="n">create_mirror_for_individual_specs</span>
+
+    <span class="n">mirror_specs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lang</span><span class="o">.</span><span class="n">stable_partition</span><span class="p">(</span><span class="n">mirror_specs</span><span class="p">,</span> <span class="n">predicate_fn</span><span class="o">=</span><span class="n">include_fn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mirror_specs</span><span class="p">,</span> <span class="n">mirror_fn</span>
+
+
+<div class="viewcode-block" id="create_mirror_for_all_specs">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.create_mirror_for_all_specs">[文件]</a>
+<span class="k">def</span> <span class="nf">create_mirror_for_all_specs</span><span class="p">(</span><span class="n">mirror_specs</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">skip_unstable_versions</span><span class="p">):</span>
+    <span class="n">mirror_cache</span><span class="p">,</span> <span class="n">mirror_stats</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">mirror_cache_and_stats</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span> <span class="n">skip_unstable_versions</span><span class="o">=</span><span class="n">skip_unstable_versions</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">mirror_specs</span><span class="p">:</span>
+        <span class="n">pkg_cls</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">PATH</span><span class="o">.</span><span class="n">get_pkg_class</span><span class="p">(</span><span class="n">candidate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pkg_obj</span> <span class="o">=</span> <span class="n">pkg_cls</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">candidate</span><span class="p">))</span>
+        <span class="n">mirror_stats</span><span class="o">.</span><span class="n">next_spec</span><span class="p">(</span><span class="n">pkg_obj</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">create_mirror_from_package_object</span><span class="p">(</span><span class="n">pkg_obj</span><span class="p">,</span> <span class="n">mirror_cache</span><span class="p">,</span> <span class="n">mirror_stats</span><span class="p">)</span>
+    <span class="n">process_mirror_stats</span><span class="p">(</span><span class="o">*</span><span class="n">mirror_stats</span><span class="o">.</span><span class="n">stats</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="create_mirror_for_individual_specs">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.create_mirror_for_individual_specs">[文件]</a>
+<span class="k">def</span> <span class="nf">create_mirror_for_individual_specs</span><span class="p">(</span><span class="n">mirror_specs</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">skip_unstable_versions</span><span class="p">):</span>
+    <span class="n">present</span><span class="p">,</span> <span class="n">mirrored</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mirror_specs</span><span class="p">,</span> <span class="n">skip_unstable_versions</span><span class="p">)</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Summary for mirror in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="n">process_mirror_stats</span><span class="p">(</span><span class="n">present</span><span class="p">,</span> <span class="n">mirrored</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mirror_destroy">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror_destroy">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror_destroy</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;given a url, recursively delete everything under it&quot;&quot;&quot;</span>
+    <span class="n">mirror_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mirror_name</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">MirrorCollection</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mirror_name</span><span class="p">)</span>
+        <span class="n">mirror_url</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">push_url</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">mirror_url</span><span class="p">:</span>
+        <span class="n">mirror_url</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">mirror_url</span>
+
+    <span class="n">web_util</span><span class="o">.</span><span class="n">remove_url</span><span class="p">(</span><span class="n">mirror_url</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mirror">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.mirror.mirror">[文件]</a>
+<span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">mirror_create</span><span class="p">,</span>
+        <span class="s2">&quot;destroy&quot;</span><span class="p">:</span> <span class="n">mirror_destroy</span><span class="p">,</span>
+        <span class="s2">&quot;add&quot;</span><span class="p">:</span> <span class="n">mirror_add</span><span class="p">,</span>
+        <span class="s2">&quot;remove&quot;</span><span class="p">:</span> <span class="n">mirror_remove</span><span class="p">,</span>
+        <span class="s2">&quot;rm&quot;</span><span class="p">:</span> <span class="n">mirror_remove</span><span class="p">,</span>
+        <span class="s2">&quot;set-url&quot;</span><span class="p">:</span> <span class="n">mirror_set_url</span><span class="p">,</span>
+        <span class="s2">&quot;set&quot;</span><span class="p">:</span> <span class="n">mirror_set</span><span class="p">,</span>
+        <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="n">mirror_list</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">no_checksum</span><span class="p">:</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;config:checksum&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;command_line&quot;</span><span class="p">)</span>
+
+    <span class="n">action</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">mirror_command</span><span class="p">](</span><span class="n">args</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

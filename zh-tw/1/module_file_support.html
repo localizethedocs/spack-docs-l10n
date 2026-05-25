@@ -1,0 +1,1193 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Learn how to configure and customize module file generation in Spack for Environment Modules and Lmod." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-11-03T19:44:28+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜尋" href="search.html"><link rel="next" title="Include Settings (include.yaml)" href="include_yaml.html"><link rel="prev" title="Chaining Spack Installations (upstreams.yaml)" href="chain.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/module_file_support.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>Modules (modules.yaml) - Spack 1.1.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/module_file_support.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="modules-modules-yaml">
+<span id="modules"></span><h1>Modules (modules.yaml)<a class="headerlink" href="#modules-modules-yaml" title="連結到這個標頭">¶</a></h1>
+<p>The use of module systems to manage user environments in a controlled way is a common practice at HPC centers that is sometimes embraced also by individual programmers on their development machines.
+To support this common practice Spack integrates with <a class="reference external" href="http://modules.sourceforge.net/">Environment Modules</a> and <a class="reference external" href="http://lmod.readthedocs.io/en/latest/">Lmod</a> by providing post-install hooks that generate module files and commands to manipulate them.</p>
+<p>Modules are one of several ways you can use Spack packages.
+For other options that may fit your use case better, you should also look at <a class="reference internal" href="command_index.html#spack-load"><span class="std std-ref">spack load</span></a> and <a class="reference internal" href="environments.html#environments"><span class="std std-ref">environments</span></a>.</p>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="連結到這個標頭">¶</a></h2>
+<p>In the current version of Spack, module files are not generated by default.
+To get started, you can generate module files for all currently installed packages by running either</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack module tcl refresh
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack module lmod refresh
+</pre></div>
+</div>
+<p>Spack can also generate module files for all future installations automatically through the following configuration:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config add modules:default:enable:<span class="o">[</span>tcl<span class="o">]</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config add modules:default:enable:<span class="o">[</span>lmod<span class="o">]</span>
+</pre></div>
+</div>
+<p>Assuming you have a module system installed, you should now be able to use the <code class="docutils literal notranslate"><span class="pre">module</span></code> command to interact with them:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module avail
+
+<span class="go">--------------------------------------------------------------- ~/spack/share/spack/modules/linux-ubuntu14-x86_64 ---------------------------------------------------------------</span>
+<span class="go">autoconf/2.69-gcc-4.8-qextxkq       hwloc/1.11.6-gcc-6.3.0-akcisez             m4/1.4.18-gcc-4.8-ev2znoc                   openblas/0.2.19-gcc-6.3.0-dhkmed6        py-setuptools/34.2.0-gcc-6.3.0-fadur4s</span>
+<span class="go">automake/1.15-gcc-4.8-maqvukj       isl/0.18-gcc-4.8-afi6taq                   m4/1.4.18-gcc-6.3.0-uppywnz                 openmpi/2.1.0-gcc-6.3.0-go2s4z5          py-six/1.10.0-gcc-6.3.0-p4dhkaw</span>
+<span class="go">binutils/2.28-gcc-4.8-5s7c6rs       libiconv/1.15-gcc-4.8-at46wg3              mawk/1.3.4-gcc-4.8-acjez57                  openssl/1.0.2k-gcc-4.8-dkls5tk           python/2.7.13-gcc-6.3.0-tyehea7</span>
+<span class="go">bison/3.0.4-gcc-4.8-ek4luo5         libpciaccess/0.13.4-gcc-6.3.0-gmufnvh      mawk/1.3.4-gcc-6.3.0-ostdoms                openssl/1.0.2k-gcc-6.3.0-gxgr5or         readline/7.0-gcc-4.8-xhufqhn</span>
+<span class="go">bzip2/1.0.6-gcc-4.8-iffrxzn         libsigsegv/2.11-gcc-4.8-pp2cvte            mpc/1.0.3-gcc-4.8-g5mztc5                   pcre/8.40-gcc-4.8-r5pbrxb                readline/7.0-gcc-6.3.0-zzcyicg</span>
+<span class="go">bzip2/1.0.6-gcc-6.3.0-bequudr       libsigsegv/2.11-gcc-6.3.0-7enifnh          mpfr/3.1.5-gcc-4.8-o7xm7az                  perl/5.24.1-gcc-4.8-dg5j65u              sqlite/3.8.5-gcc-6.3.0-6zoruzj</span>
+<span class="go">cmake/3.7.2-gcc-6.3.0-fowuuby       libtool/2.4.6-gcc-4.8-7a523za              mpich/3.2-gcc-6.3.0-dmvd3aw                 perl/5.24.1-gcc-6.3.0-6uzkpt6            tar/1.29-gcc-4.8-wse2ass</span>
+<span class="go">curl/7.53.1-gcc-4.8-3fz46n6         libtool/2.4.6-gcc-6.3.0-n7zmbzt            ncurses/6.0-gcc-4.8-dcpe7ia                 pkg-config/0.29.2-gcc-4.8-ib33t75        tcl/8.6.6-gcc-4.8-tfxzqbr</span>
+<span class="go">expat/2.2.0-gcc-4.8-mrv6bd4         libxml2/2.9.4-gcc-4.8-ryzxnsu              ncurses/6.0-gcc-6.3.0-ucbhcdy               pkg-config/0.29.2-gcc-6.3.0-jpgubk3      util-macros/1.19.1-gcc-6.3.0-xorz2x2</span>
+<span class="go">flex/2.6.3-gcc-4.8-yf345oo          libxml2/2.9.4-gcc-6.3.0-rltzsdh            netlib-lapack/3.6.1-gcc-6.3.0-js33dog       py-appdirs/1.4.0-gcc-6.3.0-jxawmw7       xz/5.2.3-gcc-4.8-mew4log</span>
+<span class="go">gcc/6.3.0-gcc-4.8-24puqve           lmod/7.4.1-gcc-4.8-je4srhr                 netlib-scalapack/2.0.2-gcc-6.3.0-5aidk4l    py-numpy/1.12.0-gcc-6.3.0-oemmoeu        xz/5.2.3-gcc-6.3.0-3vqeuvb</span>
+<span class="go">gettext/0.19.8.1-gcc-4.8-yymghlh    lua/5.3.4-gcc-4.8-im75yaz                  netlib-scalapack/2.0.2-gcc-6.3.0-hjsemcn    py-packaging/16.8-gcc-6.3.0-i2n3dtl      zip/3.0-gcc-4.8-rwar22d</span>
+<span class="go">gmp/6.1.2-gcc-4.8-5ub2wu5           lua-luafilesystem/1_6_3-gcc-4.8-wkey3nl    netlib-scalapack/2.0.2-gcc-6.3.0-jva724b    py-pyparsing/2.1.10-gcc-6.3.0-tbo6gmw    zlib/1.2.11-gcc-4.8-pgxsxv7</span>
+<span class="go">help2man/1.47.4-gcc-4.8-kcnqmau     lua-luaposix/33.4.0-gcc-4.8-mdod2ry        netlib-scalapack/2.0.2-gcc-6.3.0-rgqfr6d    py-scipy/0.19.0-gcc-6.3.0-kr7nat4        zlib/1.2.11-gcc-6.3.0-7cqp6cj</span>
+</pre></div>
+</div>
+<p>The names should look familiar, as they resemble the output from <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">find</span></code>.
+For example, you could type the following command to load the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> module:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load cmake/3.7.2-gcc-6.3.0-fowuuby
+</pre></div>
+</div>
+<p>Neither of these is particularly pretty, easy to remember, or easy to type.
+Luckily, Spack offers many facilities for customizing the module scheme used at your site.</p>
+</section>
+<section id="module-file-customization">
+<h2>Module file customization<a class="headerlink" href="#module-file-customization" title="連結到這個標頭">¶</a></h2>
+<p>The table below summarizes the essential information associated with the different file formats that can be generated by Spack:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Hierarchical</p></th>
+<th class="head"><p><strong>Default root directory</strong></p></th>
+<th class="head"><p><strong>Default template file</strong></p></th>
+<th class="head"><p><strong>Compatible tools</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tcl</span></code></p></td>
+<td><p>No</p></td>
+<td><p>share/spack/modules</p></td>
+<td><p>share/spack/templates/modules/modulefile.tcl</p></td>
+<td><p>Env. Modules/Lmod</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lmod</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>share/spack/lmod</p></td>
+<td><p>share/spack/templates/modules/modulefile.lua</p></td>
+<td><p>Lmod</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Spack ships with sensible defaults for the generation of module files, but you can customize many aspects of it to accommodate package or site specific needs.
+In general you can override or extend the default behavior by:</p>
+<ol class="arabic simple">
+<li><p>overriding certain callback APIs in the Python packages</p></li>
+<li><p>writing specific rules in the <code class="docutils literal notranslate"><span class="pre">modules.yaml</span></code> configuration file</p></li>
+<li><p>writing your own templates to override or extend the defaults</p></li>
+</ol>
+<p>The former method lets you express changes in the run-time environment that are needed to use the installed software properly, e.g. injecting variables from language interpreters into their extensions.
+The latter two instead permit to fine tune the filesystem layout, content and creation of module files to meet site specific conventions.</p>
+<section id="setting-environment-variables-dynamically-in-package-py">
+<span id="overide-api-calls-in-package-py"></span><h3>Setting environment variables dynamically in <code class="docutils literal notranslate"><span class="pre">package.py</span></code><a class="headerlink" href="#setting-environment-variables-dynamically-in-package-py" title="連結到這個標頭">¶</a></h3>
+<p>There are two methods that you can implement in any <code class="docutils literal notranslate"><span class="pre">package.py</span></code> to dynamically affect the content of the module files generated by Spack.
+The most important one is <code class="docutils literal notranslate"><span class="pre">setup_run_environment</span></code>, which can be used to set environment variables in the module file that depend on the spec:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_run_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">EnvironmentModifications</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;+foo&quot;</span><span class="p">):</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;FOO&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The second, less commonly used, is <code class="docutils literal notranslate"><span class="pre">setup_dependent_run_environment(self,</span> <span class="pre">env,</span> <span class="pre">dependent_spec)</span></code>, which allows a dependency to set variables in the module file of its dependents.
+This is typically used in packages like <code class="docutils literal notranslate"><span class="pre">python</span></code>, <code class="docutils literal notranslate"><span class="pre">r</span></code>, or <code class="docutils literal notranslate"><span class="pre">perl</span></code> to prepend the dependent's prefix to the search path of the interpreter (<code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>, <code class="docutils literal notranslate"><span class="pre">R_LIBS</span></code>, <code class="docutils literal notranslate"><span class="pre">PERL5LIB</span></code> resp.), so it can locate the packages at runtime.</p>
+<p>For example, a simplified version of the <code class="docutils literal notranslate"><span class="pre">python</span></code> package could look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_dependent_run_environment</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">EnvironmentModifications</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="p">:</span> <span class="n">Spec</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dependent_spec</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">extends</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">):</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">prepend_path</span><span class="p">(</span><span class="s2">&quot;PYTHONPATH&quot;</span><span class="p">,</span> <span class="n">dependent_spec</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">python</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and would make any package that <code class="docutils literal notranslate"><span class="pre">extends(&quot;python&quot;)</span></code> have its library directory added to the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variable in the module file.
+It's much more convenient to set this variable here, than to repeat it in every Python extension's <code class="docutils literal notranslate"><span class="pre">setup_run_environment</span></code> method.</p>
+</section>
+<section id="the-modules-yaml-config-file-and-module-sets">
+<span id="modules-yaml"></span><h3>The <code class="docutils literal notranslate"><span class="pre">modules.yaml</span></code> config file and module sets<a class="headerlink" href="#the-modules-yaml-config-file-and-module-sets" title="連結到這個標頭">¶</a></h3>
+<p>The configuration files that control module generation behavior are named <code class="docutils literal notranslate"><span class="pre">modules.yaml</span></code>.
+The default configuration looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1"># This is the default configuration for Spack&#39;s module file generation.</span>
+<span class="c1">#</span>
+<span class="c1"># Settings here are versioned with Spack and are intended to provide</span>
+<span class="c1"># sensible defaults out of the box. Spack maintainers should edit this</span>
+<span class="c1"># file to keep it current.</span>
+<span class="c1">#</span>
+<span class="c1"># Users can override these settings by editing the following files.</span>
+<span class="c1">#</span>
+<span class="c1"># Per-spack-instance settings (overrides defaults):</span>
+<span class="c1">#   $SPACK_ROOT/etc/spack/modules.yaml</span>
+<span class="c1">#</span>
+<span class="c1"># Per-user settings (overrides default and site settings):</span>
+<span class="c1">#   ~/.spack/modules.yaml</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="nt">modules</span><span class="p">:</span>
+  <span class="c1"># This maps paths in the package install prefix to environment variables</span>
+  <span class="c1"># they should be added to. For example, &lt;prefix&gt;/bin should be in PATH.</span>
+  <span class="nt">prefix_inspections</span><span class="p">:</span>
+    <span class="nt">./bin</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PATH</span>
+    <span class="nt">./man</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">MANPATH</span>
+    <span class="nt">./share/man</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">MANPATH</span>
+    <span class="nt">./share/aclocal</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ACLOCAL_PATH</span>
+    <span class="nt">./lib/pkgconfig</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PKG_CONFIG_PATH</span>
+    <span class="nt">./lib64/pkgconfig</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PKG_CONFIG_PATH</span>
+    <span class="nt">./share/pkgconfig</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PKG_CONFIG_PATH</span>
+    <span class="nt">./</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">CMAKE_PREFIX_PATH</span>
+
+  <span class="c1"># These are configurations for the module set named &quot;default&quot;</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="c1"># Where to install modules</span>
+    <span class="nt">roots</span><span class="p">:</span>
+     <span class="nt">tcl</span><span class="p">:</span>    <span class="l l-Scalar l-Scalar-Plain">$spack/share/spack/modules</span>
+     <span class="nt">lmod</span><span class="p">:</span>   <span class="l l-Scalar l-Scalar-Plain">$spack/share/spack/lmod</span>
+    <span class="c1"># What type of modules to use (&quot;tcl&quot; and/or &quot;lmod&quot;)</span>
+    <span class="nt">enable</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">autoload</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">direct</span>
+
+    <span class="c1"># Default configurations if lmod is enabled</span>
+    <span class="nt">lmod</span><span class="p">:</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">autoload</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">direct</span>
+      <span class="nt">hierarchy</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mpi</span>
+</pre></div>
+</div>
+<p>You can define one or more <strong>module sets</strong>, each of which can be configured separately with regard to install location, naming scheme, inclusion and exclusion, autoloading, et cetera.</p>
+<p>The default module set is aptly named <code class="docutils literal notranslate"><span class="pre">default</span></code>.
+All <a class="reference internal" href="#maintaining-module-files"><span class="std std-ref">Spack commands that operate on modules</span></a> apply to the <code class="docutils literal notranslate"><span class="pre">default</span></code> module set, unless another module set is specified explicitly (with the <code class="docutils literal notranslate"><span class="pre">--name</span></code> flag).</p>
+</section>
+<section id="changing-the-modules-root">
+<h3>Changing the modules root<a class="headerlink" href="#changing-the-modules-root" title="連結到這個標頭">¶</a></h3>
+<p>As shown in the table above, the default module root for <code class="docutils literal notranslate"><span class="pre">lmod</span></code> is <code class="docutils literal notranslate"><span class="pre">$spack/share/spack/lmod</span></code> and the default root for <code class="docutils literal notranslate"><span class="pre">tcl</span></code> is <code class="docutils literal notranslate"><span class="pre">$spack/share/spack/modules</span></code>.
+This can be overridden for any module set by changing the <code class="docutils literal notranslate"><span class="pre">roots</span></code> key of the configuration.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">roots</span><span class="p">:</span>
+      <span class="nt">tcl</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/install/tcl/modules</span>
+  <span class="nt">my_custom_lmod_modules</span><span class="p">:</span>
+    <span class="nt">roots</span><span class="p">:</span>
+      <span class="nt">lmod</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/install/custom/lmod/modules</span>
+      <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>This configuration will create two module sets.
+The default module set will install its <code class="docutils literal notranslate"><span class="pre">tcl</span></code> modules to <code class="docutils literal notranslate"><span class="pre">/path/to/install/tcl/modules</span></code> (and still install its lmod modules, if any, to the default location).
+The set <code class="docutils literal notranslate"><span class="pre">my_custom_lmod_modules</span></code> will install its lmod modules to <code class="docutils literal notranslate"><span class="pre">/path/to/install/custom/lmod/modules</span></code> (and still install its tcl modules, if any, to the default location).</p>
+<p>By default, an architecture-specific directory is added to the root directory.
+A module set may override that behavior by setting the <code class="docutils literal notranslate"><span class="pre">arch_folder</span></code> config value to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">roots</span><span class="p">:</span>
+      <span class="nt">tcl</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/install/tcl/modules</span>
+    <span class="nt">arch_folder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>Obviously, having multiple module sets install modules to the default location could be confusing to users of your modules.
+In the next section, we will discuss enabling and disabling module types (module file generators) for each module set.</p>
+</section>
+<section id="automatically-generating-module-files">
+<h3>Automatically generating module files<a class="headerlink" href="#automatically-generating-module-files" title="連結到這個標頭">¶</a></h3>
+<p>Spack can be configured to automatically generate module files as part of package installation.
+This is done by adding the desired module systems to the <code class="docutils literal notranslate"><span class="pre">enable</span></code> list.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">enable</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">tcl</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">lmod</span>
+</pre></div>
+</div>
+</section>
+<section id="configuring-tcl-and-lmod-modules">
+<h3>Configuring <code class="docutils literal notranslate"><span class="pre">tcl</span></code> and <code class="docutils literal notranslate"><span class="pre">lmod</span></code> modules<a class="headerlink" href="#configuring-tcl-and-lmod-modules" title="連結到這個標頭">¶</a></h3>
+<p>You can configure the behavior of either module system separately, under a key corresponding to the generator being customized:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="c1"># contains environment modules specific customizations</span>
+    <span class="nt">lmod</span><span class="p">:</span>
+      <span class="c1"># contains lmod specific customizations</span>
+</pre></div>
+</div>
+<p>In general, the configuration options that you can use in <code class="docutils literal notranslate"><span class="pre">modules.yaml</span></code> will either change the layout of the module files on the filesystem, or they will affect their content.
+For the latter point it is possible to use anonymous specs to fine tune the set of packages on which the modifications should be applied.</p>
+</section>
+<section id="autoloading-and-hiding-dependencies">
+<span id="autoloading-dependencies"></span><h3>Autoloading and hiding dependencies<a class="headerlink" href="#autoloading-and-hiding-dependencies" title="連結到這個標頭">¶</a></h3>
+<p>A module file should set the variables that are needed for an application to work.
+But since an application often has many dependencies, where should all the environment variables for those be set?
+In Spack the rule is that each package sets the runtime variables that are needed by the package itself, and no more.
+This way, dependencies can be loaded standalone too, and duplication of environment variables is avoided.</p>
+<p>That means however that if you want to use an application, you need to load the modules for all its dependencies.
+Of course this is not something you would want users to do manually.</p>
+<p>Since Spack knows the dependency graph of every package, it can easily generate module files that automatically load the modules for its dependencies recursively.
+It is enabled by default for both Lmod and Environment Modules under the <code class="docutils literal notranslate"><span class="pre">autoload:</span> <span class="pre">direct</span></code> config option.
+The former system has builtin support through the <code class="docutils literal notranslate"><span class="pre">depends_on</span></code> function, the latter simply uses a <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span></code> statement.
+Both module systems (at least in newer versions) do reference counting, so that if a module is loaded by two different modules, it will only be unloaded after the others are.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">autoload</span></code> key accepts the values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: no autoloading</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run</span></code>: autoload direct <em>run</em> type dependencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">direct</span></code>: autoload direct <em>link and run</em> type dependencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">all</span></code>: autoload all dependencies</p></li>
+</ul>
+<p>In case of <code class="docutils literal notranslate"><span class="pre">run</span></code> and <code class="docutils literal notranslate"><span class="pre">direct</span></code>, a <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span></code> triggers a recursive load.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">direct</span></code> option is most correct: there are cases where pure link dependencies need to set variables for themselves, or need to have variables of their own dependencies set.</p>
+<p>In practice however, <code class="docutils literal notranslate"><span class="pre">run</span></code> is often sufficient, and may make <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span></code> snappier.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">all</span></code> option is discouraged and seldomly used.</p>
+<p>A common complaint about autoloading is the large number of modules that are visible to the user.
+Spack has a solution for this as well: <code class="docutils literal notranslate"><span class="pre">hide_implicits:</span> <span class="pre">true</span></code>.
+This ensures that only those packages you've explicitly installed are exposed by <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">avail</span></code>, but still allows for autoloading of hidden dependencies.
+Lmod should support hiding implicits in general, while Environment Modules requires version 4.7 or higher.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>If supported by your module system, we highly encourage the following configuration that enables autoloading and hiding of implicits.
+It ensures all runtime variables are set correctly, including those for dependencies, without overwhelming the user with a large number of available modules.
+Further, it makes it easier to get readable module names without collisions, see the section below on <a class="reference internal" href="#modules-projections"><span class="std std-ref">Customize the naming of modules</span></a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">hide_implicits</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">autoload</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">direct</span> <span class="c1"># or `run`</span>
+    <span class="nt">lmod</span><span class="p">:</span>
+      <span class="nt">hide_implicits</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">autoload</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">direct</span> <span class="c1"># or `run`</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="setting-environment-variables-for-selected-packages-in-config">
+<span id="anonymous-specs"></span><h3>Setting environment variables for selected packages in config<a class="headerlink" href="#setting-environment-variables-for-selected-packages-in-config" title="連結到這個標頭">¶</a></h3>
+<p>In the configuration file you can filter particular specs, and make further changes to the environment variables that go into their module files.
+This is very powerful when you want to avoid <a class="reference internal" href="#overide-api-calls-in-package-py"><span class="std std-ref">modifying the package itself</span></a>, or when you want to set certain variables on multiple selected packages at once.</p>
+<p>For instance, in the snippet below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="c1"># The keyword `all` selects every package</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">set</span><span class="p">:</span>
+            <span class="nt">BAR</span><span class="p">:</span> <span class="s">&quot;bar&quot;</span>
+      <span class="c1"># This anonymous spec selects any package that</span>
+      <span class="c1"># depends on mpi. The double colon at the</span>
+      <span class="c1"># end clears the set of rules that matched so far.</span>
+      <span class="nt">^mpi:</span><span class="p">:</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">prepend_path</span><span class="p">:</span>
+            <span class="nt">PATH</span><span class="p">:</span> <span class="s">&quot;{^mpi.prefix}/bin&quot;</span>
+          <span class="nt">set</span><span class="p">:</span>
+            <span class="nt">BAR</span><span class="p">:</span> <span class="s">&quot;baz&quot;</span>
+      <span class="c1"># Selects any zlib package</span>
+      <span class="nt">zlib</span><span class="p">:</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">prepend_path</span><span class="p">:</span>
+            <span class="nt">LD_LIBRARY_PATH</span><span class="p">:</span> <span class="s">&quot;foo&quot;</span>
+      <span class="c1"># Selects zlib compiled with gcc@4.8</span>
+      <span class="nt">zlib%gcc@4.8</span><span class="p">:</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">unset</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FOOBAR</span>
+</pre></div>
+</div>
+<p>you are instructing Spack to set the environment variable <code class="docutils literal notranslate"><span class="pre">BAR=bar</span></code> for every module, unless the associated spec satisfies the abstract dependency <code class="docutils literal notranslate"><span class="pre">^mpi</span></code> in which case <code class="docutils literal notranslate"><span class="pre">BAR=baz</span></code>, and the directory containing the respective MPI executables is prepended to the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable.
+In addition in any spec that satisfies <code class="docutils literal notranslate"><span class="pre">zlib</span></code> the value <code class="docutils literal notranslate"><span class="pre">foo</span></code> will be prepended to <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> and in any spec that satisfies <code class="docutils literal notranslate"><span class="pre">zlib%gcc&#64;4.8</span></code> the variable <code class="docutils literal notranslate"><span class="pre">FOOBAR</span></code> will be unset.</p>
+<div class="note admonition">
+<p class="admonition-title">Note: order does matter</p>
+<p>The modifications associated with the <code class="docutils literal notranslate"><span class="pre">all</span></code> keyword are always evaluated first, no matter where they appear in the configuration file.
+All the other changes to environment variables for matching specs are evaluated from top to bottom.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>As general advice, it's often better to set as few unnecessary variables as possible.
+For example, the following seemingly innocent and potentially useful configuration</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">all</span><span class="p">:</span>
+  <span class="nt">environment</span><span class="p">:</span>
+    <span class="nt">set</span><span class="p">:</span>
+      <span class="s">&quot;{name}_ROOT&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;{prefix}&quot;</span>
+</pre></div>
+</div>
+<p>sets <code class="docutils literal notranslate"><span class="pre">BINUTILS_ROOT</span></code> to its prefix in modules for <code class="docutils literal notranslate"><span class="pre">binutils</span></code>, which happens to break the <code class="docutils literal notranslate"><span class="pre">gcc</span></code> compiler: it uses this variable as its default search path for certain object files and libraries, and by merely setting it, everything fails to link.</p>
+</div>
+</section>
+<section id="exclude-or-include-specific-module-files">
+<h3>Exclude or include specific module files<a class="headerlink" href="#exclude-or-include-specific-module-files" title="連結到這個標頭">¶</a></h3>
+<p>You can use anonymous specs also to prevent module files from being written or to force them to be written.
+Consider the case where you want to hide from users all the boilerplate software that you had to build in order to bootstrap a new compiler.
+Suppose for instance that <code class="docutils literal notranslate"><span class="pre">gcc&#64;4.4.7</span></code> is the compiler provided by your system.
+If you write a configuration file like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">include</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;gcc&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;llvm&quot;</span><span class="p p-Indicator">]</span>  <span class="c1"># include will have precedence over exclude</span>
+      <span class="nt">exclude</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;%gcc@4.4.7&quot;</span><span class="p p-Indicator">]</span>   <span class="c1"># Assuming gcc@4.4.7 is the system compiler</span>
+</pre></div>
+</div>
+<p>you will prevent the generation of module files for any package that is compiled with <code class="docutils literal notranslate"><span class="pre">gcc&#64;4.4.7</span></code>, with the only exception of any <code class="docutils literal notranslate"><span class="pre">gcc</span></code> or any <code class="docutils literal notranslate"><span class="pre">llvm</span></code> installation.</p>
+<p>It is safe to combine <code class="docutils literal notranslate"><span class="pre">exclude</span></code> and <code class="docutils literal notranslate"><span class="pre">autoload</span></code> <a class="reference internal" href="#autoloading-dependencies"><span class="std std-ref">mentioned above</span></a>.
+When <code class="docutils literal notranslate"><span class="pre">exclude</span></code> prevents a module file to be generated for a dependency, the <code class="docutils literal notranslate"><span class="pre">autoload</span></code> feature will simply not generate a statement to load it.</p>
+</section>
+<section id="customize-the-naming-of-modules">
+<span id="modules-projections"></span><h3>Customize the naming of modules<a class="headerlink" href="#customize-the-naming-of-modules" title="連結到這個標頭">¶</a></h3>
+<p>The names of environment modules generated by Spack are not always easy to fully comprehend due to the long hash in the name.
+There are three module configuration options to help with that.
+The first is a global setting to adjust the hash length.
+It can be set anywhere from 0 to 32 and has a default length of 7.
+This is the representation of the hash in the module file name and does not affect the size of the package hash.
+Be aware that the smaller the hash length the more likely naming conflicts will occur.
+The following snippet shows how to set hash length in the module file names:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">hash_length</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">7</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">hide_implicits:</span> <span class="pre">true</span></code> (see <a class="reference internal" href="#autoloading-dependencies"><span class="std std-ref">Autoloading and hiding dependencies</span></a>) vastly reduces the number modules exposed to the user.
+The hidden modules always contain the hash in their name, and are not influenced by the <code class="docutils literal notranslate"><span class="pre">hash_length</span></code> setting.
+Hidden implicits thus make it easier to use a short hash length or no hash at all, without risking name conflicts.</p>
+</div>
+<p>To help make module names more readable, and to help alleviate name conflicts with a short hash, one can use the <code class="docutils literal notranslate"><span class="pre">suffixes</span></code> option in the modules configuration file.
+This option will add strings to modules that match a spec.
+For instance, the following config options,</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">suffixes</span><span class="p">:</span>
+          <span class="nt">^python@3</span><span class="p">:</span> <span class="s">&quot;python{^python.version.up_to_2}&quot;</span>
+          <span class="nt">^openblas</span><span class="p">:</span> <span class="s">&quot;openblas&quot;</span>
+</pre></div>
+</div>
+<p>will add a <code class="docutils literal notranslate"><span class="pre">python3.12</span></code> to module names of packages compiled with Python 3.12, and similarly for all specs depending on <code class="docutils literal notranslate"><span class="pre">python&#64;3</span></code>.
+This is useful to know which version of Python a set of Python extensions is associated with.
+Likewise, the <code class="docutils literal notranslate"><span class="pre">openblas</span></code> string is attached to any program that has openblas in the spec, most likely via the <code class="docutils literal notranslate"><span class="pre">+blas</span></code> variant specification.</p>
+<p>The most heavyweight solution to module naming is to change the entire naming convention for module files.
+This uses the projections format covered in <a class="reference internal" href="environments.html#view-projections"><span class="std std-ref">View Projections</span></a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">projections</span><span class="p">:</span>
+        <span class="nt">all</span><span class="p">:</span> <span class="s">&quot;{name}/{version}-{compiler.name}-{compiler.version}-module&quot;</span>
+        <span class="nt">^mpi</span><span class="p">:</span> <span class="s">&quot;{name}/{version}-{^mpi.name}-{^mpi.version}-{compiler.name}-{compiler.version}-module&quot;</span>
+</pre></div>
+</div>
+<p>will create module files that are nested in directories by package name, contain the version and compiler name and version, and have the word <code class="docutils literal notranslate"><span class="pre">module</span></code> before the hash for all specs that do not depend on mpi, and will have the same information plus the MPI implementation name and version for all packages that depend on mpi.</p>
+<p>When specifying module names by projection for Lmod modules, we recommend NOT including names of dependencies (e.g., MPI, compilers) that are already in the Lmod hierarchy.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Tcl and Lua modules also allow for explicit conflicts between module files.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">enable</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">tcl</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">projections</span><span class="p">:</span>
+        <span class="nt">all</span><span class="p">:</span> <span class="s">&quot;{name}/{version}-{compiler.name}-{compiler.version}&quot;</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">conflict</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;{name}&quot;</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;intel/14.0.1&quot;</span>
+</pre></div>
+</div>
+<p>will create module files that will conflict with <code class="docutils literal notranslate"><span class="pre">intel/14.0.1</span></code> and with the base directory of the same module, effectively preventing the possibility to load two or more versions of the same software at the same time.
+The tokens that are available for use in this directive are those understood by the <a class="reference internal" href="spack.html#spack.spec.Spec.format" title="spack.spec.Spec.format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">format()</span></code></a> method.</p>
+<p>For Lmod and Environment Modules versions prior to 4.2, it is important to express the conflict on both module files conflicting with each other.</p>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Note: Lmod hierarchical module files</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">lmod</span></code> is activated Spack will generate a set of hierarchical lua module files that are understood by Lmod.
+The hierarchy always contains the <code class="docutils literal notranslate"><span class="pre">Core</span></code> and <code class="docutils literal notranslate"><span class="pre">Compiler</span></code> layers, but can be extended to include any virtual packages present in Spack.
+A case that could be useful in practice is for instance:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">enable</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">lmod</span>
+    <span class="nt">lmod</span><span class="p">:</span>
+      <span class="nt">core_compilers</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;gcc@4.8&quot;</span>
+      <span class="nt">core_specs</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;python&quot;</span>
+      <span class="nt">hierarchy</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;mpi&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;lapack&quot;</span>
+</pre></div>
+</div>
+<p>that will generate a hierarchy in which the <code class="docutils literal notranslate"><span class="pre">lapack</span></code> and <code class="docutils literal notranslate"><span class="pre">mpi</span></code> layer can be switched independently.
+This allows a site to build the same libraries or applications against different implementations of <code class="docutils literal notranslate"><span class="pre">mpi</span></code> and <code class="docutils literal notranslate"><span class="pre">lapack</span></code>, and let Lmod switch safely from one to the other.</p>
+<p>All packages built with a compiler in <code class="docutils literal notranslate"><span class="pre">core_compilers</span></code> and all packages that satisfy a spec in <code class="docutils literal notranslate"><span class="pre">core_specs</span></code> will be put in the <code class="docutils literal notranslate"><span class="pre">Core</span></code> hierarchy of the lua modules.</p>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Warning: consistency of core packages</p>
+<p>The user is responsible for maintaining consistency among core packages, as <code class="docutils literal notranslate"><span class="pre">core_specs</span></code> bypasses the hierarchy that allows Lmod to safely switch between coherent software stacks.</p>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Warning: deep hierarchies</p>
+<p>For hierarchies that are deeper than three layers <code class="docutils literal notranslate"><span class="pre">lmod</span> <span class="pre">spider</span></code> may have some issues.
+See <a class="reference external" href="https://github.com/TACC/Lmod/issues/114">this discussion on the Lmod project</a>.</p>
+</div>
+</section>
+<section id="customize-environment-modifications">
+<span id="customize-env-modifications"></span><h3>Customize environment modifications<a class="headerlink" href="#customize-environment-modifications" title="連結到這個標頭">¶</a></h3>
+<p>You can control which prefixes in a Spack package are added to environment variables with the <code class="docutils literal notranslate"><span class="pre">prefix_inspections</span></code> section; this section maps relative prefixes to the list of environment variables which should be updated with those prefixes.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">prefix_inspections</span></code> configuration is different from other settings in that a <code class="docutils literal notranslate"><span class="pre">prefix_inspections</span></code> configuration at the <code class="docutils literal notranslate"><span class="pre">modules</span></code> level of the configuration file applies to all module sets.
+This allows users to make general overrides to the default inspections and customize them per-module-set.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">prefix_inspections</span><span class="p">:</span>
+    <span class="nt">./bin</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PATH</span>
+    <span class="nt">./man</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">MANPATH</span>
+    <span class="nt">./</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">CMAKE_PREFIX_PATH</span>
+</pre></div>
+</div>
+<p>Prefix inspections are only applied if the relative path inside the installation prefix exists.
+In this case, for a Spack package <code class="docutils literal notranslate"><span class="pre">foo</span></code> installed to <code class="docutils literal notranslate"><span class="pre">/spack/prefix/foo</span></code>, if <code class="docutils literal notranslate"><span class="pre">foo</span></code> installs executables to <code class="docutils literal notranslate"><span class="pre">bin</span></code> but no manpages in <code class="docutils literal notranslate"><span class="pre">man</span></code>, the generated module file for <code class="docutils literal notranslate"><span class="pre">foo</span></code> would update <code class="docutils literal notranslate"><span class="pre">PATH</span></code> to contain <code class="docutils literal notranslate"><span class="pre">/spack/prefix/foo/bin</span></code> and <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code> to contain <code class="docutils literal notranslate"><span class="pre">/spack/prefix/foo</span></code>, but would not update <code class="docutils literal notranslate"><span class="pre">MANPATH</span></code>.</p>
+<p>The default list of environment variables in this config section includes <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">MANPATH</span></code>, <code class="docutils literal notranslate"><span class="pre">ACLOCAL_PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, as well as <code class="docutils literal notranslate"><span class="pre">DYLD_FALLBACK_LIBRARY_PATH</span></code> on macOS.
+On Linux however, the corresponding <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> variable is <em>not</em> set, because it affects the behavior of system executables too.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>In general, the <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> variable is not required when using packages built with Spack, thanks to the use of RPATH.
+Some packages may still need the variable, which is best handled on a per-package basis instead of globally, as explained in <a class="reference internal" href="#overide-api-calls-in-package-py"><span class="std std-ref">Setting environment variables dynamically in package.py</span></a>.</p>
+</div>
+<p>There is a special case for prefix inspections relative to environment views.
+If all of the following conditions hold for a module set configuration:</p>
+<ol class="arabic simple">
+<li><p>The configuration is for an <a class="reference internal" href="environments.html#environments"><span class="std std-ref">environment</span></a> and will never be applied outside the environment,</p></li>
+<li><p>The environment in question is configured to use a view,</p></li>
+<li><p>The <a class="reference internal" href="environments.html#configuring-environment-views"><span class="std std-ref">environment view is configured</span></a> with a projection that ensures every package is linked to a unique directory,</p></li>
+</ol>
+<p>then the module set may be configured to create modules relative to the environment view.
+This is specified by the <code class="docutils literal notranslate"><span class="pre">use_view</span></code> configuration option in the module set.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the module set is constructed relative to the default view of the environment.
+Otherwise, the value must be the name of the environment view relative to which to construct modules, or <code class="docutils literal notranslate"><span class="pre">False-ish</span></code> to disable the feature explicitly (the default is <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">use_view</span></code> value is set in the config, then the prefix inspections for the package are done relative to the package's path in the view.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">modules</span><span class="p">:</span>
+    <span class="nt">view_relative_modules</span><span class="p">:</span>
+      <span class="nt">use_view</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_view</span>
+    <span class="nt">prefix_inspections</span><span class="p">:</span>
+      <span class="nt">./bin</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PATH</span>
+  <span class="nt">view</span><span class="p">:</span>
+    <span class="nt">my_view</span><span class="p">:</span>
+      <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/my/view</span>
+      <span class="nt">projections</span><span class="p">:</span>
+        <span class="nt">all</span><span class="p">:</span> <span class="s">&quot;{name}-{hash}&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">spack</span></code> key is relevant to <a class="reference internal" href="environments.html#environments"><span class="std std-ref">environment</span></a> configuration, and the view key is discussed in detail in the section on <a class="reference internal" href="environments.html#configuring-environment-views"><span class="std std-ref">Configuring environment views</span></a>.
+With this configuration the generated module for package <code class="docutils literal notranslate"><span class="pre">foo</span></code> would set <code class="docutils literal notranslate"><span class="pre">PATH</span></code> to include <code class="docutils literal notranslate"><span class="pre">/path/to/my/view/foo-&lt;hash&gt;/bin</span></code> instead of <code class="docutils literal notranslate"><span class="pre">/spack/prefix/foo/bin</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">use_view</span></code> option is useful when deploying a large software stack to users who are likely to inspect the modules to find full paths to software, when it is desirable to present the users with a simpler set of paths than those generated by the Spack install tree.</p>
+</section>
+<section id="filter-out-environment-modifications">
+<h3>Filter out environment modifications<a class="headerlink" href="#filter-out-environment-modifications" title="連結到這個標頭">¶</a></h3>
+<p>Modifications to certain environment variables in module files are there by default, for instance because they are generated by prefix inspections.
+If you want to prevent modifications to some environment variables, you can do so by using the <code class="docutils literal notranslate"><span class="pre">exclude_env_vars</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">default</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">all</span><span class="p">:</span>
+        <span class="nt">filter</span><span class="p">:</span>
+          <span class="c1"># Exclude changes to any of these variables</span>
+          <span class="nt">exclude_env_vars</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;CPATH&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;LIBRARY_PATH&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The configuration above will generate module files that will not contain modifications to either <code class="docutils literal notranslate"><span class="pre">CPATH</span></code> or <code class="docutils literal notranslate"><span class="pre">LIBRARY_PATH</span></code>.</p>
+</section>
+<section id="select-default-modules">
+<h3>Select default modules<a class="headerlink" href="#select-default-modules" title="連結到這個標頭">¶</a></h3>
+<p>By default, when multiple modules of the same name share a directory, the highest version number will be the default module.
+This behavior of the <code class="docutils literal notranslate"><span class="pre">module</span></code> command can be overridden with a symlink named <code class="docutils literal notranslate"><span class="pre">default</span></code> to the desired default module.
+If you wish to configure default modules with Spack, add a <code class="docutils literal notranslate"><span class="pre">defaults</span></code> key to your modules configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+  <span class="nt">my-module-set</span><span class="p">:</span>
+    <span class="nt">tcl</span><span class="p">:</span>
+      <span class="nt">defaults</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gcc@10.2.1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">hdf5@1.2.10+mpi+hl%gcc</span>
+</pre></div>
+</div>
+<p>These defaults may be arbitrarily specific.
+For any package that satisfies a default, Spack will generate the module file in the appropriate path, and will generate a default symlink to the module file as well.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>If Spack is configured to generate multiple default packages in the same directory, the last modulefile to be generated will be the default module.</p>
+</div>
+</section>
+</section>
+<section id="maintaining-module-files">
+<span id="id1"></span><h2>Maintaining Module Files<a class="headerlink" href="#maintaining-module-files" title="連結到這個標頭">¶</a></h2>
+<p>Each type of module file has a command with the same name associated with it.
+The actions these commands permit are usually associated with the maintenance of a production environment.
+Here's, for instance, a sample of the features of the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span></code> command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack module tcl --help
+usage: spack module tcl [-h] [-n MODULE_SET_NAME] SUBCOMMAND ...
+
+positional arguments:
+  SUBCOMMAND
+    refresh             regenerate module files
+    find                find module files for packages
+    rm                  remove module files
+    loads               prompt the list of modules associated with a constraint
+    setdefault          set the default module file for a package
+
+options:
+  -h, --help            show this help message and exit
+  -n, --name MODULE_SET_NAME
+                        named module set to use from modules configuration
+</pre></div>
+</div>
+<section id="refresh-the-set-of-modules">
+<span id="cmd-spack-module-refresh"></span><h3>Refresh the set of modules<a class="headerlink" href="#refresh-the-set-of-modules" title="連結到這個標頭">¶</a></h3>
+<p>The subcommand that regenerates module files to update their content or their layout is <code class="docutils literal notranslate"><span class="pre">refresh</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack module tcl refresh --help
+usage: spack module tcl refresh [-hy] [--delete-tree] [--upstream-modules] ...
+
+positional arguments:
+  installed_specs     constraint to select a subset of installed packages
+
+options:
+  --delete-tree       delete the module file tree before refresh
+  --upstream-modules  generate modules for packages installed upstream
+  -h, --help          show this help message and exit
+  -y, --yes-to-all    assume &quot;yes&quot; is the answer to every confirmation request
+</pre></div>
+</div>
+<p>A set of packages can be selected using anonymous specs for the optional <code class="docutils literal notranslate"><span class="pre">constraint</span></code> positional argument.
+Optionally the entire tree can be deleted before regeneration if the change in layout is radical.</p>
+</section>
+<section id="delete-module-files">
+<span id="cmd-spack-module-rm"></span><h3>Delete module files<a class="headerlink" href="#delete-module-files" title="連結到這個標頭">¶</a></h3>
+<p>If instead what you need is just to delete a few module files, then the right subcommand is <code class="docutils literal notranslate"><span class="pre">rm</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack module tcl rm --help
+usage: spack module tcl rm [-hy] ...
+
+positional arguments:
+  installed_specs   constraint to select a subset of installed packages
+
+options:
+  -h, --help        show this help message and exit
+  -y, --yes-to-all  assume &quot;yes&quot; is the answer to every confirmation request
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>We care about your module files!
+Every modification done on modules that are already existing will ask for a confirmation by default.
+If the command is used in a script it is possible though to pass the <code class="docutils literal notranslate"><span class="pre">-y</span></code> argument, that will skip this safety measure.</p>
+</div>
+</section>
+</section>
+<section id="using-spack-modules-in-shell-scripts">
+<span id="modules-in-shell-scripts"></span><h2>Using Spack modules in shell scripts<a class="headerlink" href="#using-spack-modules-in-shell-scripts" title="連結到這個標頭">¶</a></h2>
+<p>To enable additional Spack commands for loading and unloading module files, and to add the correct path to <code class="docutils literal notranslate"><span class="pre">MODULEPATH</span></code>, you need to source the appropriate setup file.
+Assuming Spack is installed in <code class="docutils literal notranslate"><span class="pre">$SPACK_ROOT</span></code>, run the appropriate command for your shell:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>For bash/zsh/sh
+<span class="gp">$ </span>. <span class="nv">$SPACK_ROOT</span>/share/spack/setup-env.sh
+
+<span class="gp"># </span>For tcsh/csh
+<span class="gp">$ </span><span class="nb">source</span> <span class="nv">$SPACK_ROOT</span>/share/spack/setup-env.csh
+
+<span class="gp"># </span>For fish
+<span class="gp">$ </span>. <span class="nv">$SPACK_ROOT</span>/share/spack/setup-env.fish
+</pre></div>
+</div>
+<p>If you want to have Spack's shell support available on the command line at any login you can put this source line in one of the files that are sourced at startup (like <code class="docutils literal notranslate"><span class="pre">.profile</span></code>, <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">.cshrc</span></code>).
+Be aware that the shell startup time may increase slightly as a result.</p>
+<section id="spack-module-tcl-loads">
+<span id="cmd-spack-module-loads"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span> <span class="pre">loads</span></code><a class="headerlink" href="#spack-module-tcl-loads" title="連結到這個標頭">¶</a></h3>
+<p>In some cases, it is desirable to use a Spack-generated module, rather than relying on Spack's built-in user-environment modification capabilities.
+To translate a spec into a module name, use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span> <span class="pre">loads</span></code> or <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">lmod</span> <span class="pre">loads</span></code> depending on the module system desired.</p>
+<p>To load not just a module, but also all the modules it depends on, use the <code class="docutils literal notranslate"><span class="pre">--dependencies</span></code> option.
+This is not required for most modules because Spack builds binaries with RPATH support.
+However, not all packages use RPATH to find their dependencies: this can be true in particular for Python extensions, which are currently <em>not</em> built with RPATH.</p>
+<p>Scripts to load modules recursively may be made with the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack module tcl loads --dependencies &lt;spec&gt;
+</pre></div>
+</div>
+<p>An equivalent alternative using <a class="reference external" href="http://tldp.org/LDP/abs/html/process-sub.html">process substitution</a> is:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">source</span> &lt;<span class="o">(</span> spack module tcl loads --dependencies &lt;spec&gt; <span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-commands-for-shell-scripts">
+<h3>Module Commands for Shell Scripts<a class="headerlink" href="#module-commands-for-shell-scripts" title="連結到這個標頭">¶</a></h3>
+<p>Although Spack is flexible, the <code class="docutils literal notranslate"><span class="pre">module</span></code> command is much faster.
+This can become an issue when emitting a series of <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span></code> commands inside a shell script.
+By adding the <code class="docutils literal notranslate"><span class="pre">--dependencies</span></code> flag, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span> <span class="pre">loads</span></code> may also be used to generate code that can be cut-and-pasted into a shell script.
+For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack module tcl loads --dependencies py-numpy git
+<span class="gp"># </span>bzip2@1.0.6%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load bzip2/1.0.6-gcc-4.9.3-ktnrhkrmbbtlvnagfatrarzjojmkvzsx</span>
+<span class="gp"># </span>ncurses@6.0%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load ncurses/6.0-gcc-4.9.3-kaazyneh3bjkfnalunchyqtygoe2mncv</span>
+<span class="gp"># </span>zlib@1.2.8%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load zlib/1.2.8-gcc-4.9.3-v3ufwaahjnviyvgjcelo36nywx2ufj7z</span>
+<span class="gp"># </span>sqlite@3.8.5%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load sqlite/3.8.5-gcc-4.9.3-a3eediswgd5f3rmto7g3szoew5nhehbr</span>
+<span class="gp"># </span>readline@6.3%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load readline/6.3-gcc-4.9.3-se6r3lsycrwxyhreg4lqirp6xixxejh3</span>
+<span class="gp"># </span>python@3.5.1%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load python/3.5.1-gcc-4.9.3-5q5rsrtjld4u6jiicuvtnx52m7tfhegi</span>
+<span class="gp"># </span>py-setuptools@20.5%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load py-setuptools/20.5-gcc-4.9.3-4qr2suj6p6glepnedmwhl4f62x64wxw2</span>
+<span class="gp"># </span>py-nose@1.3.7%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load py-nose/1.3.7-gcc-4.9.3-pwhtjw2dvdvfzjwuuztkzr7b4l6zepli</span>
+<span class="gp"># </span>openblas@0.2.17%gcc@4.9.3+shared<span class="o">=</span>linux-x86_64
+<span class="go">module load openblas/0.2.17-gcc-4.9.3-pw6rmlom7apfsnjtzfttyayzc7nx5e7y</span>
+<span class="gp"># </span>py-numpy@1.11.0%gcc@4.9.3+blas+lapack<span class="o">=</span>linux-x86_64
+<span class="go">module load py-numpy/1.11.0-gcc-4.9.3-mulodttw5pcyjufva4htsktwty4qd52r</span>
+<span class="gp"># </span>curl@7.47.1%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load curl/7.47.1-gcc-4.9.3-ohz3fwsepm3b462p5lnaquv7op7naqbi</span>
+<span class="gp"># </span>autoconf@2.69%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load autoconf/2.69-gcc-4.9.3-bkibjqhgqm5e3o423ogfv2y3o6h2uoq4</span>
+<span class="gp"># </span>cmake@3.5.0%gcc@4.9.3~doc+ncurses+openssl~qt<span class="o">=</span>linux-x86_64
+<span class="go">module load cmake/3.5.0-gcc-4.9.3-x7xnsklmgwla3ubfgzppamtbqk5rwn7t</span>
+<span class="gp"># </span>expat@2.1.0%gcc@4.9.3<span class="o">=</span>linux-x86_64
+<span class="go">module load expat/2.1.0-gcc-4.9.3-6pkz2ucnk2e62imwakejjvbv6egncppd</span>
+<span class="gp"># </span>git@2.8.0-rc2%gcc@4.9.3+curl+expat<span class="o">=</span>linux-x86_64
+<span class="go">module load git/2.8.0-rc2-gcc-4.9.3-3bib4hqtnv5xjjoq5ugt3inblt4xrgkd</span>
+</pre></div>
+</div>
+<p>The script may be further edited by removing unnecessary modules.</p>
+</section>
+<section id="module-prefixes">
+<h3>Module Prefixes<a class="headerlink" href="#module-prefixes" title="連結到這個標頭">¶</a></h3>
+<p>On some systems, modules are automatically prefixed with a certain string; <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span> <span class="pre">loads</span></code> needs to know about that prefix when it issues <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span></code> commands.
+Add the <code class="docutils literal notranslate"><span class="pre">--prefix</span></code> option to your <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span> <span class="pre">loads</span></code> commands if this is necessary.</p>
+<p>For example, consider the following on one system:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module avail
+<span class="go">linux-SuSE11-x86_64/antlr/2.7.7-gcc-5.3.0-bdpl46y</span>
+
+<span class="gp">$ </span>spack module tcl loads antlr    <span class="c1"># WRONG!</span>
+<span class="gp"># </span>antlr@2.7.7%gcc@5.3.0~csharp+cxx~java~python <span class="nv">arch</span><span class="o">=</span>linux-SuSE11-x86_64
+<span class="go">module load antlr/2.7.7-gcc-5.3.0-bdpl46y</span>
+
+<span class="gp">$ </span>spack module tcl loads --prefix linux-SuSE11-x86_64/ antlr
+<span class="gp"># </span>antlr@2.7.7%gcc@5.3.0~csharp+cxx~java~python <span class="nv">arch</span><span class="o">=</span>linux-SuSE11-x86_64
+<span class="go">module load linux-SuSE11-x86_64/antlr/2.7.7-gcc-5.3.0-bdpl46y</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="include_yaml.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Include Settings (include.yaml)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="chain.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Chaining Spack Installations (upstreams.yaml)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on 11月 03, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Modules (modules.yaml)</a><ul>
+<li><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li><a class="reference internal" href="#module-file-customization">Module file customization</a><ul>
+<li><a class="reference internal" href="#setting-environment-variables-dynamically-in-package-py">Setting environment variables dynamically in <code class="docutils literal notranslate"><span class="pre">package.py</span></code></a></li>
+<li><a class="reference internal" href="#the-modules-yaml-config-file-and-module-sets">The <code class="docutils literal notranslate"><span class="pre">modules.yaml</span></code> config file and module sets</a></li>
+<li><a class="reference internal" href="#changing-the-modules-root">Changing the modules root</a></li>
+<li><a class="reference internal" href="#automatically-generating-module-files">Automatically generating module files</a></li>
+<li><a class="reference internal" href="#configuring-tcl-and-lmod-modules">Configuring <code class="docutils literal notranslate"><span class="pre">tcl</span></code> and <code class="docutils literal notranslate"><span class="pre">lmod</span></code> modules</a></li>
+<li><a class="reference internal" href="#autoloading-and-hiding-dependencies">Autoloading and hiding dependencies</a></li>
+<li><a class="reference internal" href="#setting-environment-variables-for-selected-packages-in-config">Setting environment variables for selected packages in config</a></li>
+<li><a class="reference internal" href="#exclude-or-include-specific-module-files">Exclude or include specific module files</a></li>
+<li><a class="reference internal" href="#customize-the-naming-of-modules">Customize the naming of modules</a></li>
+<li><a class="reference internal" href="#customize-environment-modifications">Customize environment modifications</a></li>
+<li><a class="reference internal" href="#filter-out-environment-modifications">Filter out environment modifications</a></li>
+<li><a class="reference internal" href="#select-default-modules">Select default modules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#maintaining-module-files">Maintaining Module Files</a><ul>
+<li><a class="reference internal" href="#refresh-the-set-of-modules">Refresh the set of modules</a></li>
+<li><a class="reference internal" href="#delete-module-files">Delete module files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-spack-modules-in-shell-scripts">Using Spack modules in shell scripts</a><ul>
+<li><a class="reference internal" href="#spack-module-tcl-loads"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">module</span> <span class="pre">tcl</span> <span class="pre">loads</span></code></a></li>
+<li><a class="reference internal" href="#module-commands-for-shell-scripts">Module Commands for Shell Scripts</a></li>
+<li><a class="reference internal" href="#module-prefixes">Module Prefixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=c9930d3e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>

@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.cmd.bootstrap &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/cmd/bootstrap.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+          <li class="breadcrumb-item"><a href="../cmd.html">spack.cmd</a></li>
+      <li class="breadcrumb-item active">spack.cmd.bootstrap</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.cmd.bootstrap</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty.color</span>
+
+<span class="kn">import</span> <span class="nn">spack</span>
+<span class="kn">import</span> <span class="nn">spack.bootstrap</span>
+<span class="kn">import</span> <span class="nn">spack.bootstrap.config</span>
+<span class="kn">import</span> <span class="nn">spack.bootstrap.core</span>
+<span class="kn">import</span> <span class="nn">spack.config</span>
+<span class="kn">import</span> <span class="nn">spack.mirror</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.stage</span>
+<span class="kn">import</span> <span class="nn">spack.util.path</span>
+<span class="kn">import</span> <span class="nn">spack.util.spack_yaml</span>
+<span class="kn">from</span> <span class="nn">spack.cmd.common</span> <span class="kn">import</span> <span class="n">arguments</span>
+
+<span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;manage bootstrap configuration&quot;</span>
+<span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;system&quot;</span>
+<span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;long&quot;</span>
+
+
+<span class="c1"># Tarball to be downloaded if binary packages are requested in a local mirror</span>
+<span class="n">BINARY_TARBALL</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/spack/spack-bootstrap-mirrors/releases/download/v0.6/bootstrap-buildcache.tar.gz&quot;</span>
+
+<span class="c1">#: Subdirectory where to create the mirror</span>
+<span class="n">LOCAL_MIRROR_DIR</span> <span class="o">=</span> <span class="s2">&quot;bootstrap_cache&quot;</span>
+
+<span class="c1"># Metadata for a generated binary mirror</span>
+<span class="n">BINARY_METADATA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;buildcache&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;Buildcache copied from a public tarball available on Github.&quot;</span>
+        <span class="s2">&quot;The sha256 checksum of binaries is checked before installation.&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1"># This is a mis-nomer since it&#39;s not a URL; but file urls cannot</span>
+        <span class="c1"># represent relative paths, so we have to live with it for now.</span>
+        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="n">LOCAL_MIRROR_DIR</span><span class="p">),</span>
+        <span class="s2">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/spack/spack-bootstrap-mirrors&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;releases&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/spack/spack-bootstrap-mirrors/releases&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tarball&quot;</span><span class="p">:</span> <span class="n">BINARY_TARBALL</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">CLINGO_JSON</span> <span class="o">=</span> <span class="s2">&quot;$spack/share/spack/bootstrap/github-actions-v0.6/clingo.json&quot;</span>
+<span class="n">GNUPG_JSON</span> <span class="o">=</span> <span class="s2">&quot;$spack/share/spack/bootstrap/github-actions-v0.6/gnupg.json&quot;</span>
+<span class="n">PATCHELF_JSON</span> <span class="o">=</span> <span class="s2">&quot;$spack/share/spack/bootstrap/github-actions-v0.6/patchelf.json&quot;</span>
+
+<span class="c1"># Metadata for a generated source mirror</span>
+<span class="n">SOURCE_METADATA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mirror with software needed to bootstrap Spack&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1"># This is a mis-nomer since it&#39;s not a URL; but file urls cannot</span>
+        <span class="c1"># represent relative paths, so we have to live with it for now.</span>
+        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="n">LOCAL_MIRROR_DIR</span><span class="p">)</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_add_scope_option</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--scope&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">arguments</span><span class="o">.</span><span class="n">ConfigScope</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;configuration scope to read/modify&quot;</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="setup_parser">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.bootstrap.setup_parser">[docs]</a>
+<span class="k">def</span> <span class="nf">setup_parser</span><span class="p">(</span><span class="n">subparser</span><span class="p">):</span>
+    <span class="n">sp</span> <span class="o">=</span> <span class="n">subparser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;subcommand&quot;</span><span class="p">)</span>
+
+    <span class="n">now</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Spack ready, right now!&quot;</span><span class="p">)</span>
+    <span class="n">now</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--dev&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;bootstrap dev dependencies too&quot;</span><span class="p">)</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;get the status of Spack&quot;</span><span class="p">)</span>
+    <span class="n">status</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--optional&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;show the status of rarely used optional dependencies&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">status</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--dev&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;show the status of dependencies needed to develop Spack&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">enable</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;enable&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;enable bootstrapping&quot;</span><span class="p">)</span>
+    <span class="n">_add_scope_option</span><span class="p">(</span><span class="n">enable</span><span class="p">)</span>
+    <span class="n">enable</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of the source to be enabled&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">disable</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;disable&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;disable bootstrapping&quot;</span><span class="p">)</span>
+    <span class="n">_add_scope_option</span><span class="p">(</span><span class="n">disable</span><span class="p">)</span>
+    <span class="n">disable</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of the source to be disabled&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">reset</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;reset&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;reset bootstrapping configuration to Spack defaults&quot;</span><span class="p">)</span>
+    <span class="n">arguments</span><span class="o">.</span><span class="n">add_common_arguments</span><span class="p">(</span><span class="n">reset</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;yes_to_all&quot;</span><span class="p">])</span>
+
+    <span class="n">root</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;get/set the root bootstrap directory&quot;</span><span class="p">)</span>
+    <span class="n">_add_scope_option</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;set the bootstrap directory to this value&quot;</span>
+    <span class="p">)</span>
+
+    <span class="nb">list</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;list all the sources of software to bootstrap Spack&quot;</span><span class="p">)</span>
+    <span class="n">_add_scope_option</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="n">add</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;add a new source for bootstrapping&quot;</span><span class="p">)</span>
+    <span class="n">_add_scope_option</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
+    <span class="n">add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--trust&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;enable the source immediately upon addition&quot;</span>
+    <span class="p">)</span>
+    <span class="n">add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of the new source of software&quot;</span><span class="p">)</span>
+    <span class="n">add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;metadata_dir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;directory where to find metadata files&quot;</span><span class="p">)</span>
+
+    <span class="n">remove</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;remove a bootstrapping source&quot;</span><span class="p">)</span>
+    <span class="n">remove</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of the source to be removed&quot;</span><span class="p">)</span>
+
+    <span class="n">mirror</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;mirror&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;create a local mirror to bootstrap Spack&quot;</span><span class="p">)</span>
+    <span class="n">mirror</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--binary-packages&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;download public binaries in the mirror&quot;</span>
+    <span class="p">)</span>
+    <span class="n">mirror</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--dev&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;download dev dependencies too&quot;</span><span class="p">)</span>
+    <span class="n">mirror</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;root_dir&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;root directory in which to create the mirror and metadata&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_enable_or_disable</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">subcommand</span> <span class="o">==</span> <span class="s2">&quot;enable&quot;</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Set to True if we called &quot;enable&quot;, otherwise set to false</span>
+        <span class="n">old_value</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:enable&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">old_value</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Bootstrapping is already </span><span class="si">{}</span><span class="s2">d&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">subcommand</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;bootstrap:enable&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Bootstrapping has been </span><span class="si">{}</span><span class="s2">d&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">subcommand</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_enable_source</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_disable_source</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">yes_to_all</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Bootstrapping configuration is being reset to Spack&#39;s defaults. &quot;</span>
+            <span class="s2">&quot;Current configuration will be lost.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Do you want to continue?&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">ok_to_continue</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">get_yes_or_no</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok_to_continue</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Aborting&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">scope</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span><span class="o">.</span><span class="n">writable_scopes</span><span class="p">:</span>
+        <span class="c1"># The default scope should stay untouched</span>
+        <span class="k">if</span> <span class="n">scope</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;defaults&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># If we are in an env scope we can&#39;t delete a file, but the best we</span>
+        <span class="c1"># can do is nullify the corresponding configuration</span>
+        <span class="k">if</span> <span class="n">scope</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;bootstrap&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># If we are outside of an env scope delete the bootstrap.yaml file</span>
+        <span class="n">bootstrap_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scope</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;bootstrap.yaml&quot;</span><span class="p">)</span>
+        <span class="n">backup_file</span> <span class="o">=</span> <span class="n">bootstrap_yaml</span> <span class="o">+</span> <span class="s2">&quot;.bkp&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bootstrap_yaml</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">bootstrap_yaml</span><span class="p">,</span> <span class="n">backup_file</span><span class="p">)</span>
+
+        <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_root</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;bootstrap:root&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+
+    <span class="n">root</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:root&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">root</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_list</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">bootstrapping_sources</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sources</span><span class="p">:</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;No method available for bootstrapping Spack&#39;s dependencies&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_print_method</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">trusted</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">color</span>
+
+        <span class="k">def</span> <span class="nf">fmt</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+            <span class="n">header_fmt</span> <span class="o">=</span> <span class="s2">&quot;@*b{{</span><span class="si">{0}</span><span class="s2">:}} </span><span class="si">{1}</span><span class="s2">&quot;</span>
+            <span class="n">color</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="n">header_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+
+        <span class="n">trust_str</span> <span class="o">=</span> <span class="s2">&quot;@*y</span><span class="si">{DISABLED}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">trusted</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">trust_str</span> <span class="o">=</span> <span class="s2">&quot;@*g</span><span class="si">{ENABLED}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="n">trusted</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">trust_str</span> <span class="o">=</span> <span class="s2">&quot;@*r</span><span class="si">{DISABLED}</span><span class="s2">&quot;</span>
+
+        <span class="n">fmt</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">trust_str</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">trusted</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="n">fmt</span><span class="p">(</span><span class="s2">&quot;  Type&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">()</span>
+
+            <span class="n">info_lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">info_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="s2">&quot;@*{{</span><span class="si">{0}</span><span class="s2">}}: </span><span class="si">{1}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info_lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">fmt</span><span class="p">(</span><span class="s2">&quot;  Info&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info_lines</span><span class="p">))</span>
+
+            <span class="n">description_lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">source</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">description_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">fmt</span><span class="p">(</span><span class="s2">&quot;  Description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">description_lines</span><span class="p">))</span>
+
+    <span class="n">trusted</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:trusted&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="k">def</span> <span class="nf">sort_fn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">x_trust</span> <span class="o">=</span> <span class="n">trusted</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x_trust</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">x_trust</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="n">sources</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_fn</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+        <span class="n">_print_method</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">trusted</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_write_bootstrapping_source_status</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">enabled</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write if a bootstrapping source is enable or disabled to config file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name (str): name of the bootstrapping source.</span>
+<span class="sd">        enabled (bool): True if the source is enabled, False if it is disabled.</span>
+<span class="sd">        scope (None or str): configuration scope to modify. If none use the default scope.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:sources&quot;</span><span class="p">)</span>
+
+    <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">]</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;there is no bootstrapping method named &quot;</span><span class="si">{0}</span><span class="s1">&quot;. Valid &#39;</span>
+            <span class="s2">&quot;method names are: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;there is more than one bootstrapping method named &quot;</span><span class="si">{0}</span><span class="s1">&quot;. &#39;</span>
+            <span class="s2">&quot;Please delete all methods but one from bootstrap.yaml &quot;</span>
+            <span class="s2">&quot;before proceeding&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Setting the scope explicitly is needed to not copy over to a new scope</span>
+    <span class="c1"># the entire default configuration for bootstrap.yaml</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="n">scope</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">(</span><span class="s2">&quot;bootstrap&quot;</span><span class="p">)</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;bootstrap:trusted:</span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">enabled</span><span class="p">)),</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_enable_source</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">_write_bootstrapping_source_status</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; is now enabled for bootstrapping&#39;</span>
+    <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_disable_source</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">_write_bootstrapping_source_status</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">scope</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; is now disabled and will not be used for bootstrapping&#39;</span>
+    <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_status</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;core&quot;</span><span class="p">,</span> <span class="s2">&quot;buildcache&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">optional</span><span class="p">:</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;optional&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;develop&quot;</span><span class="p">)</span>
+
+    <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;@*b{{Spack v</span><span class="si">{0}</span><span class="s2"> - </span><span class="si">{1}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">spack_version</span><span class="p">,</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">spec_for_current_python</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">colorize</span><span class="p">(</span><span class="n">header</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="c1"># Use the context manager here to avoid swapping between user and</span>
+    <span class="c1"># bootstrap config many times</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">with</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_bootstrap_configuration</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">current_section</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">:</span>
+            <span class="n">status_msg</span><span class="p">,</span> <span class="n">fail</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">status_message</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">current_section</span><span class="p">)</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="n">missing</span> <span class="ow">or</span> <span class="n">fail</span>
+            <span class="k">if</span> <span class="n">status_msg</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">colorize</span><span class="p">(</span><span class="n">status_msg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="n">legend</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Spack will take care of bootstrapping any missing dependency marked&quot;</span>
+        <span class="s2">&quot; as [@*y</span><span class="si">{B}</span><span class="s2">]. Dependencies marked as [@*y{-}] are instead required&quot;</span>
+        <span class="s2">&quot; to be found on the system.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">colorize</span><span class="p">(</span><span class="n">legend</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">initial_sources</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">bootstrapping_sources</span><span class="p">()</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">initial_sources</span><span class="p">]</span>
+
+    <span class="c1"># If the name is already used error out</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;a source named &quot;</span><span class="si">{0}</span><span class="s1">&quot; already exist. Please choose a different name&#39;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="c1"># Check that the metadata file exists</span>
+    <span class="n">metadata_dir</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">metadata_dir</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">metadata_dir</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;the directory &quot;</span><span class="si">{0}</span><span class="s1">&quot; does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_dir</span><span class="p">))</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metadata_dir</span><span class="p">,</span> <span class="s2">&quot;metadata.yaml&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;the file &quot;</span><span class="si">{0}</span><span class="s1">&quot; does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+
+    <span class="c1"># Insert the new source as the highest priority one</span>
+    <span class="n">write_scope</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">scope</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;bootstrap&quot;</span><span class="p">)</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:sources&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">write_scope</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">metadata_dir</span><span class="p">}]</span> <span class="o">+</span> <span class="n">sources</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;bootstrap:sources&quot;</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">write_scope</span><span class="p">)</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;New bootstrapping source &quot;</span><span class="si">{0}</span><span class="s1">&quot; added in the &quot;</span><span class="si">{1}</span><span class="s1">&quot; configuration scope&#39;</span>
+    <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">write_scope</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">trust</span><span class="p">:</span>
+        <span class="n">_enable_source</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">initial_sources</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">bootstrapping_sources</span><span class="p">()</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">initial_sources</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;cannot find any bootstrapping source named &quot;</span><span class="si">{0}</span><span class="s1">&quot;. &#39;</span>
+            <span class="s2">&quot;Run `spack bootstrap list` to see available sources.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">current_scope</span> <span class="ow">in</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">scopes</span><span class="p">():</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:sources&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">current_scope</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">]:</span>
+            <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;bootstrap:sources&quot;</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">current_scope</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">&#39;Removed the bootstrapping source named &quot;</span><span class="si">{0}</span><span class="s1">&quot; from the &#39;</span>
+                <span class="s1">&#39;&quot;</span><span class="si">{1}</span><span class="s1">&quot; configuration scope.&#39;</span>
+            <span class="p">)</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">current_scope</span><span class="p">))</span>
+        <span class="n">trusted</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bootstrap:trusted&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">current_scope</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">trusted</span><span class="p">:</span>
+            <span class="n">trusted</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;bootstrap:trusted&quot;</span><span class="p">,</span> <span class="n">trusted</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">current_scope</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Deleting information on &quot;</span><span class="si">{0}</span><span class="s1">&quot; from list of trusted sources&#39;</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_mirror</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">mirror_dir</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">LOCAL_MIRROR_DIR</span><span class="p">))</span>
+
+    <span class="c1"># TODO: Here we are adding gnuconfig manually, but this can be fixed</span>
+    <span class="c1"># TODO: as soon as we have an option to add to a mirror all the possible</span>
+    <span class="c1"># TODO: dependencies of a spec</span>
+    <span class="n">root_specs</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">all_core_root_specs</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+        <span class="n">root_specs</span> <span class="o">+=</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">BootstrapEnvironment</span><span class="o">.</span><span class="n">spack_dev_requirements</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">spec_str</span> <span class="ow">in</span> <span class="n">root_specs</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Adding &quot;</span><span class="si">{0}</span><span class="s1">&quot; and dependencies to the mirror at </span><span class="si">{1}</span><span class="s1">&#39;</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec_str</span><span class="p">,</span> <span class="n">mirror_dir</span><span class="p">))</span>
+        <span class="c1"># Suppress tty from the call below for terser messages</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">set_msg_enabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">spec_str</span><span class="p">)</span><span class="o">.</span><span class="n">concretized</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">traverse</span><span class="p">():</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">mirror_dir</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="p">])</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">set_msg_enabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">binary_packages</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Adding binary packages from &quot;</span><span class="si">{0}</span><span class="s1">&quot; to the mirror at </span><span class="si">{1}</span><span class="s1">&#39;</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">BINARY_TARBALL</span><span class="p">,</span> <span class="n">mirror_dir</span><span class="p">))</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">set_msg_enabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">stage</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span><span class="n">BINARY_TARBALL</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+        <span class="n">stage</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">stage</span><span class="o">.</span><span class="n">fetch</span><span class="p">()</span>
+        <span class="n">stage</span><span class="o">.</span><span class="n">expand_archive</span><span class="p">()</span>
+        <span class="n">build_cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">source_path</span><span class="p">,</span> <span class="s2">&quot;build_cache&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">build_cache_dir</span><span class="p">,</span> <span class="n">mirror_dir</span><span class="p">)</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">set_msg_enabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write_metadata</span><span class="p">(</span><span class="n">subdir</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+        <span class="n">metadata_rel_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
+        <span class="n">metadata_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">metadata_rel_dir</span><span class="p">,</span> <span class="s2">&quot;metadata.yaml&quot;</span><span class="p">)</span>
+        <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">mkdirp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">metadata_yaml</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metadata_yaml</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spack_yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">metadata_yaml</span><span class="p">),</span> <span class="n">metadata_rel_dir</span>
+
+    <span class="n">instructions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">To register the mirror on the platform where it&#39;s supposed &quot;</span>
+        <span class="s1">&#39;to be used, move &quot;</span><span class="si">{0}</span><span class="s1">&quot; to its final location and run the &#39;</span>
+        <span class="s2">&quot;following command(s):</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">root_dir</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;  </span><span class="si">% s</span><span class="s2">pack bootstrap add --trust </span><span class="si">{0}</span><span class="s2"> &lt;final-path&gt;/</span><span class="si">{1}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">rel_directory</span> <span class="o">=</span> <span class="n">write_metadata</span><span class="p">(</span><span class="n">subdir</span><span class="o">=</span><span class="s2">&quot;sources&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">SOURCE_METADATA</span><span class="p">)</span>
+    <span class="n">instructions</span> <span class="o">+=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;local-sources&quot;</span><span class="p">,</span> <span class="n">rel_directory</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">binary_packages</span><span class="p">:</span>
+        <span class="n">abs_directory</span><span class="p">,</span> <span class="n">rel_directory</span> <span class="o">=</span> <span class="n">write_metadata</span><span class="p">(</span><span class="n">subdir</span><span class="o">=</span><span class="s2">&quot;binaries&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">BINARY_METADATA</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">CLINGO_JSON</span><span class="p">),</span> <span class="n">abs_directory</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">GNUPG_JSON</span><span class="p">),</span> <span class="n">abs_directory</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">PATCHELF_JSON</span><span class="p">),</span> <span class="n">abs_directory</span><span class="p">)</span>
+        <span class="n">instructions</span> <span class="o">+=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;local-binaries&quot;</span><span class="p">,</span> <span class="n">rel_directory</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">instructions</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_now</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_bootstrap_configuration</span><span class="p">():</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_core_dependencies</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_environment_dependencies</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="bootstrap">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.bootstrap.bootstrap">[docs]</a>
+<span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">_status</span><span class="p">,</span>
+        <span class="s2">&quot;enable&quot;</span><span class="p">:</span> <span class="n">_enable_or_disable</span><span class="p">,</span>
+        <span class="s2">&quot;disable&quot;</span><span class="p">:</span> <span class="n">_enable_or_disable</span><span class="p">,</span>
+        <span class="s2">&quot;reset&quot;</span><span class="p">:</span> <span class="n">_reset</span><span class="p">,</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="n">_root</span><span class="p">,</span>
+        <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="n">_list</span><span class="p">,</span>
+        <span class="s2">&quot;add&quot;</span><span class="p">:</span> <span class="n">_add</span><span class="p">,</span>
+        <span class="s2">&quot;remove&quot;</span><span class="p">:</span> <span class="n">_remove</span><span class="p">,</span>
+        <span class="s2">&quot;mirror&quot;</span><span class="p">:</span> <span class="n">_mirror</span><span class="p">,</span>
+        <span class="s2">&quot;now&quot;</span><span class="p">:</span> <span class="n">_now</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">callbacks</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">subcommand</span><span class="p">](</span><span class="n">args</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

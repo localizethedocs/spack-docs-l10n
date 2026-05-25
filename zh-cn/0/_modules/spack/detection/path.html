@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.detection.path &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/detection/path.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.detection.path</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.detection.path 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="sd">&quot;&quot;&quot;Detection of software installed in the system, based on paths inspections</span>
+<span class="sd">and running executables.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span>
+<span class="kn">import</span> <span class="nn">llnl.util.lang</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span>
+
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.util.elf</span> <span class="k">as</span> <span class="nn">elf_utils</span>
+<span class="kn">import</span> <span class="nn">spack.util.environment</span>
+<span class="kn">import</span> <span class="nn">spack.util.environment</span> <span class="k">as</span> <span class="nn">environment</span>
+<span class="kn">import</span> <span class="nn">spack.util.ld_so_conf</span>
+<span class="kn">import</span> <span class="nn">spack.util.parallel</span>
+
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">WindowsCompilerExternalPaths</span><span class="p">,</span>
+    <span class="n">WindowsKitExternalPaths</span><span class="p">,</span>
+    <span class="n">_convert_to_iterable</span><span class="p">,</span>
+    <span class="n">compute_windows_program_path_for_package</span><span class="p">,</span>
+    <span class="n">compute_windows_user_path_for_package</span><span class="p">,</span>
+    <span class="n">executable_prefix</span><span class="p">,</span>
+    <span class="n">find_win32_additional_install_paths</span><span class="p">,</span>
+    <span class="n">library_prefix</span><span class="p">,</span>
+    <span class="n">path_to_dict</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: Timeout used for package detection (seconds)</span>
+<span class="n">DETECTION_TIMEOUT</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="n">DETECTION_TIMEOUT</span> <span class="o">=</span> <span class="mi">120</span>
+
+
+<div class="viewcode-block" id="common_windows_package_paths">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.common_windows_package_paths">[文档]</a>
+<span class="k">def</span> <span class="nf">common_windows_package_paths</span><span class="p">(</span><span class="n">pkg_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the paths for common package installation location on Windows</span>
+<span class="sd">    that are outside the PATH</span>
+<span class="sd">    Returns [] on unix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="n">WindowsCompilerExternalPaths</span><span class="o">.</span><span class="n">find_windows_compiler_bundled_packages</span><span class="p">()</span>
+    <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">find_win32_additional_install_paths</span><span class="p">())</span>
+    <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">WindowsKitExternalPaths</span><span class="o">.</span><span class="n">find_windows_kit_bin_paths</span><span class="p">())</span>
+    <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">WindowsKitExternalPaths</span><span class="o">.</span><span class="n">find_windows_kit_reg_installed_roots_paths</span><span class="p">())</span>
+    <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">WindowsKitExternalPaths</span><span class="o">.</span><span class="n">find_windows_kit_reg_sdk_paths</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">pkg_cls</span><span class="p">:</span>
+        <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">compute_windows_user_path_for_package</span><span class="p">(</span><span class="n">pkg_cls</span><span class="p">))</span>
+        <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">compute_windows_program_path_for_package</span><span class="p">(</span><span class="n">pkg_cls</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">paths</span></div>
+
+
+
+<div class="viewcode-block" id="file_identifier">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.file_identifier">[文档]</a>
+<span class="k">def</span> <span class="nf">file_identifier</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">st_dev</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">st_ino</span></div>
+
+
+
+<div class="viewcode-block" id="dedupe_paths">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.dedupe_paths">[文档]</a>
+<span class="k">def</span> <span class="nf">dedupe_paths</span><span class="p">(</span><span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deduplicate paths based on inode and device number. In case the list contains first a</span>
+<span class="sd">    symlink and then the directory it points to, the symlink is replaced with the directory path.</span>
+<span class="sd">    This ensures that we pick for example ``/usr/bin`` over ``/bin`` if the latter is a symlink to</span>
+<span class="sd">    the former`.&quot;&quot;&quot;</span>
+    <span class="n">seen</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">file_identifier</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">seen</span><span class="p">[</span><span class="n">identifier</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">seen</span><span class="p">[</span><span class="n">identifier</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">seen</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="executables_in_path">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.executables_in_path">[文档]</a>
+<span class="k">def</span> <span class="nf">executables_in_path</span><span class="p">(</span><span class="n">path_hints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the paths of all executables available from the current PATH.</span>
+
+<span class="sd">    For convenience, this is constructed as a dictionary where the keys are</span>
+<span class="sd">    the executable paths and the values are the names of the executables</span>
+<span class="sd">    (i.e. the basename of the executable path).</span>
+
+<span class="sd">    There may be multiple paths with the same basename. In this case it is</span>
+<span class="sd">    assumed there are two different instances of the executable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_hints: list of paths to be searched. If None the list will be</span>
+<span class="sd">            constructed based on the PATH environment variable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">search_paths</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">search_paths_for_executables</span><span class="p">(</span><span class="o">*</span><span class="n">path_hints</span><span class="p">)</span>
+    <span class="c1"># Make use we don&#39;t doubly list /usr/lib and /lib etc</span>
+    <span class="k">return</span> <span class="n">path_to_dict</span><span class="p">(</span><span class="n">dedupe_paths</span><span class="p">(</span><span class="n">search_paths</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="accept_elf">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.accept_elf">[文档]</a>
+<span class="k">def</span> <span class="nf">accept_elf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">host_compat</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept an ELF file if the header matches the given compat triplet. In case it&#39;s not an ELF</span>
+<span class="sd">    (e.g. static library, or some arbitrary file, fall back to is_readable_file).&quot;&quot;&quot;</span>
+    <span class="c1"># Fast path: assume libraries at least have .so in their basename.</span>
+    <span class="c1"># Note: don&#39;t replace with splitext, because of libsmth.so.1.2.3 file names.</span>
+    <span class="k">if</span> <span class="s2">&quot;.so&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">is_readable_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">host_compat</span> <span class="o">==</span> <span class="n">elf_utils</span><span class="o">.</span><span class="n">get_elf_compat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">elf_utils</span><span class="o">.</span><span class="n">ElfParsingError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">is_readable_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="libraries_in_ld_and_system_library_path">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.libraries_in_ld_and_system_library_path">[文档]</a>
+<span class="k">def</span> <span class="nf">libraries_in_ld_and_system_library_path</span><span class="p">(</span>
+    <span class="n">path_hints</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the paths of all libraries available from ``path_hints`` or the</span>
+<span class="sd">    following defaults:</span>
+
+<span class="sd">    - Environment variables (Linux: ``LD_LIBRARY_PATH``, Darwin: ``DYLD_LIBRARY_PATH``,</span>
+<span class="sd">      and ``DYLD_FALLBACK_LIBRARY_PATH``)</span>
+<span class="sd">    - Dynamic linker default paths (glibc: ld.so.conf, musl: ld-musl-&lt;arch&gt;.path)</span>
+<span class="sd">    - Default system library paths.</span>
+
+<span class="sd">    For convenience, this is constructed as a dictionary where the keys are</span>
+<span class="sd">    the library paths and the values are the names of the libraries</span>
+<span class="sd">    (i.e. the basename of the library path).</span>
+
+<span class="sd">    There may be multiple paths with the same basename. In this case it is</span>
+<span class="sd">    assumed there are two different instances of the library.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_hints: list of paths to be searched. If None the list will be</span>
+<span class="sd">            constructed based on the set of LD_LIBRARY_PATH, LIBRARY_PATH,</span>
+<span class="sd">            DYLD_LIBRARY_PATH, and DYLD_FALLBACK_LIBRARY_PATH environment</span>
+<span class="sd">            variables as well as the standard system library paths.</span>
+<span class="sd">        path_hints (list): list of paths to be searched. If ``None``, the default</span>
+<span class="sd">            system paths are used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">path_hints</span><span class="p">:</span>
+        <span class="n">search_paths</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">search_paths_for_libraries</span><span class="p">(</span><span class="o">*</span><span class="n">path_hints</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">search_paths</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Environment variables</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+            <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;DYLD_LIBRARY_PATH&quot;</span><span class="p">))</span>
+            <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;DYLD_FALLBACK_LIBRARY_PATH&quot;</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;linux&quot;</span><span class="p">):</span>
+            <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;LD_LIBRARY_PATH&quot;</span><span class="p">))</span>
+
+        <span class="c1"># Dynamic linker paths</span>
+        <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">ld_so_conf</span><span class="o">.</span><span class="n">host_dynamic_linker_search_paths</span><span class="p">())</span>
+
+        <span class="c1"># Drop redundant paths</span>
+        <span class="n">search_paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">,</span> <span class="n">search_paths</span><span class="p">))</span>
+
+    <span class="c1"># Make use we don&#39;t doubly list /usr/lib and /lib etc</span>
+    <span class="n">search_paths</span> <span class="o">=</span> <span class="n">dedupe_paths</span><span class="p">(</span><span class="n">search_paths</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">host_compat</span> <span class="o">=</span> <span class="n">elf_utils</span><span class="o">.</span><span class="n">get_elf_compat</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span>
+        <span class="n">accept</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="n">accept_elf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">host_compat</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">elf_utils</span><span class="o">.</span><span class="n">ElfParsingError</span><span class="p">):</span>
+        <span class="n">accept</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">is_readable_file</span>
+
+    <span class="n">path_to_lib</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Reverse order of search directories so that a lib in the first</span>
+    <span class="c1"># search path entry overrides later entries</span>
+    <span class="k">for</span> <span class="n">search_path</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">search_paths</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">lib</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">search_path</span><span class="p">):</span>
+            <span class="n">lib_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">search_path</span><span class="p">,</span> <span class="n">lib</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">accept</span><span class="p">(</span><span class="n">lib_path</span><span class="p">):</span>
+                <span class="n">path_to_lib</span><span class="p">[</span><span class="n">lib_path</span><span class="p">]</span> <span class="o">=</span> <span class="n">lib</span>
+    <span class="k">return</span> <span class="n">path_to_lib</span></div>
+
+
+
+<div class="viewcode-block" id="libraries_in_windows_paths">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.libraries_in_windows_paths">[文档]</a>
+<span class="k">def</span> <span class="nf">libraries_in_windows_paths</span><span class="p">(</span><span class="n">path_hints</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the paths of all libraries available from the system PATH paths.</span>
+
+<span class="sd">    For more details, see `libraries_in_ld_and_system_library_path` regarding</span>
+<span class="sd">    return type and contents.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_hints: list of paths to be searched. If None the list will be</span>
+<span class="sd">            constructed based on the set of PATH environment</span>
+<span class="sd">            variables as well as the standard system library paths.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">search_hints</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">path_hints</span> <span class="k">if</span> <span class="n">path_hints</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">search_paths</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">search_paths_for_libraries</span><span class="p">(</span><span class="o">*</span><span class="n">search_hints</span><span class="p">)</span>
+    <span class="c1"># on Windows, some libraries (.dlls) are found in the bin directory or sometimes</span>
+    <span class="c1"># at the search root. Add both of those options to the search scheme</span>
+    <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">filesystem</span><span class="o">.</span><span class="n">search_paths_for_executables</span><span class="p">(</span><span class="o">*</span><span class="n">search_hints</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">path_hints</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># if no user provided path was given, add defaults to the search</span>
+        <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">WindowsKitExternalPaths</span><span class="o">.</span><span class="n">find_windows_kit_lib_paths</span><span class="p">())</span>
+        <span class="c1"># SDK and WGL should be handled by above, however on occasion the WDK is in an atypical</span>
+        <span class="c1"># location, so we handle that case specifically.</span>
+        <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">WindowsKitExternalPaths</span><span class="o">.</span><span class="n">find_windows_driver_development_kit_paths</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">path_to_dict</span><span class="p">(</span><span class="n">search_paths</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_group_by_prefix</span><span class="p">(</span><span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">groups</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">groups</span>
+
+
+<div class="viewcode-block" id="Finder">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder">[文档]</a>
+<span class="k">class</span> <span class="nc">Finder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inspects the file-system looking for packages. Guesses places where to look using PATH.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Finder.default_path_hints">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder.default_path_hints">[文档]</a>
+    <span class="k">def</span> <span class="nf">default_path_hints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="Finder.search_patterns">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder.search_patterns">[文档]</a>
+    <span class="k">def</span> <span class="nf">search_patterns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;spack.package_base.PackageBase&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the list of patterns used to match candidate files.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pkg: package being detected</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;must be implemented by derived classes&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Finder.candidate_files">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder.candidate_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">candidate_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of candidate files found on the system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            patterns: search patterns to be used for matching files</span>
+<span class="sd">            paths: paths where to search for files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;must be implemented by derived classes&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Finder.prefix_from_path">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder.prefix_from_path">[文档]</a>
+    <span class="k">def</span> <span class="nf">prefix_from_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a path where a file was found, returns the corresponding prefix.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path: path of a detected file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;must be implemented by derived classes&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Finder.detect_specs">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder.detect_specs">[文档]</a>
+    <span class="k">def</span> <span class="nf">detect_specs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;spack.package_base.PackageBase&quot;</span><span class="p">],</span> <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a list of files matching the search patterns, returns a list of detected specs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pkg: package being detected</span>
+<span class="sd">            paths: files matching the package search patterns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;determine_spec_details&quot;</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> must define &#39;determine_spec_details&#39; in order&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; for Spack to detect externally-provided instances&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; of the package.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">candidate_path</span><span class="p">,</span> <span class="n">items_in_prefix</span> <span class="ow">in</span> <span class="n">_group_by_prefix</span><span class="p">(</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">dedupe</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># TODO: multiple instances of a package can live in the same</span>
+            <span class="c1"># prefix, and a package implementation can return multiple specs</span>
+            <span class="c1"># for one prefix, but without additional details (e.g. about the</span>
+            <span class="c1"># naming scheme which differentiates them), the spec won&#39;t be</span>
+            <span class="c1"># usable.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">specs</span> <span class="o">=</span> <span class="n">_convert_to_iterable</span><span class="p">(</span>
+                    <span class="n">pkg</span><span class="o">.</span><span class="n">determine_spec_details</span><span class="p">(</span><span class="n">candidate_path</span><span class="p">,</span> <span class="n">items_in_prefix</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">specs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SHOW_BACKTRACE</span><span class="p">:</span>
+                    <span class="n">details</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">details</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;error detecting &quot;</span><span class="si">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; from prefix </span><span class="si">{</span><span class="n">candidate_path</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">details</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">specs</span><span class="p">:</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_convert_to_iterable</span><span class="p">(</span><span class="n">items_in_prefix</span><span class="p">))</span>
+                <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The following files in </span><span class="si">{</span><span class="n">candidate_path</span><span class="si">}</span><span class="s2"> were decidedly not &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;part of the package </span><span class="si">{</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">files</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">resolved_specs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># spec -&gt; exe found for the spec</span>
+            <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
+                <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_from_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">candidate_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">resolved_specs</span><span class="p">:</span>
+                    <span class="n">prior_prefix</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_convert_to_iterable</span><span class="p">(</span><span class="n">resolved_specs</span><span class="p">[</span><span class="n">spec</span><span class="p">]))</span>
+                    <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Files in </span><span class="si">{</span><span class="n">candidate_path</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">prior_prefix</span><span class="si">}</span><span class="s2"> are both associated&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot; with the same spec </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="n">resolved_specs</span><span class="p">[</span><span class="n">spec</span><span class="p">]</span> <span class="o">=</span> <span class="n">candidate_path</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">spec</span><span class="o">.</span><span class="n">validate_detection</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s1">&quot; has been detected on the system but will &#39;</span>
+                        <span class="sa">f</span><span class="s2">&quot;not be added to packages.yaml [reason=</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="o">.</span><span class="n">external_path</span><span class="p">:</span>
+                    <span class="n">spec</span><span class="o">.</span><span class="n">external_path</span> <span class="o">=</span> <span class="n">prefix</span>
+
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="Finder.find">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.Finder.find">[文档]</a>
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;For a given package, returns a list of detected specs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pkg_name: package being detected</span>
+<span class="sd">            repository: repository to retrieve the package</span>
+<span class="sd">            initial_guess: initial list of paths to search from the caller if None, default paths</span>
+<span class="sd">                are searched. If this is an empty list, nothing will be searched.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pkg_cls</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get_pkg_class</span><span class="p">(</span><span class="n">pkg_name</span><span class="p">)</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_patterns</span><span class="p">(</span><span class="n">pkg</span><span class="o">=</span><span class="n">pkg_cls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">initial_guess</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">initial_guess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_path_hints</span><span class="p">()</span>
+            <span class="n">initial_guess</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">common_windows_package_paths</span><span class="p">(</span><span class="n">pkg_cls</span><span class="p">))</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_files</span><span class="p">(</span><span class="n">patterns</span><span class="o">=</span><span class="n">patterns</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_specs</span><span class="p">(</span><span class="n">pkg</span><span class="o">=</span><span class="n">pkg_cls</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="n">candidates</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ExecutablesFinder">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.ExecutablesFinder">[文档]</a>
+<span class="k">class</span> <span class="nc">ExecutablesFinder</span><span class="p">(</span><span class="n">Finder</span><span class="p">):</span>
+<div class="viewcode-block" id="ExecutablesFinder.default_path_hints">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.ExecutablesFinder.default_path_hints">[文档]</a>
+    <span class="k">def</span> <span class="nf">default_path_hints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExecutablesFinder.search_patterns">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.ExecutablesFinder.search_patterns">[文档]</a>
+    <span class="k">def</span> <span class="nf">search_patterns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;spack.package_base.PackageBase&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;executables&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;platform_executables&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">platform_executables</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ExecutablesFinder.candidate_files">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.ExecutablesFinder.candidate_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">candidate_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">executables_by_path</span> <span class="o">=</span> <span class="n">executables_in_path</span><span class="p">(</span><span class="n">path_hints</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+        <span class="n">joined_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patterns</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span> <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">exe</span> <span class="ow">in</span> <span class="n">executables_by_path</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">joined_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">exe</span><span class="p">)]</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ExecutablesFinder.prefix_from_path">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.ExecutablesFinder.prefix_from_path">[文档]</a>
+    <span class="k">def</span> <span class="nf">prefix_from_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">executable_prefix</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;no bin/ dir found in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">. Cannot add it as a Spack package&quot;</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LibrariesFinder">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.LibrariesFinder">[文档]</a>
+<span class="k">class</span> <span class="nc">LibrariesFinder</span><span class="p">(</span><span class="n">Finder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finds libraries on the system, searching by LD_LIBRARY_PATH, LIBRARY_PATH,</span>
+<span class="sd">    DYLD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, and standard system library paths</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LibrariesFinder.search_patterns">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.LibrariesFinder.search_patterns">[文档]</a>
+    <span class="k">def</span> <span class="nf">search_patterns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;spack.package_base.PackageBase&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;libraries&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">libraries</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="LibrariesFinder.candidate_files">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.LibrariesFinder.candidate_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">candidate_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">libraries_by_path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">libraries_in_ld_and_system_library_path</span><span class="p">(</span><span class="n">path_hints</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span>
+            <span class="k">else</span> <span class="n">libraries_in_windows_paths</span><span class="p">(</span><span class="n">path_hints</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">compiled_re</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">exe</span> <span class="ow">in</span> <span class="n">libraries_by_path</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">compiled_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">exe</span><span class="p">):</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="LibrariesFinder.prefix_from_path">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.LibrariesFinder.prefix_from_path">[文档]</a>
+    <span class="k">def</span> <span class="nf">prefix_from_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">library_prefix</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;no lib/ or lib64/ dir found in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">. Cannot add it as a Spack package&quot;</span>
+            <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="by_path">
+<a class="viewcode-back" href="../../../spack.detection.html#spack.detection.by_path">[文档]</a>
+<span class="k">def</span> <span class="nf">by_path</span><span class="p">(</span>
+    <span class="n">packages_to_search</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">path_hints</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_workers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the list of packages that have been detected on the system, keyed by</span>
+<span class="sd">    unqualified package name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        packages_to_search: list of packages to be detected. Each package can be either unqualified</span>
+<span class="sd">            of fully qualified</span>
+<span class="sd">        path_hints: initial list of paths to be searched</span>
+<span class="sd">        max_workers: maximum number of workers to search for packages in parallel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">spack.repo</span>
+
+    <span class="c1"># TODO: Packages should be able to define both .libraries and .executables in the future</span>
+    <span class="c1"># TODO: determine_spec_details should get all relevant libraries and executables in one call</span>
+    <span class="n">executables_finder</span><span class="p">,</span> <span class="n">libraries_finder</span> <span class="o">=</span> <span class="n">ExecutablesFinder</span><span class="p">(),</span> <span class="n">LibrariesFinder</span><span class="p">()</span>
+    <span class="n">detected_specs_by_package</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">Future</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">repository</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">PATH</span><span class="o">.</span><span class="n">ensure_unwrapped</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">make_concurrent_executor</span><span class="p">(</span><span class="n">max_workers</span><span class="p">,</span> <span class="n">require_fork</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">packages_to_search</span><span class="p">:</span>
+            <span class="n">executable_future</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                <span class="n">executables_finder</span><span class="o">.</span><span class="n">find</span><span class="p">,</span>
+                <span class="n">pkg_name</span><span class="o">=</span><span class="n">pkg</span><span class="p">,</span>
+                <span class="n">initial_guess</span><span class="o">=</span><span class="n">path_hints</span><span class="p">,</span>
+                <span class="n">repository</span><span class="o">=</span><span class="n">repository</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">library_future</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                <span class="n">libraries_finder</span><span class="o">.</span><span class="n">find</span><span class="p">,</span>
+                <span class="n">pkg_name</span><span class="o">=</span><span class="n">pkg</span><span class="p">,</span>
+                <span class="n">initial_guess</span><span class="o">=</span><span class="n">path_hints</span><span class="p">,</span>
+                <span class="n">repository</span><span class="o">=</span><span class="n">repository</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">detected_specs_by_package</span><span class="p">[</span><span class="n">pkg</span><span class="p">]</span> <span class="o">=</span> <span class="n">executable_future</span><span class="p">,</span> <span class="n">library_future</span>
+
+        <span class="k">for</span> <span class="n">pkg_name</span><span class="p">,</span> <span class="n">futures</span> <span class="ow">in</span> <span class="n">detected_specs_by_package</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">detected</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">DETECTION_TIMEOUT</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">detected</span><span class="p">:</span>
+                        <span class="n">_</span><span class="p">,</span> <span class="n">unqualified_name</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">partition_package_name</span><span class="p">(</span><span class="n">pkg_name</span><span class="p">)</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">unqualified_name</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">detected</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                    <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;[EXTERNAL DETECTION] Skipping </span><span class="si">{</span><span class="n">pkg_name</span><span class="si">}</span><span class="s2">: timeout reached&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;[EXTERNAL DETECTION] Skipping </span><span class="si">{</span><span class="n">pkg_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

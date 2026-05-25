@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>llnl.util.symlink &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/llnl/util/symlink.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+      <li class="breadcrumb-item active">llnl.util.symlink</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>llnl.util.symlink 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util</span> <span class="kn">import</span> <span class="n">lang</span><span class="p">,</span> <span class="n">tty</span>
+
+<span class="kn">from</span> <span class="nn">..path</span> <span class="kn">import</span> <span class="n">sanitize_win_longpath</span><span class="p">,</span> <span class="n">system_path_filter</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">win32file</span> <span class="kn">import</span> <span class="n">CreateHardLink</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_symlink</span><span class="p">(</span>
+    <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_is_directory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dir_fd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;On Windows with System Administrator privileges this will be a normal symbolic link via</span>
+<span class="sd">    os.symlink. On Windows without privledges the link will be a junction for a directory and a</span>
+<span class="sd">    hardlink for a file. On Windows the various link types are:</span>
+
+<span class="sd">    Symbolic Link: A link to a file or directory on the same or different volume (drive letter) or</span>
+<span class="sd">    even to a remote file or directory (using UNC in its path). Need System Administrator</span>
+<span class="sd">    privileges to make these.</span>
+
+<span class="sd">    Hard Link: A link to a file on the same volume (drive letter) only. Every file (file&#39;s data)</span>
+<span class="sd">    has at least 1 hard link (file&#39;s name). But when this method creates a new hard link there will</span>
+<span class="sd">    be 2. Deleting all hard links effectively deletes the file. Don&#39;t need System Administrator</span>
+<span class="sd">    privileges.</span>
+
+<span class="sd">    Junction: A link to a directory on the same or different volume (drive letter) but not to a</span>
+<span class="sd">    remote directory. Don&#39;t need System Administrator privileges.&quot;&quot;&quot;</span>
+    <span class="n">source_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">win_source_path</span> <span class="o">=</span> <span class="n">source_path</span>
+    <span class="n">link_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
+
+    <span class="c1"># Perform basic checks to make sure symlinking will succeed</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">link_path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">AlreadyExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Link path (</span><span class="si">{</span><span class="n">link_path</span><span class="si">}</span><span class="s2">) already exists. Cannot create link.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">source_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">source_path</span><span class="p">):</span>
+            <span class="c1"># An absolute source path that does not exist will result in a broken link.</span>
+            <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Source path (</span><span class="si">{</span><span class="n">source_path</span><span class="si">}</span><span class="s2">) is absolute but does not exist. Resulting &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;link would be broken so not making link.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># os.symlink can create a link when the given source path is relative to</span>
+            <span class="c1"># the link path. Emulate this behavior and check to see if the source exists</span>
+            <span class="c1"># relative to the link path ahead of link creation to prevent broken</span>
+            <span class="c1"># links from being made.</span>
+            <span class="n">link_parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">link_path</span><span class="p">)</span>
+            <span class="n">relative_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">link_parent_dir</span><span class="p">,</span> <span class="n">source_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">relative_path</span><span class="p">):</span>
+                <span class="c1"># In order to work on windows, the source path needs to be modified to be</span>
+                <span class="c1"># relative because hardlink/junction dont resolve relative paths the same</span>
+                <span class="c1"># way as os.symlink. This is ignored on other operating systems.</span>
+                <span class="n">win_source_path</span> <span class="o">=</span> <span class="n">relative_path</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The source path (</span><span class="si">{</span><span class="n">source_path</span><span class="si">}</span><span class="s2">) is not relative to the link path &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">link_path</span><span class="si">}</span><span class="s2">). Resulting link would be broken so not making link.&quot;</span>
+                <span class="p">)</span>
+
+    <span class="c1"># Create the symlink</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_windows_can_symlink</span><span class="p">():</span>
+        <span class="n">_windows_create_link</span><span class="p">(</span><span class="n">win_source_path</span><span class="p">,</span> <span class="n">link_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">link_path</span><span class="p">,</span> <span class="n">target_is_directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">source_path</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_islink</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Override os.islink to give correct answer for spack logic.</span>
+
+<span class="sd">    For Non-Windows: a link can be determined with the os.path.islink method.</span>
+<span class="sd">    Windows-only methods will return false for other operating systems.</span>
+
+<span class="sd">    For Windows: spack considers symlinks, hard links, and junctions to</span>
+<span class="sd">    all be links, so if any of those are True, return True.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): path to check if it is a link.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">         bool - whether the path is any kind link or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">_windows_is_junction</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">_windows_is_hardlink</span><span class="p">(</span><span class="n">path</span><span class="p">)])</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_is_hardlink</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines if a path is a windows hard link. This is accomplished</span>
+<span class="sd">    by looking at the number of links using os.stat. A non-hard-linked file</span>
+<span class="sd">    will have a st_nlink value of 1, whereas a hard link will have a value</span>
+<span class="sd">    larger than 1. Note that both the original and hard-linked file will</span>
+<span class="sd">    return True because they share the same inode.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): Windows path to check for a hard link</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">         bool - Whether the path is a hard link or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">st_nlink</span> <span class="o">&gt;</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_is_junction</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines if a path is a windows junction. A junction can be</span>
+<span class="sd">    determined using a bitwise AND operation between the file&#39;s</span>
+<span class="sd">    attribute bitmask and the known junction bitmask (0x400).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): A non-file path</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool - whether the path is a junction or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="kn">import</span> <span class="nn">ctypes.wintypes</span>
+
+    <span class="n">get_file_attributes</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">kernel32</span><span class="o">.</span><span class="n">GetFileAttributesW</span>  <span class="c1"># type: ignore[attr-defined]</span>
+    <span class="n">get_file_attributes</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">wintypes</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">,)</span>
+    <span class="n">get_file_attributes</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span>
+
+    <span class="n">invalid_file_attributes</span> <span class="o">=</span> <span class="mh">0xFFFFFFFF</span>
+    <span class="n">reparse_point</span> <span class="o">=</span> <span class="mh">0x400</span>
+    <span class="n">file_attr</span> <span class="o">=</span> <span class="n">get_file_attributes</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">file_attr</span> <span class="o">==</span> <span class="n">invalid_file_attributes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">file_attr</span> <span class="o">&amp;</span> <span class="n">reparse_point</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+
+<span class="nd">@lang</span><span class="o">.</span><span class="n">memoized</span>
+<span class="k">def</span> <span class="nf">_windows_can_symlink</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines if windows is able to make a symlink depending on</span>
+<span class="sd">    the system configuration and the level of the user&#39;s permissions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;windows_can_symlink method can&#39;t be used on non-Windows OS.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">tempdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+
+    <span class="n">dpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="s2">&quot;dpath&quot;</span><span class="p">)</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="s2">&quot;fpath.txt&quot;</span><span class="p">)</span>
+
+    <span class="n">dlink</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="s2">&quot;dlink&quot;</span><span class="p">)</span>
+    <span class="n">flink</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="s2">&quot;flink.txt&quot;</span><span class="p">)</span>
+
+    <span class="kn">import</span> <span class="nn">llnl.util.filesystem</span> <span class="k">as</span> <span class="nn">fs</span>
+
+    <span class="n">fs</span><span class="o">.</span><span class="n">touchp</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">mkdirp</span><span class="p">(</span><span class="n">dpath</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">dpath</span><span class="p">,</span> <span class="n">dlink</span><span class="p">)</span>
+        <span class="n">can_symlink_directories</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">dlink</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="n">can_symlink_directories</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">flink</span><span class="p">)</span>
+        <span class="n">can_symlink_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">flink</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="n">can_symlink_files</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Cleanup the test directory</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">can_symlink_directories</span> <span class="ow">and</span> <span class="n">can_symlink_files</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_create_link</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Attempts to create a Hard Link or Junction as an alternative</span>
+<span class="sd">    to a symbolic link. This is called when symbolic links cannot</span>
+<span class="sd">    be created.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;windows_create_link method can&#39;t be used on non-Windows OS.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="n">_windows_create_junction</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="n">link</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="n">_windows_create_hard_link</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="n">link</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot create link from </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">. It is neither a file nor a directory.&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_create_junction</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Duly verify that the path and link are eligible to create a junction,</span>
+<span class="sd">    then create the junction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;windows_create_junction method can&#39;t be used on non-Windows OS.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Source path does not exist, cannot create a junction.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">AlreadyExistsError</span><span class="p">(</span><span class="s2">&quot;Link path already exists, cannot create a junction.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Source path is not a directory, cannot create a junction.&quot;</span><span class="p">)</span>
+
+    <span class="kn">import</span> <span class="nn">subprocess</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cmd&quot;</span><span class="p">,</span> <span class="s2">&quot;/C&quot;</span><span class="p">,</span> <span class="s2">&quot;mklink&quot;</span><span class="p">,</span> <span class="s2">&quot;/J&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">source</span><span class="p">]</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Make junction command returned a non-zero return code.&quot;</span><span class="p">,</span> <span class="n">err_str</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_create_hard_link</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Duly verify that the path and link are eligible to create a hard</span>
+<span class="sd">    link, then create the hard link.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;windows_create_hard_link method can&#39;t be used on non-Windows OS.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File path </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> does not exist. Cannot create hard link.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">AlreadyExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Link path (</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">) already exists. Cannot create hard link.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File path (</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">) is not a file. Cannot create hard link.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating hard link </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2"> pointing to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">CreateHardLink</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_readlink</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dir_fd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spack utility to override of os.readlink method to work cross platform&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_windows_is_hardlink</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_windows_read_hard_link</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">_windows_is_junction</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_windows_read_junction</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sanitize_win_longpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">readlink</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dir_fd</span><span class="o">=</span><span class="n">dir_fd</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_read_hard_link</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find all of the files that point to the same inode as the link&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t read hard link on non-Windows OS.&quot;</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="n">fsutil_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fsutil&quot;</span><span class="p">,</span> <span class="s2">&quot;hardlink&quot;</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">]</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">fsutil_cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred while reading hard link: </span><span class="si">{</span><span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># fsutil response does not include the drive name, so append it back to each linked file.</span>
+    <span class="n">drive</span><span class="p">,</span> <span class="n">link_tail</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitdrive</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">link</span><span class="p">))</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()])</span>
+    <span class="n">links</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">links</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># TODO: How best to handle the case where 3 or more paths point to a single inode?</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found multiple paths pointing to the same inode </span><span class="si">{</span><span class="n">links</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Cannot determine hard link source path.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_windows_read_junction</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the path that a junction points to.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t read junction on non-Windows OS.&quot;</span><span class="p">)</span>
+
+    <span class="n">link</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="n">link_basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="n">link_parent</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="n">fsutil_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dir&quot;</span><span class="p">,</span> <span class="s2">&quot;/a:l&quot;</span><span class="p">,</span> <span class="n">link_parent</span><span class="p">]</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">fsutil_cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred while reading junction: </span><span class="si">{</span><span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;&lt;JUNCTION&gt;\s+</span><span class="si">{</span><span class="n">link_basename</span><span class="si">}</span><span class="s2"> \[(.*)]&quot;</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">matches</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SymlinkError</span><span class="p">(</span><span class="s2">&quot;Could not find junction path.&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="resolve_link_target_relative_to_the_link">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.symlink.resolve_link_target_relative_to_the_link">[文件]</a>
+<span class="nd">@system_path_filter</span>
+<span class="k">def</span> <span class="nf">resolve_link_target_relative_to_the_link</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    os.path.isdir uses os.path.exists, which for links will check</span>
+<span class="sd">    the existence of the link target. If the link target is relative to</span>
+<span class="sd">    the link, we need to construct a pathname that is valid from</span>
+<span class="sd">    our cwd (which may not be the same as the link&#39;s directory)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">readlink</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">target</span>
+    <span class="n">link_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">link</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">link_dir</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="n">symlink</span> <span class="o">=</span> <span class="n">_windows_symlink</span>
+    <span class="n">readlink</span> <span class="o">=</span> <span class="n">_windows_readlink</span>
+    <span class="n">islink</span> <span class="o">=</span> <span class="n">_windows_islink</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">symlink</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">symlink</span>
+    <span class="n">readlink</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">readlink</span>
+    <span class="n">islink</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span>
+
+
+<div class="viewcode-block" id="SymlinkError">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.symlink.SymlinkError">[文件]</a>
+<span class="k">class</span> <span class="nc">SymlinkError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exception class for errors raised while creating symlinks,</span>
+<span class="sd">    junctions and hard links</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="AlreadyExistsError">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.symlink.AlreadyExistsError">[文件]</a>
+<span class="k">class</span> <span class="nc">AlreadyExistsError</span><span class="p">(</span><span class="n">SymlinkError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link path already exists.&quot;&quot;&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

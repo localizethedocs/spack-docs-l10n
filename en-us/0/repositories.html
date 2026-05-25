@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Package Repositories (repos.yaml) &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/repositories.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build Caches" href="binary_caches.html" />
+    <link rel="prev" title="Modules (modules.yaml)" href="module_file_support.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package Repositories (repos.yaml)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#repos-yaml"><code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#namespaces">Namespaces</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#uniqueness">Uniqueness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#namespace-example">Namespace example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#overriding-built-in-packages">Overriding built-in packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-repo"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spack-repo-list"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spack-repo-create"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">create</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spack-repo-add"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">add</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spack-repo-remove"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">remove</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#repo-namespaces-and-python">Repo namespaces and Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Package Repositories (repos.yaml)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/repositories.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="package-repositories-repos-yaml">
+<span id="repositories"></span><h1>Package Repositories (repos.yaml)<a class="headerlink" href="#package-repositories-repos-yaml" title="Link to this heading"></a></h1>
+<p>Spack comes with thousands of built-in package recipes in
+<code class="docutils literal notranslate"><span class="pre">var/spack/repos/builtin/</span></code>.  This is a <strong>package repository</strong> – a
+directory that Spack searches when it needs to find a package by name.
+You may need to maintain packages for restricted, proprietary or
+experimental software separately from the built-in repository. Spack
+allows you to configure local repositories using either the
+<code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> or the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span></code> command.</p>
+<p>A package repository is a directory structured like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span><span class="o">/</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">yaml</span>
+    <span class="n">packages</span><span class="o">/</span>
+        <span class="n">hdf5</span><span class="o">/</span>
+            <span class="n">package</span><span class="o">.</span><span class="n">py</span>
+        <span class="n">mpich</span><span class="o">/</span>
+            <span class="n">package</span><span class="o">.</span><span class="n">py</span>
+            <span class="n">mpich</span><span class="o">-</span><span class="mf">1.9</span><span class="o">-</span><span class="n">bugfix</span><span class="o">.</span><span class="n">patch</span>
+        <span class="n">trilinos</span><span class="o">/</span>
+            <span class="n">package</span><span class="o">.</span><span class="n">py</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>The top-level <code class="docutils literal notranslate"><span class="pre">repo.yaml</span></code> file contains configuration metadata for the
+repository. The packages subdirectory, typically <code class="docutils literal notranslate"><span class="pre">packages</span></code>, contains
+subdirectories for each package in the repository.  Each package directory
+contains a <code class="docutils literal notranslate"><span class="pre">package.py</span></code> file and any patches or other files needed to build the
+package.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">repo.yaml</span></code> file may also contain a <code class="docutils literal notranslate"><span class="pre">subdirectory</span></code> key,
+which can modify the name of the subdirectory used for packages. As seen above,
+the default value is <code class="docutils literal notranslate"><span class="pre">packages</span></code>. An empty string (<code class="docutils literal notranslate"><span class="pre">subdirectory:</span> <span class="pre">''</span></code>) requires
+a flattened repo structure in which the package names are top-level subdirectories.</p>
+<p>Package repositories allow you to:</p>
+<ol class="arabic simple">
+<li><p>Maintain your own packages separately from Spack;</p></li>
+<li><p>Share your packages (e.g., by hosting them in a shared file system),
+without committing them to the built-in Spack package repository; and</p></li>
+<li><p>Override built-in Spack packages with your own implementation.</p></li>
+</ol>
+<p>Packages in a separate repository can also <em>depend on</em> built-in Spack
+packages.  So, you can leverage existing recipes without re-implementing
+them in your own repository.</p>
+<section id="repos-yaml">
+<h2><code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code><a class="headerlink" href="#repos-yaml" title="Link to this heading"></a></h2>
+<p>Spack uses the <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> file in <code class="docutils literal notranslate"><span class="pre">~/.spack</span></code> (and <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">elsewhere</span></a>) to find repositories. Note that the <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code>
+configuration file is distinct from the <code class="docutils literal notranslate"><span class="pre">repo.yaml</span></code> file in each
+repository.  For more on the YAML format, and on how configuration file
+precedence works in Spack, see <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">configuration</span></a>.</p>
+<p>The default <code class="docutils literal notranslate"><span class="pre">etc/spack/defaults/repos.yaml</span></code> file looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">repos</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p>The file starts with <code class="docutils literal notranslate"><span class="pre">repos:</span></code> and contains a single ordered list of
+paths to repositories. Each path is on a separate line starting with
+<code class="docutils literal notranslate"><span class="pre">-</span></code>.  You can add a repository by inserting another path into the list:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">repos</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/local-repo</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p>When Spack interprets a spec, e.g., <code class="docutils literal notranslate"><span class="pre">mpich</span></code> in <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">mpich</span></code>,
+it searches these repositories in order (first to last) to resolve each
+package name.  In this example, Spack will look for the following
+packages and use the first valid file:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/opt/local-repo/packages/mpich/package.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$spack/var/spack/repos/builtin/packages/mpich/package.py</span></code></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, Spack can only use repositories in the file system. We plan
+to eventually support URLs in <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code>, so that you can easily
+point to remote package repositories, but that is not yet implemented.</p>
+</div>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"></a></h2>
+<p>Every repository in Spack has an associated <strong>namespace</strong> defined in its
+top-level <code class="docutils literal notranslate"><span class="pre">repo.yaml</span></code> file.  If you look at
+<code class="docutils literal notranslate"><span class="pre">var/spack/repos/builtin/repo.yaml</span></code> in the built-in repository, you’ll
+see that its namespace is <code class="docutils literal notranslate"><span class="pre">builtin</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>var/spack/repos/builtin/repo.yaml
+<span class="go">repo:</span>
+<span class="go">  namespace: builtin</span>
+</pre></div>
+</div>
+<p>Spack records the repository namespace of each installed package.  For
+example, if you install the <code class="docutils literal notranslate"><span class="pre">mpich</span></code> package from the <code class="docutils literal notranslate"><span class="pre">builtin</span></code> repo,
+Spack records its fully qualified name as <code class="docutils literal notranslate"><span class="pre">builtin.mpich</span></code>.  This
+accomplishes two things:</p>
+<ol class="arabic simple">
+<li><p>You can have packages with the same name from different namespaces
+installed at once.</p></li>
+</ol>
+<ol class="arabic simple">
+<li><p>You can easily determine which repository a package came from after it
+is installed (more <a class="reference internal" href="#namespace-example"><span class="std std-ref">below</span></a>).</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It may seem redundant for a repository to have both a namespace and a
+path, but repository <em>paths</em> may change over time, or, as mentioned
+above, a locally hosted repository path may eventually be hosted at
+some remote URL.</p>
+<p>Namespaces are designed to allow <em>package authors</em> to associate a
+unique identifier with their packages, so that the package can be
+identified even if the repository moves. This is why the namespace is
+determined by the <code class="docutils literal notranslate"><span class="pre">repo.yaml</span></code> file in the repository rather than the
+local <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> configuration: the <em>repository maintainer</em> sets
+the name.</p>
+</div>
+<section id="uniqueness">
+<h3>Uniqueness<a class="headerlink" href="#uniqueness" title="Link to this heading"></a></h3>
+<p>You should choose a namespace that uniquely identifies your package
+repository.  For example, if you make a repository for packages written
+by your organization, you could use your organization’s name.  You can
+also nest namespaces using periods, so you could identify a repository by
+a sub-organization.  For example, LLNL might use a namespace for its
+internal repositories like <code class="docutils literal notranslate"><span class="pre">llnl</span></code>. Packages from the Physical &amp; Life
+Sciences directorate (PLS) might use the <code class="docutils literal notranslate"><span class="pre">llnl.pls</span></code> namespace, and
+packages created by the Computation directorate might use <code class="docutils literal notranslate"><span class="pre">llnl.comp</span></code>.</p>
+<p>Spack cannot ensure that every repository is named uniquely, but it will
+prevent you from registering two repositories with the same namespace at
+the same time.  If you try to add a repository that has the same name as
+an existing one, e.g., <code class="docutils literal notranslate"><span class="pre">builtin</span></code>, Spack will print a warning message.</p>
+</section>
+<section id="namespace-example">
+<span id="id1"></span><h3>Namespace example<a class="headerlink" href="#namespace-example" title="Link to this heading"></a></h3>
+<p>Suppose that LLNL maintains its own version of <code class="docutils literal notranslate"><span class="pre">mpich</span></code>, separate from
+Spack’s built-in <code class="docutils literal notranslate"><span class="pre">mpich</span></code> package, and suppose you’ve installed both
+LLNL’s and Spack’s <code class="docutils literal notranslate"><span class="pre">mpich</span></code> packages.  If you just use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">find</span></code>,
+you won’t see a difference between these two packages:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>find
+<span class="go">==&gt; 2 installed packages.</span>
+<span class="go">-- linux-rhel6-x86_64 / gcc@4.4.7 -------------</span>
+<span class="go">mpich@3.2  mpich@3.2</span>
+</pre></div>
+</div>
+<p>However, if you use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">find</span> <span class="pre">-N</span></code>, Spack will display the packages
+with their namespaces:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>find<span class="w"> </span>-N
+<span class="go">==&gt; 2 installed packages.</span>
+<span class="go">-- linux-rhel6-x86_64 / gcc@4.4.7 -------------</span>
+<span class="go">builtin.mpich@3.2  llnl.comp.mpich@3.2</span>
+</pre></div>
+</div>
+<p>Now you know which one is LLNL’s special version, and which one is the
+built-in Spack package.  As you might guess, packages that are identical
+except for their namespace will still have different hashes:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>find<span class="w"> </span>-lN
+<span class="go">==&gt; 2 installed packages.</span>
+<span class="go">-- linux-rhel6-x86_64 / gcc@4.4.7 -------------</span>
+<span class="go">c35p3gc builtin.mpich@3.2  itoqmox llnl.comp.mpich@3.2</span>
+</pre></div>
+</div>
+<p>All Spack commands that take a package <a class="reference internal" href="basic_usage.html#sec-specs"><span class="std std-ref">spec</span></a> can also
+accept a fully qualified spec with a namespace.  This means you can use
+the namespace to be more specific when designating, e.g., which package
+you want to uninstall:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">spack uninstall llnl.comp.mpich</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="overriding-built-in-packages">
+<h2>Overriding built-in packages<a class="headerlink" href="#overriding-built-in-packages" title="Link to this heading"></a></h2>
+<p>Spack’s search semantics mean that you can make your own implementation
+of a built-in Spack package (like <code class="docutils literal notranslate"><span class="pre">mpich</span></code>), put it in a repository, and
+use it to override the built-in package.  As long as the repository
+containing your <code class="docutils literal notranslate"><span class="pre">mpich</span></code> is earlier any other in <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code>, any
+built-in package that depends on <code class="docutils literal notranslate"><span class="pre">mpich</span></code> will be use the one in your
+repository.</p>
+<p>Suppose you have three repositories: the builtin Spack repo
+(<code class="docutils literal notranslate"><span class="pre">builtin</span></code>), a shared repo for your institution (e.g., <code class="docutils literal notranslate"><span class="pre">llnl</span></code>), and a
+repo containing your own prototype packages (<code class="docutils literal notranslate"><span class="pre">proto</span></code>).  Suppose they
+contain packages as follows:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Namespace</p></th>
+<th class="head"><p>Path to repo</p></th>
+<th class="head"><p>Packages</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">proto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~/proto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mpich</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">llnl</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/usr/local/llnl</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hdf5</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">builtin</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$spack/var/spack/repos/builtin</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mpich</span></code>, <code class="docutils literal notranslate"><span class="pre">hdf5</span></code>, others</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Suppose that <code class="docutils literal notranslate"><span class="pre">hdf5</span></code> depends on <code class="docutils literal notranslate"><span class="pre">mpich</span></code>.  You can override the
+built-in <code class="docutils literal notranslate"><span class="pre">hdf5</span></code> by adding the <code class="docutils literal notranslate"><span class="pre">llnl</span></code> repo to <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">repos</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/local/llnl</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">hdf5</span></code> will install <code class="docutils literal notranslate"><span class="pre">llnl.hdf5</span> <span class="pre">^builtin.mpich</span></code>.</p>
+<p>If, instead, <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">repos</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/proto</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/local/llnl</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">hdf5</span></code> will install <code class="docutils literal notranslate"><span class="pre">llnl.hdf5</span> <span class="pre">^proto.mpich</span></code>.</p>
+<p>Any unqualified package name will be resolved by searching <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code>
+from the first entry to the last.  You can force a particular
+repository’s package by using a fully qualified name.  For example, if
+your <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> is as above, and you want <code class="docutils literal notranslate"><span class="pre">builtin.mpich</span></code> instead
+of <code class="docutils literal notranslate"><span class="pre">proto.mpich</span></code>, you can write:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spack</span> <span class="n">install</span> <span class="n">hdf5</span> <span class="o">^</span><span class="n">builtin</span><span class="o">.</span><span class="n">mpich</span>
+</pre></div>
+</div>
+<p>which will install <code class="docutils literal notranslate"><span class="pre">llnl.hdf5</span> <span class="pre">^builtin.mpich</span></code>.</p>
+<p>Similarly, you can force the <code class="docutils literal notranslate"><span class="pre">builtin.hdf5</span></code> like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spack</span> <span class="n">install</span> <span class="n">builtin</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">^</span><span class="n">builtin</span><span class="o">.</span><span class="n">mpich</span>
+</pre></div>
+</div>
+<p>This will not search <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> at all, as the <code class="docutils literal notranslate"><span class="pre">builtin</span></code> repo is
+specified in both cases.  It will install <code class="docutils literal notranslate"><span class="pre">builtin.hdf5</span>
+<span class="pre">^builtin.mpich</span></code>.</p>
+<p>If you want to see which repositories will be used in a build <em>before</em>
+you install it, you can use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">spec</span> <span class="pre">-N</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>spec<span class="w"> </span>-N<span class="w"> </span>hdf5
+<span class="go">Input spec</span>
+<span class="go">--------------------------------</span>
+<span class="go">hdf5</span>
+
+<span class="go">Normalized</span>
+<span class="go">--------------------------------</span>
+<span class="go">hdf5</span>
+<span class="go">    ^zlib@1.1.2:</span>
+
+<span class="go">Concretized</span>
+<span class="go">--------------------------------</span>
+<span class="gp">builtin.hdf5@1.10.0-patch1%</span>apple-clang@7.0.2+cxx~debug+fortran+mpi+shared~szip~threadsafe<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>darwin-elcapitan-x86_64
+<span class="go">    ^builtin.openmpi@2.0.1%apple-clang@7.0.2~mxm~pmi~psm~psm2~slurm~sqlite3~thread_multiple~tm~verbs+vt arch=darwin-elcapitan-x86_64</span>
+<span class="go">        ^builtin.hwloc@1.11.4%apple-clang@7.0.2 arch=darwin-elcapitan-x86_64</span>
+<span class="go">            ^builtin.libpciaccess@0.13.4%apple-clang@7.0.2 arch=darwin-elcapitan-x86_64</span>
+<span class="go">                ^builtin.libtool@2.4.6%apple-clang@7.0.2 arch=darwin-elcapitan-x86_64</span>
+<span class="go">                    ^builtin.m4@1.4.17%apple-clang@7.0.2+sigsegv arch=darwin-elcapitan-x86_64</span>
+<span class="go">                        ^builtin.libsigsegv@2.10%apple-clang@7.0.2 arch=darwin-elcapitan-x86_64</span>
+<span class="go">                ^builtin.pkg-config@0.29.1%apple-clang@7.0.2+internal_glib arch=darwin-elcapitan-x86_64</span>
+<span class="go">                ^builtin.util-macros@1.19.0%apple-clang@7.0.2 arch=darwin-elcapitan-x86_64</span>
+<span class="go">    ^builtin.zlib@1.2.8%apple-clang@7.0.2+pic arch=darwin-elcapitan-x86_64</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You <em>can</em> use a fully qualified package name in a <code class="docutils literal notranslate"><span class="pre">depends_on</span></code>
+directive in a <code class="docutils literal notranslate"><span class="pre">package.py</span></code> file, like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s1">&#39;proto.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is <em>not</em> recommended, as it makes it very difficult for
+multiple repos to be composed and shared.  A <code class="docutils literal notranslate"><span class="pre">package.py</span></code> like this
+will fail if the <code class="docutils literal notranslate"><span class="pre">proto</span></code> repository is not registered in
+<code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code>.</p>
+</div>
+</section>
+<section id="spack-repo">
+<span id="cmd-spack-repo"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span></code><a class="headerlink" href="#spack-repo" title="Link to this heading"></a></h2>
+<p>Spack’s <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">configuration system</span></a> allows repository
+settings to come from <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> files in many locations.  If you
+want to see the repositories registered as a result of all configuration
+files, use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">list</span></code>.</p>
+<section id="spack-repo-list">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">list</span></code><a class="headerlink" href="#spack-repo-list" title="Link to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>list
+<span class="go">==&gt; 2 package repositories.</span>
+<span class="go">myrepo     ~/myrepo</span>
+<span class="go">builtin    ~/spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p>Each repository is listed with its associated namespace.  To get the raw,
+merged YAML from all configuration files, use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span> <span class="pre">repos</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>repos
+<span class="go">repos:srepos:</span>
+<span class="go">- ~/myrepo</span>
+<span class="go">- $spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p>Note that, unlike <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">list</span></code>, this does not include the
+namespace, which is read from each repo’s <code class="docutils literal notranslate"><span class="pre">repo.yaml</span></code>.</p>
+</section>
+<section id="spack-repo-create">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">create</span></code><a class="headerlink" href="#spack-repo-create" title="Link to this heading"></a></h3>
+<p>To make your own repository, you don’t need to construct a directory
+yourself; you can use the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">create</span></code> command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </span>myrepo
+<span class="go">==&gt; Created repo with namespace &#39;myrepo&#39;.</span>
+<span class="go">==&gt; To register it with spack, run this command:</span>
+<span class="go">  spack repo add ~/myrepo</span>
+
+<span class="gp">$ </span>ls<span class="w"> </span>myrepo
+<span class="go">packages/  repo.yaml</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>myrepo/repo.yaml
+<span class="go">repo:</span>
+<span class="go">  namespace: &#39;myrepo&#39;</span>
+</pre></div>
+</div>
+<p>By default, the namespace of a new repo matches its directory’s name.
+You can supply a custom namespace with a second argument, e.g.:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </span>myrepo<span class="w"> </span>llnl.comp
+<span class="go">==&gt; Created repo with namespace &#39;llnl.comp&#39;.</span>
+<span class="go">==&gt; To register it with spack, run this command:</span>
+<span class="go">  spack repo add ~/myrepo</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>myrepo/repo.yaml
+<span class="go">repo:</span>
+<span class="go">  namespace: &#39;llnl.comp&#39;</span>
+</pre></div>
+</div>
+<p>You can also create repositories with custom structure with the <code class="docutils literal notranslate"><span class="pre">-d/--subdirectory</span></code>
+argument, e.g.:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </span>-d<span class="w"> </span>applications<span class="w"> </span>myrepo<span class="w"> </span>apps
+<span class="go">==&gt; Created repo with namespace &#39;apps&#39;.</span>
+<span class="go">==&gt; To register it with Spack, run this command:</span>
+<span class="go">  spack repo add ~/myrepo</span>
+
+<span class="gp">$ </span>ls<span class="w"> </span>myrepo
+<span class="go">applications/  repo.yaml</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>myrepo/repo.yaml
+<span class="go">repo:</span>
+<span class="go">  namespace: apps</span>
+<span class="go">  subdirectory: applications</span>
+</pre></div>
+</div>
+</section>
+<section id="spack-repo-add">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">add</span></code><a class="headerlink" href="#spack-repo-add" title="Link to this heading"></a></h3>
+<p>Once your repository is created, you can register it with Spack with
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">add</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>./myrepo
+<span class="go">==&gt; Added repo with namespace &#39;llnl.comp&#39;.</span>
+
+<span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>list
+<span class="go">==&gt; 2 package repositories.</span>
+<span class="go">llnl.comp    ~/myrepo</span>
+<span class="go">builtin      ~/spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p>This simply adds the repo to your <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> file.</p>
+<p>Once a repository is registered like this, you should be able to see its
+packages’ names in the output of <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">list</span></code>, and you should be able
+to build them using <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">&lt;name&gt;</span></code> as you would with any
+built-in package.</p>
+</section>
+<section id="spack-repo-remove">
+<h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">remove</span></code><a class="headerlink" href="#spack-repo-remove" title="Link to this heading"></a></h3>
+<p>You can remove an already-registered repository with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span> <span class="pre">rm</span></code>.
+This will work whether you pass the repository’s namespace <em>or</em> its
+path.</p>
+<p>By namespace:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>rm<span class="w"> </span>llnl.comp
+<span class="go">==&gt; Removed repository ~/myrepo with namespace &#39;llnl.comp&#39;.</span>
+
+<span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>list
+<span class="go">==&gt; 1 package repository.</span>
+<span class="go">builtin    ~/spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+<p>By path:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>rm<span class="w"> </span>~/myrepo
+<span class="go">==&gt; Removed repository ~/myrepo</span>
+
+<span class="gp">$ </span>spack<span class="w"> </span>repo<span class="w"> </span>list
+<span class="go">==&gt; 1 package repository.</span>
+<span class="go">builtin    ~/spack/var/spack/repos/builtin</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="repo-namespaces-and-python">
+<h2>Repo namespaces and Python<a class="headerlink" href="#repo-namespaces-and-python" title="Link to this heading"></a></h2>
+<p>You may have noticed that namespace notation for repositories is similar
+to the notation for namespaces in Python.  As it turns out, you <em>can</em>
+treat Spack repositories like Python packages; this is how they are
+implemented.</p>
+<p>You could, for example, extend a <code class="docutils literal notranslate"><span class="pre">builtin</span></code> package in your own
+repository:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spack.pkg.builtin.mpich</span> <span class="kn">import</span> <span class="n">Mpich</span>
+
+<span class="k">class</span> <span class="nc">MyPackage</span><span class="p">(</span><span class="n">Mpich</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>Spack repo namespaces are actually Python namespaces tacked on under
+<code class="docutils literal notranslate"><span class="pre">spack.pkg</span></code>.  The search semantics of <code class="docutils literal notranslate"><span class="pre">repos.yaml</span></code> are actually
+implemented using Python’s built-in <a class="reference external" href="https://docs.python.org/2/library/sys.html#sys.path">sys.path</a> search.  The
+<a class="reference internal" href="spack.html#module-spack.repo" title="spack.repo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spack.repo</span></code></a> module implements a custom <a class="reference external" href="https://docs.python.org/2/library/imp.html">Python importer</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="module_file_support.html" class="btn btn-neutral float-left" title="Modules (modules.yaml)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="binary_caches.html" class="btn btn-neutral float-right" title="Build Caches" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

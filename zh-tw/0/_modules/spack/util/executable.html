@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.executable &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/executable.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.executable</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.executable 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">PurePath</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">from</span> <span class="nn">spack.util.environment</span> <span class="kn">import</span> <span class="n">EnvironmentModifications</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Executable&quot;</span><span class="p">,</span> <span class="s2">&quot;which&quot;</span><span class="p">,</span> <span class="s2">&quot;ProcessError&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Executable">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.Executable">[文件]</a>
+<span class="k">class</span> <span class="nc">Executable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing a program that can be run on the command line.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">and</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+            <span class="c1"># pathlib strips the ./ from relative paths so it must be added back</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exe</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_path</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_env</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_envmod</span> <span class="o">=</span> <span class="n">EnvironmentModifications</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_quotes</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ProcessError</span><span class="p">(</span><span class="s2">&quot;Cannot construct executable for &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Executable.add_default_arg">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.Executable.add_default_arg">[文件]</a>
+    <span class="k">def</span> <span class="nf">add_default_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add default argument(s) to the command.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Executable.with_default_args">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.Executable.with_default_args">[文件]</a>
+    <span class="k">def</span> <span class="nf">with_default_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as add_default_arg, but returns a copy of the executable.&quot;&quot;&quot;</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">add_default_arg</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="Executable.copy">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.Executable.copy">[文件]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this Executable.&quot;&quot;&quot;</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">exe</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">default_env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_env</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">default_envmod</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_envmod</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="Executable.add_default_env">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.Executable.add_default_env">[文件]</a>
+    <span class="k">def</span> <span class="nf">add_default_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set an environment variable when the command is run.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            key: The environment variable to set</span>
+<span class="sd">            value: The value to set it to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_env</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="Executable.add_default_envmod">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.Executable.add_default_envmod">[文件]</a>
+    <span class="k">def</span> <span class="nf">add_default_envmod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envmod</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set an EnvironmentModifications to use when the command is run.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_envmod</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">envmod</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The command-line string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The executable and default arguments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The executable name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The basename of the executable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">PurePath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The path to the executable.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The path to the executable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">PurePath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run this executable in a subprocess.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            *args (str): Command-line arguments to the executable to run</span>
+
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">            _dump_env (dict): Dict to be set to the environment actually</span>
+<span class="sd">                used (envisaged for testing purposes only)</span>
+<span class="sd">            env (dict or EnvironmentModifications): The environment with which</span>
+<span class="sd">                to run the executable</span>
+<span class="sd">            extra_env (dict or EnvironmentModifications): Extra items to add to</span>
+<span class="sd">                the environment (neither requires nor precludes env)</span>
+<span class="sd">            fail_on_error (bool): Raise an exception if the subprocess returns</span>
+<span class="sd">                an error. Default is True. The return code is available as</span>
+<span class="sd">                ``exe.returncode``</span>
+<span class="sd">            ignore_errors (int or list): A list of error codes to ignore.</span>
+<span class="sd">                If these codes are returned, this process will not raise</span>
+<span class="sd">                an exception even if ``fail_on_error`` is set to ``True``</span>
+<span class="sd">            ignore_quotes (bool): If False, warn users that quotes are not needed</span>
+<span class="sd">                as Spack does not use a shell. Defaults to False.</span>
+<span class="sd">            timeout (int or float): The number of seconds to wait before killing</span>
+<span class="sd">                the child process</span>
+<span class="sd">            input: Where to read stdin from</span>
+<span class="sd">            output: Where to send stdout</span>
+<span class="sd">            error: Where to send stderr</span>
+
+<span class="sd">        Accepted values for input, output, and error:</span>
+
+<span class="sd">        * python streams, e.g. open Python file objects, or ``os.devnull``</span>
+<span class="sd">        * filenames, which will be automatically opened for writing</span>
+<span class="sd">        * ``str``, as in the Python string type. If you set these to ``str``,</span>
+<span class="sd">          output and error will be written to pipes and returned as a string.</span>
+<span class="sd">          If both ``output`` and ``error`` are set to ``str``, then one string</span>
+<span class="sd">          is returned containing output concatenated with error. Not valid</span>
+<span class="sd">          for ``input``</span>
+<span class="sd">        * ``str.split``, as in the ``split`` method of the Python string type.</span>
+<span class="sd">          Behaves the same as ``str``, except that value is also written to</span>
+<span class="sd">          ``stdout`` or ``stderr``.</span>
+
+<span class="sd">        By default, the subprocess inherits the parent&#39;s file descriptors.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">process_cmd_output</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">output</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">)</span> <span class="ow">or</span> <span class="n">error</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">output</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+                        <span class="n">outstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">outstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="n">outstr</span>
+                    <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">:</span>
+                        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outstr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">error</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+                        <span class="n">errstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">errstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="n">errstr</span>
+                    <span class="k">if</span> <span class="n">error</span> <span class="ow">is</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">:</span>
+                        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="c1"># Environment</span>
+        <span class="n">env_arg</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Setup default environment</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">env_arg</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_envmod</span><span class="o">.</span><span class="n">apply_modifications</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_env</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">spack.util.environment</span> <span class="kn">import</span> <span class="n">EnvironmentModifications</span>  <span class="c1"># no cycle</span>
+
+        <span class="c1"># Apply env argument</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_arg</span><span class="p">,</span> <span class="n">EnvironmentModifications</span><span class="p">):</span>
+            <span class="n">env_arg</span><span class="o">.</span><span class="n">apply_modifications</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">env_arg</span><span class="p">:</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env_arg</span><span class="p">)</span>
+
+        <span class="c1"># Apply extra env</span>
+        <span class="n">extra_env</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra_env&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extra_env</span><span class="p">,</span> <span class="n">EnvironmentModifications</span><span class="p">):</span>
+            <span class="n">extra_env</span><span class="o">.</span><span class="n">apply_modifications</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra_env</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;_dump_env&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;_dump_env&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;_dump_env&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+        <span class="n">fail_on_error</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;fail_on_error&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">ignore_errors</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;ignore_errors&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">ignore_quotes</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;ignore_quotes&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_quotes</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># If they just want to ignore one error code, make it a tuple.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_errors</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ignore_errors</span> <span class="o">=</span> <span class="p">(</span><span class="n">ignore_errors</span><span class="p">,)</span>
+
+        <span class="nb">input</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">input</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot use `str` as input stream.&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">streamify</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">mode</span><span class="p">),</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">arg</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">arg</span><span class="p">,</span> <span class="kc">False</span>
+
+        <span class="n">ostream</span><span class="p">,</span> <span class="n">close_ostream</span> <span class="o">=</span> <span class="n">streamify</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">estream</span><span class="p">,</span> <span class="n">close_estream</span> <span class="o">=</span> <span class="n">streamify</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">istream</span><span class="p">,</span> <span class="n">close_istream</span> <span class="o">=</span> <span class="n">streamify</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_quotes</span><span class="p">:</span>
+            <span class="n">quoted_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^&quot;.*&quot;$|^</span><span class="se">\&#39;</span><span class="s1">.*</span><span class="se">\&#39;</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">quoted_args</span><span class="p">:</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Quotes in command arguments can confuse scripts like&quot;</span> <span class="s2">&quot; configure.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;The following arguments may cause problems when executed:&quot;</span><span class="p">,</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">arg</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">quoted_args</span><span class="p">])),</span>
+                    <span class="s2">&quot;Quotes aren&#39;t needed because spack doesn&#39;t use a shell. &quot;</span>
+                    <span class="s2">&quot;Consider removing them.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;If multiple levels of quotation are required, use &quot;</span> <span class="s2">&quot;`ignore_quotes=True`.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="n">escaped_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">arg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2">&#39;</span><span class="se">\&quot;</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">]</span>
+        <span class="n">cmd_line_string</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">escaped_cmd</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">cmd_line_string</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">istream</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">estream</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">ostream</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">close_fds</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">process_cmd_output</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+            <span class="n">rc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span>
+            <span class="k">if</span> <span class="n">fail_on_error</span> <span class="ow">and</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore_errors</span><span class="p">):</span>
+                <span class="n">long_msg</span> <span class="o">=</span> <span class="n">cmd_line_string</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="c1"># If the output is not captured in the result, it will have</span>
+                    <span class="c1"># been stored either in the specified files (e.g. if</span>
+                    <span class="c1"># &#39;output&#39; specifies a file) or written to the parent&#39;s</span>
+                    <span class="c1"># stdout/stderr (e.g. if &#39;output&#39; is not specified)</span>
+                    <span class="n">long_msg</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">result</span>
+
+                <span class="k">raise</span> <span class="n">ProcessError</span><span class="p">(</span><span class="s2">&quot;Command exited with status </span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">long_msg</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Command: &quot;</span> <span class="o">+</span> <span class="n">cmd_line_string</span>
+            <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Did you mean to add a space to the command?&quot;</span>
+
+            <span class="k">raise</span> <span class="n">ProcessError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">),</span> <span class="n">message</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fail_on_error</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ProcessError</span><span class="p">(</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Exit status </span><span class="si">%d</span><span class="s2"> when invoking command: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">cmd_line_string</span><span class="p">),</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">TimeoutExpired</span> <span class="k">as</span> <span class="n">te</span><span class="p">:</span>
+            <span class="n">proc</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">process_cmd_output</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+            <span class="n">long_msg</span> <span class="o">=</span> <span class="n">cmd_line_string</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">fail_on_error</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ProcessTimeoutError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Process timed out after </span><span class="si">{</span><span class="n">timeout</span><span class="si">}</span><span class="s2">s. &quot;</span>
+                    <span class="s2">&quot;We expected the following command to run quickly but it did not, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;please report this as an issue: </span><span class="si">{</span><span class="n">long_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">long_message</span><span class="o">=</span><span class="n">long_msg</span><span class="p">,</span>
+                <span class="p">)</span> <span class="kn">from</span> <span class="nn">te</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">close_ostream</span><span class="p">:</span>
+                <span class="n">ostream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">close_estream</span><span class="p">:</span>
+                <span class="n">estream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">close_istream</span><span class="p">:</span>
+                <span class="n">istream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;exe&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">exe</span>
+
+    <span class="k">def</span> <span class="nf">__neq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;exe: </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">which_string</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Like ``which()``, but return a string instead of an ``Executable``.&quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;required&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">path</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">get_candidate_items</span><span class="p">(</span><span class="n">search_item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">search_item</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">search_item</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">search_item</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.exe&quot;</span><span class="p">,</span> <span class="s2">&quot;.bat&quot;</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">search_item</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">add_extra_search_paths</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+        <span class="n">with_parents</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">with_parents</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;bin&quot;</span><span class="p">:</span>
+                    <span class="n">with_parents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">with_parents</span>
+
+    <span class="k">for</span> <span class="n">search_item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">search_paths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">search_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">search_item</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+            <span class="c1"># we do this because pathlib will strip any leading ./</span>
+            <span class="n">search_paths</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span>
+        <span class="n">search_paths</span> <span class="o">=</span> <span class="n">add_extra_search_paths</span><span class="p">(</span><span class="n">search_paths</span><span class="p">)</span>
+
+        <span class="n">search_item</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">search_item</span><span class="p">)</span>
+        <span class="n">candidate_items</span> <span class="o">=</span> <span class="n">get_candidate_items</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">search_item</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">candidate_item</span> <span class="ow">in</span> <span class="n">candidate_items</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">search_paths</span><span class="p">:</span>
+                <span class="n">exe</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="n">candidate_item</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">exe</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exe</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="n">required</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CommandNotFoundError</span><span class="p">(</span><span class="s2">&quot;spack requires &#39;</span><span class="si">%s</span><span class="s2">&#39;. Make sure it is in your path.&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="which">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.which">[文件]</a>
+<span class="k">def</span> <span class="nf">which</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finds an executable in the path like command-line which.</span>
+
+<span class="sd">    If given multiple executables, returns the first one that is found.</span>
+<span class="sd">    If no executables are found, returns None.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        *args (str): One or more executables to search for</span>
+
+<span class="sd">    Keyword Arguments:</span>
+<span class="sd">        path (list or str): The path to search. Defaults to ``PATH``</span>
+<span class="sd">        required (bool): If set to True, raise an error if executable not found</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Executable: The first executable that is found in the path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exe</span> <span class="o">=</span> <span class="n">which_string</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Executable</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span> <span class="k">if</span> <span class="n">exe</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ProcessError">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.executable.ProcessError">[文件]</a>
+<span class="k">class</span> <span class="nc">ProcessError</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ProcessErrors are raised when Executables exit with an error code.&quot;&quot;&quot;</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">ProcessTimeoutError</span><span class="p">(</span><span class="n">ProcessError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ProcessTimeoutErrors are raised when Executable calls with a</span>
+<span class="sd">    specified timeout exceed that time&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">CommandNotFoundError</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when ``which()`` can&#39;t find a required executable.&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

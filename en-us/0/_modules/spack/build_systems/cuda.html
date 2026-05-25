@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.build_systems.cuda &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/build_systems/cuda.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.build_systems.cuda</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.build_systems.cuda</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">spack.variant</span>
+<span class="kn">from</span> <span class="nn">spack.directives</span> <span class="kn">import</span> <span class="n">conflicts</span><span class="p">,</span> <span class="n">depends_on</span><span class="p">,</span> <span class="n">variant</span>
+<span class="kn">from</span> <span class="nn">spack.multimethod</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">spack.package_base</span> <span class="kn">import</span> <span class="n">PackageBase</span>
+
+
+<div class="viewcode-block" id="CudaPackage">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cuda.CudaPackage">[docs]</a>
+<span class="k">class</span> <span class="nc">CudaPackage</span><span class="p">(</span><span class="n">PackageBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Auxiliary class which contains CUDA variant, dependencies and conflicts</span>
+<span class="sd">    and is meant to unify and facilitate its usage.</span>
+
+<span class="sd">    Maintainers: ax3l, Rombur, davidbeckingsale</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#gpu-feature-list</span>
+    <span class="c1"># https://developer.nvidia.com/cuda-gpus</span>
+    <span class="c1"># https://en.wikipedia.org/wiki/CUDA#GPUs_supported</span>
+    <span class="n">cuda_arch_values</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;10&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;11&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;12&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;13&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;20&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;21&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;30&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;32&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;35&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;37&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;52&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;53&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;60&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;61&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;62&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;70&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;72&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;75&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;80&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;86&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;87&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;89&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;90&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;90a&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># FIXME: keep cuda and cuda_arch separate to make usage easier until</span>
+    <span class="c1"># Spack has depends_on(cuda, when=&#39;cuda_arch!=None&#39;) or alike</span>
+    <span class="n">variant</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Build with CUDA&quot;</span><span class="p">)</span>
+
+    <span class="n">variant</span><span class="p">(</span>
+        <span class="s2">&quot;cuda_arch&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;CUDA architecture&quot;</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">variant</span><span class="o">.</span><span class="n">any_combination_of</span><span class="p">(</span><span class="o">*</span><span class="n">cuda_arch_values</span><span class="p">),</span>
+        <span class="n">sticky</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#nvcc-examples</span>
+    <span class="c1"># https://llvm.org/docs/CompileCudaWithLLVM.html#compiling-cuda-code</span>
+<div class="viewcode-block" id="CudaPackage.cuda_flags">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cuda.CudaPackage.cuda_flags">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cuda_flags</span><span class="p">(</span><span class="n">arch_list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;--generate-code arch=compute_</span><span class="si">{0}</span><span class="s2">,code=sm_</span><span class="si">{0}</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;--generate-code arch=compute_</span><span class="si">{0}</span><span class="s2">,code=compute_</span><span class="si">{0}</span><span class="s2">&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">arch_list</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CudaPackage.compute_capabilities">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cuda.CudaPackage.compute_capabilities">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_capabilities</span><span class="p">(</span><span class="n">arch_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a decimal place to each CUDA arch.</span>
+
+<span class="sd">        &gt;&gt;&gt; compute_capabilities([&#39;90&#39;, &#39;90a&#39;])</span>
+<span class="sd">        [&#39;9.0&#39;, &#39;9.0a&#39;]</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            arch_list: A list of integer strings, optionally followed by a suffix.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of float strings, optionally followed by a suffix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+)&quot;</span><span class="p">)</span>
+        <span class="n">capabilities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="n">arch_list</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">letter</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">arch</span><span class="p">)</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">)</span>
+            <span class="n">capabilities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span> <span class="o">+</span> <span class="n">letter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">capabilities</span></div>
+
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda&quot;</span><span class="p">)</span>
+
+    <span class="c1"># CUDA version vs Architecture</span>
+    <span class="c1"># https://en.wikipedia.org/wiki/CUDA#GPUs_supported</span>
+    <span class="c1"># https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#deprecated-features</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@:6.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=10&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@:6.5&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=11&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@2.1:6.5&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=12&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@2.1:6.5&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=13&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@3.0:8.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=20&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@3.2:8.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=21&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@5.0:10.2&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=30&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@5.0:10.2&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=32&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@5.0:11.8&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=35&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@6.5:11.8&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=37&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@6.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=50&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@6.5:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=52&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@6.5:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=53&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@8.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=60&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@8.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=61&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@8.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=62&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@9.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=70&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@9.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=72&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@10.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=75&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@11.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=80&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@11.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=86&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@11.4:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=87&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@11.8:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=89&quot;</span><span class="p">)</span>
+
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@12.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=90&quot;</span><span class="p">)</span>
+    <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cuda@12.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;cuda_arch=90a&quot;</span><span class="p">)</span>
+
+    <span class="c1"># From the NVIDIA install guide we know of conflicts for particular</span>
+    <span class="c1"># platforms (linux, darwin), architectures (x86, powerpc) and compilers</span>
+    <span class="c1"># (gcc, clang). We don&#39;t restrict %gcc and %clang conflicts to</span>
+    <span class="c1"># platform=linux, since they may apply to platform=darwin. We currently</span>
+    <span class="c1"># do not provide conflicts for platform=darwin with %apple-clang.</span>
+
+    <span class="c1"># Linux x86_64 compiler conflicts from here:</span>
+    <span class="c1"># https://gist.github.com/ax3l/9489132</span>
+    <span class="k">with</span> <span class="n">when</span><span class="p">(</span><span class="s2">&quot;^cuda~allow-unsupported-compilers&quot;</span><span class="p">):</span>
+        <span class="c1"># GCC</span>
+        <span class="c1"># According to</span>
+        <span class="c1"># https://github.com/spack/spack/pull/25054#issuecomment-886531664</span>
+        <span class="c1"># these conflicts are valid independently from the architecture</span>
+
+        <span class="c1"># minimum supported versions</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@:4&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@11.0:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@:5&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@11.4:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:6&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@12.2:&quot;</span><span class="p">)</span>
+
+        <span class="c1"># maximum supported version</span>
+        <span class="c1"># NOTE:</span>
+        <span class="c1"># in order to not constrain future cuda version to old gcc versions,</span>
+        <span class="c1"># it has been decided to use an upper bound for the latest version.</span>
+        <span class="c1"># This implies that the last one in the list has to be updated at</span>
+        <span class="c1"># each release of a new cuda minor version.</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@10:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@11:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.4.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@11.2:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.5&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@12:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.8&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@13:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.3&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@14:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.6&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@12:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.4.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@13:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.5&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@14:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.7&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@15:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@16:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.1&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@17:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.3&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@18:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.5&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@19:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.6&quot;</span><span class="p">)</span>
+
+        <span class="c1"># https://gist.github.com/ax3l/9489132#gistcomment-3860114</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@10&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.4.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@5:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:7.5 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@6:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:8 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@7:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.1 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@8:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.0.130 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@9:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.2.89 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:14.8&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:7.0.27 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:15.3,15.5:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@7.5 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:16.2,16.0:16.3&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@8 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:15,18:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@9.0:9.1 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:16,19:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@9.2.88:10.0 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:17,20:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@10.1.105:10.2.89 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:17,21:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@11.0.2:11.1.0 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.4&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:7.5 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.7,4:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@8.0:9.0 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.7,4.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@9.1 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.7,5.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@9.2 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.7,6.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@10.0.130 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.7,7.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@10.1.105 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.7,8.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@10.1.105:10.1.243 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:3.2,9:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@10.2.89 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:5&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@11.0.2: target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@10:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.0.3 target=x86_64:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@11:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.1.0 target=x86_64:&quot;</span><span class="p">)</span>
+
+        <span class="c1"># x86_64 vs. ppc64le differ according to NVidia docs</span>
+        <span class="c1"># Linux ppc64le compiler conflicts from Table from the docs below:</span>
+        <span class="c1"># https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html</span>
+        <span class="c1"># https://docs.nvidia.com/cuda/archive/9.2/cuda-installation-guide-linux/index.html</span>
+        <span class="c1"># https://docs.nvidia.com/cuda/archive/9.1/cuda-installation-guide-linux/index.html</span>
+        <span class="c1"># https://docs.nvidia.com/cuda/archive/9.0/cuda-installation-guide-linux/index.html</span>
+        <span class="c1"># https://docs.nvidia.com/cuda/archive/8.0/cuda-installation-guide-linux/index.html</span>
+
+        <span class="c1"># information prior to CUDA 9 difficult to find</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@6:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@8:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.0.130 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@9:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.1.243 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="c1"># officially, CUDA 11.0.2 only supports the system GCC 8.3 on ppc64le</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:8 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:16&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.1.185 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;%pgi@:17&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@4:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.0.176 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@5:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.1 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@6:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.2 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@7:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@10.0.130 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@7.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.1.105 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@8.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.2.89 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@:5&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@11.0.2: target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@10:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.0.2 target=ppc64le:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">lang@11:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.1.0 target=ppc64le:&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Intel is mostly relevant for x86_64 Linux, even though it also</span>
+        <span class="c1"># exists for Mac OS X. No information prior to CUDA 3.2 or Intel 11.1</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@:11.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:3.1&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@:12.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@5.5:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@:13.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@6.0:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@:13.2&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@6.5:&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@:14.9&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@7:&quot;</span><span class="p">)</span>
+        <span class="c1"># Intel 15.x is compatible with CUDA 7 thru current CUDA</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@16.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:8.0.43&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@17.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:8.0.60&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@18.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.9&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@19.0:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@19.1:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:10.1&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@19.2:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.1.0&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">ntel@2021:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.4.0&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ARM</span>
+        <span class="c1"># https://github.com/spack/spack/pull/39666#issuecomment-2377609263</span>
+        <span class="c1"># Might need to be expanded to other gcc versions</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">cc@13.2.0&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:12.4 target=aarch64:&quot;</span><span class="p">)</span>
+
+        <span class="c1"># XL is mostly relevant for ppc64le Linux</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">l@:12,14:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:9.1&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">l@:12,14:15,17:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@9.2&quot;</span><span class="p">)</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">l@:12,17:&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@:11.1.0&quot;</span><span class="p">)</span>
+
+        <span class="c1"># PowerPC.</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;target=ppc64le&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@12.5:&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Darwin.</span>
+        <span class="c1"># TODO: add missing conflicts for %apple-clang cuda@:10</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="s2">&quot;platform=darwin&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;+cuda ^cuda@11.0.2:&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1004 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.relocate &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/relocate.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.relocate</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.relocate 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">macholib.mach_o</span>
+<span class="kn">import</span> <span class="nn">macholib.MachO</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">llnl.util.lang</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+<span class="kn">from</span> <span class="nn">llnl.util.lang</span> <span class="kn">import</span> <span class="n">memoized</span>
+<span class="kn">from</span> <span class="nn">llnl.util.symlink</span> <span class="kn">import</span> <span class="n">readlink</span><span class="p">,</span> <span class="n">symlink</span>
+
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.store</span>
+<span class="kn">import</span> <span class="nn">spack.util.elf</span> <span class="k">as</span> <span class="nn">elf</span>
+<span class="kn">import</span> <span class="nn">spack.util.executable</span> <span class="k">as</span> <span class="nn">executable</span>
+<span class="kn">import</span> <span class="nn">spack.util.filesystem</span> <span class="k">as</span> <span class="nn">ssys</span>
+
+<span class="kn">from</span> <span class="nn">.relocate_text</span> <span class="kn">import</span> <span class="n">BinaryFilePrefixReplacer</span><span class="p">,</span> <span class="n">TextFilePrefixReplacer</span>
+
+
+<div class="viewcode-block" id="InstallRootStringError">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.InstallRootStringError">[文档]</a>
+<span class="k">class</span> <span class="nc">InstallRootStringError</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">root_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Signal that the relocated binary still has the original</span>
+<span class="sd">        Spack&#39;s store root string</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): path of the binary</span>
+<span class="sd">            root_path (str): original Spack&#39;s store root string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2">contains string</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;after replacing it in rpaths.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Package should not be relocated.</span><span class="se">\n</span><span class="s2"> Use -a to override.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">root_path</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="nd">@memoized</span>
+<span class="k">def</span> <span class="nf">_patchelf</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">executable</span><span class="o">.</span><span class="n">Executable</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the full path to the patchelf binary, if available, else None.&quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">spack.bootstrap</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">with</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_bootstrap_configuration</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">spack</span><span class="o">.</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">ensure_patchelf_in_path_or_raise</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_elf_rpaths_for</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the RPATHs for an executable or a library.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): full path to the executable or library</span>
+
+<span class="sd">    Return:</span>
+<span class="sd">        RPATHs as a list of strings. Returns an empty array</span>
+<span class="sd">        on ELF parsing errors, or when the ELF file simply</span>
+<span class="sd">        has no rpaths.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">elf</span><span class="o">.</span><span class="n">get_rpaths</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+
+
+<span class="k">def</span> <span class="nf">_make_relative</span><span class="p">(</span><span class="n">reference_file</span><span class="p">,</span> <span class="n">path_root</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list where any path in ``paths`` that starts with</span>
+<span class="sd">    ``path_root`` is made relative to the directory in which the</span>
+<span class="sd">    reference file is stored.</span>
+
+<span class="sd">    After a path is made relative it is prefixed with the ``$ORIGIN``</span>
+<span class="sd">    string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        reference_file (str): file from which the reference directory</span>
+<span class="sd">            is computed</span>
+<span class="sd">        path_root (str): root of the relative paths</span>
+<span class="sd">        paths: (list) paths to be examined</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of relative paths</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">reference_file</span><span class="p">)</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">path_root</span><span class="p">)</span>
+    <span class="n">relative_paths</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start_directory</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;$ORIGIN&quot;</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
+
+        <span class="n">relative_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">relative_paths</span>
+
+
+<span class="k">def</span> <span class="nf">_normalize_relative_paths</span><span class="p">(</span><span class="n">start_path</span><span class="p">,</span> <span class="n">relative_paths</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize the relative paths with respect to the original path name</span>
+<span class="sd">    of the file (``start_path``).</span>
+
+<span class="sd">    The paths that are passed to this function existed or were relevant</span>
+<span class="sd">    on another filesystem, so os.path.abspath cannot be used.</span>
+
+<span class="sd">    A relative path may contain the signifier $ORIGIN. Assuming that</span>
+<span class="sd">    ``start_path`` is absolute, this implies that the relative path</span>
+<span class="sd">    (relative to start_path) should be replaced with an absolute path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        start_path (str): path from which the starting directory</span>
+<span class="sd">            is extracted</span>
+<span class="sd">        relative_paths (str): list of relative paths as obtained by a</span>
+<span class="sd">            call to :ref:`_make_relative`</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of normalized paths</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">normalized_paths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;$ORIGIN&quot;</span><span class="p">))</span>
+    <span class="n">start_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">start_path</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">relative_paths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;$ORIGIN&quot;</span><span class="p">):</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">start_directory</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+        <span class="n">normalized_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">normalized_paths</span>
+
+
+<span class="k">def</span> <span class="nf">_decode_macho_data</span><span class="p">(</span><span class="n">bytestring</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">bytestring</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="macho_make_paths_relative">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.macho_make_paths_relative">[文档]</a>
+<span class="k">def</span> <span class="nf">macho_make_paths_relative</span><span class="p">(</span><span class="n">path_name</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a dictionary mapping the original rpaths to the relativized rpaths.</span>
+<span class="sd">    This dictionary is used to replace paths in mach-o binaries.</span>
+<span class="sd">    Replace old_dir with relative path from dirname of path name</span>
+<span class="sd">    in rpaths and deps; idpath is replaced with @rpath/libname.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">paths_to_paths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">idpath</span><span class="p">:</span>
+        <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">idpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;@rpath&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">idpath</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">rpath</span> <span class="ow">in</span> <span class="n">rpaths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">old_layout_root</span><span class="p">,</span> <span class="n">rpath</span><span class="p">):</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">rpath</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path_name</span><span class="p">))</span>
+            <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">rpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rel</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">rpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">rpath</span>
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">old_layout_root</span><span class="p">,</span> <span class="n">dep</span><span class="p">):</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path_name</span><span class="p">))</span>
+            <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rel</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">dep</span>
+    <span class="k">return</span> <span class="n">paths_to_paths</span></div>
+
+
+
+<div class="viewcode-block" id="macho_make_paths_normal">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.macho_make_paths_normal">[文档]</a>
+<span class="k">def</span> <span class="nf">macho_make_paths_normal</span><span class="p">(</span><span class="n">orig_path_name</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a dictionary mapping the relativized rpaths to the original rpaths.</span>
+<span class="sd">    This dictionary is used to replace paths in mach-o binaries.</span>
+<span class="sd">    Replace &#39;@loader_path&#39; with the dirname of the origname path name</span>
+<span class="sd">    in rpaths and deps; idpath is replaced with the original path name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rel_to_orig</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">idpath</span><span class="p">:</span>
+        <span class="n">rel_to_orig</span><span class="p">[</span><span class="n">idpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_path_name</span>
+
+    <span class="k">for</span> <span class="n">rpath</span> <span class="ow">in</span> <span class="n">rpaths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">,</span> <span class="n">rpath</span><span class="p">):</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">orig_path_name</span><span class="p">),</span> <span class="n">rpath</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">rel_to_orig</span><span class="p">[</span><span class="n">rpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rel_to_orig</span><span class="p">[</span><span class="n">rpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">rpath</span>
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">,</span> <span class="n">dep</span><span class="p">):</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">orig_path_name</span><span class="p">),</span> <span class="n">dep</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">rel_to_orig</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rel_to_orig</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">dep</span>
+    <span class="k">return</span> <span class="n">rel_to_orig</span></div>
+
+
+
+<div class="viewcode-block" id="macho_find_paths">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.macho_find_paths">[文档]</a>
+<span class="k">def</span> <span class="nf">macho_find_paths</span><span class="p">(</span><span class="n">orig_rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">,</span> <span class="n">prefix_to_prefix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inputs</span>
+<span class="sd">    original rpaths from mach-o binaries</span>
+<span class="sd">    dependency libraries for mach-o binaries</span>
+<span class="sd">    id path of mach-o libraries</span>
+<span class="sd">    old install directory layout root</span>
+<span class="sd">    prefix_to_prefix dictionary which maps prefixes in the old directory layout</span>
+<span class="sd">    to directories in the new directory layout</span>
+<span class="sd">    Output</span>
+<span class="sd">    paths_to_paths dictionary which maps all of the old paths to new paths</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">paths_to_paths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># Sort from longest path to shortest, to ensure we try /foo/bar/baz before /foo/bar</span>
+    <span class="n">prefix_iteration_order</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">prefix_to_prefix</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">orig_rpath</span> <span class="ow">in</span> <span class="n">orig_rpaths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">orig_rpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">old_layout_root</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">old_prefix</span> <span class="ow">in</span> <span class="n">prefix_iteration_order</span><span class="p">:</span>
+                <span class="n">new_prefix</span> <span class="o">=</span> <span class="n">prefix_to_prefix</span><span class="p">[</span><span class="n">old_prefix</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">orig_rpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">):</span>
+                    <span class="n">new_rpath</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">),</span> <span class="n">new_prefix</span><span class="p">,</span> <span class="n">orig_rpath</span><span class="p">)</span>
+                    <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">orig_rpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_rpath</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">orig_rpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_rpath</span>
+
+    <span class="k">if</span> <span class="n">idpath</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">old_prefix</span> <span class="ow">in</span> <span class="n">prefix_iteration_order</span><span class="p">:</span>
+            <span class="n">new_prefix</span> <span class="o">=</span> <span class="n">prefix_to_prefix</span><span class="p">[</span><span class="n">old_prefix</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">idpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">):</span>
+                <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">idpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">),</span> <span class="n">new_prefix</span><span class="p">,</span> <span class="n">idpath</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">old_prefix</span> <span class="ow">in</span> <span class="n">prefix_iteration_order</span><span class="p">:</span>
+            <span class="n">new_prefix</span> <span class="o">=</span> <span class="n">prefix_to_prefix</span><span class="p">[</span><span class="n">old_prefix</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">dep</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">):</span>
+                <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">),</span> <span class="n">new_prefix</span><span class="p">,</span> <span class="n">dep</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">dep</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
+            <span class="n">paths_to_paths</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">dep</span>
+
+    <span class="k">return</span> <span class="n">paths_to_paths</span></div>
+
+
+
+<div class="viewcode-block" id="modify_macho_object">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.modify_macho_object">[文档]</a>
+<span class="k">def</span> <span class="nf">modify_macho_object</span><span class="p">(</span><span class="n">cur_path</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">paths_to_paths</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is used to make machO buildcaches on macOS by</span>
+<span class="sd">    replacing old paths with new paths using install_name_tool</span>
+<span class="sd">    Inputs:</span>
+<span class="sd">    mach-o binary to be modified</span>
+<span class="sd">    original rpaths</span>
+<span class="sd">    original dependency paths</span>
+<span class="sd">    original id path if a mach-o library</span>
+<span class="sd">    dictionary mapping paths in old install layout to new install layout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># avoid error message for libgcc_s</span>
+    <span class="k">if</span> <span class="s2">&quot;libgcc_&quot;</span> <span class="ow">in</span> <span class="n">cur_path</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">idpath</span><span class="p">:</span>
+        <span class="n">new_idpath</span> <span class="o">=</span> <span class="n">paths_to_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idpath</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_idpath</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">idpath</span> <span class="o">==</span> <span class="n">new_idpath</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="s2">&quot;-id&quot;</span><span class="p">,</span> <span class="n">new_idpath</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+        <span class="n">new_dep</span> <span class="o">=</span> <span class="n">paths_to_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_dep</span> <span class="ow">and</span> <span class="n">dep</span> <span class="o">!=</span> <span class="n">new_dep</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="s2">&quot;-change&quot;</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">new_dep</span><span class="p">)]</span>
+
+    <span class="n">new_rpaths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">orig_rpath</span> <span class="ow">in</span> <span class="n">rpaths</span><span class="p">:</span>
+        <span class="n">new_rpath</span> <span class="o">=</span> <span class="n">paths_to_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">orig_rpath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_rpath</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">orig_rpath</span> <span class="o">==</span> <span class="n">new_rpath</span><span class="p">:</span>
+            <span class="n">args_to_add</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;-rpath&quot;</span><span class="p">,</span> <span class="n">orig_rpath</span><span class="p">,</span> <span class="n">new_rpath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">args_to_add</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">new_rpath</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_rpaths</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">args_to_add</span><span class="p">]</span>
+                <span class="n">new_rpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_rpath</span><span class="p">)</span>
+
+    <span class="c1"># Deduplicate and flatten</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">dedupe</span><span class="p">(</span><span class="n">args</span><span class="p">)))</span>
+    <span class="n">install_name_tool</span> <span class="o">=</span> <span class="n">executable</span><span class="o">.</span><span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;install_name_tool&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">edit_in_place_through_temporary_file</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">temp_path</span><span class="p">:</span>
+            <span class="n">install_name_tool</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="macholib_get_paths">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.macholib_get_paths">[文档]</a>
+<span class="k">def</span> <span class="nf">macholib_get_paths</span><span class="p">(</span><span class="n">cur_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get rpaths, dependent libraries, and library id of mach-o objects.&quot;&quot;&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">macholib</span><span class="o">.</span><span class="n">MachO</span><span class="o">.</span><span class="n">MachO</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span><span class="o">.</span><span class="n">headers</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">headers</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Failed to read Mach-O headers: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cur_path</span><span class="p">))</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Reproduce original behavior of only returning the last mach-O</span>
+            <span class="c1"># header section</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Encountered fat binary: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cur_path</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">headers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;dylib_stub&quot;</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;File is a stub, not a full library: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cur_path</span><span class="p">))</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="n">headers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">commands</span>
+
+    <span class="n">LC_ID_DYLIB</span> <span class="o">=</span> <span class="n">macholib</span><span class="o">.</span><span class="n">mach_o</span><span class="o">.</span><span class="n">LC_ID_DYLIB</span>
+    <span class="n">LC_LOAD_DYLIB</span> <span class="o">=</span> <span class="n">macholib</span><span class="o">.</span><span class="n">mach_o</span><span class="o">.</span><span class="n">LC_LOAD_DYLIB</span>
+    <span class="n">LC_RPATH</span> <span class="o">=</span> <span class="n">macholib</span><span class="o">.</span><span class="n">mach_o</span><span class="o">.</span><span class="n">LC_RPATH</span>
+
+    <span class="n">ident</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rpaths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">load_command</span><span class="p">,</span> <span class="n">dylib_command</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">load_command</span><span class="o">.</span><span class="n">cmd</span>
+        <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">LC_RPATH</span><span class="p">:</span>
+            <span class="n">rpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_decode_macho_data</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">LC_LOAD_DYLIB</span><span class="p">:</span>
+            <span class="n">deps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_decode_macho_data</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">LC_ID_DYLIB</span><span class="p">:</span>
+            <span class="n">ident</span> <span class="o">=</span> <span class="n">_decode_macho_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">ident</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_set_elf_rpaths_and_interpreter</span><span class="p">(</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">interpreter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace the original RPATH of the target with the paths passed as arguments.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        target: target executable. Must be an ELF object.</span>
+<span class="sd">        rpaths: paths to be set in the RPATH</span>
+<span class="sd">        interpreter: optionally set the interpreter</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A string concatenating the stdout and stderr of the call to ``patchelf`` if it was invoked</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Join the paths using &#39;:&#39; as a separator</span>
+    <span class="n">rpaths_str</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rpaths</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># TODO: error handling is not great here?</span>
+        <span class="c1"># TODO: revisit the use of --force-rpath as it might be conditional</span>
+        <span class="c1"># TODO: if we want to support setting RUNPATH from binary packages</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;--force-rpath&quot;</span><span class="p">,</span> <span class="s2">&quot;--set-rpath&quot;</span><span class="p">,</span> <span class="n">rpaths_str</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">interpreter</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--set-interpreter&quot;</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">])</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_patchelf</span><span class="p">()(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">executable</span><span class="o">.</span><span class="n">ProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="needs_binary_relocation">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.needs_binary_relocation">[文档]</a>
+<span class="k">def</span> <span class="nf">needs_binary_relocation</span><span class="p">(</span><span class="n">m_type</span><span class="p">,</span> <span class="n">m_subtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the file with MIME type/subtype passed as arguments</span>
+<span class="sd">    needs binary relocation, False otherwise.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        m_type (str): MIME type of the file</span>
+<span class="sd">        m_subtype (str): MIME subtype of the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subtypes</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;x-executable&quot;</span><span class="p">,</span> <span class="s2">&quot;x-sharedlib&quot;</span><span class="p">,</span> <span class="s2">&quot;x-mach-binary&quot;</span><span class="p">,</span> <span class="s2">&quot;x-pie-executable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m_type</span> <span class="o">==</span> <span class="s2">&quot;application&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">m_subtype</span> <span class="ow">in</span> <span class="n">subtypes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="needs_text_relocation">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.needs_text_relocation">[文档]</a>
+<span class="k">def</span> <span class="nf">needs_text_relocation</span><span class="p">(</span><span class="n">m_type</span><span class="p">,</span> <span class="n">m_subtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the file with MIME type/subtype passed as arguments</span>
+<span class="sd">    needs text relocation, False otherwise.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        m_type (str): MIME type of the file</span>
+<span class="sd">        m_subtype (str): MIME subtype of the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">m_type</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="relocate_macho_binaries">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.relocate_macho_binaries">[文档]</a>
+<span class="k">def</span> <span class="nf">relocate_macho_binaries</span><span class="p">(</span>
+    <span class="n">path_names</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">,</span> <span class="n">new_layout_root</span><span class="p">,</span> <span class="n">prefix_to_prefix</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">old_prefix</span><span class="p">,</span> <span class="n">new_prefix</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Use macholib python package to get the rpaths, depedent libraries</span>
+<span class="sd">    and library identity for libraries from the MachO object. Modify them</span>
+<span class="sd">    with the replacement paths queried from the dictionary mapping old layout</span>
+<span class="sd">    prefixes to hashes and the dictionary mapping hashes to the new layout</span>
+<span class="sd">    prefixes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">path_name</span> <span class="ow">in</span> <span class="n">path_names</span><span class="p">:</span>
+        <span class="c1"># Corner case where macho object file ended up in the path name list</span>
+        <span class="k">if</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.o&quot;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">rel</span><span class="p">:</span>
+            <span class="c1"># get the relativized paths</span>
+            <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span> <span class="o">=</span> <span class="n">macholib_get_paths</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+            <span class="c1"># get the file path name in the original prefix</span>
+            <span class="n">orig_path_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">new_prefix</span><span class="p">),</span> <span class="n">old_prefix</span><span class="p">,</span> <span class="n">path_name</span><span class="p">)</span>
+            <span class="c1"># get the mapping of the relativized paths to the original</span>
+            <span class="c1"># normalized paths</span>
+            <span class="n">rel_to_orig</span> <span class="o">=</span> <span class="n">macho_make_paths_normal</span><span class="p">(</span><span class="n">orig_path_name</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">)</span>
+            <span class="c1"># replace the relativized paths with normalized paths</span>
+            <span class="n">modify_macho_object</span><span class="p">(</span><span class="n">path_name</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">rel_to_orig</span><span class="p">)</span>
+            <span class="c1"># get the normalized paths in the mach-o binary</span>
+            <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span> <span class="o">=</span> <span class="n">macholib_get_paths</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+            <span class="c1"># get the mapping of paths in old prefix to path in new prefix</span>
+            <span class="n">paths_to_paths</span> <span class="o">=</span> <span class="n">macho_find_paths</span><span class="p">(</span>
+                <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">,</span> <span class="n">prefix_to_prefix</span>
+            <span class="p">)</span>
+            <span class="c1"># replace the old paths with new paths</span>
+            <span class="n">modify_macho_object</span><span class="p">(</span><span class="n">path_name</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">paths_to_paths</span><span class="p">)</span>
+            <span class="c1"># get the new normalized path in the mach-o binary</span>
+            <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span> <span class="o">=</span> <span class="n">macholib_get_paths</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+            <span class="c1"># get the mapping of paths to relative paths in the new prefix</span>
+            <span class="n">paths_to_paths</span> <span class="o">=</span> <span class="n">macho_make_paths_relative</span><span class="p">(</span>
+                <span class="n">path_name</span><span class="p">,</span> <span class="n">new_layout_root</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span>
+            <span class="p">)</span>
+            <span class="c1"># replace the new paths with relativized paths in the new prefix</span>
+            <span class="n">modify_macho_object</span><span class="p">(</span><span class="n">path_name</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">paths_to_paths</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># get the paths in the old prefix</span>
+            <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span> <span class="o">=</span> <span class="n">macholib_get_paths</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+            <span class="c1"># get the mapping of paths in the old prerix to the new prefix</span>
+            <span class="n">paths_to_paths</span> <span class="o">=</span> <span class="n">macho_find_paths</span><span class="p">(</span>
+                <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">,</span> <span class="n">prefix_to_prefix</span>
+            <span class="p">)</span>
+            <span class="c1"># replace the old paths with new paths</span>
+            <span class="n">modify_macho_object</span><span class="p">(</span><span class="n">path_name</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">paths_to_paths</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_transform_rpaths</span><span class="p">(</span><span class="n">orig_rpaths</span><span class="p">,</span> <span class="n">orig_root</span><span class="p">,</span> <span class="n">new_prefixes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return an updated list of RPATHs where each entry in the original list</span>
+<span class="sd">    starting with the old root is relocated to another place according to the</span>
+<span class="sd">    mapping passed as argument.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        orig_rpaths (list): list of the original RPATHs</span>
+<span class="sd">        orig_root (str): original root to be substituted</span>
+<span class="sd">        new_prefixes (dict): dictionary that maps the original prefixes to</span>
+<span class="sd">            where they should be relocated</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of paths</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_rpaths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">orig_rpath</span> <span class="ow">in</span> <span class="n">orig_rpaths</span><span class="p">:</span>
+        <span class="c1"># If the original RPATH doesn&#39;t start with the target root</span>
+        <span class="c1"># append it verbatim and proceed</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">orig_rpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">orig_root</span><span class="p">):</span>
+            <span class="n">new_rpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orig_rpath</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Otherwise inspect the mapping and transform + append any prefix</span>
+        <span class="c1"># that starts with a registered key</span>
+        <span class="c1"># avoiding duplicates</span>
+        <span class="k">for</span> <span class="n">old_prefix</span><span class="p">,</span> <span class="n">new_prefix</span> <span class="ow">in</span> <span class="n">new_prefixes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">orig_rpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">):</span>
+                <span class="n">new_rpath</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">old_prefix</span><span class="p">),</span> <span class="n">new_prefix</span><span class="p">,</span> <span class="n">orig_rpath</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">new_rpath</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_rpaths</span><span class="p">:</span>
+                    <span class="n">new_rpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_rpath</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_rpaths</span>
+
+
+<div class="viewcode-block" id="new_relocate_elf_binaries">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.new_relocate_elf_binaries">[文档]</a>
+<span class="k">def</span> <span class="nf">new_relocate_elf_binaries</span><span class="p">(</span><span class="n">binaries</span><span class="p">,</span> <span class="n">prefix_to_prefix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Take a list of binaries, and an ordered dictionary of</span>
+<span class="sd">    prefix to prefix mapping, and update the rpaths accordingly.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Transform to binary string</span>
+    <span class="n">prefix_to_prefix</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">prefix_to_prefix</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">binaries</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">substitute_rpath_and_pt_interp_in_place_or_raise</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">prefix_to_prefix</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">elf</span><span class="o">.</span><span class="n">ElfCStringUpdatesFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Fall back to `patchelf --set-rpath ... --set-interpreter ...`</span>
+            <span class="n">rpaths</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">rpath</span><span class="o">.</span><span class="n">new_value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">rpath</span> <span class="k">else</span> <span class="p">[]</span>
+            <span class="n">interpreter</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">pt_interp</span><span class="o">.</span><span class="n">new_value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">pt_interp</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">_set_elf_rpaths_and_interpreter</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rpaths</span><span class="o">=</span><span class="n">rpaths</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="n">interpreter</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="relocate_elf_binaries">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.relocate_elf_binaries">[文档]</a>
+<span class="k">def</span> <span class="nf">relocate_elf_binaries</span><span class="p">(</span>
+    <span class="n">binaries</span><span class="p">,</span> <span class="n">orig_root</span><span class="p">,</span> <span class="n">new_root</span><span class="p">,</span> <span class="n">new_prefixes</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">orig_prefix</span><span class="p">,</span> <span class="n">new_prefix</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Relocate the binaries passed as arguments by changing their RPATHs.</span>
+
+<span class="sd">    Use patchelf to get the original RPATHs and then replace them with</span>
+<span class="sd">    rpaths in the new directory layout.</span>
+
+<span class="sd">    New RPATHs are determined from a dictionary mapping the prefixes in the</span>
+<span class="sd">    old directory layout to the prefixes in the new directory layout if the</span>
+<span class="sd">    rpath was in the old layout root, i.e. system paths are not replaced.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        binaries (list): list of binaries that might need relocation, located</span>
+<span class="sd">            in the new prefix</span>
+<span class="sd">        orig_root (str): original root to be substituted</span>
+<span class="sd">        new_root (str): new root to be used, only relevant for relative RPATHs</span>
+<span class="sd">        new_prefixes (dict): dictionary that maps the original prefixes to</span>
+<span class="sd">            where they should be relocated</span>
+<span class="sd">        rel (bool): True if the RPATHs are relative, False if they are absolute</span>
+<span class="sd">        orig_prefix (str): prefix where the executable was originally located</span>
+<span class="sd">        new_prefix (str): prefix where we want to relocate the executable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">new_binary</span> <span class="ow">in</span> <span class="n">binaries</span><span class="p">:</span>
+        <span class="n">orig_rpaths</span> <span class="o">=</span> <span class="n">_elf_rpaths_for</span><span class="p">(</span><span class="n">new_binary</span><span class="p">)</span>
+        <span class="c1"># TODO: Can we deduce `rel` from the original RPATHs?</span>
+        <span class="k">if</span> <span class="n">rel</span><span class="p">:</span>
+            <span class="c1"># Get the file path in the original prefix</span>
+            <span class="n">orig_binary</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">new_prefix</span><span class="p">),</span> <span class="n">orig_prefix</span><span class="p">,</span> <span class="n">new_binary</span><span class="p">)</span>
+
+            <span class="c1"># Get the normalized RPATHs in the old prefix using the file path</span>
+            <span class="c1"># in the orig prefix</span>
+            <span class="n">orig_norm_rpaths</span> <span class="o">=</span> <span class="n">_normalize_relative_paths</span><span class="p">(</span><span class="n">orig_binary</span><span class="p">,</span> <span class="n">orig_rpaths</span><span class="p">)</span>
+            <span class="c1"># Get the normalize RPATHs in the new prefix</span>
+            <span class="n">new_norm_rpaths</span> <span class="o">=</span> <span class="n">_transform_rpaths</span><span class="p">(</span><span class="n">orig_norm_rpaths</span><span class="p">,</span> <span class="n">orig_root</span><span class="p">,</span> <span class="n">new_prefixes</span><span class="p">)</span>
+            <span class="c1"># Get the relative RPATHs in the new prefix</span>
+            <span class="n">new_rpaths</span> <span class="o">=</span> <span class="n">_make_relative</span><span class="p">(</span><span class="n">new_binary</span><span class="p">,</span> <span class="n">new_root</span><span class="p">,</span> <span class="n">new_norm_rpaths</span><span class="p">)</span>
+            <span class="c1"># check to see if relative rpaths are changed before rewriting</span>
+            <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">new_rpaths</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">orig_rpaths</span><span class="p">):</span>
+                <span class="n">_set_elf_rpaths_and_interpreter</span><span class="p">(</span><span class="n">new_binary</span><span class="p">,</span> <span class="n">new_rpaths</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_rpaths</span> <span class="o">=</span> <span class="n">_transform_rpaths</span><span class="p">(</span><span class="n">orig_rpaths</span><span class="p">,</span> <span class="n">orig_root</span><span class="p">,</span> <span class="n">new_prefixes</span><span class="p">)</span>
+            <span class="n">_set_elf_rpaths_and_interpreter</span><span class="p">(</span><span class="n">new_binary</span><span class="p">,</span> <span class="n">new_rpaths</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_link_relative">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.make_link_relative">[文档]</a>
+<span class="k">def</span> <span class="nf">make_link_relative</span><span class="p">(</span><span class="n">new_links</span><span class="p">,</span> <span class="n">orig_links</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the relative target from the original link and</span>
+<span class="sd">    make the new link relative.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        new_links (list): new links to be made relative</span>
+<span class="sd">        orig_links (list): original links</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">new_link</span><span class="p">,</span> <span class="n">orig_link</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">new_links</span><span class="p">,</span> <span class="n">orig_links</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">readlink</span><span class="p">(</span><span class="n">orig_link</span><span class="p">)</span>
+        <span class="n">relative_target</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">orig_link</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">new_link</span><span class="p">)</span>
+        <span class="n">symlink</span><span class="p">(</span><span class="n">relative_target</span><span class="p">,</span> <span class="n">new_link</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_macho_binaries_relative">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.make_macho_binaries_relative">[文档]</a>
+<span class="k">def</span> <span class="nf">make_macho_binaries_relative</span><span class="p">(</span><span class="n">cur_path_names</span><span class="p">,</span> <span class="n">orig_path_names</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replace old RPATHs with paths relative to old_dir in binary files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">for</span> <span class="n">cur_path</span><span class="p">,</span> <span class="n">orig_path</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cur_path_names</span><span class="p">,</span> <span class="n">orig_path_names</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">)</span> <span class="o">=</span> <span class="n">macholib_get_paths</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span>
+        <span class="n">paths_to_paths</span> <span class="o">=</span> <span class="n">macho_make_paths_relative</span><span class="p">(</span>
+            <span class="n">orig_path</span><span class="p">,</span> <span class="n">old_layout_root</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span>
+        <span class="p">)</span>
+        <span class="n">modify_macho_object</span><span class="p">(</span><span class="n">cur_path</span><span class="p">,</span> <span class="n">rpaths</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">idpath</span><span class="p">,</span> <span class="n">paths_to_paths</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_elf_binaries_relative">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.make_elf_binaries_relative">[文档]</a>
+<span class="k">def</span> <span class="nf">make_elf_binaries_relative</span><span class="p">(</span><span class="n">new_binaries</span><span class="p">,</span> <span class="n">orig_binaries</span><span class="p">,</span> <span class="n">orig_layout_root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace the original RPATHs in the new binaries making them</span>
+<span class="sd">    relative to the original layout root.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        new_binaries (list): new binaries whose RPATHs is to be made relative</span>
+<span class="sd">        orig_binaries (list): original binaries</span>
+<span class="sd">        orig_layout_root (str): path to be used as a base for making</span>
+<span class="sd">            RPATHs relative</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">new_binary</span><span class="p">,</span> <span class="n">orig_binary</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">new_binaries</span><span class="p">,</span> <span class="n">orig_binaries</span><span class="p">):</span>
+        <span class="n">orig_rpaths</span> <span class="o">=</span> <span class="n">_elf_rpaths_for</span><span class="p">(</span><span class="n">new_binary</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">orig_rpaths</span><span class="p">:</span>
+            <span class="n">new_rpaths</span> <span class="o">=</span> <span class="n">_make_relative</span><span class="p">(</span><span class="n">orig_binary</span><span class="p">,</span> <span class="n">orig_layout_root</span><span class="p">,</span> <span class="n">orig_rpaths</span><span class="p">)</span>
+            <span class="n">_set_elf_rpaths_and_interpreter</span><span class="p">(</span><span class="n">new_binary</span><span class="p">,</span> <span class="n">new_rpaths</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="warn_if_link_cant_be_relocated">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.warn_if_link_cant_be_relocated">[文档]</a>
+<span class="k">def</span> <span class="nf">warn_if_link_cant_be_relocated</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Symbolic link at &quot;</span><span class="si">{}</span><span class="s1">&quot; to &quot;</span><span class="si">{}</span><span class="s1">&quot; cannot be relocated&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="relocate_links">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.relocate_links">[文档]</a>
+<span class="k">def</span> <span class="nf">relocate_links</span><span class="p">(</span><span class="n">links</span><span class="p">,</span> <span class="n">prefix_to_prefix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Relocate links to a new install prefix.&quot;&quot;&quot;</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prefix_to_prefix</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+        <span class="n">old_target</span> <span class="o">=</span> <span class="n">readlink</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">old_target</span><span class="p">)</span>
+
+        <span class="c1"># No match.</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn_if_link_cant_be_relocated</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">old_target</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">new_target</span> <span class="o">=</span> <span class="n">prefix_to_prefix</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">()]</span> <span class="o">+</span> <span class="n">old_target</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="p">:]</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+        <span class="n">symlink</span><span class="p">(</span><span class="n">new_target</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="relocate_text">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.relocate_text">[文档]</a>
+<span class="k">def</span> <span class="nf">relocate_text</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">prefixes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Relocate text file from the original installation prefix to the</span>
+<span class="sd">    new prefix.</span>
+
+<span class="sd">    Relocation also affects the the path in Spack&#39;s sbang script.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        files (list): Text files to be relocated</span>
+<span class="sd">        prefixes (OrderedDict): String prefixes which need to be changed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TextFilePrefixReplacer</span><span class="o">.</span><span class="n">from_strings_or_bytes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">files</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="relocate_text_bin">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.relocate_text_bin">[文档]</a>
+<span class="k">def</span> <span class="nf">relocate_text_bin</span><span class="p">(</span><span class="n">binaries</span><span class="p">,</span> <span class="n">prefixes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace null terminated path strings hard-coded into binaries.</span>
+
+<span class="sd">    The new install prefix must be shorter than the original one.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        binaries (list): binaries to be relocated</span>
+<span class="sd">        prefixes (OrderedDict): String prefixes which need to be changed.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      spack.relocate_text.BinaryTextReplaceError: when the new path is longer than the old path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">BinaryFilePrefixReplacer</span><span class="o">.</span><span class="n">from_strings_or_bytes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">binaries</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="is_binary">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.is_binary">[文档]</a>
+<span class="k">def</span> <span class="nf">is_binary</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if a file is binary, False otherwise</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: file to be tested</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True or False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m_type</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ssys</span><span class="o">.</span><span class="n">mime_type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">{0}</span><span class="s2">] -&gt; &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m_type</span> <span class="o">==</span> <span class="s2">&quot;application&quot;</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;BINARY FILE&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;TEXT FILE&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<span class="c1"># Memoize this due to repeated calls to libraries in the same directory.</span>
+<span class="nd">@llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">memoized</span>
+<span class="k">def</span> <span class="nf">_exists_dir</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fixup_macos_rpath">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.fixup_macos_rpath">[文档]</a>
+<span class="k">def</span> <span class="nf">fixup_macos_rpath</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply rpath fixups to the given file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        root: absolute path to the parent directory</span>
+<span class="sd">        filename: relative path to the library or binary</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if fixups were applied, else False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">abspath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ssys</span><span class="o">.</span><span class="n">mime_type</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="s2">&quot;application&quot;</span><span class="p">,</span> <span class="s2">&quot;x-mach-binary&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Get Mach-O header commands</span>
+    <span class="p">(</span><span class="n">rpath_list</span><span class="p">,</span> <span class="n">deps</span><span class="p">,</span> <span class="n">id_dylib</span><span class="p">)</span> <span class="o">=</span> <span class="n">macholib_get_paths</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+
+    <span class="c1"># Convert rpaths list to (name -&gt; number of occurrences)</span>
+    <span class="n">add_rpaths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">del_rpaths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">rpaths</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">rpath</span> <span class="ow">in</span> <span class="n">rpath_list</span><span class="p">:</span>
+        <span class="n">rpaths</span><span class="p">[</span><span class="n">rpath</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check dependencies for non-rpath entries</span>
+    <span class="n">spack_root</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">STORE</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">root</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">spack_root</span><span class="p">):</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Spack-installed dependency for </span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">abspath</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+            <span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dirname</span> <span class="o">!=</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">dirname</span> <span class="ow">in</span> <span class="n">rpaths</span><span class="p">:</span>
+                <span class="c1"># Only change the rpath if it&#39;s a dependency *or* if the root</span>
+                <span class="c1"># rpath was already added to the library (this is to prevent</span>
+                <span class="c1"># GCC or similar getting rpaths when they weren&#39;t at all</span>
+                <span class="c1"># configured)</span>
+                <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-change&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;@rpath/&quot;</span> <span class="o">+</span> <span class="n">basename</span><span class="p">]</span>
+                <span class="n">add_rpaths</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dirname</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Check for nonexistent rpaths (often added by spack linker overzealousness</span>
+    <span class="c1"># with both lib/ and lib64/) and duplicate rpaths</span>
+    <span class="k">for</span> <span class="n">rpath</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">rpaths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">rpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@loader_path&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rpath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@executable_path&quot;</span><span class="p">):</span>
+            <span class="c1"># Allowable relative paths</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">_exists_dir</span><span class="p">(</span><span class="n">rpath</span><span class="p">):</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Nonexistent rpath in </span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">abspath</span><span class="p">,</span> <span class="n">rpath</span><span class="p">))</span>
+            <span class="n">del_rpaths</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rpath</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Rpath should only be there once, but it can sometimes be</span>
+            <span class="c1"># duplicated between Spack&#39;s compiler and libtool. If there are</span>
+            <span class="c1"># more copies of the same one, something is very odd....</span>
+            <span class="n">tty_debug</span> <span class="o">=</span> <span class="n">tty</span><span class="o">.</span><span class="n">debug</span> <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">tty</span><span class="o">.</span><span class="n">warn</span>
+            <span class="n">tty_debug</span><span class="p">(</span><span class="s2">&quot;Rpath appears </span><span class="si">{0}</span><span class="s2"> times in </span><span class="si">{1}</span><span class="s2">: </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">rpath</span><span class="p">))</span>
+            <span class="n">del_rpaths</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rpath</span><span class="p">)</span>
+
+    <span class="c1"># Delete bad rpaths</span>
+    <span class="k">for</span> <span class="n">rpath</span> <span class="ow">in</span> <span class="n">del_rpaths</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-delete_rpath&quot;</span><span class="p">,</span> <span class="n">rpath</span><span class="p">]</span>
+
+    <span class="c1"># Add missing rpaths that are not set for deletion</span>
+    <span class="k">for</span> <span class="n">rpath</span> <span class="ow">in</span> <span class="n">add_rpaths</span> <span class="o">-</span> <span class="n">del_rpaths</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">rpaths</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-add_rpath&quot;</span><span class="p">,</span> <span class="n">rpath</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+        <span class="c1"># No fixes needed</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">edit_in_place_through_temporary_file</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span> <span class="k">as</span> <span class="n">temp_path</span><span class="p">:</span>
+        <span class="n">executable</span><span class="o">.</span><span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;install_name_tool&quot;</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="fixup_macos_rpaths">
+<a class="viewcode-back" href="../../spack.html#spack.relocate.fixup_macos_rpaths">[文档]</a>
+<span class="k">def</span> <span class="nf">fixup_macos_rpaths</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove duplicate and nonexistent rpaths.</span>
+
+<span class="sd">    Some autotools packages write their own ``-rpath`` entries in addition to</span>
+<span class="sd">    those implicitly added by the Spack compiler wrappers. On Linux these</span>
+<span class="sd">    duplicate rpaths are eliminated, but on macOS they result in multiple</span>
+<span class="sd">    entries which makes it harder to adjust with ``install_name_tool</span>
+<span class="sd">    -delete_rpath``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">external</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">virtual</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;external or virtual package cannot be fixed up: </span><span class="si">{0!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="s2">&quot;platform=darwin&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;fixup_macos_rpaths requires macOS&quot;</span><span class="p">)</span>
+
+    <span class="n">applied</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">libs</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;lib64&quot;</span><span class="p">,</span> <span class="s2">&quot;libexec&quot;</span><span class="p">,</span> <span class="s2">&quot;plugins&quot;</span><span class="p">,</span> <span class="s2">&quot;Library&quot;</span><span class="p">,</span> <span class="s2">&quot;Frameworks&quot;</span><span class="p">])</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">prefix</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;Could not fix up install prefix spec </span><span class="si">{0}</span><span class="s2"> because it does &quot;</span>
+            <span class="s2">&quot;not exist: </span><span class="si">{1!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Explore the installation prefix of the spec</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">topdown</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">dirs</span><span class="p">[:]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dirs</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">libs</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">needed_fix</span> <span class="o">=</span> <span class="n">fixup_macos_rpath</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Failed to apply library fixups to: </span><span class="si">{0}</span><span class="s2">/</span><span class="si">{1}</span><span class="s2">: </span><span class="si">{2!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+                <span class="n">needed_fix</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">needed_fix</span><span class="p">:</span>
+                <span class="n">applied</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">specname</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">{/hash:7}&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">applied</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Fixed rpaths for </span><span class="si">{0:d}</span><span class="s2"> </span><span class="si">{1}</span><span class="s2"> installed to </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">applied</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span> <span class="k">if</span> <span class="n">applied</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;binaries&quot;</span><span class="p">,</span> <span class="n">specname</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No rpath fixup needed for &quot;</span> <span class="o">+</span> <span class="n">specname</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

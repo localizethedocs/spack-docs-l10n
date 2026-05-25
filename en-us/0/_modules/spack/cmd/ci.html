@@ -1,0 +1,869 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.cmd.ci &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/cmd/ci.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+          <li class="breadcrumb-item"><a href="../cmd.html">spack.cmd</a></li>
+      <li class="breadcrumb-item active">spack.cmd.ci</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.cmd.ci</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span><span class="p">,</span> <span class="n">urlunparse</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+<span class="kn">import</span> <span class="nn">llnl.util.tty.color</span> <span class="k">as</span> <span class="nn">clr</span>
+
+<span class="kn">import</span> <span class="nn">spack.binary_distribution</span> <span class="k">as</span> <span class="nn">bindist</span>
+<span class="kn">import</span> <span class="nn">spack.ci</span> <span class="k">as</span> <span class="nn">spack_ci</span>
+<span class="kn">import</span> <span class="nn">spack.cmd</span>
+<span class="kn">import</span> <span class="nn">spack.cmd.buildcache</span> <span class="k">as</span> <span class="nn">buildcache</span>
+<span class="kn">import</span> <span class="nn">spack.config</span> <span class="k">as</span> <span class="nn">cfg</span>
+<span class="kn">import</span> <span class="nn">spack.environment</span> <span class="k">as</span> <span class="nn">ev</span>
+<span class="kn">import</span> <span class="nn">spack.hash_types</span> <span class="k">as</span> <span class="nn">ht</span>
+<span class="kn">import</span> <span class="nn">spack.mirror</span>
+<span class="kn">import</span> <span class="nn">spack.util.gpg</span> <span class="k">as</span> <span class="nn">gpg_util</span>
+<span class="kn">import</span> <span class="nn">spack.util.timer</span> <span class="k">as</span> <span class="nn">timer</span>
+<span class="kn">import</span> <span class="nn">spack.util.url</span> <span class="k">as</span> <span class="nn">url_util</span>
+<span class="kn">import</span> <span class="nn">spack.util.web</span> <span class="k">as</span> <span class="nn">web_util</span>
+
+<span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;manage continuous integration pipelines&quot;</span>
+<span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;build&quot;</span>
+<span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;long&quot;</span>
+
+<span class="n">SPACK_COMMAND</span> <span class="o">=</span> <span class="s2">&quot;spack&quot;</span>
+<span class="n">INSTALL_FAIL_CODE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">FAILED_CREATE_BUILDCACHE_CODE</span> <span class="o">=</span> <span class="mi">100</span>
+
+
+<div class="viewcode-block" id="deindent">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.deindent">[docs]</a>
+<span class="k">def</span> <span class="nf">deindent</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">desc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;    &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="unicode_escape">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.unicode_escape">[docs]</a>
+<span class="k">def</span> <span class="nf">unicode_escape</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns transformed path with any unicode</span>
+<span class="sd">    characters replaced with their corresponding escapes&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;unicode-escape&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="setup_parser">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.setup_parser">[docs]</a>
+<span class="k">def</span> <span class="nf">setup_parser</span><span class="p">(</span><span class="n">subparser</span><span class="p">):</span>
+    <span class="n">setup_parser</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">subparser</span>
+    <span class="n">subparsers</span> <span class="o">=</span> <span class="n">subparser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;CI sub-commands&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Dynamic generation of the jobs yaml from a spack environment</span>
+    <span class="n">generate</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;generate&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">deindent</span><span class="p">(</span><span class="n">ci_generate</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">first_line</span><span class="p">(</span><span class="n">ci_generate</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">generate</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;pathname for the generated gitlab ci yaml file</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;path to the file where generated jobs file should be written. &quot;</span>
+        <span class="s2">&quot;default is .gitlab-ci.yml in the root of the repository&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">generate</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--optimize&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(DEPRECATED) optimize the gitlab yaml file for size</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;run the generated document through a series of optimization passes &quot;</span>
+        <span class="s2">&quot;designed to reduce the size of the generated file&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">generate</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--dependencies&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(DEPRECATED) disable DAG scheduling (use &#39;plain&#39; dependencies)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">prune_group</span> <span class="o">=</span> <span class="n">generate</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+    <span class="n">prune_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--prune-dag&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;prune_dag&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;skip up-to-date specs</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;do not generate jobs for specs that are up-to-date on the mirror&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">prune_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--no-prune-dag&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;prune_dag&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;process up-to-date specs</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;generate jobs for specs even when they are up-to-date on the mirror&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">generate</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--check-index-only&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;index_only&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;only check spec state from buildcache indices</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Spack always checks specs against configured binary mirrors, regardless of the DAG &quot;</span>
+        <span class="s2">&quot;pruning option. if enabled, Spack will assume all remote buildcache indices are &quot;</span>
+        <span class="s2">&quot;up-to-date when assessing whether the spec on the mirror, if present, is up-to-date. &quot;</span>
+        <span class="s2">&quot;this has the benefit of reducing pipeline generation time but at the potential cost of &quot;</span>
+        <span class="s2">&quot;needlessly rebuilding specs when the indices are outdated. if not enabled, Spack will &quot;</span>
+        <span class="s2">&quot;fetch remote spec files directly to assess whether the spec on the mirror is up-to-date&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">generate</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--artifacts-root&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to the root of the artifacts directory</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;if provided, concrete environment files (spack.yaml, spack.lock) will be generated under &quot;</span>
+        <span class="s2">&quot;this directory. their location will be passed to generated child jobs through the &quot;</span>
+        <span class="s2">&quot;SPACK_CONCRETE_ENVIRONMENT_PATH variable&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">generate</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">ci_generate</span><span class="p">)</span>
+
+    <span class="c1"># Rebuild the buildcache index associated with the mirror in the</span>
+    <span class="c1"># active, gitlab-enabled environment.</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;rebuild-index&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">deindent</span><span class="p">(</span><span class="n">ci_reindex</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">first_line</span><span class="p">(</span><span class="n">ci_reindex</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">index</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">ci_reindex</span><span class="p">)</span>
+
+    <span class="c1"># Handle steps of a ci build/rebuild</span>
+    <span class="n">rebuild</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;rebuild&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">deindent</span><span class="p">(</span><span class="n">ci_rebuild</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">first_line</span><span class="p">(</span><span class="n">ci_rebuild</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">rebuild</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--tests&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;run stand-alone tests after the build&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">rebuild</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--fail-fast&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;stop stand-alone tests after the first failure&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">rebuild</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">ci_rebuild</span><span class="p">)</span>
+
+    <span class="c1"># Facilitate reproduction of a failed CI build job</span>
+    <span class="n">reproduce</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;reproduce-build&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">deindent</span><span class="p">(</span><span class="n">ci_reproduce</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">first_line</span><span class="p">(</span><span class="n">ci_reproduce</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">reproduce</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;job_url&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;URL of GitLab job web page or artifact&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">_gitlab_artifacts_url</span>
+    <span class="p">)</span>
+    <span class="n">reproduce</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--runtime&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Container runtime to use.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;docker&quot;</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;docker&quot;</span><span class="p">,</span> <span class="s2">&quot;podman&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">reproduce</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--working-dir&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;where to unpack artifacts&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;ci_reproduction&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">reproduce</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--autostart&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Run docker reproducer automatically&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span>
+    <span class="p">)</span>
+    <span class="n">gpg_group</span> <span class="o">=</span> <span class="n">reproduce</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gpg_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--gpg-file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to public GPG key for validating binary cache installs&quot;</span>
+    <span class="p">)</span>
+    <span class="n">gpg_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--gpg-url&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;URL to public GPG key for validating binary cache installs&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">reproduce</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">ci_reproduce</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ci_generate">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.ci_generate">[docs]</a>
+<span class="k">def</span> <span class="nf">ci_generate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate jobs file from a CI-aware spack file</span>
+
+<span class="sd">    if you want to report the results on CDash, you will need to set the SPACK_CDASH_AUTH_TOKEN</span>
+<span class="sd">    before invoking this command. the value must be the CDash authorization token needed to create</span>
+<span class="sd">    a build group and register all generated jobs under it</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">optimize</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The --optimize option has been deprecated, and currently has no effect. &quot;</span>
+            <span class="s2">&quot;It will be removed in Spack v0.24.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dependencies</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The --dependencies option has been deprecated, and currently has no effect. &quot;</span>
+            <span class="s2">&quot;It will be removed in Spack v0.24.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">require_active_env</span><span class="p">(</span><span class="n">cmd_name</span><span class="o">=</span><span class="s2">&quot;ci generate&quot;</span><span class="p">)</span>
+
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">output_file</span>
+    <span class="n">prune_dag</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prune_dag</span>
+    <span class="n">index_only</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">index_only</span>
+    <span class="n">artifacts_root</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">artifacts_root</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output_file</span><span class="p">:</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;.gitlab-ci.yml&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+        <span class="n">gen_ci_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gen_ci_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">gen_ci_dir</span><span class="p">)</span>
+
+    <span class="c1"># Generate the jobs</span>
+    <span class="n">spack_ci</span><span class="o">.</span><span class="n">generate_gitlab_ci_yaml</span><span class="p">(</span>
+        <span class="n">env</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="p">,</span>
+        <span class="n">prune_dag</span><span class="o">=</span><span class="n">prune_dag</span><span class="p">,</span>
+        <span class="n">check_index_only</span><span class="o">=</span><span class="n">index_only</span><span class="p">,</span>
+        <span class="n">artifacts_root</span><span class="o">=</span><span class="n">artifacts_root</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ci_reindex">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.ci_reindex">[docs]</a>
+<span class="k">def</span> <span class="nf">ci_reindex</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;rebuild the buildcache index for the remote mirror</span>
+
+<span class="sd">    use the active, gitlab-enabled environment to rebuild the buildcache index for the associated</span>
+<span class="sd">    mirror</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">require_active_env</span><span class="p">(</span><span class="n">cmd_name</span><span class="o">=</span><span class="s2">&quot;ci rebuild-index&quot;</span><span class="p">)</span>
+    <span class="n">yaml_root</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">manifest</span><span class="p">[</span><span class="n">ev</span><span class="o">.</span><span class="n">TOP_LEVEL_KEY</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;mirrors&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yaml_root</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">yaml_root</span><span class="p">[</span><span class="s2">&quot;mirrors&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="s2">&quot;spack ci rebuild-index requires an env containing a mirror&quot;</span><span class="p">)</span>
+
+    <span class="n">ci_mirrors</span> <span class="o">=</span> <span class="n">yaml_root</span><span class="p">[</span><span class="s2">&quot;mirrors&quot;</span><span class="p">]</span>
+    <span class="n">mirror_urls</span> <span class="o">=</span> <span class="p">[</span><span class="n">url</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">ci_mirrors</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+    <span class="n">remote_mirror_url</span> <span class="o">=</span> <span class="n">mirror_urls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mirror</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">Mirror</span><span class="p">(</span><span class="n">remote_mirror_url</span><span class="p">)</span>
+
+    <span class="n">buildcache</span><span class="o">.</span><span class="n">update_index</span><span class="p">(</span><span class="n">mirror</span><span class="p">,</span> <span class="n">update_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ci_rebuild">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.ci_rebuild">[docs]</a>
+<span class="k">def</span> <span class="nf">ci_rebuild</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;rebuild a spec if it is not on the remote mirror</span>
+
+<span class="sd">    check a single spec against the remote mirror, and rebuild it from source if the mirror does</span>
+<span class="sd">    not contain the hash</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rebuild_timer</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">Timer</span><span class="p">()</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">require_active_env</span><span class="p">(</span><span class="n">cmd_name</span><span class="o">=</span><span class="s2">&quot;ci rebuild&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Make sure the environment is &quot;gitlab-enabled&quot;, or else there&#39;s nothing</span>
+    <span class="c1"># to do.</span>
+    <span class="n">ci_config</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ci&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ci_config</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="s2">&quot;spack ci rebuild requires an env containing ci cfg&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Grab the environment variables we need.  These either come from the</span>
+    <span class="c1"># pipeline generation step (&quot;spack ci generate&quot;), where they were written</span>
+    <span class="c1"># out as variables, or else provided by GitLab itself.</span>
+    <span class="n">pipeline_artifacts_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_ARTIFACTS_ROOT&quot;</span><span class="p">)</span>
+    <span class="n">job_log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_JOB_LOG_DIR&quot;</span><span class="p">)</span>
+    <span class="n">job_test_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_JOB_TEST_DIR&quot;</span><span class="p">)</span>
+    <span class="n">repro_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_JOB_REPRO_DIR&quot;</span><span class="p">)</span>
+    <span class="n">concrete_env_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_CONCRETE_ENV_DIR&quot;</span><span class="p">)</span>
+    <span class="n">ci_job_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_JOB_NAME&quot;</span><span class="p">)</span>
+    <span class="n">signing_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_SIGNING_KEY&quot;</span><span class="p">)</span>
+    <span class="n">job_spec_pkg_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_JOB_SPEC_PKG_NAME&quot;</span><span class="p">)</span>
+    <span class="n">job_spec_dag_hash</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_JOB_SPEC_DAG_HASH&quot;</span><span class="p">)</span>
+    <span class="n">spack_pipeline_type</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_PIPELINE_TYPE&quot;</span><span class="p">)</span>
+    <span class="n">spack_ci_stack_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_CI_STACK_NAME&quot;</span><span class="p">)</span>
+    <span class="n">rebuild_everything</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_REBUILD_EVERYTHING&quot;</span><span class="p">)</span>
+    <span class="n">require_signing</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SPACK_REQUIRE_SIGNING&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If signing key was provided via &quot;SPACK_SIGNING_KEY&quot;, then try to import it.</span>
+    <span class="k">if</span> <span class="n">signing_key</span><span class="p">:</span>
+        <span class="n">spack_ci</span><span class="o">.</span><span class="n">import_signing_key</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
+
+    <span class="c1"># Fail early if signing is required but we don&#39;t have a signing key</span>
+    <span class="n">sign_binaries</span> <span class="o">=</span> <span class="n">require_signing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">require_signing</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+    <span class="k">if</span> <span class="n">sign_binaries</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">can_sign_binaries</span><span class="p">():</span>
+        <span class="n">gpg_util</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="s2">&quot;SPACK_REQUIRE_SIGNING=True =&gt; spack must have exactly one signing key&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Construct absolute paths relative to current $CI_PROJECT_DIR</span>
+    <span class="n">ci_project_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_PROJECT_DIR&quot;</span><span class="p">)</span>
+    <span class="n">pipeline_artifacts_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ci_project_dir</span><span class="p">,</span> <span class="n">pipeline_artifacts_dir</span><span class="p">)</span>
+    <span class="n">job_log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ci_project_dir</span><span class="p">,</span> <span class="n">job_log_dir</span><span class="p">)</span>
+    <span class="n">job_test_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ci_project_dir</span><span class="p">,</span> <span class="n">job_test_dir</span><span class="p">)</span>
+    <span class="n">repro_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ci_project_dir</span><span class="p">,</span> <span class="n">repro_dir</span><span class="p">)</span>
+    <span class="n">concrete_env_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ci_project_dir</span><span class="p">,</span> <span class="n">concrete_env_dir</span><span class="p">)</span>
+
+    <span class="c1"># Debug print some of the key environment variables we should have received</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;pipeline_artifacts_dir = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pipeline_artifacts_dir</span><span class="p">))</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job_spec_pkg_name = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_spec_pkg_name</span><span class="p">))</span>
+
+    <span class="c1"># Query the environment manifest to find out whether we&#39;re reporting to a</span>
+    <span class="c1"># CDash instance, and if so, gather some information from the manifest to</span>
+    <span class="c1"># support that task.</span>
+    <span class="n">cdash_config</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cdash&quot;</span><span class="p">)</span>
+    <span class="n">cdash_handler</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s2">&quot;build-group&quot;</span> <span class="ow">in</span> <span class="n">cdash_config</span><span class="p">:</span>
+        <span class="n">cdash_handler</span> <span class="o">=</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">CDashHandler</span><span class="p">(</span><span class="n">cdash_config</span><span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash url = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">url</span><span class="p">))</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash project = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">project</span><span class="p">))</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash project_enc = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">project_enc</span><span class="p">))</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash build_name = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">build_name</span><span class="p">))</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash build_stamp = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">build_stamp</span><span class="p">))</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash site = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">site</span><span class="p">))</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cdash build_group = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">build_group</span><span class="p">))</span>
+
+    <span class="c1"># Is this a pipeline run on a spack PR or a merge to develop?  It might</span>
+    <span class="c1"># be neither, e.g. a pipeline run on some environment repository.</span>
+    <span class="n">spack_is_pr_pipeline</span> <span class="o">=</span> <span class="n">spack_pipeline_type</span> <span class="o">==</span> <span class="s2">&quot;spack_pull_request&quot;</span>
+    <span class="n">spack_is_develop_pipeline</span> <span class="o">=</span> <span class="n">spack_pipeline_type</span> <span class="o">==</span> <span class="s2">&quot;spack_protected_branch&quot;</span>
+
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="s2">&quot;Pipeline type - PR: </span><span class="si">{0}</span><span class="s2">, develop: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">spack_is_pr_pipeline</span><span class="p">,</span> <span class="n">spack_is_develop_pipeline</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">full_rebuild</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">rebuild_everything</span> <span class="ow">and</span> <span class="n">rebuild_everything</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="k">else</span> <span class="kc">False</span>
+
+    <span class="n">pipeline_mirrors</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">MirrorCollection</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">buildcache_destination</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s2">&quot;buildcache-destination&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pipeline_mirrors</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="s2">&quot;spack ci rebuild requires a mirror named &#39;buildcache-destination&quot;</span><span class="p">)</span>
+
+    <span class="n">buildcache_destination</span> <span class="o">=</span> <span class="n">pipeline_mirrors</span><span class="p">[</span><span class="s2">&quot;buildcache-destination&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Get the concrete spec to be built by this job.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">job_spec</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_one_by_hash</span><span class="p">(</span><span class="n">job_spec_dag_hash</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="s2">&quot;Could not find environment spec with hash </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_spec_dag_hash</span><span class="p">))</span>
+
+    <span class="n">job_spec_json_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_spec_pkg_name</span><span class="p">)</span>
+    <span class="n">job_spec_json_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">,</span> <span class="n">job_spec_json_file</span><span class="p">)</span>
+
+    <span class="c1"># To provide logs, cdash reports, etc for developer download/perusal,</span>
+    <span class="c1"># these things have to be put into artifacts.  This means downstream</span>
+    <span class="c1"># jobs that &quot;need&quot; this job will get those artifacts too.  So here we</span>
+    <span class="c1"># need to clean out the artifacts we may have got from upstream jobs.</span>
+
+    <span class="n">cdash_report_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipeline_artifacts_dir</span><span class="p">,</span> <span class="s2">&quot;cdash_report&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cdash_report_dir</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">cdash_report_dir</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">job_log_dir</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">job_log_dir</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">job_test_dir</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">job_test_dir</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">)</span>
+
+    <span class="c1"># Now that we removed them if they existed, create the directories we</span>
+    <span class="c1"># need for storing artifacts.  The cdash_report directory will be</span>
+    <span class="c1"># created internally if needed.</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">job_log_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">job_test_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">)</span>
+
+    <span class="c1"># Copy the concrete environment files to the repro directory so we can</span>
+    <span class="c1"># expose them as artifacts and not conflict with the concrete environment</span>
+    <span class="c1"># files we got as artifacts from the upstream pipeline generation job.</span>
+    <span class="c1"># Try to cast a slightly wider net too, and hopefully get the generated</span>
+    <span class="c1"># pipeline yaml.  If we miss it, the user will still be able to go to the</span>
+    <span class="c1"># pipeline generation job and get it from there.</span>
+    <span class="n">target_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">concrete_env_dir</span><span class="p">,</span> <span class="n">pipeline_artifacts_dir</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">dir_to_list</span> <span class="ow">in</span> <span class="n">target_dirs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_to_list</span><span class="p">):</span>
+            <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_to_list</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src_file</span><span class="p">):</span>
+                <span class="n">dst_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst_file</span><span class="p">)</span>
+
+    <span class="c1"># Write this job&#39;s spec json into the reproduction directory, and it will</span>
+    <span class="c1"># also be used in the generated &quot;spack install&quot; command to install the spec</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job concrete spec path: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_spec_json_path</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">job_spec_json_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">job_spec</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="nb">hash</span><span class="o">=</span><span class="n">ht</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">))</span>
+
+    <span class="c1"># Write some other details to aid in reproduction into an artifact</span>
+    <span class="n">repro_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">,</span> <span class="s2">&quot;repro.json&quot;</span><span class="p">)</span>
+    <span class="n">repro_details</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;job_name&quot;</span><span class="p">:</span> <span class="n">ci_job_name</span><span class="p">,</span>
+        <span class="s2">&quot;job_spec_json&quot;</span><span class="p">:</span> <span class="n">job_spec_json_file</span><span class="p">,</span>
+        <span class="s2">&quot;ci_project_dir&quot;</span><span class="p">:</span> <span class="n">ci_project_dir</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">repro_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">repro_details</span><span class="p">))</span>
+
+    <span class="c1"># Write information about spack into an artifact in the repro dir</span>
+    <span class="n">spack_info</span> <span class="o">=</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">get_spack_info</span><span class="p">()</span>
+    <span class="n">spack_info_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repro_dir</span><span class="p">,</span> <span class="s2">&quot;spack_info.txt&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">spack_info_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">spack_info</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">matches</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">full_rebuild</span> <span class="k">else</span> <span class="n">bindist</span><span class="o">.</span><span class="n">get_mirrors_for_spec</span><span class="p">(</span><span class="n">job_spec</span><span class="p">,</span> <span class="n">index_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="c1"># Got a hash match on at least one configured mirror.  All</span>
+        <span class="c1"># matches represent the fully up-to-date spec, so should all be</span>
+        <span class="c1"># equivalent.  If artifacts mirror is enabled, we just pick one</span>
+        <span class="c1"># of the matches and download the buildcache files from there to</span>
+        <span class="c1"># the artifacts, so they&#39;re available to be used by dependent</span>
+        <span class="c1"># jobs in subsequent stages.</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;No need to rebuild </span><span class="si">{0}</span><span class="s2">, found hash match at: &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_spec_pkg_name</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="s2">&quot;mirror_url&quot;</span><span class="p">]))</span>
+
+        <span class="c1"># Now we are done and successful</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c1"># No hash match anywhere means we need to rebuild spec</span>
+
+    <span class="c1"># Start with spack arguments</span>
+    <span class="n">spack_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">SPACK_COMMAND</span><span class="p">,</span> <span class="s2">&quot;--color=always&quot;</span><span class="p">,</span> <span class="s2">&quot;--backtrace&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">]</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;verify_ssl&quot;</span><span class="p">]:</span>
+        <span class="n">spack_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-k&quot;</span><span class="p">)</span>
+
+    <span class="n">install_args</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;--use-buildcache=</span><span class="si">{</span><span class="n">spack_ci</span><span class="o">.</span><span class="n">win_quote</span><span class="p">(</span><span class="s2">&quot;package:never,dependencies:only&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+
+    <span class="n">can_verify</span> <span class="o">=</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">can_verify_binaries</span><span class="p">()</span>
+    <span class="n">verify_binaries</span> <span class="o">=</span> <span class="n">can_verify</span> <span class="ow">and</span> <span class="n">spack_is_pr_pipeline</span> <span class="ow">is</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_binaries</span><span class="p">:</span>
+        <span class="n">install_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--no-check-signature&quot;</span><span class="p">)</span>
+
+    <span class="n">slash_hash</span> <span class="o">=</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">win_quote</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">job_spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">())</span>
+
+    <span class="c1"># Arguments when installing the root from sources</span>
+    <span class="n">deps_install_args</span> <span class="o">=</span> <span class="n">install_args</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;--only=dependencies&quot;</span><span class="p">]</span>
+    <span class="n">root_install_args</span> <span class="o">=</span> <span class="n">install_args</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;--keep-stage&quot;</span><span class="p">,</span> <span class="s2">&quot;--only=package&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">cdash_handler</span><span class="p">:</span>
+        <span class="c1"># Add additional arguments to `spack install` for CDash reporting.</span>
+        <span class="n">root_install_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cdash_handler</span><span class="o">.</span><span class="n">args</span><span class="p">())</span>
+
+    <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># apparently there&#39;s a race when spack bootstraps? do it up front once</span>
+        <span class="p">[</span><span class="n">SPACK_COMMAND</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="n">unicode_escape</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="s2">&quot;bootstrap&quot;</span><span class="p">,</span> <span class="s2">&quot;now&quot;</span><span class="p">],</span>
+        <span class="n">spack_cmd</span> <span class="o">+</span> <span class="n">deps_install_args</span> <span class="o">+</span> <span class="p">[</span><span class="n">slash_hash</span><span class="p">],</span>
+        <span class="n">spack_cmd</span> <span class="o">+</span> <span class="n">root_install_args</span> <span class="o">+</span> <span class="p">[</span><span class="n">slash_hash</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Installing </span><span class="si">{0}</span><span class="s2"> from source&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_spec</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">install_exit_code</span> <span class="o">=</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">process_command</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="p">,</span> <span class="n">repro_dir</span><span class="p">)</span>
+
+    <span class="c1"># Now do the post-install tasks</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;spack install exited </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">install_exit_code</span><span class="p">))</span>
+
+    <span class="c1"># If a spec fails to build in a spack develop pipeline, we add it to a</span>
+    <span class="c1"># list of known broken hashes.  This allows spack PR pipelines to</span>
+    <span class="c1"># avoid wasting compute cycles attempting to build those hashes.</span>
+    <span class="k">if</span> <span class="n">install_exit_code</span> <span class="o">==</span> <span class="n">INSTALL_FAIL_CODE</span> <span class="ow">and</span> <span class="n">spack_is_develop_pipeline</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Install failed on develop&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;broken-specs-url&quot;</span> <span class="ow">in</span> <span class="n">ci_config</span><span class="p">:</span>
+            <span class="n">broken_specs_url</span> <span class="o">=</span> <span class="n">ci_config</span><span class="p">[</span><span class="s2">&quot;broken-specs-url&quot;</span><span class="p">]</span>
+            <span class="n">dev_fail_hash</span> <span class="o">=</span> <span class="n">job_spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span>
+            <span class="n">broken_spec_path</span> <span class="o">=</span> <span class="n">url_util</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">broken_specs_url</span><span class="p">,</span> <span class="n">dev_fail_hash</span><span class="p">)</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Reporting broken develop build as: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">broken_spec_path</span><span class="p">))</span>
+            <span class="n">spack_ci</span><span class="o">.</span><span class="n">write_broken_spec</span><span class="p">(</span>
+                <span class="n">broken_spec_path</span><span class="p">,</span>
+                <span class="n">job_spec_pkg_name</span><span class="p">,</span>
+                <span class="n">spack_ci_stack_name</span><span class="p">,</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_JOB_URL&quot;</span><span class="p">),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_PIPELINE_URL&quot;</span><span class="p">),</span>
+                <span class="n">job_spec</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="nb">hash</span><span class="o">=</span><span class="n">ht</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">),</span>
+            <span class="p">)</span>
+
+    <span class="c1"># We generated the &quot;spack install ...&quot; command to &quot;--keep-stage&quot;, copy</span>
+    <span class="c1"># any logs from the staging directory to artifacts now</span>
+    <span class="n">spack_ci</span><span class="o">.</span><span class="n">copy_stage_logs_to_artifacts</span><span class="p">(</span><span class="n">job_spec</span><span class="p">,</span> <span class="n">job_log_dir</span><span class="p">)</span>
+
+    <span class="c1"># If the installation succeeded and we&#39;re running stand-alone tests for</span>
+    <span class="c1"># the package, run them and copy the output. Failures of any kind should</span>
+    <span class="c1"># *not* terminate the build process or preclude creating the build cache.</span>
+    <span class="n">broken_tests</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;broken-tests-packages&quot;</span> <span class="ow">in</span> <span class="n">ci_config</span>
+        <span class="ow">and</span> <span class="n">job_spec</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">ci_config</span><span class="p">[</span><span class="s2">&quot;broken-tests-packages&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">reports_dir</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">join_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;cdash_report&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">tests</span> <span class="ow">and</span> <span class="n">broken_tests</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to run stand-alone tests since listed in ci&#39;s &#39;broken-tests-packages&#39;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cdash_handler</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Package is listed in ci&#39;s broken-tests-packages&quot;</span>
+            <span class="n">cdash_handler</span><span class="o">.</span><span class="n">report_skipped</span><span class="p">(</span><span class="n">job_spec</span><span class="p">,</span> <span class="n">reports_dir</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">cdash_handler</span><span class="o">.</span><span class="n">copy_test_results</span><span class="p">(</span><span class="n">reports_dir</span><span class="p">,</span> <span class="n">job_test_dir</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">tests</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">install_exit_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># First ensure we will use a reasonable test stage directory</span>
+                <span class="n">stage_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">job_spec</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+                <span class="n">test_stage</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">join_path</span><span class="p">(</span><span class="n">stage_root</span><span class="p">,</span> <span class="s2">&quot;spack-standalone-tests&quot;</span><span class="p">)</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Configuring test_stage to </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_stage</span><span class="p">))</span>
+                <span class="n">config_test_path</span> <span class="o">=</span> <span class="s2">&quot;config:test_stage:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_stage</span><span class="p">)</span>
+                <span class="n">cfg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">config_test_path</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">default_modify_scope</span><span class="p">())</span>
+
+                <span class="c1"># Run the tests, resorting to junit results if not using cdash</span>
+                <span class="n">log_file</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="kc">None</span> <span class="k">if</span> <span class="n">cdash_handler</span> <span class="k">else</span> <span class="n">fs</span><span class="o">.</span><span class="n">join_path</span><span class="p">(</span><span class="n">test_stage</span><span class="p">,</span> <span class="s2">&quot;ci-test-results.xml&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">spack_ci</span><span class="o">.</span><span class="n">run_standalone_tests</span><span class="p">(</span>
+                    <span class="n">cdash</span><span class="o">=</span><span class="n">cdash_handler</span><span class="p">,</span>
+                    <span class="n">job_spec</span><span class="o">=</span><span class="n">job_spec</span><span class="p">,</span>
+                    <span class="n">fail_fast</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">fail_fast</span><span class="p">,</span>
+                    <span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">,</span>
+                    <span class="n">repro_dir</span><span class="o">=</span><span class="n">repro_dir</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="c1"># If there is any error, just print a warning.</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Error processing stand-alone tests: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="c1"># Copy the test log/results files</span>
+                <span class="n">spack_ci</span><span class="o">.</span><span class="n">copy_test_logs_to_artifacts</span><span class="p">(</span><span class="n">test_stage</span><span class="p">,</span> <span class="n">job_test_dir</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cdash_handler</span><span class="p">:</span>
+                    <span class="n">cdash_handler</span><span class="o">.</span><span class="n">copy_test_results</span><span class="p">(</span><span class="n">reports_dir</span><span class="p">,</span> <span class="n">job_test_dir</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">log_file</span><span class="p">:</span>
+                    <span class="n">spack_ci</span><span class="o">.</span><span class="n">copy_files_to_artifacts</span><span class="p">(</span><span class="n">log_file</span><span class="p">,</span> <span class="n">job_test_dir</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No recognized test results reporting option&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to run stand-alone tests due to unsuccessful installation&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cdash_handler</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Failed to install the package&quot;</span>
+                <span class="n">cdash_handler</span><span class="o">.</span><span class="n">report_skipped</span><span class="p">(</span><span class="n">job_spec</span><span class="p">,</span> <span class="n">reports_dir</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">cdash_handler</span><span class="o">.</span><span class="n">copy_test_results</span><span class="p">(</span><span class="n">reports_dir</span><span class="p">,</span> <span class="n">job_test_dir</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">install_exit_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># If the install succeeded, push it to the buildcache destination. Failure to push</span>
+        <span class="c1"># will result in a non-zero exit code. Pushing is best-effort.</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">create_buildcache</span><span class="p">(</span>
+            <span class="n">input_spec</span><span class="o">=</span><span class="n">job_spec</span><span class="p">,</span>
+            <span class="n">destination_mirror_urls</span><span class="o">=</span><span class="p">[</span><span class="n">buildcache_destination</span><span class="o">.</span><span class="n">push_url</span><span class="p">],</span>
+            <span class="n">sign_binaries</span><span class="o">=</span><span class="n">spack_ci</span><span class="o">.</span><span class="n">can_sign_binaries</span><span class="p">(),</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+                <span class="n">install_exit_code</span> <span class="o">=</span> <span class="n">FAILED_CREATE_BUILDCACHE_CODE</span>
+            <span class="p">(</span><span class="n">tty</span><span class="o">.</span><span class="n">msg</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="k">else</span> <span class="n">tty</span><span class="o">.</span><span class="n">error</span><span class="p">)(</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="s2">&quot;Pushed&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;Failed to push&quot;</span><span class="si">}</span><span class="s1"> &#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">job_spec</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">{@version}{/hash:7}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="n">clr</span><span class="o">.</span><span class="n">get_color_when</span><span class="p">())</span><span class="si">}</span><span class="s1"> &#39;</span>
+                <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># If this is a develop pipeline, check if the spec that we just built is</span>
+        <span class="c1"># on the broken-specs list. If so, remove it.</span>
+        <span class="k">if</span> <span class="n">spack_is_develop_pipeline</span> <span class="ow">and</span> <span class="s2">&quot;broken-specs-url&quot;</span> <span class="ow">in</span> <span class="n">ci_config</span><span class="p">:</span>
+            <span class="n">broken_specs_url</span> <span class="o">=</span> <span class="n">ci_config</span><span class="p">[</span><span class="s2">&quot;broken-specs-url&quot;</span><span class="p">]</span>
+            <span class="n">just_built_hash</span> <span class="o">=</span> <span class="n">job_spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span>
+            <span class="n">broken_spec_path</span> <span class="o">=</span> <span class="n">url_util</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">broken_specs_url</span><span class="p">,</span> <span class="n">just_built_hash</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">web_util</span><span class="o">.</span><span class="n">url_exists</span><span class="p">(</span><span class="n">broken_spec_path</span><span class="p">):</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Removing </span><span class="si">{0}</span><span class="s2"> from the list of broken specs&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">broken_spec_path</span><span class="p">))</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">web_util</span><span class="o">.</span><span class="n">remove_url</span><span class="p">(</span><span class="n">broken_spec_path</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="c1"># If there is an S3 error (e.g., access denied or connection</span>
+                    <span class="c1"># error), the first non boto-specific class in the exception</span>
+                    <span class="c1"># hierarchy is Exception.  Just print a warning and return.</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Error removing </span><span class="si">{0}</span><span class="s2"> from broken specs list: </span><span class="si">{1}</span><span class="s2">&quot;</span>
+                    <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">broken_spec_path</span><span class="p">,</span> <span class="n">err</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># If the install did not succeed, print out some instructions on how to reproduce this</span>
+        <span class="c1"># build failure outside of the pipeline environment.</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;spack install exited non-zero, will not create buildcache&quot;</span><span class="p">)</span>
+
+        <span class="n">api_root_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_API_V4_URL&quot;</span><span class="p">)</span>
+        <span class="n">ci_project_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_PROJECT_ID&quot;</span><span class="p">)</span>
+        <span class="n">ci_job_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI_JOB_ID&quot;</span><span class="p">)</span>
+
+        <span class="n">repro_job_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">api_root_url</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">{</span><span class="n">ci_project_id</span><span class="si">}</span><span class="s2">/jobs/</span><span class="si">{</span><span class="n">ci_job_id</span><span class="si">}</span><span class="s2">/artifacts&quot;</span>
+        <span class="c1"># Control characters cause this to be printed in blue so it stands out</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="se">\033</span><span class="s2">[34mTo reproduce this build locally, run:</span>
+
+<span class="s2">    spack ci reproduce-build </span><span class="si">{</span><span class="n">repro_job_url</span><span class="si">}</span><span class="s2"> [--working-dir &lt;dir&gt;] [--autostart]</span>
+
+<span class="s2">If this project does not have public pipelines, you will need to first:</span>
+
+<span class="s2">    export GITLAB_PRIVATE_TOKEN=&lt;generated_token&gt;</span>
+
+<span class="s2">... then follow the printed instructions.</span><span class="se">\033</span><span class="s2">[0;0m</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">rebuild_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;install_timers.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">timelog</span><span class="p">:</span>
+            <span class="n">extra_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;.ci-rebuild&quot;</span><span class="p">}</span>
+            <span class="n">rebuild_timer</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span><span class="n">timelog</span><span class="p">,</span> <span class="n">extra_attributes</span><span class="o">=</span><span class="n">extra_attributes</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="c1"># Tie job success/failure to the success/failure of building the spec</span>
+    <span class="k">return</span> <span class="n">install_exit_code</span></div>
+
+
+
+<div class="viewcode-block" id="ci_reproduce">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.ci_reproduce">[docs]</a>
+<span class="k">def</span> <span class="nf">ci_reproduce</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate instructions for reproducing the spec rebuild job</span>
+
+<span class="sd">    artifacts of the provided gitlab pipeline rebuild job&#39;s URL will be used to derive</span>
+<span class="sd">    instructions for reproducing the build locally</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Allow passing GPG key for reprocuding protected CI jobs</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gpg_file</span><span class="p">:</span>
+        <span class="n">gpg_key_url</span> <span class="o">=</span> <span class="n">url_util</span><span class="o">.</span><span class="n">path_to_file_url</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gpg_file</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">gpg_url</span><span class="p">:</span>
+        <span class="n">gpg_key_url</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">gpg_url</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gpg_key_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">spack_ci</span><span class="o">.</span><span class="n">reproduce_ci_job</span><span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">autostart</span><span class="p">,</span> <span class="n">gpg_key_url</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">runtime</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_gitlab_artifacts_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Take a URL either to the URL of the job in the GitLab UI, or to the artifacts zip file,</span>
+<span class="sd">    and output the URL to the artifacts zip file.&quot;&quot;&quot;</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Just use API endpoints verbatim, they&#39;re probably generated by Spack.</span>
+    <span class="k">if</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;api&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">url</span>
+
+    <span class="c1"># If it&#39;s a URL to the job in the Gitlab UI, we may need to append the artifacts path.</span>
+    <span class="n">minus_idx</span> <span class="o">=</span> <span class="n">parts</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Remove repeated slashes in the remainder</span>
+    <span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="n">minus_idx</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">p</span><span class="p">]</span>
+
+    <span class="c1"># Now the format is jobs/X or jobs/X/artifacts/download</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rest</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">rest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;jobs&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rest</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># replace jobs/X with jobs/X/artifacts/download</span>
+        <span class="n">rest</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="s2">&quot;artifacts&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Replace the parts and unparse.</span>
+    <span class="n">parts</span><span class="p">[</span><span class="n">minus_idx</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rest</span>
+
+    <span class="c1"># Don&#39;t allow fragments / queries</span>
+    <span class="k">return</span> <span class="n">urlunparse</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="n">fragment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="ci">
+<a class="viewcode-back" href="../../../spack.cmd.html#spack.cmd.ci.ci">[docs]</a>
+<span class="k">def</span> <span class="nf">ci</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">func</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">args</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

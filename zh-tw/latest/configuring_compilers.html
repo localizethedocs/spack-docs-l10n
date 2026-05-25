@@ -1,0 +1,717 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Discover how to configure compilers in Spack, whether by specifying them as externals, or by installing them with Spack." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2026-04-01T06:40:16+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜尋" href="search.html"><link rel="next" title="Spack Environments" href="environments_basics.html"><link rel="prev" title="Installing Packages" href="installing.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/configuring_compilers.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Configuring Compilers - Spack 1.2.0.dev0 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.2.0.dev0 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing Packages</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/configuring_compilers.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="configuring-compilers">
+<span id="compiler-config"></span><h1>Configuring Compilers<a class="headerlink" href="#configuring-compilers" title="連結到這個標頭">¶</a></h1>
+<p>Spack has the ability to build packages with multiple compilers and compiler versions.
+Compilers can be made available to Spack by:</p>
+<ol class="arabic simple">
+<li><p>Specifying them as externals in <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>, or</p></li>
+<li><p>Having them installed in the current Spack store, or</p></li>
+<li><p>Having them available as binaries in a build cache</p></li>
+</ol>
+<p>For convenience, Spack will automatically detect compilers as externals the first time it needs them, if no compiler is available.</p>
+<section id="spack-compiler-list">
+<span id="cmd-spack-compilers"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">list</span></code><a class="headerlink" href="#spack-compiler-list" title="連結到這個標頭">¶</a></h2>
+<p>You can see which compilers are available to Spack by running <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">list</span></code>:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack compiler list
+<span class="go">==&gt; Available compilers</span>
+<span class="go">-- gcc ubuntu20.04-x86_64 ---------------------------------------</span>
+<span class="go">[e]  gcc@10.5.0  [+]  gcc@15.1.0  [+]  gcc@14.3.0</span>
+</pre></div>
+</div>
+<p>Compilers marked with an <code class="docutils literal notranslate"><span class="pre">[e]</span></code> are system compilers (externals), and those marked with a <code class="docutils literal notranslate"><span class="pre">[+]</span></code> have been installed by Spack.
+Compilers from remote build caches are marked as <code class="docutils literal notranslate"><span class="pre">-</span></code>, but are not shown by default.
+To see them you need a specific option:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack compiler list --remote
+<span class="go">==&gt; Available compilers</span>
+<span class="go">-- gcc ubuntu20.04-x86_64 ---------------------------------------</span>
+<span class="go">[e]  gcc@10.5.0  [+]  gcc@15.1.0  [+]  gcc@14.3.0</span>
+
+<span class="go">-- gcc ubuntu20.04-x86_64 ---------------------------------------</span>
+<span class="go"> -   gcc@12.4.0</span>
+</pre></div>
+</div>
+<p>Any of these compilers can be used to build Spack packages.
+More details on how this is done can be found in <a class="reference internal" href="spec_syntax.html#sec-specs"><span class="std std-ref">Spec Syntax</span></a>.</p>
+</section>
+<section id="spack-compiler-find">
+<span id="cmd-spack-compiler-find"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">find</span></code><a class="headerlink" href="#spack-compiler-find" title="連結到這個標頭">¶</a></h2>
+<p>If you do not see a compiler in the list shown by:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack compiler list
+</pre></div>
+</div>
+<p>but you want to use it with Spack, you can simply run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">find</span></code> with the path to where the compiler is installed.
+For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack compiler find /opt/intel/oneapi/compiler/2025.1/bin/
+<span class="go">==&gt; Added 1 new compiler to /home/user/.spack/packages.yaml</span>
+<span class="go">    intel-oneapi-compilers@2025.1.0</span>
+<span class="go">==&gt; Compilers are defined in the following files:</span>
+<span class="go">    /home/user/.spack/packages.yaml</span>
+</pre></div>
+</div>
+<p>Or you can run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">find</span></code> with no arguments to force auto-detection.
+This is useful if you do not know where compilers are installed, but you know that new compilers have been added to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.
+For example, you might load a module, like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module load gcc/4.9.0
+<span class="gp">$ </span>spack compiler find
+<span class="go">==&gt; Added 1 new compiler to /home/user/.spack/packages.yaml</span>
+<span class="go">    gcc@4.9.0</span>
+</pre></div>
+</div>
+<p>This loads the environment module for gcc-4.9.0 to add it to <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, and then it adds the compiler to Spack.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>By default, Spack does not fill in the <code class="docutils literal notranslate"><span class="pre">modules:</span></code> field in the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> file.
+If you are using a compiler from a module, then you should add this field manually.
+See the section on <a class="reference internal" href="#compilers-requiring-modules"><span class="std std-ref">Compilers Requiring Modules</span></a>.</p>
+</div>
+</section>
+<section id="spack-compiler-info">
+<span id="cmd-spack-compiler-info"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">info</span></code><a class="headerlink" href="#spack-compiler-info" title="連結到這個標頭">¶</a></h2>
+<p>If you want to see additional information about specific compilers, you can run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">info</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack compiler info gcc
+<span class="go">gcc@=8.4.0 languages=&#39;c,c++,fortran&#39; arch=linux-ubuntu20.04-x86_64:</span>
+<span class="go">  prefix: /usr</span>
+<span class="go">  compilers:</span>
+<span class="go">    c: /usr/bin/gcc-8</span>
+<span class="go">    cxx: /usr/bin/g++-8</span>
+<span class="go">    fortran: /usr/bin/gfortran-8</span>
+
+<span class="go">gcc@=9.4.0 languages=&#39;c,c++,fortran&#39; arch=linux-ubuntu20.04-x86_64:</span>
+<span class="go">  prefix: /usr</span>
+<span class="go">  compilers:</span>
+<span class="go">    c: /usr/bin/gcc</span>
+<span class="go">    cxx: /usr/bin/g++</span>
+<span class="go">    fortran: /usr/bin/gfortran</span>
+
+<span class="go">gcc@=10.5.0 languages=&#39;c,c++,fortran&#39; arch=linux-ubuntu20.04-x86_64:</span>
+<span class="go">  prefix: /usr</span>
+<span class="go">  compilers:</span>
+<span class="go">    c: /usr/bin/gcc-10</span>
+<span class="go">    cxx: /usr/bin/g++-10</span>
+<span class="go">    fortran: /usr/bin/gfortran-10</span>
+</pre></div>
+</div>
+<p>This shows the details of the compilers that were detected by Spack.
+Notice also that we didn't have to be too specific about the version.
+We just said <code class="docutils literal notranslate"><span class="pre">gcc</span></code>, and we got information about all the matching compilers.</p>
+</section>
+<section id="manual-configuration-of-external-compilers">
+<h2>Manual configuration of external compilers<a class="headerlink" href="#manual-configuration-of-external-compilers" title="連結到這個標頭">¶</a></h2>
+<p>If auto-detection fails, you can manually configure a compiler by editing your <code class="docutils literal notranslate"><span class="pre">packages</span></code> configuration.
+You can do this by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config edit packages
+</pre></div>
+</div>
+<p>which will open the file in <a class="reference internal" href="packaging_guide_creation.html#controlling-the-editor"><span class="std std-ref">your favorite editor</span></a>.</p>
+<p>Each compiler has an &quot;external&quot; entry in the file with <code class="docutils literal notranslate"><span class="pre">extra_attributes</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">gcc</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc@10.5.0 languages=&#39;c,c++,fortran&#39;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gcc-10</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/g++-10</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gfortran-10</span>
+</pre></div>
+</div>
+<p>The compiler executables are listed under <code class="docutils literal notranslate"><span class="pre">extra_attributes:compilers</span></code>, and are keyed by language.
+Once you save the file, the configured compilers will show up in the list displayed by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compilers</span></code>.</p>
+<p>You can also add compiler flags to manually configured compilers.
+These flags should be specified in the <code class="docutils literal notranslate"><span class="pre">flags</span></code> section of the compiler specification.
+The valid flags are <code class="docutils literal notranslate"><span class="pre">cflags</span></code>, <code class="docutils literal notranslate"><span class="pre">cxxflags</span></code>, <code class="docutils literal notranslate"><span class="pre">fflags</span></code>, <code class="docutils literal notranslate"><span class="pre">cppflags</span></code>, <code class="docutils literal notranslate"><span class="pre">ldflags</span></code>, and <code class="docutils literal notranslate"><span class="pre">ldlibs</span></code>.
+For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">gcc</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc@10.5.0 languages=&#39;c,c++,fortran&#39;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gcc-10</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/g++-10</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/gfortran-10</span>
+        <span class="nt">flags</span><span class="p">:</span>
+          <span class="nt">cflags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-O3 -fPIC</span>
+          <span class="nt">cxxflags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-O3 -fPIC</span>
+          <span class="nt">cppflags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-O3 -fPIC</span>
+</pre></div>
+</div>
+<p>These flags will be treated by Spack as if they were entered from the command line each time this compiler is used.
+The compiler wrappers then inject those flags into the compiler command.
+Compiler flags entered from the command line will be discussed in more detail in the following section.</p>
+<p>Some compilers also require additional environment configuration.
+Examples include Intel's oneAPI and AMD's AOCC compiler suites, which have custom scripts for loading environment variables and setting paths.
+These variables should be specified in the <code class="docutils literal notranslate"><span class="pre">environment</span></code> section of the compiler specification.
+The operations available to modify the environment are <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">unset</span></code>, <code class="docutils literal notranslate"><span class="pre">prepend_path</span></code>, <code class="docutils literal notranslate"><span class="pre">append_path</span></code>, and <code class="docutils literal notranslate"><span class="pre">remove_path</span></code>.
+For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">intel-oneapi-compilers</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">intel-oneapi-compilers@2025.1.0</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/intel/oneapi</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/intel/oneapi/compiler/2025.1/bin/icx</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/intel/oneapi/compiler/2025.1/bin/icpx</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/intel/oneapi/compiler/2025.1/bin/ifx</span>
+        <span class="nt">environment</span><span class="p">:</span>
+          <span class="nt">set</span><span class="p">:</span>
+            <span class="nt">MKL_ROOT</span><span class="p">:</span> <span class="s">&quot;/path/to/mkl/root&quot;</span>
+          <span class="nt">unset</span><span class="p">:</span> <span class="c1"># A list of environment variables to unset</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">CC</span>
+          <span class="nt">prepend_path</span><span class="p">:</span> <span class="c1"># Similar for append|remove_path</span>
+            <span class="nt">LD_LIBRARY_PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/ld/paths/added/by/setvars/sh</span>
+</pre></div>
+</div>
+<p>It is also possible to specify additional <code class="docutils literal notranslate"><span class="pre">RPATHs</span></code> that the compiler will add to all executables generated by that compiler.
+This is useful for forcing certain compilers to RPATH their own runtime libraries so that executables will run without the need to set <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">gcc</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc@4.9.3</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/gcc</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/gcc/bin/gcc</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/gcc/bin/g++</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/gcc/bin/gfortran</span>
+        <span class="nt">extra_rpaths</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/some/compiler/runtime/directory</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/some/other/compiler/runtime/directory</span>
+</pre></div>
+</div>
+</section>
+<section id="compilers-requiring-modules">
+<span id="id1"></span><h2>Compilers Requiring Modules<a class="headerlink" href="#compilers-requiring-modules" title="連結到這個標頭">¶</a></h2>
+<p>Many installed compilers will work regardless of the environment from which they are called.
+However, some installed compilers require environment variables to be set in order to run.</p>
+<p>On typical HPC clusters, these environment modifications are usually delegated to some &quot;module&quot; system.
+In such a case, you should tell Spack which module(s) to load in order to run the chosen compiler:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">gcc</span><span class="p">:</span>
+    <span class="nt">externals</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">spec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc@10.5.0 languages=&#39;c,c++,fortran&#39;</span>
+      <span class="nt">prefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/compilers</span>
+      <span class="nt">extra_attributes</span><span class="p">:</span>
+        <span class="nt">compilers</span><span class="p">:</span>
+          <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/compilers/bin/gcc-10</span>
+          <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/compilers/bin/g++-10</span>
+          <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/compilers/bin/gfortran-10</span>
+      <span class="nt">modules</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">gcc/10.5.0</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Some compilers require special environment settings to be loaded not just to run, but also to execute the code they build, breaking packages that need to execute code they just compiled.
+If it's not possible or practical to use a better compiler, you'll need to ensure that environment settings are preserved for compilers like this (i.e., you'll need to load the module or source the compiler's shell script).</p>
+<p>By default, Spack tries to ensure that builds are reproducible by cleaning the environment before building.
+If this interferes with your compiler settings, you CAN use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">--dirty</span></code> as a workaround.
+Note that this MAY interfere with package builds.</p>
+</section>
+<section id="build-your-own-compiler">
+<h2>Build Your Own Compiler<a class="headerlink" href="#build-your-own-compiler" title="連結到這個標頭">¶</a></h2>
+<p>If you require a specific compiler and version, you can have Spack build it for you.
+For example:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install <span class="nc">gcc</span><span class="kp">@14</span>
+</pre></div>
+</div>
+<p>Once the compiler is installed, you can start using it without additional configuration:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install <span class="nc">hdf5</span><span class="nf">~mpi</span> <span class="nv">%</span><span class="nc">gcc</span><span class="kp">@14</span>
+</pre></div>
+</div>
+</section>
+<section id="mixing-compilers">
+<h2>Mixing Compilers<a class="headerlink" href="#mixing-compilers" title="連結到這個標頭">¶</a></h2>
+<p>For more options on configuring Spack to mix different compilers for different languages, see <a class="reference internal" href="toolchains_yaml.html#toolchains"><span class="std std-ref">the toolchains configuration docs</span></a>.</p>
+<p>To disable mixing (e.g. if you have multiple compilers defined, but want each concretized DAG to use one of them consistently), you can set:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">compiler_mixing</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>This affects root specs and any (transitive) link or run dependencies.
+Build-only dependencies are allowed to use different compilers (even when this is set).</p>
+<p>Some packages are difficult to build with high performance compilers, and it may be necessary to enable compiler mixing just for those packages.
+To enable mixing for specific packages, specify an allow-list in the <code class="docutils literal notranslate"><span class="pre">compiler_mixing</span></code> config:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">compiler_mixing</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;openssl&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">openssl</span></code> to the compiler mixing allow-list does not allow mixing for dependencies of <code class="docutils literal notranslate"><span class="pre">openssl</span></code>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="environments_basics.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Spack Environments</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="installing.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Installing Packages</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 4月 01, 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Configuring Compilers</a><ul>
+<li><a class="reference internal" href="#spack-compiler-list"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#spack-compiler-find"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">find</span></code></a></li>
+<li><a class="reference internal" href="#spack-compiler-info"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compiler</span> <span class="pre">info</span></code></a></li>
+<li><a class="reference internal" href="#manual-configuration-of-external-compilers">Manual configuration of external compilers</a></li>
+<li><a class="reference internal" href="#compilers-requiring-modules">Compilers Requiring Modules</a></li>
+<li><a class="reference internal" href="#build-your-own-compiler">Build Your Own Compiler</a></li>
+<li><a class="reference internal" href="#mixing-compilers">Mixing Compilers</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=dfc612df"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>

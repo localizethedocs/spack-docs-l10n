@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bootstrapping &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/bootstrapping.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Command Reference" href="command_index.html" />
+    <link rel="prev" title="Build Caches" href="binary_caches.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bootstrapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-bootstrapping-store">The Bootstrapping store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-and-disabling-bootstrapping-methods">Enabling and disabling bootstrapping methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-mirror-for-air-gapped-systems">Creating a mirror for air-gapped systems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Bootstrapping</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bootstrapping.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bootstrapping">
+<span id="id1"></span><h1>Bootstrapping<a class="headerlink" href="#bootstrapping" title="Link to this heading"></a></h1>
+<p>In the <a class="reference internal" href="getting_started.html#getting-started"><span class="std std-ref">Getting started</span></a> Section we already mentioned that
+Spack can bootstrap some of its dependencies, including <code class="docutils literal notranslate"><span class="pre">clingo</span></code>. In fact, there
+is an entire command dedicated to the management of every aspect of bootstrapping:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack bootstrap --help
+usage: spack bootstrap [-h] SUBCOMMAND ...
+
+manage bootstrap configuration
+
+positional arguments:
+  SUBCOMMAND
+    now       Spack ready, right now!
+    status    get the status of Spack
+    enable    enable bootstrapping
+    disable   disable bootstrapping
+    reset     reset bootstrapping configuration to Spack defaults
+    root      get/set the root bootstrap directory
+    list      list all the sources of software to bootstrap Spack
+    add       add a new source for bootstrapping
+    remove    remove a bootstrapping source
+    mirror    create a local mirror to bootstrap Spack
+
+options:
+  -h, --help  show this help message and exit
+</pre></div>
+</div>
+<p>Spack is configured to bootstrap its dependencies lazily by default; i.e. the first time they are needed and
+can't be found. You can readily check if any prerequisite for using Spack is missing by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>status
+<span class="go">Spack v0.19.0 - python@3.8</span>
+
+<span class="go">[FAIL] Core Functionalities</span>
+<span class="go">  [B] MISSING &quot;clingo&quot;: required to concretize specs</span>
+
+<span class="go">[FAIL] Binary packages</span>
+<span class="go">  [B] MISSING &quot;gpg2&quot;: required to sign/verify buildcaches</span>
+
+
+<span class="go">Spack will take care of bootstrapping any missing dependency marked as [B]. Dependencies marked as [-] are instead required to be found on the system.</span>
+
+<span class="gp">% </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>In the case of the output shown above Spack detected that both <code class="docutils literal notranslate"><span class="pre">clingo</span></code> and <code class="docutils literal notranslate"><span class="pre">gnupg</span></code>
+are missing and it's giving detailed information on why they are needed and whether
+they can be bootstrapped. The return code of this command summarizes the results, if any
+dependencies are missing the return code is <code class="docutils literal notranslate"><span class="pre">1</span></code>, otherwise <code class="docutils literal notranslate"><span class="pre">0</span></code>. Running a command that
+concretizes a spec, like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>solve<span class="w"> </span>zlib
+<span class="go">==&gt; Bootstrapping clingo from pre-built binaries</span>
+<span class="go">==&gt; Fetching https://mirror.spack.io/bootstrap/github-actions/v0.1/build_cache/darwin-catalina-x86_64/apple-clang-12.0.0/clingo-bootstrap-spack/darwin-catalina-x86_64-apple-clang-12.0.0-clingo-bootstrap-spack-p5on7i4hejl775ezndzfdkhvwra3hatn.spack</span>
+<span class="go">==&gt; Installing &quot;clingo-bootstrap@spack%apple-clang@12.0.0~docs~ipo+python build_type=Release arch=darwin-catalina-x86_64&quot; from a buildcache</span>
+<span class="go">[ ... ]</span>
+</pre></div>
+</div>
+<p>automatically triggers the bootstrapping of clingo from pre-built binaries as expected.</p>
+<p>Users can also bootstrap all the dependencies needed by Spack in a single command, which
+might be useful to setup containers or other similar environments:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>now
+<span class="go">==&gt; Bootstrapping clingo from pre-built binaries</span>
+<span class="go">==&gt; Fetching https://mirror.spack.io/bootstrap/github-actions/v0.3/build_cache/linux-centos7-x86_64-gcc-10.2.1-clingo-bootstrap-spack-shqedxgvjnhiwdcdrvjhbd73jaevv7wt.spec.json</span>
+<span class="go">==&gt; Fetching https://mirror.spack.io/bootstrap/github-actions/v0.3/build_cache/linux-centos7-x86_64/gcc-10.2.1/clingo-bootstrap-spack/linux-centos7-x86_64-gcc-10.2.1-clingo-bootstrap-spack-shqedxgvjnhiwdcdrvjhbd73jaevv7wt.spack</span>
+<span class="go">==&gt; Installing &quot;clingo-bootstrap@spack%gcc@10.2.1~docs~ipo+python+static_libstdcpp build_type=Release arch=linux-centos7-x86_64&quot; from a buildcache</span>
+<span class="go">==&gt; Bootstrapping patchelf from pre-built binaries</span>
+<span class="go">==&gt; Fetching https://mirror.spack.io/bootstrap/github-actions/v0.3/build_cache/linux-centos7-x86_64-gcc-10.2.1-patchelf-0.15.0-htk62k7efo2z22kh6kmhaselru7bfkuc.spec.json</span>
+<span class="go">==&gt; Fetching https://mirror.spack.io/bootstrap/github-actions/v0.3/build_cache/linux-centos7-x86_64/gcc-10.2.1/patchelf-0.15.0/linux-centos7-x86_64-gcc-10.2.1-patchelf-0.15.0-htk62k7efo2z22kh6kmhaselru7bfkuc.spack</span>
+<span class="go">==&gt; Installing &quot;patchelf@0.15.0%gcc@10.2.1 ldflags=&quot;-static-libstdc++ -static-libgcc&quot;  arch=linux-centos7-x86_64&quot; from a buildcache</span>
+</pre></div>
+</div>
+<section id="the-bootstrapping-store">
+<h2>The Bootstrapping store<a class="headerlink" href="#the-bootstrapping-store" title="Link to this heading"></a></h2>
+<p>The software installed for bootstrapping purposes is deployed in a separate store.
+Its location can be checked with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>root
+</pre></div>
+</div>
+<p>It can also be changed with the same command by just specifying the newly desired path:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>root<span class="w"> </span>/opt/spack/bootstrap
+</pre></div>
+</div>
+<p>You can check what is installed in the bootstrapping store at any time using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>-b<span class="w"> </span>find
+<span class="go">==&gt; Showing internal bootstrap store at &quot;/Users/spack/.spack/bootstrap/store&quot;</span>
+<span class="go">==&gt; 11 installed packages</span>
+<span class="go">-- darwin-catalina-x86_64 / apple-clang@12.0.0 ------------------</span>
+<span class="go">clingo-bootstrap@spack  libassuan@2.5.5  libgpg-error@1.42  libksba@1.5.1  pinentry@1.1.1  zlib@1.2.11</span>
+<span class="go">gnupg@2.3.1             libgcrypt@1.9.3  libiconv@1.16      npth@1.6       python@3.8</span>
+</pre></div>
+</div>
+<p>In case it is needed you can remove all the software in the current bootstrapping store with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>clean<span class="w"> </span>-b
+<span class="go">==&gt; Removing bootstrapped software and configuration in &quot;/Users/spack/.spack/bootstrap&quot;</span>
+
+<span class="gp">% </span>spack<span class="w"> </span>-b<span class="w"> </span>find
+<span class="go">==&gt; Showing internal bootstrap store at &quot;/Users/spack/.spack/bootstrap/store&quot;</span>
+<span class="go">==&gt; 0 installed packages</span>
+</pre></div>
+</div>
+</section>
+<section id="enabling-and-disabling-bootstrapping-methods">
+<h2>Enabling and disabling bootstrapping methods<a class="headerlink" href="#enabling-and-disabling-bootstrapping-methods" title="Link to this heading"></a></h2>
+<p>Bootstrapping is always performed by trying the methods listed by:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack bootstrap list
+Name: github-actions-v0.6 ENABLED
+
+  Type: buildcache
+
+  Info: 
+    url: oci://ghcr.io/spack/bootstrap-buildcache-v1
+    homepage: https://github.com/spack/spack-bootstrap-mirrors
+    releases: https://github.com/spack/spack-bootstrap-mirrors/releases
+
+  Description: 
+    Buildcache generated from a public workflow using GitHub Actions hosted on GitHub Packages.
+    The sha256 checksum of binaries is checked before installation.
+    
+
+Name: github-actions-v0.5 ENABLED
+
+  Type: buildcache
+
+  Info: 
+    url: https://mirror.spack.io/bootstrap/github-actions/v0.5
+    homepage: https://github.com/spack/spack-bootstrap-mirrors
+    releases: https://github.com/spack/spack-bootstrap-mirrors/releases
+
+  Description: 
+    Buildcache generated from a public workflow using Github Actions.
+    The sha256 checksum of binaries is checked before installation.
+    
+
+Name: spack-install ENABLED
+
+  Type: install
+
+  Info: 
+    url: https://mirror.spack.io
+
+  Description: 
+    Specs built from sources downloaded from the Spack public mirror.
+</pre></div>
+</div>
+<p>in the order they appear, from top to bottom. By default Spack is
+configured to try first bootstrapping from pre-built binaries and to
+fall-back to bootstrapping from sources if that failed.</p>
+<p>If need be, you can disable bootstrapping altogether by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>disable
+</pre></div>
+</div>
+<p>in which case it's your responsibility to ensure Spack runs in an
+environment where all its prerequisites are installed. You can
+also configure Spack to skip certain bootstrapping methods by disabling
+them specifically:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>disable<span class="w"> </span>github-actions
+<span class="go">==&gt; &quot;github-actions&quot; is now disabled and will not be used for bootstrapping</span>
+</pre></div>
+</div>
+<p>tells Spack to skip trying to bootstrap from binaries. To add the &quot;github-actions&quot; method back you can:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>github-actions
+</pre></div>
+</div>
+<p>There is also an option to reset the bootstrapping configuration to Spack's defaults:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>reset
+<span class="go">==&gt; Bootstrapping configuration is being reset to Spack&#39;s defaults. Current configuration will be lost.</span>
+<span class="go">Do you want to continue? [Y/n]</span>
+<span class="gp">%</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-mirror-for-air-gapped-systems">
+<h2>Creating a mirror for air-gapped systems<a class="headerlink" href="#creating-a-mirror-for-air-gapped-systems" title="Link to this heading"></a></h2>
+<p>Spack's default configuration for bootstrapping relies on the user having
+access to the internet, either to fetch pre-compiled binaries or source tarballs.
+Sometimes though Spack is deployed on air-gapped systems where such access is denied.</p>
+<p>To help with similar situations Spack has a command that recreates, in a local folder
+of choice, a mirror containing the source tarballs and/or binary packages needed for
+bootstrapping.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>mirror<span class="w"> </span>--binary-packages<span class="w"> </span>/opt/bootstrap
+<span class="go">==&gt; Adding &quot;clingo-bootstrap@spack+python %apple-clang target=x86_64&quot; and dependencies to the mirror at /opt/bootstrap/local-mirror</span>
+<span class="go">==&gt; Adding &quot;gnupg@2.3: %apple-clang target=x86_64&quot; and dependencies to the mirror at /opt/bootstrap/local-mirror</span>
+<span class="go">==&gt; Adding &quot;patchelf@0.13.1:0.13.99 %apple-clang target=x86_64&quot; and dependencies to the mirror at /opt/bootstrap/local-mirror</span>
+<span class="go">==&gt; Adding binary packages from &quot;https://github.com/alalazo/spack-bootstrap-mirrors/releases/download/v0.1-rc.2/bootstrap-buildcache.tar.gz&quot; to the mirror at /opt/bootstrap/local-mirror</span>
+
+<span class="go">To register the mirror on the platform where it&#39;s supposed to be used run the following command(s):</span>
+<span class="gp">  % </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>add<span class="w"> </span>--trust<span class="w"> </span>local-sources<span class="w"> </span>/opt/bootstrap/metadata/sources
+<span class="gp">  % </span>spack<span class="w"> </span>bootstrap<span class="w"> </span>add<span class="w"> </span>--trust<span class="w"> </span>local-binaries<span class="w"> </span>/opt/bootstrap/metadata/binaries
+</pre></div>
+</div>
+<p>This command needs to be run on a machine with internet access and the resulting folder
+has to be moved over to the air-gapped system. Once the local sources are added using the
+commands suggested at the prompt, they can be used to bootstrap Spack.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="binary_caches.html" class="btn btn-neutral float-left" title="Build Caches" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="command_index.html" class="btn btn-neutral float-right" title="Command Reference" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

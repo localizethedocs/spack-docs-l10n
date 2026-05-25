@@ -1,0 +1,825 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.build_systems.cmake &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/build_systems/cmake.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.build_systems.cmake</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.build_systems.cmake</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">collections.abc</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.filesystem</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">from</span> <span class="nn">llnl.util.lang</span> <span class="kn">import</span> <span class="n">stable_partition</span>
+
+<span class="kn">import</span> <span class="nn">spack.builder</span>
+<span class="kn">import</span> <span class="nn">spack.deptypes</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.package_base</span>
+<span class="kn">from</span> <span class="nn">spack.directives</span> <span class="kn">import</span> <span class="n">build_system</span><span class="p">,</span> <span class="n">conflicts</span><span class="p">,</span> <span class="n">depends_on</span><span class="p">,</span> <span class="n">variant</span>
+<span class="kn">from</span> <span class="nn">spack.multimethod</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">spack.util.environment</span> <span class="kn">import</span> <span class="n">filter_system_paths</span>
+
+<span class="kn">from</span> <span class="nn">._checks</span> <span class="kn">import</span> <span class="n">BaseBuilder</span><span class="p">,</span> <span class="n">execute_build_time_tests</span>
+
+<span class="c1"># Regex to extract the primary generator from the CMake generator</span>
+<span class="c1"># string.</span>
+<span class="n">_primary_generator_extractor</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:.* - )?(.*)&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_primary_generator</span><span class="p">(</span><span class="n">generator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use the compiled regex _primary_generator_extractor to extract the</span>
+<span class="sd">    primary generator from the generator string which may contain an</span>
+<span class="sd">    optional secondary generator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_primary_generator_extractor</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">generator</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_maybe_set_python_hints</span><span class="p">(</span><span class="n">pkg</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the PYTHON_EXECUTABLE, Python_EXECUTABLE, and Python3_EXECUTABLE CMake variables</span>
+<span class="sd">    if the package has Python as build or link dep and ``find_python_hints`` is set to True. See</span>
+<span class="sd">    ``find_python_hints`` for context.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;find_python_hints&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dependencies</span><span class="p">(</span>
+        <span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">BUILD</span> <span class="o">|</span> <span class="n">dt</span><span class="o">.</span><span class="n">LINK</span>
+    <span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">python_executable</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">path</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;PYTHON_EXECUTABLE&quot;</span><span class="p">,</span> <span class="n">python_executable</span><span class="p">),</span>
+            <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;Python_EXECUTABLE&quot;</span><span class="p">,</span> <span class="n">python_executable</span><span class="p">),</span>
+            <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;Python3_EXECUTABLE&quot;</span><span class="p">,</span> <span class="n">python_executable</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_supports_compilation_databases</span><span class="p">(</span><span class="n">pkg</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if this package (and CMake) can support compilation databases.&quot;&quot;&quot;</span>
+
+    <span class="c1"># CMAKE_EXPORT_COMPILE_COMMANDS only exists for CMake &gt;= 3.5</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;^cmake@3.5:&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># CMAKE_EXPORT_COMPILE_COMMANDS is only implemented for Makefile and Ninja generators</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;generator=make&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;generator=ninja&quot;</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">_conditional_cmake_defaults</span><span class="p">(</span><span class="n">pkg</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set a few default defines for CMake, depending on its version.&quot;&quot;&quot;</span>
+    <span class="n">cmakes</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dependencies</span><span class="p">(</span><span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">BUILD</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmakes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">cmake</span> <span class="o">=</span> <span class="n">cmakes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># CMAKE_INTERPROCEDURAL_OPTIMIZATION only exists for CMake &gt;= 3.9</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ipo</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;ipo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">ipo</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">cmake</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3.9:&quot;</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_INTERPROCEDURAL_OPTIMIZATION&quot;</span><span class="p">,</span> <span class="n">ipo</span><span class="p">))</span>
+
+    <span class="c1"># Disable Package Registry: export(PACKAGE) may put files in the user&#39;s home directory, and</span>
+    <span class="c1"># find_package may search there. This is not what we want.</span>
+
+    <span class="c1"># Do not populate CMake User Package Registry</span>
+    <span class="k">if</span> <span class="n">cmake</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3.15:&quot;</span><span class="p">):</span>
+        <span class="c1"># see https://cmake.org/cmake/help/latest/policy/CMP0090.html</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_POLICY_DEFAULT_CMP0090&quot;</span><span class="p">,</span> <span class="s2">&quot;NEW&quot;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">cmake</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3.1:&quot;</span><span class="p">):</span>
+        <span class="c1"># see https://cmake.org/cmake/help/latest/variable/CMAKE_EXPORT_NO_PACKAGE_REGISTRY.html</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_EXPORT_NO_PACKAGE_REGISTRY&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+
+    <span class="c1"># Do not use CMake User/System Package Registry</span>
+    <span class="c1"># https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#disabling-the-package-registry</span>
+    <span class="k">if</span> <span class="n">cmake</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3.16:&quot;</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_FIND_USE_PACKAGE_REGISTRY&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">cmake</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3.1:3.15&quot;</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+
+    <span class="c1"># Export a compilation database if supported.</span>
+    <span class="k">if</span> <span class="n">_supports_compilation_databases</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_EXPORT_COMPILE_COMMANDS&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+
+    <span class="c1"># Enable MACOSX_RPATH by default when cmake_minimum_required &lt; 3</span>
+    <span class="c1"># https://cmake.org/cmake/help/latest/policy/CMP0042.html</span>
+    <span class="k">if</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;platform=darwin&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">cmake</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@3:&quot;</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_POLICY_DEFAULT_CMP0042&quot;</span><span class="p">,</span> <span class="s2">&quot;NEW&quot;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="generator">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.generator">[docs]</a>
+<span class="k">def</span> <span class="nf">generator</span><span class="p">(</span><span class="o">*</span><span class="n">names</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The build system generator to use.</span>
+
+<span class="sd">    See ``cmake --help`` for a list of valid generators.</span>
+<span class="sd">    Currently, &quot;Unix Makefiles&quot; and &quot;Ninja&quot; are the only generators</span>
+<span class="sd">    that Spack supports. Defaults to &quot;Unix Makefiles&quot;.</span>
+
+<span class="sd">    See https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html</span>
+<span class="sd">    for more information.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        names: allowed generators for this package</span>
+<span class="sd">        default: default generator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">allowed_values</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;make&quot;</span><span class="p">,</span> <span class="s2">&quot;ninja&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_values</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;only &#39;make&#39; and &#39;ninja&#39; are allowed for CMake&#39;s &#39;generator&#39; directive&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">default</span> <span class="ow">or</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">not_used</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">allowed_values</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_values</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">allowed_values</span>
+
+    <span class="n">_values</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">variant</span><span class="p">(</span>
+        <span class="s2">&quot;generator&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="n">_values</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the build system generator to use&quot;</span><span class="p">,</span>
+        <span class="n">when</span><span class="o">=</span><span class="s2">&quot;build_system=cmake&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">not_used</span><span class="p">:</span>
+        <span class="n">conflicts</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;generator=</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_cmake_prefix_path">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.get_cmake_prefix_path">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cmake_prefix_path</span><span class="p">(</span><span class="n">pkg</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Obtain the CMAKE_PREFIX_PATH entries for a package, based on the cmake_prefix_path package</span>
+<span class="sd">    attribute of direct build/test and transitive link dependencies.&quot;&quot;&quot;</span>
+    <span class="c1"># Add direct build/test deps</span>
+    <span class="n">selected</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dependencies</span><span class="p">(</span><span class="n">deptype</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">BUILD</span> <span class="o">|</span> <span class="n">dt</span><span class="o">.</span><span class="n">TEST</span><span class="p">)}</span>
+    <span class="c1"># Add transitive link deps</span>
+    <span class="n">selected</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">LINK</span><span class="p">))</span>
+    <span class="c1"># Separate out externals so they do not shadow Spack prefixes</span>
+    <span class="n">externals</span><span class="p">,</span> <span class="n">spack_built</span> <span class="o">=</span> <span class="n">stable_partition</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;topo&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">external</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filter_system_paths</span><span class="p">(</span>
+        <span class="n">path</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">spack_built</span><span class="p">,</span> <span class="n">externals</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">cmake_prefix_paths</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CMakePackage">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakePackage">[docs]</a>
+<span class="k">class</span> <span class="nc">CMakePackage</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">package_base</span><span class="o">.</span><span class="n">PackageBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specialized class for packages built using CMake</span>
+
+<span class="sd">    For more information on the CMake build system, see:</span>
+<span class="sd">    https://cmake.org/cmake/help/latest/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: This attribute is used in UI queries that need to know the build</span>
+    <span class="c1">#: system base class</span>
+    <span class="n">build_system_class</span> <span class="o">=</span> <span class="s2">&quot;CMakePackage&quot;</span>
+
+    <span class="c1">#: Legacy buildsystem attribute used to deserialize and install old specs</span>
+    <span class="n">legacy_buildsystem</span> <span class="o">=</span> <span class="s2">&quot;cmake&quot;</span>
+
+    <span class="c1">#: When this package depends on Python and ``find_python_hints`` is set to True, pass the</span>
+    <span class="c1">#: defines {Python3,Python,PYTHON}_EXECUTABLE explicitly, so that CMake locates the right</span>
+    <span class="c1">#: Python in its builtin FindPython3, FindPython, and FindPythonInterp modules. Spack does</span>
+    <span class="c1">#: CMake&#39;s job because CMake&#39;s modules by default only search for Python versions known at the</span>
+    <span class="c1">#: time of release.</span>
+    <span class="n">find_python_hints</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">build_system</span><span class="p">(</span><span class="s2">&quot;cmake&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">when</span><span class="p">(</span><span class="s2">&quot;build_system=cmake&quot;</span><span class="p">):</span>
+        <span class="c1"># https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html</span>
+        <span class="c1"># See https://github.com/spack/spack/pull/36679 and related issues for a</span>
+        <span class="c1"># discussion of the trade-offs between Release and RelWithDebInfo for default</span>
+        <span class="c1"># builds. Release is chosen to maximize performance and reduce disk-space burden,</span>
+        <span class="c1"># at the cost of more difficulty in debugging.</span>
+        <span class="n">variant</span><span class="p">(</span>
+            <span class="s2">&quot;build_type&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;Release&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;CMake build type&quot;</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Debug&quot;</span><span class="p">,</span> <span class="s2">&quot;Release&quot;</span><span class="p">,</span> <span class="s2">&quot;RelWithDebInfo&quot;</span><span class="p">,</span> <span class="s2">&quot;MinSizeRel&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="c1"># CMAKE_INTERPROCEDURAL_OPTIMIZATION only exists for CMake &gt;= 3.9</span>
+        <span class="c1"># https://cmake.org/cmake/help/latest/variable/CMAKE_INTERPROCEDURAL_OPTIMIZATION.html</span>
+        <span class="n">variant</span><span class="p">(</span>
+            <span class="s2">&quot;ipo&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">when</span><span class="o">=</span><span class="s2">&quot;^cmake@3.9:&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;CMake interprocedural optimization&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+            <span class="n">generator</span><span class="p">(</span><span class="s2">&quot;ninja&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">generator</span><span class="p">(</span><span class="s2">&quot;ninja&quot;</span><span class="p">,</span> <span class="s2">&quot;make&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;make&quot;</span><span class="p">)</span>
+
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gmake&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;generator=make&quot;</span><span class="p">)</span>
+        <span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;ninja&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;generator=ninja&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CMakePackage.flags_to_build_system_args">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakePackage.flags_to_build_system_args">[docs]</a>
+    <span class="k">def</span> <span class="nf">flags_to_build_system_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list of all command line arguments to pass the specified</span>
+<span class="sd">        compiler flags to cmake. Note CMAKE does not have a cppflags option,</span>
+<span class="sd">        so cppflags will be added to cflags, cxxflags, and fflags to mimic the</span>
+<span class="sd">        behavior in other tools.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Has to be dynamic attribute due to caching</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;cmake_flag_args&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="n">flag_string</span> <span class="o">=</span> <span class="s2">&quot;-DCMAKE_</span><span class="si">{0}</span><span class="s2">_FLAGS=</span><span class="si">{1}</span><span class="s2">&quot;</span>
+        <span class="n">langs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;CXX&quot;</span><span class="p">:</span> <span class="s2">&quot;cxx&quot;</span><span class="p">,</span> <span class="s2">&quot;Fortran&quot;</span><span class="p">:</span> <span class="s2">&quot;f&quot;</span><span class="p">}</span>
+
+        <span class="c1"># Handle language compiler flags</span>
+        <span class="k">for</span> <span class="n">lang</span><span class="p">,</span> <span class="n">pre</span> <span class="ow">in</span> <span class="n">langs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s2">&quot;flags&quot;</span>
+            <span class="c1"># cmake has no explicit cppflags support -&gt; add it to all langs</span>
+            <span class="n">lang_flags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cppflags&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">if</span> <span class="n">lang_flags</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cmake_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flag_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">lang_flags</span><span class="p">))</span>
+
+        <span class="c1"># Cmake has different linker arguments for different build types.</span>
+        <span class="c1"># We specify for each of them.</span>
+        <span class="k">if</span> <span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldflags&quot;</span><span class="p">]:</span>
+            <span class="n">ldflags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldflags&quot;</span><span class="p">])</span>
+            <span class="c1"># cmake has separate linker arguments for types of builds.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmake_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-DCMAKE_EXE_LINKER_FLAGS=</span><span class="si">{</span><span class="n">ldflags</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmake_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-DCMAKE_MODULE_LINKER_FLAGS=</span><span class="si">{</span><span class="n">ldflags</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmake_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-DCMAKE_SHARED_LINKER_FLAGS=</span><span class="si">{</span><span class="n">ldflags</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># CMake has libs options separated by language. Apply ours to each.</span>
+        <span class="k">if</span> <span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldlibs&quot;</span><span class="p">]:</span>
+            <span class="n">libs_flags</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ldlibs&quot;</span><span class="p">])</span>
+            <span class="n">libs_string</span> <span class="o">=</span> <span class="s2">&quot;-DCMAKE_</span><span class="si">{0}</span><span class="s2">_STANDARD_LIBRARIES=</span><span class="si">{1}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">lang</span> <span class="ow">in</span> <span class="n">langs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cmake_flag_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">libs_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">libs_flags</span><span class="p">))</span></div>
+
+
+    <span class="c1"># Legacy methods (used by too many packages to change them,</span>
+    <span class="c1"># need to forward to the builder)</span>
+<div class="viewcode-block" id="CMakePackage.define">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakePackage.define">[docs]</a>
+    <span class="k">def</span> <span class="nf">define</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CMakePackage.define_from_variant">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakePackage.define_from_variant">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_from_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">define_from_variant</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CMakeBuilder">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder">[docs]</a>
+<span class="nd">@spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="s2">&quot;cmake&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CMakeBuilder</span><span class="p">(</span><span class="n">BaseBuilder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The cmake builder encodes the default way of building software with CMake. IT</span>
+<span class="sd">    has three phases that can be overridden:</span>
+
+<span class="sd">        1. :py:meth:`~.CMakeBuilder.cmake`</span>
+<span class="sd">        2. :py:meth:`~.CMakeBuilder.build`</span>
+<span class="sd">        3. :py:meth:`~.CMakeBuilder.install`</span>
+
+<span class="sd">    They all have sensible defaults and for many packages the only thing</span>
+<span class="sd">    necessary will be to override :py:meth:`~.CMakeBuilder.cmake_args`.</span>
+
+<span class="sd">    For a finer tuning you may also override:</span>
+
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+<span class="sd">        | **Method**                                    | **Purpose**        |</span>
+<span class="sd">        +===============================================+====================+</span>
+<span class="sd">        | :py:meth:`~.CMakeBuilder.root_cmakelists_dir` | Location of the    |</span>
+<span class="sd">        |                                               | root CMakeLists.txt|</span>
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+<span class="sd">        | :py:meth:`~.CMakeBuilder.build_directory`     | Directory where to |</span>
+<span class="sd">        |                                               | build the package  |</span>
+<span class="sd">        +-----------------------------------------------+--------------------+</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Phases of a CMake package</span>
+    <span class="n">phases</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Names associated with package methods in the old build-system format</span>
+    <span class="n">legacy_methods</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;cmake_args&quot;</span><span class="p">,</span> <span class="s2">&quot;check&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Names associated with package attributes in the old build-system format</span>
+    <span class="n">legacy_attributes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;build_targets&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;install_targets&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;build_time_test_callbacks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;archive_files&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;root_cmakelists_dir&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;std_cmake_args&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;build_dirname&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;build_directory&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1">#: Targets to be used during the build phase</span>
+    <span class="n">build_targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">#: Targets to be used during the install phase</span>
+    <span class="n">install_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+    <span class="c1">#: Callback names for build-time test</span>
+    <span class="n">build_time_test_callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;check&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">archive_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Files to archive for packages based on CMake&quot;&quot;&quot;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;CMakeCache.txt&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">_supports_compilation_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;compile_commands.json&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">files</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">root_cmakelists_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The relative path to the directory containing CMakeLists.txt</span>
+
+<span class="sd">        This path is relative to the root of the extracted tarball,</span>
+<span class="sd">        not to the ``build_directory``. Defaults to the current directory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">source_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;generator=make&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Unix Makefiles&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;generator=ninja&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Ninja&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">format</span><span class="p">()</span><span class="si">}</span><span class="s1"> has an unsupported value for the &quot;generator&quot; variant&#39;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">std_cmake_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Standard cmake arguments provided as a property for</span>
+<span class="sd">        convenience of package writers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">std_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;cmake_flag_args&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="n">args</span>
+
+<div class="viewcode-block" id="CMakeBuilder.std_args">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.std_args">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">std_args</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the standard cmake arguments for a generic package&quot;&quot;&quot;</span>
+        <span class="n">default_generator</span> <span class="o">=</span> <span class="s2">&quot;Ninja&quot;</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span> <span class="k">else</span> <span class="s2">&quot;Unix Makefiles&quot;</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="n">generator</span> <span class="ow">or</span> <span class="n">default_generator</span>
+        <span class="n">valid_primary_generators</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Unix Makefiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Ninja&quot;</span><span class="p">]</span>
+        <span class="n">primary_generator</span> <span class="o">=</span> <span class="n">_extract_primary_generator</span><span class="p">(</span><span class="n">generator</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">primary_generator</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_primary_generators</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Invalid CMake generator: &#39;</span><span class="si">{0}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">generator</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;CMakePackage currently supports the following &quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;primary generators: &#39;</span><span class="si">{0}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&#39;, &#39;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">valid_primary_generators</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">InstallError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">build_type</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;build_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">build_type</span> <span class="o">=</span> <span class="s2">&quot;RelWithDebInfo&quot;</span>
+
+        <span class="n">define</span> <span class="o">=</span> <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;-G&quot;</span><span class="p">,</span>
+            <span class="n">generator</span><span class="p">,</span>
+            <span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_INSTALL_PREFIX&quot;</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()),</span>
+            <span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_INSTALL_RPATH_USE_LINK_PATH&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="c1"># only include the install prefix lib dirs; rpaths for deps are added by USE_LINK_PATH</span>
+            <span class="n">define</span><span class="p">(</span>
+                <span class="s2">&quot;CMAKE_INSTALL_RPATH&quot;</span><span class="p">,</span>
+                <span class="p">[</span>
+                    <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span>
+                    <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s2">&quot;lib64&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span>
+                <span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">,</span> <span class="n">get_cmake_prefix_path</span><span class="p">(</span><span class="n">pkg</span><span class="p">)),</span>
+            <span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_BUILD_TYPE&quot;</span><span class="p">,</span> <span class="n">build_type</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">primary_generator</span> <span class="o">==</span> <span class="s2">&quot;Unix Makefiles&quot;</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_VERBOSE_MAKEFILE&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">mac_ver</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_FIND_FRAMEWORK&quot;</span><span class="p">,</span> <span class="s2">&quot;LAST&quot;</span><span class="p">),</span> <span class="n">define</span><span class="p">(</span><span class="s2">&quot;CMAKE_FIND_APPBUNDLE&quot;</span><span class="p">,</span> <span class="s2">&quot;LAST&quot;</span><span class="p">)]</span>
+            <span class="p">)</span>
+
+        <span class="n">_conditional_cmake_defaults</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">_maybe_set_python_hints</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">args</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.define_cuda_architectures">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.define_cuda_architectures">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">define_cuda_architectures</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the str ``-DCMAKE_CUDA_ARCHITECTURES:STRING=(expanded cuda_arch)``.</span>
+
+<span class="sd">        ``cuda_arch`` is variant composed of a list of target CUDA architectures and</span>
+<span class="sd">        it is declared in the cuda package.</span>
+
+<span class="sd">        This method is no-op for cmake&lt;3.18 and when ``cuda_arch`` variant is not set.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmake_flag</span> <span class="o">=</span> <span class="nb">str</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;cuda_arch&quot;</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span> <span class="ow">and</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;^cmake@3.18:&quot;</span><span class="p">):</span>
+            <span class="n">cmake_flag</span> <span class="o">=</span> <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span>
+                <span class="s2">&quot;CMAKE_CUDA_ARCHITECTURES&quot;</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;cuda_arch&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cmake_flag</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.define_hip_architectures">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.define_hip_architectures">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">define_hip_architectures</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the str ``-DCMAKE_HIP_ARCHITECTURES:STRING=(expanded amdgpu_target)``.</span>
+
+<span class="sd">        ``amdgpu_target`` is variant composed of a list of the target HIP</span>
+<span class="sd">        architectures and it is declared in the rocm package.</span>
+
+<span class="sd">        This method is no-op for cmake&lt;3.18 and when ``amdgpu_target`` variant is</span>
+<span class="sd">        not set.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmake_flag</span> <span class="o">=</span> <span class="nb">str</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;amdgpu_target&quot;</span> <span class="ow">in</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span> <span class="ow">and</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;^cmake@3.21:&quot;</span><span class="p">):</span>
+            <span class="n">cmake_flag</span> <span class="o">=</span> <span class="n">CMakeBuilder</span><span class="o">.</span><span class="n">define</span><span class="p">(</span>
+                <span class="s2">&quot;CMAKE_HIP_ARCHITECTURES&quot;</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="s2">&quot;amdgpu_target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cmake_flag</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.define">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.define">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">define</span><span class="p">(</span><span class="n">cmake_var</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a CMake command line argument that defines a variable.</span>
+
+<span class="sd">        The resulting argument will convert boolean values to OFF/ON</span>
+<span class="sd">        and lists/tuples to CMake semicolon-separated string lists. All other</span>
+<span class="sd">        values will be interpreted as strings.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                [define(&#39;BUILD_SHARED_LIBS&#39;, True),</span>
+<span class="sd">                 define(&#39;CMAKE_CXX_STANDARD&#39;, 14),</span>
+<span class="sd">                 define(&#39;swr&#39;, [&#39;avx&#39;, &#39;avx2&#39;])]</span>
+
+<span class="sd">            will generate the following configuration options:</span>
+
+<span class="sd">            .. code-block:: console</span>
+
+<span class="sd">                [&quot;-DBUILD_SHARED_LIBS:BOOL=ON&quot;,</span>
+<span class="sd">                 &quot;-DCMAKE_CXX_STANDARD:STRING=14&quot;,</span>
+<span class="sd">                 &quot;-DSWR:STRING=avx;avx2]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create a list of pairs. Each pair includes a configuration</span>
+        <span class="c1"># option and whether or not that option is activated</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;BOOL&quot;</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;ON&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s2">&quot;OFF&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;STRING&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;-D&quot;</span><span class="p">,</span> <span class="n">cmake_var</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.define_from_variant">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.define_from_variant">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_from_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmake_var</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a CMake command line argument from the given variant&#39;s value.</span>
+
+<span class="sd">        The optional ``variant`` argument defaults to the lower-case transform</span>
+<span class="sd">        of ``cmake_var``.</span>
+
+<span class="sd">        This utility function is similar to</span>
+<span class="sd">        :meth:`~spack.build_systems.autotools.AutotoolsBuilder.with_or_without`.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Given a package with:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                variant(&#39;cxxstd&#39;, default=&#39;11&#39;, values=(&#39;11&#39;, &#39;14&#39;),</span>
+<span class="sd">                        multi=False, description=&#39;&#39;)</span>
+<span class="sd">                variant(&#39;shared&#39;, default=True, description=&#39;&#39;)</span>
+<span class="sd">                variant(&#39;swr&#39;, values=any_combination_of(&#39;avx&#39;, &#39;avx2&#39;),</span>
+<span class="sd">                        description=&#39;&#39;)</span>
+
+<span class="sd">            calling this function like:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                [self.define_from_variant(&#39;BUILD_SHARED_LIBS&#39;, &#39;shared&#39;),</span>
+<span class="sd">                 self.define_from_variant(&#39;CMAKE_CXX_STANDARD&#39;, &#39;cxxstd&#39;),</span>
+<span class="sd">                 self.define_from_variant(&#39;SWR&#39;)]</span>
+
+<span class="sd">            will generate the following configuration options:</span>
+
+<span class="sd">            .. code-block:: console</span>
+
+<span class="sd">                [&quot;-DBUILD_SHARED_LIBS:BOOL=ON&quot;,</span>
+<span class="sd">                 &quot;-DCMAKE_CXX_STANDARD:STRING=14&quot;,</span>
+<span class="sd">                 &quot;-DSWR:STRING=avx;avx2]</span>
+
+<span class="sd">            for ``&lt;spec-name&gt; cxxstd=14 +shared swr=avx,avx2``</span>
+
+<span class="sd">        Note: if the provided variant is conditional, and the condition is not met,</span>
+<span class="sd">                this function returns an empty string. CMake discards empty strings</span>
+<span class="sd">                provided on the command line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">variant</span> <span class="o">=</span> <span class="n">cmake_var</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">has_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; is not a variant of &quot;</span><span class="si">{1}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">variants</span><span class="p">[</span><span class="n">variant</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="c1"># Sort multi-valued variants for reproducibility</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="n">cmake_var</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">build_dirname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory name to use when building the package.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;spack-build-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">build_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Full-path to the directory to use when building the package.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_dirname</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CMakeBuilder.cmake_args">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.cmake_args">[docs]</a>
+    <span class="k">def</span> <span class="nf">cmake_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of all the arguments that must be passed to cmake, except:</span>
+
+<span class="sd">            * CMAKE_INSTALL_PREFIX</span>
+<span class="sd">            * CMAKE_BUILD_TYPE</span>
+
+<span class="sd">        which will be set automatically.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.cmake">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.cmake">[docs]</a>
+    <span class="k">def</span> <span class="nf">cmake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs ``cmake`` in the build directory&quot;&quot;&quot;</span>
+
+        <span class="c1"># skip cmake phase if it is an incremental develop build</span>
+        <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">is_develop</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="s2">&quot;CMakeCache.txt&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_cmake_args</span>
+        <span class="n">options</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmake_args</span><span class="p">()</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_cmakelists_dir</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">cmake</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.build">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.build">[docs]</a>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make the build targets&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">==</span> <span class="s2">&quot;Unix Makefiles&quot;</span><span class="p">:</span>
+                <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">build_targets</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">==</span> <span class="s2">&quot;Ninja&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">build_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">)</span>
+                <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">ninja</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">build_targets</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CMakeBuilder.install">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.install">[docs]</a>
+    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make the install targets&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">==</span> <span class="s2">&quot;Unix Makefiles&quot;</span><span class="p">:</span>
+                <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">install_targets</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">==</span> <span class="s2">&quot;Ninja&quot;</span><span class="p">:</span>
+                <span class="n">pkg</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">ninja</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">install_targets</span><span class="p">)</span></div>
+
+
+    <span class="n">spack</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">)(</span><span class="n">execute_build_time_tests</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CMakeBuilder.check">
+<a class="viewcode-back" href="../../../spack.build_systems.html#spack.build_systems.cmake.CMakeBuilder.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search the CMake-generated files for the targets ``test`` and ``check``,</span>
+<span class="sd">        and runs them if found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">working_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_directory</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">==</span> <span class="s2">&quot;Unix Makefiles&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_make_target_execute</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">jobs_env</span><span class="o">=</span><span class="s2">&quot;CTEST_PARALLEL_LEVEL&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_make_target_execute</span><span class="p">(</span><span class="s2">&quot;check&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">==</span> <span class="s2">&quot;Ninja&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_ninja_target_execute</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">jobs_env</span><span class="o">=</span><span class="s2">&quot;CTEST_PARALLEL_LEVEL&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">_if_ninja_target_execute</span><span class="p">(</span><span class="s2">&quot;check&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

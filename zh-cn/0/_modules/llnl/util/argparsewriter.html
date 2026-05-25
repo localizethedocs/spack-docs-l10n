@@ -1,0 +1,607 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>llnl.util.argparsewriter &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/llnl/util/argparsewriter.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">llnl.util.argparsewriter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>llnl.util.argparsewriter 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">ArgumentParser</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="Command">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.Command">[文档]</a>
+<span class="k">class</span> <span class="nc">Command</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parsed representation of a command from argparse.</span>
+
+<span class="sd">    This is a single command from an argparse parser. ``ArgparseWriter`` creates these and returns</span>
+<span class="sd">    them from ``parse()``, and it passes one of these to each call to ``format()`` so that we can</span>
+<span class="sd">    take an action for a single command.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">prog</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">usage</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">positionals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span>
+        <span class="n">optionals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span>
+        <span class="n">subcommands</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">ArgumentParser</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new Command instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prog: Program name.</span>
+<span class="sd">            description: Command description.</span>
+<span class="sd">            usage: Command usage.</span>
+<span class="sd">            positionals: List of positional arguments.</span>
+<span class="sd">            optionals: List of optional arguments.</span>
+<span class="sd">            subcommands: List of subcommand parsers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog</span> <span class="o">=</span> <span class="n">prog</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positionals</span> <span class="o">=</span> <span class="n">positionals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optionals</span> <span class="o">=</span> <span class="n">optionals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subcommands</span> <span class="o">=</span> <span class="n">subcommands</span></div>
+
+
+
+<span class="c1"># NOTE: The only reason we subclass argparse.HelpFormatter is to get access to self._expand_help(),</span>
+<span class="c1"># ArgparseWriter is not intended to be used as a formatter_class.</span>
+<div class="viewcode-block" id="ArgparseWriter">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseWriter">[文档]</a>
+<span class="k">class</span> <span class="nc">ArgparseWriter</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze an argparse ArgumentParser for easy generation of help.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prog</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">IO</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">aliases</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new ArgparseWriter instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prog: Program name.</span>
+<span class="sd">            out: File object to write to.</span>
+<span class="sd">            aliases: Whether or not to include subparsers for aliases.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">prog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog</span> <span class="o">=</span> <span class="n">prog</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="n">aliases</span>
+
+<div class="viewcode-block" id="ArgparseWriter.parse">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseWriter.parse">[文档]</a>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">:</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">prog</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the parser object and return the relavent components.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parser: Command parser.</span>
+<span class="sd">            prog: Program name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Information about the command from the parser.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">parser</span>
+
+        <span class="n">split_prog</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">prog</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">split_prog</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prog</span>
+        <span class="n">prog</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_prog</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">description</span>
+
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_get_formatter</span><span class="p">()</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_actions</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_mutually_exclusive_groups</span>
+        <span class="n">usage</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">_format_usage</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Go through actions and split them into optionals, positionals, and subcommands</span>
+        <span class="n">optionals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">positionals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">subcommands</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">:</span>
+                <span class="n">flags</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span>
+                <span class="n">dest_flags</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">_format_action_invocation</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+                <span class="n">nargs</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_expand_help</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">help</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">help</span> <span class="o">!=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span>
+                    <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="n">help</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">choices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">dest</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">action</span><span class="o">.</span><span class="n">choices</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dest</span> <span class="o">=</span> <span class="p">[</span><span class="n">action</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span>
+
+                <span class="n">optionals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">flags</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">dest_flags</span><span class="p">,</span> <span class="n">nargs</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">argparse</span><span class="o">.</span><span class="n">_SubParsersAction</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">subaction</span> <span class="ow">in</span> <span class="n">action</span><span class="o">.</span><span class="n">_choices_actions</span><span class="p">:</span>
+                    <span class="n">subparser</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">_name_parser_map</span><span class="p">[</span><span class="n">subaction</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span>
+                    <span class="n">help</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_expand_help</span><span class="p">(</span><span class="n">subaction</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">subaction</span><span class="o">.</span><span class="n">help</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">help</span> <span class="o">!=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span>
+                        <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">help</span> <span class="o">=</span> <span class="n">help</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">subcommands</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">subparser</span><span class="p">,</span> <span class="n">subaction</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+
+                    <span class="c1"># Look for aliases of the form &#39;name (alias, ...)&#39;</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subaction</span><span class="o">.</span><span class="n">metavar</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(.*) \((.*)\)&quot;</span><span class="p">,</span> <span class="n">subaction</span><span class="o">.</span><span class="n">metavar</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                            <span class="n">aliases</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+                                <span class="n">subparser</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">_name_parser_map</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span>
+                                <span class="n">help</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">_expand_help</span><span class="p">(</span><span class="n">subaction</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">subaction</span><span class="o">.</span><span class="n">help</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">help</span> <span class="o">!=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span>
+                                    <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                                <span class="p">)</span>
+                                <span class="n">help</span> <span class="o">=</span> <span class="n">help</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="n">subcommands</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">subparser</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">_format_action_invocation</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_expand_help</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">help</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">help</span> <span class="o">!=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span>
+                    <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="n">help</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">positionals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">args</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">choices</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span><span class="n">prog</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">usage</span><span class="p">,</span> <span class="n">positionals</span><span class="p">,</span> <span class="n">optionals</span><span class="p">,</span> <span class="n">subcommands</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgparseWriter.format">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseWriter.format">[文档]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the string representation of a single node in the parser tree.</span>
+
+<span class="sd">        Override this in subclasses to define how each subcommand should be displayed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cmd: Parsed information about a command or subcommand.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            String representation of this subcommand.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">:</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">prog</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively write a parser.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parser: Command parser.</span>
+<span class="sd">            prog: Program name.</span>
+<span class="sd">            level: Current level.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">level</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">subparser</span><span class="p">,</span> <span class="n">prog</span><span class="p">,</span> <span class="n">help</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">subcommands</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="n">subparser</span><span class="p">,</span> <span class="n">prog</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArgparseWriter.write">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseWriter.write">[文档]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">:</span> <span class="n">ArgumentParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write out details about an ArgumentParser.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parser: Command parser.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prog</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BrokenPipeError</span><span class="p">:</span>
+            <span class="c1"># Swallow pipe errors</span>
+            <span class="k">pass</span></div>
+</div>
+
+
+
+<span class="n">_rst_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;`&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter">[文档]</a>
+<span class="k">class</span> <span class="nc">ArgparseRstWriter</span><span class="p">(</span><span class="n">ArgparseWriter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write argparse output as rst sections.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">prog</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">out</span><span class="p">:</span> <span class="n">IO</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+        <span class="n">aliases</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">rst_levels</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rst_levels</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new ArgparseRstWriter instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prog: Program name.</span>
+<span class="sd">            out: File object to write to.</span>
+<span class="sd">            aliases: Whether or not to include subparsers for aliases.</span>
+<span class="sd">            rst_levels: List of characters for rst section headings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">prog</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">aliases</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rst_levels</span> <span class="o">=</span> <span class="n">rst_levels</span>
+
+<div class="viewcode-block" id="ArgparseRstWriter.format">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.format">[文档]</a>
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the string representation of a single node in the parser tree.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cmd: Parsed information about a command or subcommand.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            String representation of a node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_command</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">prog</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+
+        <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">usage</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">usage</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">positionals</span><span class="p">:</span>
+            <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_positionals</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">args</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">nargs</span><span class="p">,</span> <span class="n">help</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">positionals</span><span class="p">:</span>
+                <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positional</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+            <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_positionals</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">optionals</span><span class="p">:</span>
+            <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_optionals</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">flags</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">dest_flags</span><span class="p">,</span> <span class="n">nargs</span><span class="p">,</span> <span class="n">help</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">optionals</span><span class="p">:</span>
+                <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optional</span><span class="p">(</span><span class="n">dest_flags</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+            <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_optionals</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">subcommands</span><span class="p">:</span>
+            <span class="n">string</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_subcommands</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">subcommands</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.begin_command">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.begin_command">[文档]</a>
+    <span class="k">def</span> <span class="nf">begin_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prog</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Text to print before a command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prog: Program name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Text before a command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">----</span>
+
+<span class="s2">.. _</span><span class="si">{0}</span><span class="s2">:</span>
+
+<span class="si">{1}</span>
+<span class="si">{2}</span>
+
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">prog</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span> <span class="n">prog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rst_levels</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">prog</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.description">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.description">[文档]</a>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Description of a command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            description: Command description.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Description of a command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">description</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.usage">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.usage">[文档]</a>
+    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example usage of a command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            usage: Command usage.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Usage of a command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">.. code-block:: console</span>
+
+<span class="s2">    </span><span class="si">{0}</span>
+
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">usage</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.begin_positionals">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.begin_positionals">[文档]</a>
+    <span class="k">def</span> <span class="nf">begin_positionals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Text to print before positional arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Positional arguments header.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">**Positional arguments**</span><span class="se">\n\n</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.positional">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.positional">[文档]</a>
+    <span class="k">def</span> <span class="nf">positional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Description of a positional argument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Argument name.</span>
+<span class="sd">            help: Help text.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Positional argument description.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="si">{0}</span>
+<span class="s2">  </span><span class="si">{1}</span>
+
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">help</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.end_positionals">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.end_positionals">[文档]</a>
+    <span class="k">def</span> <span class="nf">end_positionals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Text to print after positional arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Positional arguments footer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.begin_optionals">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.begin_optionals">[文档]</a>
+    <span class="k">def</span> <span class="nf">begin_optionals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Text to print before optional arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional arguments header.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">**Optional arguments**</span><span class="se">\n\n</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.optional">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.optional">[文档]</a>
+    <span class="k">def</span> <span class="nf">optional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Description of an optional argument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            opts: Optional argument.</span>
+<span class="sd">            help: Help text.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional argument description.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">``</span><span class="si">{0}</span><span class="s2">``</span>
+<span class="s2">  </span><span class="si">{1}</span>
+
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">opts</span><span class="p">,</span> <span class="n">help</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.end_optionals">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.end_optionals">[文档]</a>
+    <span class="k">def</span> <span class="nf">end_optionals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Text to print after optional arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional arguments footer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ArgparseRstWriter.begin_subcommands">
+<a class="viewcode-back" href="../../../llnl.util.html#llnl.util.argparsewriter.ArgparseRstWriter.begin_subcommands">[文档]</a>
+    <span class="k">def</span> <span class="nf">begin_subcommands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subcommands</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">ArgumentParser</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Table with links to other subcommands.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            subcommands: List of subcommands.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Subcommand linking text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">**Subcommands**</span>
+
+<span class="s2">.. hlist::</span>
+<span class="s2">   :columns: 4</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">subcommands</span><span class="p">:</span>
+            <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[^ ]* &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">prog</span><span class="p">)</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;   * :ref:`</span><span class="si">{0}</span><span class="s2"> &lt;</span><span class="si">{1}</span><span class="s2">&gt;`</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prog</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">prog</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">string</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

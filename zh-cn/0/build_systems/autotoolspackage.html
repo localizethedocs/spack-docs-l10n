@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autotools &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/build_systems/autotoolspackage.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaddf03"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="CMake" href="cmakepackage.html" />
+    <link rel="prev" title="Waf" href="wafpackage.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../ltd-provenance.js"></script>
+<script type="text/javascript" src="../ltd-current.js"></script>
+<script type="text/javascript" src="../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_systems.html">Build Systems</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wafpackage.html">Waf</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Autotools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phases">Phases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#important-files">Important files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-system-dependencies">Build system dependencies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-a-custom-autoreconf-phase">Using a custom autoreconf phase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#patching-configure-or-makefile-in-files">patching configure or Makefile.in files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#old-autotools-helper-scripts">Old Autotools helper scripts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#force-autoreconf">force_autoreconf</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#finding-configure-flags">Finding configure flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#addings-flags-to-configure">Addings flags to configure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#helper-functions">Helper functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enable-or-disable">enable_or_disable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#with-or-without">with_or_without</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#activation-value">activation_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-variant-keyword">The <code class="docutils literal notranslate"><span class="pre">variant</span></code> keyword</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conditional-variants">Conditional variants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#activation-overrides">Activation overrides</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-script-in-a-sub-directory">Configure script in a sub-directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-out-of-source">Building out of source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-and-install-targets">Build and install targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-documentation">External documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intelpackage.html">Intel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourceforgepackage.html">Sourceforge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../build_systems.html">Build Systems</a></li>
+      <li class="breadcrumb-item active">Autotools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/build_systems/autotoolspackage.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="autotools">
+<span id="autotoolspackage"></span><h1>Autotools<a class="headerlink" href="#autotools" title="Link to this heading"></a></h1>
+<p>Autotools is a GNU build system that provides a build-script generator.
+By running the platform-independent <code class="docutils literal notranslate"><span class="pre">./configure</span></code> script that comes
+with the package, you can generate a platform-dependent Makefile.</p>
+<section id="phases">
+<h2>Phases<a class="headerlink" href="#phases" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">AutotoolsBuilder</span></code> and <code class="docutils literal notranslate"><span class="pre">AutotoolsPackage</span></code> base classes come with the following phases:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">autoreconf</span></code> - generate the configure script</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configure</span></code> - generate the Makefiles</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code> - build the package</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">install</span></code> - install the package</p></li>
+</ol>
+<p>Most of the time, the <code class="docutils literal notranslate"><span class="pre">autoreconf</span></code> phase will do nothing, but if the
+package is missing a <code class="docutils literal notranslate"><span class="pre">configure</span></code> script, <code class="docutils literal notranslate"><span class="pre">autoreconf</span></code> will generate
+one for you.</p>
+<p>The other phases run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./configure<span class="w"> </span>--prefix<span class="o">=</span>/path/to/installation/prefix
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make<span class="w"> </span>check<span class="w">  </span><span class="c1"># optional</span>
+<span class="gp">$ </span>make<span class="w"> </span>install
+<span class="gp">$ </span>make<span class="w"> </span>installcheck<span class="w">  </span><span class="c1"># optional</span>
+</pre></div>
+</div>
+<p>Of course, you may need to add a few arguments to the <code class="docutils literal notranslate"><span class="pre">./configure</span></code>
+line.</p>
+</section>
+<section id="important-files">
+<h2>Important files<a class="headerlink" href="#important-files" title="Link to this heading"></a></h2>
+<p>The most important file for an Autotools-based package is the <code class="docutils literal notranslate"><span class="pre">configure</span></code>
+script. This script is automatically generated by Autotools and generates
+the appropriate Makefile when run.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Watch out for fake Autotools packages!</p>
+<p>Autotools is a very popular build system, and many people are used to the
+classic steps to install a package:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./configure
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+<p>For this reason, some developers will write their own <code class="docutils literal notranslate"><span class="pre">configure</span></code>
+scripts that have nothing to do with Autotools. These packages may
+not accept the same flags as other Autotools packages, so it is
+better to use the <code class="docutils literal notranslate"><span class="pre">Package</span></code> base class and create a
+<a class="reference internal" href="custompackage.html#custompackage"><span class="std std-ref">custom build system</span></a>. You can tell if a package
+uses Autotools by running <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--help</span></code> and comparing the output
+to other known Autotools packages. You should also look for files like:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">configure.ac</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configure.in</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Makefile.am</span></code></p></li>
+</ul>
+<p>Packages that don't use Autotools aren't likely to have these files.</p>
+</div>
+</section>
+<section id="build-system-dependencies">
+<h2>Build system dependencies<a class="headerlink" href="#build-system-dependencies" title="Link to this heading"></a></h2>
+<p>Whether or not your package requires Autotools to install depends on
+how the source code is distributed. Most of the time, when developers
+distribute tarballs, they will already contain the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script
+necessary for installation. If this is the case, your package does not
+require any Autotools dependencies.</p>
+<p>However, a basic rule of version control systems is to never commit
+code that can be generated. The source code repository itself likely
+does not have a <code class="docutils literal notranslate"><span class="pre">configure</span></code> script. Developers typically write
+(or auto-generate) a <code class="docutils literal notranslate"><span class="pre">configure.ac</span></code> script that contains configuration
+preferences and a <code class="docutils literal notranslate"><span class="pre">Makefile.am</span></code> script that contains build instructions.
+Then, <code class="docutils literal notranslate"><span class="pre">autoconf</span></code> is used to convert <code class="docutils literal notranslate"><span class="pre">configure.ac</span></code> into <code class="docutils literal notranslate"><span class="pre">configure</span></code>,
+while <code class="docutils literal notranslate"><span class="pre">automake</span></code> is used to convert <code class="docutils literal notranslate"><span class="pre">Makefile.am</span></code> into <code class="docutils literal notranslate"><span class="pre">Makefile.in</span></code>.
+<code class="docutils literal notranslate"><span class="pre">Makefile.in</span></code> is used by <code class="docutils literal notranslate"><span class="pre">configure</span></code> to generate a platform-dependent
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for you. The following diagram provides a high-level overview
+of the process:</p>
+<figure class="align-default" id="id1">
+<a class="reference external image-reference" href="https://commons.wikimedia.org/w/index.php?curid=15581407"><img alt="../_images/Autoconf-automake-process.svg" src="../_images/Autoconf-automake-process.svg" />
+</a>
+<figcaption>
+<p><span class="caption-text"><a class="reference external" href="https://commons.wikimedia.org/wiki/File:Autoconf-automake-process.svg">GNU autoconf and automake process for generating makefiles</a>
+by <cite>Jdthood</cite> under <a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a></span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>If a <code class="docutils literal notranslate"><span class="pre">configure</span></code> script is not present in your tarball, you will
+need to generate one yourself. Luckily, Spack already has an <code class="docutils literal notranslate"><span class="pre">autoreconf</span></code>
+phase to do most of the work for you. By default, the <code class="docutils literal notranslate"><span class="pre">autoreconf</span></code>
+phase runs:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>autoreconf<span class="w"> </span>--install<span class="w"> </span>--verbose<span class="w"> </span>--force<span class="w"> </span>-I<span class="w"> </span>&lt;aclocal-prefix&gt;/share/aclocal
+</pre></div>
+</div>
+<p>In case you need to add more arguments, override <code class="docutils literal notranslate"><span class="pre">autoreconf_extra_args</span></code>
+in your <code class="docutils literal notranslate"><span class="pre">package.py</span></code> on class scope like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">autoreconf_extra_args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-Im4&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>All you need to do is add a few Autotools dependencies to the package.
+Most stable releases will come with a <code class="docutils literal notranslate"><span class="pre">configure</span></code> script, but if you
+check out a commit from the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch, you would want to add:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;autoconf&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;@master&quot;</span><span class="p">)</span>
+<span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;automake&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;@master&quot;</span><span class="p">)</span>
+<span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;libtool&quot;</span><span class="p">,</span>  <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;@master&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is typically redundant to list the <code class="docutils literal notranslate"><span class="pre">m4</span></code> macro processor package as a
+dependency, since <code class="docutils literal notranslate"><span class="pre">autoconf</span></code> already depends on it.</p>
+<section id="using-a-custom-autoreconf-phase">
+<h3>Using a custom autoreconf phase<a class="headerlink" href="#using-a-custom-autoreconf-phase" title="Link to this heading"></a></h3>
+<p>In some cases, it might be needed to replace the default implementation
+of the autoreconf phase with one running a script interpreter. In this
+example, the <code class="docutils literal notranslate"><span class="pre">bash</span></code> shell is used to run the <code class="docutils literal notranslate"><span class="pre">autogen.sh</span></code> script.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">autoreconf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">which</span><span class="p">(</span><span class="s2">&quot;bash&quot;</span><span class="p">)(</span><span class="s2">&quot;autogen.sh&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the <code class="docutils literal notranslate"><span class="pre">package.py</span></code> has build instructions in a separate
+<a class="reference internal" href="../packaging_guide.html#multiple-build-systems"><span class="std std-ref">builder class</span></a>, the signature for a phase changes slightly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AutotoolsBuilder</span><span class="p">(</span><span class="n">AutotoolsBuilder</span><span class="p">):</span>
+   <span class="k">def</span> <span class="nf">autoreconf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+      <span class="n">which</span><span class="p">(</span><span class="s2">&quot;bash&quot;</span><span class="p">)(</span><span class="s2">&quot;autogen.sh&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="patching-configure-or-makefile-in-files">
+<h3>patching configure or Makefile.in files<a class="headerlink" href="#patching-configure-or-makefile-in-files" title="Link to this heading"></a></h3>
+<p>In some cases, developers might need to distribute a patch that modifies
+one of the files used to generate <code class="docutils literal notranslate"><span class="pre">configure</span></code> or <code class="docutils literal notranslate"><span class="pre">Makefile.in</span></code>.
+In this case, these scripts will need to be regenerated. It is
+preferable to regenerate these manually using the patch, and then
+create a new patch that directly modifies <code class="docutils literal notranslate"><span class="pre">configure</span></code>. That way,
+Spack can use the secondary patch and additional build system
+dependencies aren't necessary.</p>
+</section>
+<section id="old-autotools-helper-scripts">
+<h3>Old Autotools helper scripts<a class="headerlink" href="#old-autotools-helper-scripts" title="Link to this heading"></a></h3>
+<p>Autotools based tarballs come with helper scripts such as <code class="docutils literal notranslate"><span class="pre">config.sub</span></code> and
+<code class="docutils literal notranslate"><span class="pre">config.guess</span></code>. It is the responsibility of the developers to keep these files
+up to date so that they run on every platform, but for very old software
+releases this is impossible. In these cases Spack can help to replace these
+files with newer ones, without having to add the heavy dependency on
+<code class="docutils literal notranslate"><span class="pre">automake</span></code>.</p>
+<p>Automatic helper script replacement is currently enabled by default on
+<code class="docutils literal notranslate"><span class="pre">ppc64le</span></code> and <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>, as these are the known cases where old scripts fail.
+On these targets, <code class="docutils literal notranslate"><span class="pre">AutotoolsPackage</span></code> adds a build dependency on <code class="docutils literal notranslate"><span class="pre">gnuconfig</span></code>,
+which is a very light-weight package with newer versions of the helper files.
+Spack then tries to run all the helper scripts it can find in the release, and
+replaces them on failure with the helper scripts from <code class="docutils literal notranslate"><span class="pre">gnuconfig</span></code>.</p>
+<p>To opt out of this feature, use the following setting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">patch_config_files</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>To enable it conditionally on different architectures, define a property and
+make the package depend on <code class="docutils literal notranslate"><span class="pre">gnuconfig</span></code> as a build dependency:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;gnuconfig&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;@1.0:&quot;</span><span class="p">)</span>
+
+<span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">patch_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+   <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@1.0:&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<blockquote>
+<div><p>On some exotic architectures it is necessary to use system provided
+<code class="docutils literal notranslate"><span class="pre">config.sub</span></code> and <code class="docutils literal notranslate"><span class="pre">config.guess</span></code> files. In this case, the most
+transparent solution is to mark the <code class="docutils literal notranslate"><span class="pre">gnuconfig</span></code> package as external and
+non-buildable, with a prefix set to the directory containing the files:</p>
+</div></blockquote>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">gnuconfig</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">buildable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">externals</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gnuconfig@master</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/share/configure_files/</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="force-autoreconf">
+<h3>force_autoreconf<a class="headerlink" href="#force-autoreconf" title="Link to this heading"></a></h3>
+<p>If for whatever reason you really want to add the original patch
+and tell Spack to regenerate <code class="docutils literal notranslate"><span class="pre">configure</span></code>, you can do so using the
+following setting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">force_autoreconf</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>This line tells Spack to wipe away the existing <code class="docutils literal notranslate"><span class="pre">configure</span></code> script
+and generate a new one. If you only need to do this for a single
+version, this can be done like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">force_autoreconf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">==</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;1.2.3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="finding-configure-flags">
+<h2>Finding configure flags<a class="headerlink" href="#finding-configure-flags" title="Link to this heading"></a></h2>
+<p>Once you have a <code class="docutils literal notranslate"><span class="pre">configure</span></code> script present, the next step is to
+determine what option flags are available. These flags can be found
+by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./configure<span class="w"> </span>--help
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">configure</span></code> will display a list of valid flags separated into
+some or all of the following sections:</p>
+<ul class="simple">
+<li><p>Configuration</p></li>
+<li><p>Installation directories</p></li>
+<li><p>Fine tuning of the installation directories</p></li>
+<li><p>Program names</p></li>
+<li><p>X features</p></li>
+<li><p>System types</p></li>
+<li><p><strong>Optional Features</strong></p></li>
+<li><p><strong>Optional Packages</strong></p></li>
+<li><p><strong>Some influential environment variables</strong></p></li>
+</ul>
+<p>For the most part, you can ignore all but the last 3 sections.
+The &quot;Optional Features&quot; sections lists flags that enable/disable
+features you may be interested in. The &quot;Optional Packages&quot; section
+often lists dependencies and the flags needed to locate them. The
+&quot;environment variables&quot; section lists environment variables that the
+build system uses to pass flags to the compiler and linker.</p>
+</section>
+<section id="addings-flags-to-configure">
+<h2>Addings flags to configure<a class="headerlink" href="#addings-flags-to-configure" title="Link to this heading"></a></h2>
+<p>For most of the flags you encounter, you will want a variant to
+optionally enable/disable them. You can then optionally pass these
+flags to the <code class="docutils literal notranslate"><span class="pre">configure</span></code> call by overriding the <code class="docutils literal notranslate"><span class="pre">configure_args</span></code>
+function like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;+mpi&quot;</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--enable-mpi&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--disable-mpi&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">args</span>
+</pre></div>
+</div>
+<p>Alternatively, you can use the <a class="reference internal" href="#autotools-enable-or-disable"><span class="std std-ref">enable_or_disable</span></a> helper:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">enable_or_disable</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Note that we are explicitly disabling MPI support if it is not
+requested. This is important, as many Autotools packages will enable
+options by default if the dependencies are found, and disable them
+otherwise. We want Spack installations to be as deterministic as possible.
+If two users install a package with the same variants, the goal is that
+both installations work the same way. See <a class="reference external" href="https://www.linux.com/news/best-practices-autotools">here</a>
+and <a class="reference external" href="https://wiki.gentoo.org/wiki/Project:Quality_Assurance/Automagic_dependencies">here</a>
+for a rationale as to why these so-called &quot;automagic&quot; dependencies
+are a problem.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>By default, Autotools installs packages to <code class="docutils literal notranslate"><span class="pre">/usr</span></code>. We don't want this,
+so Spack automatically adds <code class="docutils literal notranslate"><span class="pre">--prefix=/path/to/installation/prefix</span></code>
+to your list of <code class="docutils literal notranslate"><span class="pre">configure_args</span></code>. You don't need to add this yourself.</p>
+</div>
+</section>
+<section id="helper-functions">
+<h2>Helper functions<a class="headerlink" href="#helper-functions" title="Link to this heading"></a></h2>
+<p>You may have noticed that most of the Autotools flags are of the form
+<code class="docutils literal notranslate"><span class="pre">--enable-foo</span></code>, <code class="docutils literal notranslate"><span class="pre">--disable-bar</span></code>, <code class="docutils literal notranslate"><span class="pre">--with-baz=&lt;prefix&gt;</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">--without-baz</span></code>. Since these flags are so common, Spack provides a
+couple of helper functions to make your life easier.</p>
+<section id="enable-or-disable">
+<span id="autotools-enable-or-disable"></span><h3>enable_or_disable<a class="headerlink" href="#enable-or-disable" title="Link to this heading"></a></h3>
+<p>Autotools flags for simple boolean variants can be automatically
+generated by calling the <code class="docutils literal notranslate"><span class="pre">enable_or_disable</span></code> method. This is
+typically used to enable or disable some feature within the package.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span>
+    <span class="s2">&quot;memchecker&quot;</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Memchecker support for debugging [degrades performance]&quot;</span>
+<span class="p">)</span>
+<span class="n">config_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enable_or_disable</span><span class="p">(</span><span class="s2">&quot;memchecker&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In this example, specifying the variant <code class="docutils literal notranslate"><span class="pre">+memchecker</span></code> will generate
+the following configuration options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">--enable-memchecker</span>
+</pre></div>
+</div>
+</section>
+<section id="with-or-without">
+<h3>with_or_without<a class="headerlink" href="#with-or-without" title="Link to this heading"></a></h3>
+<p>Autotools flags for more complex variants, including boolean variants
+and multi-valued variants, can be automatically generated by calling
+the <code class="docutils literal notranslate"><span class="pre">with_or_without</span></code> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span>
+    <span class="s2">&quot;schedulers&quot;</span><span class="p">,</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">disjoint_sets</span><span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">,),</span> <span class="p">(</span><span class="s2">&quot;alps&quot;</span><span class="p">,</span> <span class="s2">&quot;lsf&quot;</span><span class="p">,</span> <span class="s2">&quot;tm&quot;</span><span class="p">,</span> <span class="s2">&quot;slurm&quot;</span><span class="p">,</span> <span class="s2">&quot;sge&quot;</span><span class="p">,</span> <span class="s2">&quot;loadleveler&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">with_non_feature_values</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">),</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of schedulers for which support is enabled; &quot;</span>
+    <span class="s2">&quot;&#39;auto&#39; lets openmpi determine&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;schedulers=auto&quot;</span><span class="p">):</span>
+    <span class="n">config_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">with_or_without</span><span class="p">(</span><span class="s2">&quot;schedulers&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In this example, specifying the variant <code class="docutils literal notranslate"><span class="pre">schedulers=slurm,sge</span></code> will
+generate the following configuration options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">--with-slurm --with-sge</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">enable_or_disable</span></code> is actually functionally equivalent with
+<code class="docutils literal notranslate"><span class="pre">with_or_without</span></code>, and accepts the same arguments and variant types;
+but idiomatic autotools packages often follow these naming
+conventions.</p>
+</section>
+<section id="activation-value">
+<h3>activation_value<a class="headerlink" href="#activation-value" title="Link to this heading"></a></h3>
+<p>Autotools parameters that require an option can still be automatically
+generated, using the <code class="docutils literal notranslate"><span class="pre">activation_value</span></code> argument to
+<code class="docutils literal notranslate"><span class="pre">with_or_without</span></code> (or, rarely, <code class="docutils literal notranslate"><span class="pre">enable_or_disable</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span>
+   <span class="s2">&quot;fabrics&quot;</span><span class="p">,</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">disjoint_sets</span><span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">,),</span> <span class="p">(</span><span class="s2">&quot;psm&quot;</span><span class="p">,</span> <span class="s2">&quot;psm2&quot;</span><span class="p">,</span> <span class="s2">&quot;verbs&quot;</span><span class="p">,</span> <span class="s2">&quot;mxm&quot;</span><span class="p">,</span> <span class="s2">&quot;ucx&quot;</span><span class="p">,</span> <span class="s2">&quot;libfabric&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">with_non_feature_values</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">),</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of fabrics that are enabled; &quot;</span>
+    <span class="s2">&quot;&#39;auto&#39; lets openmpi determine&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;fabrics=auto&quot;</span><span class="p">):</span>
+    <span class="n">config_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">with_or_without</span><span class="p">(</span><span class="s2">&quot;fabrics&quot;</span><span class="p">,</span>
+        <span class="n">activation_value</span><span class="o">=</span><span class="s2">&quot;prefix&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">activation_value</span></code> accepts a callable that generates the configure
+parameter value given the variant value; but the special value
+<code class="docutils literal notranslate"><span class="pre">prefix</span></code> tells Spack to automatically use the dependenency's
+installation prefix, which is the most common use for such
+parameters. In this example, specifying the variant
+<code class="docutils literal notranslate"><span class="pre">fabrics=libfabric</span></code> will generate the following configuration
+options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">--with-libfabric=&lt;/path/to/libfabric&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="the-variant-keyword">
+<h3>The <code class="docutils literal notranslate"><span class="pre">variant</span></code> keyword<a class="headerlink" href="#the-variant-keyword" title="Link to this heading"></a></h3>
+<p>When Spack variants and configure flags do not correspond one-to-one, the
+<code class="docutils literal notranslate"><span class="pre">variant</span></code> keyword can be passed to <code class="docutils literal notranslate"><span class="pre">with_or_without</span></code> and
+<code class="docutils literal notranslate"><span class="pre">enable_or_disable</span></code>. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span><span class="s2">&quot;debug_tools&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">config_args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_or_disable</span><span class="p">(</span><span class="s2">&quot;debug-tools&quot;</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;debug_tools&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or when one variant controls multiple flags:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span><span class="s2">&quot;debug_tools&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">config_args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_or_without</span><span class="p">(</span><span class="s2">&quot;memchecker&quot;</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;debug_tools&quot;</span><span class="p">)</span>
+<span class="n">config_args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_or_without</span><span class="p">(</span><span class="s2">&quot;profiler&quot;</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;debug_tools&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="conditional-variants">
+<h3>Conditional variants<a class="headerlink" href="#conditional-variants" title="Link to this heading"></a></h3>
+<p>When a variant is conditional and its condition is not met on the concrete spec, the
+<code class="docutils literal notranslate"><span class="pre">with_or_without</span></code> and <code class="docutils literal notranslate"><span class="pre">enable_or_disable</span></code> methods will simply return an empty list.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">variant</span><span class="p">(</span><span class="s2">&quot;profiler&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;@2.0:&quot;</span><span class="p">)</span>
+<span class="n">config_args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_or_without</span><span class="p">(</span><span class="s2">&quot;profiler&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will neither add <code class="docutils literal notranslate"><span class="pre">--with-profiler</span></code> nor <code class="docutils literal notranslate"><span class="pre">--without-profiler</span></code> when the version is
+below <code class="docutils literal notranslate"><span class="pre">2.0</span></code>.</p>
+</section>
+<section id="activation-overrides">
+<h3>Activation overrides<a class="headerlink" href="#activation-overrides" title="Link to this heading"></a></h3>
+<p>Finally, the behavior of either <code class="docutils literal notranslate"><span class="pre">with_or_without</span></code> or
+<code class="docutils literal notranslate"><span class="pre">enable_or_disable</span></code> can be overridden for specific variant
+values. This is most useful for multi-values variants where some of
+the variant values require atypical behavior.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">with_or_without_verbs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activated</span><span class="p">):</span>
+    <span class="c1"># Up through version 1.6, this option was named --with-openib.</span>
+    <span class="c1"># In version 1.7, it was renamed to be --with-verbs.</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="s2">&quot;verbs&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;@1.7:&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;openib&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">activated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;--without-</span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;--with-</span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="s1">&#39;rdma-core&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Defining <code class="docutils literal notranslate"><span class="pre">with_or_without_verbs</span></code> overrides the behavior of a
+<code class="docutils literal notranslate"><span class="pre">fabrics=verbs</span></code> variant, changing the configure-time option to
+<code class="docutils literal notranslate"><span class="pre">--with-openib</span></code> for older versions of the package and specifying an
+alternative dependency name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">openib</span><span class="o">=&lt;/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">rdma</span><span class="o">-</span><span class="n">core</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="configure-script-in-a-sub-directory">
+<h2>Configure script in a sub-directory<a class="headerlink" href="#configure-script-in-a-sub-directory" title="Link to this heading"></a></h2>
+<p>Occasionally, developers will hide their source code and <code class="docutils literal notranslate"><span class="pre">configure</span></code>
+script in a subdirectory like <code class="docutils literal notranslate"><span class="pre">src</span></code>. If this happens, Spack won't
+be able to automatically detect the build system properly when running
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">create</span></code>. You will have to manually change the package base
+class and tell Spack where the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script resides. You can
+do this like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_directory</span> <span class="o">=</span> <span class="s2">&quot;src&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="building-out-of-source">
+<h2>Building out of source<a class="headerlink" href="#building-out-of-source" title="Link to this heading"></a></h2>
+<p>Some packages like <code class="docutils literal notranslate"><span class="pre">gcc</span></code> recommend building their software in a
+different directory than the source code to prevent build pollution.
+This can be done using the <code class="docutils literal notranslate"><span class="pre">build_directory</span></code> variable:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_directory</span> <span class="o">=</span> <span class="s2">&quot;spack-build&quot;</span>
+</pre></div>
+</div>
+<p>By default, Spack will build the package in the same directory that
+contains the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script</p>
+</section>
+<section id="build-and-install-targets">
+<h2>Build and install targets<a class="headerlink" href="#build-and-install-targets" title="Link to this heading"></a></h2>
+<p>For most Autotools packages, the usual:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>configure
+<span class="gp">$ </span>make
+<span class="gp">$ </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+<p>is sufficient to install the package. However, if you need to run
+make with any other targets, for example, to build an optional
+library or build the documentation, you can add these like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">]</span>
+<span class="n">install_targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<p>Autotools-based packages typically provide unit testing via the
+<code class="docutils literal notranslate"><span class="pre">check</span></code> and <code class="docutils literal notranslate"><span class="pre">installcheck</span></code> targets. If you build your software
+with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">--test=root</span></code>, Spack will check for the presence
+of a <code class="docutils literal notranslate"><span class="pre">check</span></code> or <code class="docutils literal notranslate"><span class="pre">test</span></code> target in the Makefile and run
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code> for you. After installation, it will check for an
+<code class="docutils literal notranslate"><span class="pre">installcheck</span></code> target and run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">installcheck</span></code> if it finds one.</p>
+</section>
+<section id="external-documentation">
+<h2>External documentation<a class="headerlink" href="#external-documentation" title="Link to this heading"></a></h2>
+<p>For more information on the Autotools build system, see:
+<a class="reference external" href="https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html">https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="wafpackage.html" class="btn btn-neutral float-left" title="Waf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="cmakepackage.html" class="btn btn-neutral float-right" title="CMake" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

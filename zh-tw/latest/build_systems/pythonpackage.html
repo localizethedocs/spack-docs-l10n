@@ -1,0 +1,1033 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="A guide to packaging Python libraries with Spack, covering PyPI downloads, dependency management, and build system integration." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-09-23T06:15:07+00:00" /><link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜尋" href="../search.html"><link rel="next" title="R" href="rpackage.html"><link rel="prev" title="Perl" href="perlpackage.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/build_systems/pythonpackage.html">
+        <link rel="prefetch" href="../_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="../_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Python - Spack 1.2.0.dev0 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../ltd-provenance.js"></script>
+<script type="text/javascript" src="../ltd-current.js"></script>
+<script type="text/javascript" src="../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Spack 1.2.0.dev0 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="../_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="../_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installing Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perlpackage.html">Perl</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/build_systems/pythonpackage.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="python">
+<span id="pythonpackage"></span><h1>Python<a class="headerlink" href="#python" title="連結到這個標頭">¶</a></h1>
+<p>Python packages and modules have their own special build system.
+This documentation covers everything you'll need to know in order to write a Spack build recipe for a Python library.</p>
+<section id="terminology">
+<h2>Terminology<a class="headerlink" href="#terminology" title="連結到這個標頭">¶</a></h2>
+<p>In the Python ecosystem, there are a number of terms that are important to understand.</p>
+<dl class="simple">
+<dt><strong>PyPI</strong></dt><dd><p>The <a class="reference external" href="https://pypi.org/">Python Package Index</a>, where most Python libraries are hosted.</p>
+</dd>
+<dt><strong>sdist</strong></dt><dd><p>Source distributions, distributed as tarballs (.tar.gz) and zip files (.zip).
+Contain the source code of the package.</p>
+</dd>
+<dt><strong>bdist</strong></dt><dd><p>Built distributions, distributed as wheels (.whl).
+Contain the pre-built library.</p>
+</dd>
+<dt><strong>wheel</strong></dt><dd><p>A binary distribution format common in the Python ecosystem.
+This file is actually just a zip file containing specific metadata and code.
+See the <a class="reference external" href="https://packaging.python.org/en/latest/specifications/binary-distribution-format/">documentation</a> for more details.</p>
+</dd>
+<dt><strong>build frontend</strong></dt><dd><p>Command-line tools used to build and install wheels.
+Examples include <a class="reference external" href="https://pip.pypa.io/">pip</a>, <a class="reference external" href="https://pypa-build.readthedocs.io/">build</a>, and <a class="reference external" href="https://installer.readthedocs.io/">installer</a>.</p>
+</dd>
+<dt><strong>build backend</strong></dt><dd><p>Libraries used to define how to build a wheel.
+Examples include <a class="reference external" href="https://setuptools.pypa.io/">setuptools</a>, <a class="reference external" href="https://flit.pypa.io/">flit</a>, <a class="reference external" href="https://python-poetry.org/">poetry</a>, <a class="reference external" href="https://hatch.pypa.io/latest/">hatchling</a>, <a class="reference external" href="https://meson-python.readthedocs.io/">meson</a>, and <a class="reference external" href="https://pdm.fming.dev/latest/">pdm</a>.</p>
+</dd>
+</dl>
+</section>
+<section id="downloading">
+<h2>Downloading<a class="headerlink" href="#downloading" title="連結到這個標頭">¶</a></h2>
+<p>The first step in packaging a Python library is to figure out where to download it from.
+The vast majority of Python packages are hosted on <a class="reference external" href="https://pypi.org/">PyPI</a>, which is <a class="reference internal" href="#pypi-vs-github"><span class="std std-ref">preferred over GitHub</span></a> for downloading packages.
+Search for the package name on PyPI to find the project page.
+The project page is usually located at:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>https://pypi.org/project/&lt;package-name&gt;
+</pre></div>
+</div>
+<p>On the project page, there is a &quot;Download files&quot; tab containing download URLs.
+Whenever possible, we prefer to build Spack packages from source.
+If PyPI only has wheels, check to see if the project is hosted on GitHub and see if GitHub has source distributions.
+The project page usually has a &quot;Homepage&quot; and/or &quot;Source code&quot; link for this.
+If the project is closed-source, it may only have wheels available.
+For example, <code class="docutils literal notranslate"><span class="pre">py-azureml-sdk</span></code> is closed-source and can be downloaded from:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>https://pypi.io/packages/py3/a/azureml_sdk/azureml_sdk-1.11.0-py3-none-any.whl
+</pre></div>
+</div>
+<p>Once you've found a URL to download the package from, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack create &lt;url&gt;
+</pre></div>
+</div>
+<p>to create a new package template.</p>
+<section id="pypi-vs-github">
+<span id="id1"></span><h3>PyPI vs. GitHub<a class="headerlink" href="#pypi-vs-github" title="連結到這個標頭">¶</a></h3>
+<p>Many packages are hosted on PyPI, but are developed on GitHub or another version control system hosting service.
+The source code can be downloaded from either location, but PyPI is preferred for the following reasons:</p>
+<ol class="arabic">
+<li><p>PyPI contains the bare minimum number of files needed to install the package.</p>
+<p>You may notice that the tarball you download from PyPI does not have the same checksum as the tarball you download from GitHub.
+When a developer uploads a new release to PyPI, it doesn't contain every file in the repository, only the files necessary to install the package.
+PyPI tarballs are therefore smaller.</p>
+</li>
+<li><p>PyPI is the official source for package managers like <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<p>Let's be honest, <code class="docutils literal notranslate"><span class="pre">pip</span></code> is much more popular than Spack.
+If the GitHub tarball contains a file not present in the PyPI tarball that causes a bug, the developers may not realize this for quite some time.
+If the bug was in a file contained in the PyPI tarball, users would notice the bug much more quickly.</p>
+</li>
+<li><p>GitHub release may be a beta version.</p>
+<p>When a developer releases a new version of a package on GitHub, it may not be intended for most users.
+Until that release also makes its way to PyPI, it should be assumed that the release is not yet ready for general use.</p>
+</li>
+<li><p>The checksum for a GitHub release may change.</p>
+<p>Unfortunately, some developers have a habit of patching releases without incrementing the version number.
+This results in a change in tarball checksum.
+Package managers like Spack that use checksums to verify the integrity of a download tarball grind to a halt when the checksum for a known version changes.
+Most of the time, the change is intentional, and contains a needed bug fix.
+However, sometimes the change indicates a download source that has been compromised, and a tarball that contains a virus.
+If this happens, you must contact the developers to determine which is the case.
+PyPI is nice because it makes it physically impossible to re-release the same version of a package with a different checksum.</p>
+</li>
+</ol>
+<p>The only reason to use GitHub instead of PyPI is if PyPI only has wheels or if the PyPI sdist is missing a file needed to build the package.
+If this is the case, please add a comment above the <code class="docutils literal notranslate"><span class="pre">url</span></code> explaining this.</p>
+</section>
+</section>
+<section id="id2">
+<h2>PyPI<a class="headerlink" href="#id2" title="連結到這個標頭">¶</a></h2>
+<p>Since PyPI is so commonly used to host Python libraries, the <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> base class has a <code class="docutils literal notranslate"><span class="pre">pypi</span></code> attribute that can be set.
+Once set, <code class="docutils literal notranslate"><span class="pre">pypi</span></code> will be used to define the <code class="docutils literal notranslate"><span class="pre">homepage</span></code>, <code class="docutils literal notranslate"><span class="pre">url</span></code>, and <code class="docutils literal notranslate"><span class="pre">list_url</span></code>.
+For example, the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">homepage</span> <span class="o">=</span> <span class="s2">&quot;https://pypi.org/project/setuptools/&quot;</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://pypi.org/packages/source/s/setuptools/setuptools-49.2.0.zip&quot;</span>
+<span class="n">list_url</span> <span class="o">=</span> <span class="s2">&quot;https://pypi.org/simple/setuptools/&quot;</span>
+</pre></div>
+</div>
+<p>is equivalent to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pypi</span> <span class="o">=</span> <span class="s2">&quot;setuptools/setuptools-49.2.0.zip&quot;</span>
+</pre></div>
+</div>
+<p>If a package has a different homepage listed on PyPI, you can override it by setting your own <code class="docutils literal notranslate"><span class="pre">homepage</span></code>.</p>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="連結到這個標頭">¶</a></h2>
+<p>The top of the PyPI project page contains a short description of the package.
+The &quot;Project description&quot; tab may also contain a longer description of the package.
+Either of these can be used to populate the package docstring.</p>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="連結到這個標頭">¶</a></h2>
+<p>Once you've determined the basic metadata for a package, the next step is to determine the build backend.
+<code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> uses <a class="reference external" href="https://pip.pypa.io/">pip</a> to install the package, but pip requires a backend to actually build the package.</p>
+<p>To determine the build backend, look for a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
+If there is no <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file and only a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> or <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file, you can assume that the project uses <a class="reference internal" href="#setuptools"><span class="std std-ref">setuptools</span></a>.
+If there is a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file, see if it contains a <code class="docutils literal notranslate"><span class="pre">[build-system]</span></code> section.
+For example:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[build-system]</span>
+<span class="n">requires</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;setuptools&gt;=42&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wheel&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">build-backend</span> <span class="o">=</span> <span class="s2">&quot;setuptools.build_meta&quot;</span>
+</pre></div>
+</div>
+<p>This section does two things: the <code class="docutils literal notranslate"><span class="pre">requires</span></code> key lists build dependencies of the project, and the <code class="docutils literal notranslate"><span class="pre">build-backend</span></code> key defines the build backend.
+All of these build dependencies should be added as dependencies to your package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;py-setuptools@42:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">py-wheel</span></code> is already listed as a build dependency in the <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> base class, so you don't need to add it unless you need to specify a specific version requirement or change the dependency type.</p>
+<p>See <a class="reference external" href="https://www.python.org/dev/peps/pep-0517/">PEP 517</a> and <a class="reference external" href="https://www.python.org/dev/peps/pep-0518/">PEP 518</a> for more information on the design of <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p>
+<p>Depending on which build backend a project uses, there are various places that run-time dependencies can be listed.
+Most modern build backends support listing dependencies directly in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.
+Look for dependencies under the following keys:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">requires-python</span></code> under <code class="docutils literal notranslate"><span class="pre">[project]</span></code></p>
+<p>This specifies the version of Python that is required.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dependencies</span></code> under <code class="docutils literal notranslate"><span class="pre">[project]</span></code></p>
+<p>These packages are required for building and installation.
+You can add them with <code class="docutils literal notranslate"><span class="pre">type=(&quot;build&quot;,</span> <span class="pre">&quot;run&quot;)</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[project.optional-dependencies]</span></code></p>
+<p>This section includes keys with lists of optional dependencies needed to enable those features.
+You should add a variant that optionally adds these dependencies.
+This variant should be <code class="docutils literal notranslate"><span class="pre">False</span></code> by default.</p>
+</li>
+</ul>
+<p>Some build backends may have additional locations where dependencies can be found.</p>
+<section id="distutils">
+<h3>distutils<a class="headerlink" href="#distutils" title="連結到這個標頭">¶</a></h3>
+<p>Before the introduction of setuptools and other build backends, Python packages had to rely on the built-in distutils library.
+Distutils is missing many of the features that setuptools and other build backends offer, and users are encouraged to use setuptools instead.
+In fact, distutils was deprecated in Python 3.10 and will be removed in Python 3.12.
+Because of this, pip actually replaces all imports of distutils with setuptools.
+If a package uses distutils, you should instead add a build dependency on setuptools.
+Check for a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file that may list dependencies of the project.</p>
+</section>
+<section id="setuptools">
+<span id="id4"></span><h3>setuptools<a class="headerlink" href="#setuptools" title="連結到這個標頭">¶</a></h3>
+<p>If the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> lists <code class="docutils literal notranslate"><span class="pre">setuptools.build_meta</span></code> as a <code class="docutils literal notranslate"><span class="pre">build-backend</span></code>, or if the package has a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> that imports <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>, or if the package has a <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file, then it uses setuptools to build.
+Setuptools is a replacement for the distutils library, and has almost the exact same API.
+In addition to <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, dependencies can be listed in the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> or <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file.
+Look for the following arguments:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">python_requires</span></code></p>
+<p>This specifies the version of Python that is required.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup_requires</span></code></p>
+<p>These packages are usually only needed at build-time, so you can add them with <code class="docutils literal notranslate"><span class="pre">type=&quot;build&quot;</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">install_requires</span></code></p>
+<p>These packages are required for building and installation.
+You can add them with <code class="docutils literal notranslate"><span class="pre">type=(&quot;build&quot;,</span> <span class="pre">&quot;run&quot;)</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">extras_require</span></code></p>
+<p>These packages are optional dependencies that enable additional functionality.
+You should add a variant that optionally adds these dependencies.
+This variant should be <code class="docutils literal notranslate"><span class="pre">False</span></code> by default.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests_require</span></code></p>
+<p>These are packages that are required to run the unit tests for the package.
+These dependencies can be specified using the <code class="docutils literal notranslate"><span class="pre">type=&quot;test&quot;</span></code> dependency type.
+However, the PyPI tarballs rarely contain unit tests, so there is usually no reason to add these.</p>
+</li>
+</ul>
+<p>See <a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/dependency_management.html">https://setuptools.pypa.io/en/latest/userguide/dependency_management.html</a> for more information on how setuptools handles dependency management.
+See <a class="reference external" href="https://www.python.org/dev/peps/pep-0440/#version-specifiers">PEP 440</a> for documentation on version specifiers in setuptools.</p>
+</section>
+<section id="id5">
+<h3>flit<a class="headerlink" href="#id5" title="連結到這個標頭">¶</a></h3>
+<p>There are actually two possible build backends for flit, <code class="docutils literal notranslate"><span class="pre">flit</span></code> and <code class="docutils literal notranslate"><span class="pre">flit_core</span></code>.
+If you see these in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, add a build dependency to your package.
+With flit, all dependencies are listed directly in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
+Older versions of flit used to store this info in a <code class="docutils literal notranslate"><span class="pre">flit.ini</span></code> file, so check for this too.</p>
+<p>In addition to the default <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> keys listed above, older versions of flit may use the following keys:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">requires</span></code> under <code class="docutils literal notranslate"><span class="pre">[tool.flit.metadata]</span></code></p>
+<p>These packages are required for building and installation.
+You can add them with <code class="docutils literal notranslate"><span class="pre">type=(&quot;build&quot;,</span> <span class="pre">&quot;run&quot;)</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[tool.flit.metadata.requires-extra]</span></code></p>
+<p>This section includes keys with lists of optional dependencies needed to enable those features.
+You should add a variant that optionally adds these dependencies.
+This variant should be <code class="docutils literal notranslate"><span class="pre">False</span></code> by default.</p>
+</li>
+</ul>
+<p>See <a class="reference external" href="https://flit.pypa.io/en/latest/pyproject_toml.html">https://flit.pypa.io/en/latest/pyproject_toml.html</a> for more information.</p>
+</section>
+<section id="id6">
+<h3>poetry<a class="headerlink" href="#id6" title="連結到這個標頭">¶</a></h3>
+<p>Like flit, poetry also has two possible build backends, <code class="docutils literal notranslate"><span class="pre">poetry</span></code> and <code class="docutils literal notranslate"><span class="pre">poetry_core</span></code>.
+If you see these in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, add a build dependency to your package.
+With poetry, all dependencies are listed directly in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
+Dependencies are listed in a <code class="docutils literal notranslate"><span class="pre">[tool.poetry.dependencies]</span></code> section, and use a <a class="reference external" href="https://python-poetry.org/docs/dependency-specification/#version-constraints">custom syntax</a> for specifying the version requirements.
+Note that <code class="docutils literal notranslate"><span class="pre">~=</span></code> works differently in poetry than in setuptools and flit for versions that start with a zero.</p>
+</section>
+<section id="id7">
+<h3>hatchling<a class="headerlink" href="#id7" title="連結到這個標頭">¶</a></h3>
+<p>If the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> lists <code class="docutils literal notranslate"><span class="pre">hatchling.build</span></code> as the <code class="docutils literal notranslate"><span class="pre">build-backend</span></code>, it uses the hatchling build system.
+Hatchling uses the default <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> keys to list dependencies.</p>
+<p>See <a class="reference external" href="https://hatch.pypa.io/latest/config/dependency/">https://hatch.pypa.io/latest/config/dependency/</a> for more information.</p>
+</section>
+<section id="id8">
+<h3>meson<a class="headerlink" href="#id8" title="連結到這個標頭">¶</a></h3>
+<p>If the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> lists <code class="docutils literal notranslate"><span class="pre">mesonpy</span></code> as the <code class="docutils literal notranslate"><span class="pre">build-backend</span></code>, it uses the meson build system.
+Meson uses the default <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> keys to list dependencies.</p>
+<p>See <a class="reference external" href="https://meson-python.readthedocs.io/en/latest/tutorials/introduction.html">https://meson-python.readthedocs.io/en/latest/tutorials/introduction.html</a> for more information.</p>
+</section>
+<section id="id9">
+<h3>pdm<a class="headerlink" href="#id9" title="連結到這個標頭">¶</a></h3>
+<p>If the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> lists <code class="docutils literal notranslate"><span class="pre">pdm.pep517.api</span></code> as the <code class="docutils literal notranslate"><span class="pre">build-backend</span></code>, it uses the PDM build system.
+PDM uses the default <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> keys to list dependencies.</p>
+<p>See <a class="reference external" href="https://pdm.fming.dev/latest/">https://pdm.fming.dev/latest/</a> for more information.</p>
+</section>
+<section id="wheels">
+<h3>wheels<a class="headerlink" href="#wheels" title="連結到這個標頭">¶</a></h3>
+<p>Some Python packages are closed-source and are distributed as Python wheels.
+For example, <code class="docutils literal notranslate"><span class="pre">py-azureml-sdk</span></code> downloads a <code class="docutils literal notranslate"><span class="pre">.whl</span></code> file.
+This file is simply a zip file, and can be extracted using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip *.whl
+</pre></div>
+</div>
+<p>The zip file will not contain a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, but it will contain a <code class="docutils literal notranslate"><span class="pre">METADATA</span></code> file which contains all the information you need to write a <code class="docutils literal notranslate"><span class="pre">package.py</span></code> build recipe.
+Check for lines like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Requires-Python: &gt;=3.5,&lt;4
+Requires-Dist: azureml-core (~=1.11.0)
+Requires-Dist: azureml-dataset-runtime[fuse] (~=1.11.0)
+Requires-Dist: azureml-train (~=1.11.0)
+Requires-Dist: azureml-train-automl-client (~=1.11.0)
+Requires-Dist: azureml-pipeline (~=1.11.0)
+Provides-Extra: accel-models
+Requires-Dist: azureml-accel-models (~=1.11.0); extra == &#39;accel-models&#39;
+Provides-Extra: automl
+Requires-Dist: azureml-train-automl (~=1.11.0); extra == &#39;automl&#39;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Requires-Python</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">python_requires</span></code> and <code class="docutils literal notranslate"><span class="pre">Requires-Dist</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">install_requires</span></code>.
+<code class="docutils literal notranslate"><span class="pre">Provides-Extra</span></code> is used to name optional features (variants) and a <code class="docutils literal notranslate"><span class="pre">Requires-Dist</span></code> with <code class="docutils literal notranslate"><span class="pre">extra</span> <span class="pre">==</span> <span class="pre">'foo'</span></code> will list any dependencies needed for that feature.</p>
+</section>
+</section>
+<section id="passing-arguments-to-setup-py">
+<h2>Passing arguments to setup.py<a class="headerlink" href="#passing-arguments-to-setup-py" title="連結到這個標頭">¶</a></h2>
+<p>The default install phase should be sufficient to install most packages.
+However, the installation instructions for a package may suggest passing certain flags to the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> call.
+The <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> class has two techniques for doing this.</p>
+<section id="config-settings">
+<h3>Config settings<a class="headerlink" href="#config-settings" title="連結到這個標頭">¶</a></h3>
+<p>These settings are passed to <a class="reference external" href="https://peps.python.org/pep-0517/">PEP 517</a> build backends.
+For example, <code class="docutils literal notranslate"><span class="pre">py-scipy</span></code> package allows you to specify the name of the BLAS/LAPACK library you want pkg-config to search for:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">depends_on</span><span class="p">(</span><span class="s2">&quot;py-pip@22.1:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;build&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">config_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;blas&quot;</span><span class="p">:</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;blas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;lapack&quot;</span><span class="p">:</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;lapack&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>This flag only works for packages that define a <code class="docutils literal notranslate"><span class="pre">build-backend</span></code> in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.
+Also, it is only supported by pip 22.1+, which requires Python 3.7+.
+For packages that still support Python 3.6 and older, <code class="docutils literal notranslate"><span class="pre">install_options</span></code> should be used instead.</p>
+</div>
+</section>
+<section id="global-options">
+<h3>Global options<a class="headerlink" href="#global-options" title="連結到這個標頭">¶</a></h3>
+<p>These flags are added directly after <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> when pip runs <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>.
+For example, the <code class="docutils literal notranslate"><span class="pre">py-pyyaml</span></code> package has an optional dependency on <code class="docutils literal notranslate"><span class="pre">libyaml</span></code> that can be enabled like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">global_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;+libyaml&quot;</span><span class="p">):</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--with-libyaml&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--without-libyaml&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">options</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Direct invocation of <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> is <a class="reference external" href="https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html">deprecated</a>.
+This flag forces pip to use a deprecated installation procedure.
+It should only be used in packages that don't define a <code class="docutils literal notranslate"><span class="pre">build-backend</span></code> in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> or packages that still support Python 3.6 and older.</p>
+</div>
+</section>
+<section id="install-options">
+<h3>Install options<a class="headerlink" href="#install-options" title="連結到這個標頭">¶</a></h3>
+<p>These flags are added directly after <code class="docutils literal notranslate"><span class="pre">install</span></code> when pip runs <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>.
+For example, the <code class="docutils literal notranslate"><span class="pre">py-pyyaml</span></code> package allows you to specify the directories to search for <code class="docutils literal notranslate"><span class="pre">libyaml</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">install_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;+libyaml&quot;</span><span class="p">):</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;libyaml&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">search_flags</span><span class="p">,</span>
+                <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;libyaml&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">include_flags</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">options</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Direct invocation of <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> is <a class="reference external" href="https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html">deprecated</a>.
+This flag forces pip to use a deprecated installation procedure.
+It should only be used in packages that don't define a <code class="docutils literal notranslate"><span class="pre">build-backend</span></code> in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> or packages that still support Python 3.6 and older.</p>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="連結到這個標頭">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> provides a couple of options for testing packages both during and after the installation process.</p>
+<section id="import-tests">
+<h3>Import tests<a class="headerlink" href="#import-tests" title="連結到這個標頭">¶</a></h3>
+<p>Just because a package successfully built does not mean that it built correctly.
+The most reliable test of whether or not the package was correctly installed is to attempt to import all of the modules that get installed.
+To get a list of modules, run the following command in the source directory:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">setuptools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">setuptools</span><span class="o">.</span><span class="n">find_packages</span><span class="p">()</span>
+<span class="go">[&#39;numpy&#39;, &#39;numpy._build_utils&#39;, &#39;numpy.compat&#39;, &#39;numpy.core&#39;, &#39;numpy.distutils&#39;, &#39;numpy.doc&#39;, &#39;numpy.f2py&#39;, &#39;numpy.fft&#39;, &#39;numpy.lib&#39;, &#39;numpy.linalg&#39;, &#39;numpy.ma&#39;, &#39;numpy.matrixlib&#39;, &#39;numpy.polynomial&#39;, &#39;numpy.random&#39;, &#39;numpy.testing&#39;, &#39;numpy.core.code_generators&#39;, &#39;numpy.distutils.command&#39;, &#39;numpy.distutils.fcompiler&#39;]</span>
+</pre></div>
+</div>
+<p>Large, complex packages like <code class="docutils literal notranslate"><span class="pre">numpy</span></code> will return a long list of packages, while other packages like <code class="docutils literal notranslate"><span class="pre">six</span></code> will return an empty list.
+<code class="docutils literal notranslate"><span class="pre">py-six</span></code> installs a single <code class="docutils literal notranslate"><span class="pre">six.py</span></code> file.
+In Python packaging lingo, a &quot;package&quot; is a directory containing files like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>foo/__init__.py
+foo/bar.py
+foo/baz.py
+</pre></div>
+</div>
+<p>whereas a &quot;module&quot; is a single Python file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> base class automatically detects these package and module names for you.
+If, for whatever reason, the module names detected are wrong, you can provide the names yourself by overriding <code class="docutils literal notranslate"><span class="pre">import_modules</span></code> like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">import_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;six&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Sometimes the list of module names to import depends on how the package was built.
+For example, the <code class="docutils literal notranslate"><span class="pre">py-pyyaml</span></code> package has a <code class="docutils literal notranslate"><span class="pre">+libyaml</span></code> variant that enables the build of a faster optimized version of the library.
+If the user chooses <code class="docutils literal notranslate"><span class="pre">~libyaml</span></code>, only the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> library will be importable.
+If the user chooses <code class="docutils literal notranslate"><span class="pre">+libyaml</span></code>, both the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">yaml.cyaml</span></code> libraries will be available.
+This can be expressed like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">import_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;yaml&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="s2">&quot;+libyaml&quot;</span><span class="p">):</span>
+        <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;yaml.cyaml&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">modules</span>
+</pre></div>
+</div>
+<p>These tests often catch missing dependencies and non-RPATHed libraries.
+Make sure not to add modules/packages containing the word &quot;test&quot;, as these likely won't end up in the installation directory, or may require test dependencies like pytest to be installed.</p>
+<p>Instead of defining the <code class="docutils literal notranslate"><span class="pre">import_modules</span></code> explicitly, only the subset of module names to be skipped can be defined by using <code class="docutils literal notranslate"><span class="pre">skip_modules</span></code>.
+If a defined module has submodules, they are skipped as well, e.g., in case the <code class="docutils literal notranslate"><span class="pre">plotting</span></code> modules should be excluded from the automatically detected <code class="docutils literal notranslate"><span class="pre">import_modules</span></code> <code class="docutils literal notranslate"><span class="pre">[&quot;nilearn&quot;,</span> <span class="pre">&quot;nilearn.surface&quot;,</span> <span class="pre">&quot;nilearn.plotting&quot;,</span> <span class="pre">&quot;nilearn.plotting.data&quot;]</span></code> set:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skip_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nilearn.plotting&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This will set <code class="docutils literal notranslate"><span class="pre">import_modules</span></code> to <code class="docutils literal notranslate"><span class="pre">[&quot;nilearn&quot;,</span> <span class="pre">&quot;nilearn.surface&quot;]</span></code>.</p>
+<p>Import tests can be run during the installation using <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">--test=root</span></code> or at any time after the installation using <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">run</span></code>.</p>
+</section>
+<section id="unit-tests">
+<h3>Unit tests<a class="headerlink" href="#unit-tests" title="連結到這個標頭">¶</a></h3>
+<p>The package may have its own unit or regression tests.
+Spack can run these tests during the installation by adding test methods after installation.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">py-numpy</span></code> adds the following as a check to run after the <code class="docutils literal notranslate"><span class="pre">install</span></code> phase:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@run_after</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+<span class="nd">@on_package_attributes</span><span class="p">(</span><span class="n">run_tests</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">install_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">working_dir</span><span class="p">(</span><span class="s2">&quot;spack-test&quot;</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">python</span><span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;import numpy; numpy.test(&#39;full&#39;, verbose=2)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>when testing is enabled during the installation (i.e., <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">--test=root</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Additional information is available on <a class="reference internal" href="../packaging_guide_testing.html#install-phase-tests"><span class="std std-ref">install phase tests</span></a>.</p>
+</div>
+</section>
+</section>
+<section id="setup-file-in-a-sub-directory">
+<h2>Setup file in a sub-directory<a class="headerlink" href="#setup-file-in-a-sub-directory" title="連結到這個標頭">¶</a></h2>
+<p>Many C/C++ libraries provide optional Python bindings in a subdirectory.
+To tell pip which directory to build from, you can override the <code class="docutils literal notranslate"><span class="pre">build_directory</span></code> attribute.
+For example, if a package provides Python bindings in a <code class="docutils literal notranslate"><span class="pre">python</span></code> directory, you can use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">build_directory</span> <span class="o">=</span> <span class="s2">&quot;python&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="pythonpackage-vs-packages-that-use-python">
+<h2>PythonPackage vs. packages that use Python<a class="headerlink" href="#pythonpackage-vs-packages-that-use-python" title="連結到這個標頭">¶</a></h2>
+<p>There are many packages that make use of Python, but packages that depend on Python are not necessarily <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code>'s.</p>
+<section id="choosing-a-build-system">
+<h3>Choosing a build system<a class="headerlink" href="#choosing-a-build-system" title="連結到這個標頭">¶</a></h3>
+<p>First of all, you need to select a build system.
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">create</span></code> usually does this for you, but if for whatever reason you need to do this manually, choose <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> if and only if the package contains one of the following files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code></p></li>
+</ul>
+</section>
+<section id="choosing-a-package-name">
+<h3>Choosing a package name<a class="headerlink" href="#choosing-a-package-name" title="連結到這個標頭">¶</a></h3>
+<p>Selecting the appropriate package name is a little more complicated than choosing the build system.
+By default, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">create</span></code> will prepend <code class="docutils literal notranslate"><span class="pre">py-</span></code> to the beginning of the package name if it detects that the package uses the <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> build system.
+However, there are occasionally packages that use <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> that shouldn't start with <code class="docutils literal notranslate"><span class="pre">py-</span></code>.
+For example:</p>
+<ul class="simple">
+<li><p>awscli</p></li>
+<li><p>aws-parallelcluster</p></li>
+<li><p>busco</p></li>
+<li><p>easybuild</p></li>
+<li><p>httpie</p></li>
+<li><p>mercurial</p></li>
+<li><p>scons</p></li>
+<li><p>snakemake</p></li>
+</ul>
+<p>The thing these packages have in common is that they are command-line tools that just so happen to be written in Python.
+Someone who wants to install <code class="docutils literal notranslate"><span class="pre">mercurial</span></code> with Spack isn't going to realize that it is written in Python, and they certainly aren't going to assume the package is called <code class="docutils literal notranslate"><span class="pre">py-mercurial</span></code>.
+For this reason, we manually renamed the package to <code class="docutils literal notranslate"><span class="pre">mercurial</span></code>.</p>
+<p>Likewise, there are occasionally packages that don't use the <code class="docutils literal notranslate"><span class="pre">PythonPackage</span></code> build system but should still be prepended with <code class="docutils literal notranslate"><span class="pre">py-</span></code>.
+For example:</p>
+<ul class="simple">
+<li><p>py-genders</p></li>
+<li><p>py-py2cairo</p></li>
+<li><p>py-pygobject</p></li>
+<li><p>py-pygtk</p></li>
+<li><p>py-pyqt</p></li>
+<li><p>py-pyserial</p></li>
+<li><p>py-sip</p></li>
+<li><p>py-xpyb</p></li>
+</ul>
+<p>These packages are primarily used as Python libraries, not as command-line tools.
+You may see C/C++ packages that have optional Python language bindings, such as:</p>
+<ul class="simple">
+<li><p>antlr</p></li>
+<li><p>cantera</p></li>
+<li><p>conduit</p></li>
+<li><p>pagmo</p></li>
+<li><p>vtk</p></li>
+</ul>
+<p>Don't prepend these kinds of packages with <code class="docutils literal notranslate"><span class="pre">py-</span></code>.
+When in doubt, think about how this package will be used.
+Is it primarily a Python library that will be imported in other Python scripts?
+Or is it a command-line tool, or C/C++/Fortran program with optional Python modules?
+The former should be prepended with <code class="docutils literal notranslate"><span class="pre">py-</span></code>, while the latter should not.</p>
+</section>
+<section id="extends-vs-depends-on">
+<h3><code class="docutils literal notranslate"><span class="pre">extends</span></code> vs. <code class="docutils literal notranslate"><span class="pre">depends_on</span></code><a class="headerlink" href="#extends-vs-depends-on" title="連結到這個標頭">¶</a></h3>
+<p>As mentioned in the <a class="reference internal" href="../packaging_guide_creation.html#packaging-extensions"><span class="std std-ref">Packaging Guide</span></a>, <code class="docutils literal notranslate"><span class="pre">extends</span></code> and <code class="docutils literal notranslate"><span class="pre">depends_on</span></code> are very similar, but <code class="docutils literal notranslate"><span class="pre">extends</span></code> ensures that the extension and extendee share the same prefix in views.
+This allows the user to import a Python module without having to add that module to <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>.</p>
+<p>Additionally, <code class="docutils literal notranslate"><span class="pre">extends(&quot;python&quot;)</span></code> adds a dependency on the package <code class="docutils literal notranslate"><span class="pre">python-venv</span></code>.
+This improves isolation from the system, whether it's during the build or at runtime: user and system site packages cannot accidentally be used by any package that <code class="docutils literal notranslate"><span class="pre">extends(&quot;python&quot;)</span></code>.</p>
+<p>As a rule of thumb: if a package does not install any Python modules of its own, and merely puts a Python script in the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory, then there is no need for <code class="docutils literal notranslate"><span class="pre">extends</span></code>.
+If the package installs modules in the <code class="docutils literal notranslate"><span class="pre">site-packages</span></code> directory, it requires <code class="docutils literal notranslate"><span class="pre">extends</span></code>.</p>
+</section>
+<section id="executing-python-during-the-build">
+<h3>Executing <code class="docutils literal notranslate"><span class="pre">python</span></code> during the build<a class="headerlink" href="#executing-python-during-the-build" title="連結到這個標頭">¶</a></h3>
+<p>Whenever you need to execute a Python command or pass the path of the Python interpreter to the build system, it is best to use the global variable <code class="docutils literal notranslate"><span class="pre">python</span></code> directly.
+For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@run_before</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">recythonize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">python</span><span class="p">(</span><span class="s2">&quot;setup.py&quot;</span><span class="p">,</span> <span class="s2">&quot;clean&quot;</span><span class="p">)</span>  <span class="c1"># use the `python` global</span>
+</pre></div>
+</div>
+<p>As mentioned in the previous section, <code class="docutils literal notranslate"><span class="pre">extends(&quot;python&quot;)</span></code> adds an automatic dependency on <code class="docutils literal notranslate"><span class="pre">python-venv</span></code>, which is a virtual environment that guarantees build isolation.
+The <code class="docutils literal notranslate"><span class="pre">python</span></code> global always refers to the correct Python interpreter, whether the package uses <code class="docutils literal notranslate"><span class="pre">extends(&quot;python&quot;)</span></code> or <code class="docutils literal notranslate"><span class="pre">depends_on(&quot;python&quot;)</span></code>.</p>
+</section>
+</section>
+<section id="alternatives-to-spack">
+<h2>Alternatives to Spack<a class="headerlink" href="#alternatives-to-spack" title="連結到這個標頭">¶</a></h2>
+<p>PyPI has hundreds of thousands of packages that are not yet in Spack, and <code class="docutils literal notranslate"><span class="pre">pip</span></code> may be a perfectly valid alternative to using Spack.
+The main advantage of Spack over <code class="docutils literal notranslate"><span class="pre">pip</span></code> is its ability to compile non-Python dependencies.
+It can also build cythonized versions of a package or link to an optimized BLAS/LAPACK library like MKL, resulting in calculations that run orders of magnitude faster.
+Spack does not offer a significant advantage over other Python-management systems for installing and using tools like flake8 and sphinx.
+But if you need packages with non-Python dependencies like numpy and scipy, Spack will be very valuable to you.</p>
+<p>Anaconda is another great alternative to Spack, and comes with its own <code class="docutils literal notranslate"><span class="pre">conda</span></code> package manager.
+Like Spack, Anaconda is capable of compiling non-Python dependencies.
+Anaconda contains many Python packages that are not yet in Spack, and Spack contains many Python packages that are not yet in Anaconda.
+The main advantage of Spack over Anaconda is its ability to choose a specific compiler and BLAS/LAPACK or MPI library.
+Spack also has better platform support for supercomputers, and can build optimized binaries for your specific microarchitecture.</p>
+</section>
+<section id="external-documentation">
+<h2>External documentation<a class="headerlink" href="#external-documentation" title="連結到這個標頭">¶</a></h2>
+<p>For more information on Python packaging, see:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://packaging.python.org/">https://packaging.python.org/</a></p></li>
+</ul>
+<p>For more information on build and installation frontend tools, see:</p>
+<ul class="simple">
+<li><p>pip: <a class="reference external" href="https://pip.pypa.io/">https://pip.pypa.io/</a></p></li>
+<li><p>build: <a class="reference external" href="https://pypa-build.readthedocs.io/">https://pypa-build.readthedocs.io/</a></p></li>
+<li><p>installer: <a class="reference external" href="https://installer.readthedocs.io/">https://installer.readthedocs.io/</a></p></li>
+</ul>
+<p>For more information on build backend tools, see:</p>
+<ul class="simple">
+<li><p>setuptools: <a class="reference external" href="https://setuptools.pypa.io/">https://setuptools.pypa.io/</a></p></li>
+<li><p>flit: <a class="reference external" href="https://flit.pypa.io/">https://flit.pypa.io/</a></p></li>
+<li><p>poetry: <a class="reference external" href="https://python-poetry.org/">https://python-poetry.org/</a></p></li>
+<li><p>hatchling: <a class="reference external" href="https://hatch.pypa.io/latest/">https://hatch.pypa.io/latest/</a></p></li>
+<li><p>meson: <a class="reference external" href="https://meson-python.readthedocs.io/">https://meson-python.readthedocs.io/</a></p></li>
+<li><p>pdm: <a class="reference external" href="https://pdm.fming.dev/latest/">https://pdm.fming.dev/latest/</a></p></li>
+</ul>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="rpackage.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">R</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="perlpackage.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Perl</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 9月 23, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Python</a><ul>
+<li><a class="reference internal" href="#terminology">Terminology</a></li>
+<li><a class="reference internal" href="#downloading">Downloading</a><ul>
+<li><a class="reference internal" href="#pypi-vs-github">PyPI vs. GitHub</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">PyPI</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
+<li><a class="reference internal" href="#distutils">distutils</a></li>
+<li><a class="reference internal" href="#setuptools">setuptools</a></li>
+<li><a class="reference internal" href="#id5">flit</a></li>
+<li><a class="reference internal" href="#id6">poetry</a></li>
+<li><a class="reference internal" href="#id7">hatchling</a></li>
+<li><a class="reference internal" href="#id8">meson</a></li>
+<li><a class="reference internal" href="#id9">pdm</a></li>
+<li><a class="reference internal" href="#wheels">wheels</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#passing-arguments-to-setup-py">Passing arguments to setup.py</a><ul>
+<li><a class="reference internal" href="#config-settings">Config settings</a></li>
+<li><a class="reference internal" href="#global-options">Global options</a></li>
+<li><a class="reference internal" href="#install-options">Install options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing">Testing</a><ul>
+<li><a class="reference internal" href="#import-tests">Import tests</a></li>
+<li><a class="reference internal" href="#unit-tests">Unit tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup-file-in-a-sub-directory">Setup file in a sub-directory</a></li>
+<li><a class="reference internal" href="#pythonpackage-vs-packages-that-use-python">PythonPackage vs. packages that use Python</a><ul>
+<li><a class="reference internal" href="#choosing-a-build-system">Choosing a build system</a></li>
+<li><a class="reference internal" href="#choosing-a-package-name">Choosing a package name</a></li>
+<li><a class="reference internal" href="#extends-vs-depends-on"><code class="docutils literal notranslate"><span class="pre">extends</span></code> vs. <code class="docutils literal notranslate"><span class="pre">depends_on</span></code></a></li>
+<li><a class="reference internal" href="#executing-python-during-the-build">Executing <code class="docutils literal notranslate"><span class="pre">python</span></code> during the build</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#alternatives-to-spack">Alternatives to Spack</a></li>
+<li><a class="reference internal" href="#external-documentation">External documentation</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=dfc612df"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>

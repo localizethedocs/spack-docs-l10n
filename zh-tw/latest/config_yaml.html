@@ -1,0 +1,996 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="A detailed guide to the config.yaml file in Spack, which allows you to set core configuration options like installation paths, build parallelism, and trusted sources." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2026-05-13T08:47:56+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜尋" href="search.html"><link rel="next" title="Package Settings (packages.yaml)" href="packages_yaml.html"><link rel="prev" title="Configuration Files" href="configuration.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/config_yaml.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Spack Settings (config.yaml) - Spack 1.2.0.dev0 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.2.0.dev0 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/config_yaml.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="spack-settings-config-yaml">
+<span id="config-yaml"></span><h1>Spack Settings (config.yaml)<a class="headerlink" href="#spack-settings-config-yaml" title="連結到這個標頭">¶</a></h1>
+<p>Spack's basic configuration options are set in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.
+You can see the default settings by looking at <code class="docutils literal notranslate"><span class="pre">etc/spack/defaults/config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1"># This is the default spack configuration file.</span>
+<span class="c1">#</span>
+<span class="c1"># Settings here are versioned with Spack and are intended to provide</span>
+<span class="c1"># sensible defaults out of the box. Spack maintainers should edit this</span>
+<span class="c1"># file to keep it current.</span>
+<span class="c1">#</span>
+<span class="c1"># Users can override these settings by editing files in:</span>
+<span class="c1">#</span>
+<span class="c1">#  * $SPACK_ROOT/etc/spack/     - Spack instance settings</span>
+<span class="c1">#  * ~/.spack/                  - user settings</span>
+<span class="c1">#  * $SPACK_ROOT/etc/spack/site - Spack &quot;site&quot; settings. Like instance settings</span>
+<span class="c1">#                                 but lower priority then user settings.</span>
+<span class="c1">#</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="nt">config</span><span class="p">:</span>
+  <span class="c1"># This is the path to the root of the Spack install tree.</span>
+  <span class="c1"># You can use $spack here to refer to the root of the spack instance.</span>
+  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$spack/opt/spack</span>
+    <span class="nt">projections</span><span class="p">:</span>
+      <span class="nt">all</span><span class="p">:</span> <span class="s">&quot;{architecture.platform}-{architecture.target}/{name}-{version}-{hash}&quot;</span>
+    <span class="c1"># install_tree can include an optional padded length (int or boolean)</span>
+    <span class="c1"># default is False (do not pad)</span>
+    <span class="c1"># if padded_length is True, Spack will pad as close to the system max path</span>
+    <span class="c1"># length as possible</span>
+    <span class="c1"># if padded_length is an integer, Spack will pad to that many characters,</span>
+    <span class="c1"># assuming it is higher than the length of the install_tree root.</span>
+    <span class="c1"># padded_length: 128</span>
+
+
+  <span class="c1"># Locations where templates should be found</span>
+  <span class="nt">template_dirs</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$spack/share/spack/templates</span>
+
+  <span class="c1"># Directory where licenses should be located</span>
+  <span class="nt">license_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$spack/etc/spack/licenses</span>
+
+  <span class="c1"># Temporary locations Spack can try to use for builds.</span>
+  <span class="c1">#</span>
+  <span class="c1"># Recommended options are given below.</span>
+  <span class="c1">#</span>
+  <span class="c1"># Builds can be faster in temporary directories on some (e.g., HPC) systems.</span>
+  <span class="c1"># Specifying `$tempdir` will ensure use of the default temporary directory</span>
+  <span class="c1"># (i.e., ``$TMP` or ``$TMPDIR``).</span>
+  <span class="c1">#</span>
+  <span class="c1"># Another option that prevents conflicts and potential permission issues is</span>
+  <span class="c1"># to specify `$user_cache_path/stage`, which ensures each user builds in their</span>
+  <span class="c1"># home directory.</span>
+  <span class="c1">#</span>
+  <span class="c1"># A more traditional path uses the value of `$spack/var/spack/stage`, which</span>
+  <span class="c1"># builds directly inside Spack&#39;s instance without staging them in a</span>
+  <span class="c1"># temporary space.  Problems with specifying a path inside a Spack instance</span>
+  <span class="c1"># are that it precludes its use as a system package and its ability to be</span>
+  <span class="c1"># pip installable.</span>
+  <span class="c1">#</span>
+  <span class="c1"># In Spack environment files, chaining onto existing system Spack</span>
+  <span class="c1"># installations, the $env variable can be used to download, cache and build</span>
+  <span class="c1"># into user-writable paths that are relative to the currently active</span>
+  <span class="c1"># environment.</span>
+  <span class="c1">#</span>
+  <span class="c1"># In any case, if the username is not already in the path, Spack will append</span>
+  <span class="c1"># the value of `$user` in an attempt to avoid potential conflicts between</span>
+  <span class="c1"># users in shared temporary spaces.</span>
+  <span class="c1">#</span>
+  <span class="c1"># The build stage can be purged with `spack clean --stage` and</span>
+  <span class="c1"># `spack clean -a`, so it is important that the specified directory uniquely</span>
+  <span class="c1"># identifies Spack staging to avoid accidentally wiping out non-Spack work.</span>
+  <span class="nt">build_stage</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$tempdir/$user/spack-stage</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$user_cache_path/stage</span>
+  <span class="c1"># - $spack/var/spack/stage</span>
+
+  <span class="c1"># Naming format for individual stage directories</span>
+  <span class="nt">stage_name</span><span class="p">:</span> <span class="s">&quot;spack-stage-{name}-{version}-{hash}&quot;</span>
+
+  <span class="c1"># Directory in which to run tests and store test results.</span>
+  <span class="c1"># Tests will be stored in directories named by date/time and package</span>
+  <span class="c1"># name/hash.</span>
+  <span class="nt">test_stage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$user_cache_path/test</span>
+
+  <span class="c1"># Cache directory for already downloaded source tarballs and archived</span>
+  <span class="c1"># repositories. This can be purged with `spack clean --downloads`.</span>
+  <span class="nt">source_cache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$spack/var/spack/cache</span>
+
+
+  <span class="c1">## Directory where spack managed environments are created and stored</span>
+  <span class="c1"># environments_root: $spack/var/spack/environments</span>
+
+
+  <span class="c1"># Cache directory for miscellaneous files, like the package index.</span>
+  <span class="c1"># This can be purged with `spack clean --misc-cache`</span>
+  <span class="nt">misc_cache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$user_cache_path/cache</span>
+
+  <span class="c1"># Abort downloads after this many seconds if not data is received.</span>
+  <span class="c1"># Setting this to 0 will disable the timeout.</span>
+  <span class="nt">connect_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
+
+
+  <span class="c1"># If this is false, tools like curl that use SSL will not verify</span>
+  <span class="c1"># certificates. (e.g., curl will use use the -k option)</span>
+  <span class="nt">verify_ssl</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+
+  <span class="c1"># This is where custom certs for proxy/firewall are stored.</span>
+  <span class="c1"># It can be a path or environment variable. To match ssl env configuration</span>
+  <span class="c1"># the default is the environment variable SSL_CERT_FILE</span>
+  <span class="nt">ssl_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$SSL_CERT_FILE</span>
+
+
+  <span class="c1"># Suppress gpg warnings from binary package verification</span>
+  <span class="c1"># Only suppresses warnings, gpg failure will still fail the install</span>
+  <span class="c1"># Potential rationale to set True: users have already explicitly trusted the</span>
+  <span class="c1"># gpg key they are using, and may not want to see repeated warnings that it</span>
+  <span class="c1"># is self-signed or something of the sort.</span>
+  <span class="nt">suppress_gpg_warnings</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+
+  <span class="c1"># If set to true, Spack will always check checksums after downloading</span>
+  <span class="c1"># archives. If false, Spack skips the checksum step.</span>
+  <span class="nt">checksum</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+
+  <span class="c1"># If set to true, Spack will fetch deprecated versions without warning.</span>
+  <span class="c1"># If false, Spack will raise an error when trying to install a deprecated version.</span>
+  <span class="nt">deprecated</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+
+  <span class="c1"># If set to true, `spack install` and friends will NOT clean</span>
+  <span class="c1"># potentially harmful variables from the build environment. Use wisely.</span>
+  <span class="nt">dirty</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+
+  <span class="c1"># The language the build environment will use. This will produce English</span>
+  <span class="c1"># compiler messages by default, so the log parser can highlight errors.</span>
+  <span class="c1"># If set to C, it will use English (see man locale).</span>
+  <span class="c1"># If set to the empty string (&#39;&#39;), it will use the language from the</span>
+  <span class="c1"># user&#39;s environment.</span>
+  <span class="nt">build_language</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
+
+
+  <span class="c1"># When set to true, concurrent instances of Spack will use locks to</span>
+  <span class="c1"># avoid modifying the install tree, database file, etc. If false, Spack</span>
+  <span class="c1"># will disable all locking, but you must NOT run concurrent instances</span>
+  <span class="c1"># of Spack.  For filesystems that don&#39;t support locking, you should set</span>
+  <span class="c1"># this to false and run one Spack at a time, but otherwise we recommend</span>
+  <span class="c1"># enabling locks.</span>
+  <span class="nt">locks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="c1"># The default url fetch method to use.</span>
+  <span class="c1"># If set to &#39;curl&#39;, Spack will require curl on the user&#39;s system</span>
+  <span class="c1"># If set to &#39;urllib&#39;, Spack will use python built-in libs to fetch</span>
+  <span class="nt">url_fetch_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">urllib</span>
+
+  <span class="c1"># The maximum number of jobs to use for the build. When using the old</span>
+  <span class="c1"># installer, this is the number of jobs per package. In the new installer,</span>
+  <span class="c1"># this is the global maximum number of jobs across all packages. When fewer</span>
+  <span class="c1"># cores are available, Spack will use fewer jobs. The `-j` command line</span>
+  <span class="c1"># argument overrides this option.</span>
+  <span class="nt">build_jobs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">16</span>
+
+  <span class="c1"># The maximum number of concurrent package builds a single Spack process</span>
+  <span class="c1"># will perform. The default value of 0 means no package parallelism when using</span>
+  <span class="c1"># the old installer, and unlimited package parallelism (other than the limit</span>
+  <span class="c1"># set by build_jobs) when using the new installer. Setting this to 1 will</span>
+  <span class="c1"># disable package parallelism in both installers. This option is ignored on</span>
+  <span class="c1"># Windows.</span>
+  <span class="nt">concurrent_packages</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+
+  <span class="c1"># Which installer to use: &quot;old&quot; or &quot;new&quot;.</span>
+  <span class="nt">installer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">new</span>
+
+  <span class="c1"># Restrict filesystem and network access during builds. The stage directory,</span>
+  <span class="c1"># install prefix, and system temp directory are always writable.</span>
+  <span class="c1"># Spack-installed dependency prefixes are always readable. Use the allow_read</span>
+  <span class="c1"># and allow_write lists to grant additional permissions to other paths.</span>
+  <span class="c1"># This feature is only available on Linux kernels with Landlock support, and</span>
+  <span class="c1"># only works with the new installer.</span>
+  <span class="nt">sandbox</span><span class="p">:</span>
+    <span class="nt">enable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="c1"># Allow TCP network access during the build phase.</span>
+    <span class="nt">allow_network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="c1"># Additional paths with read and execute permissions.</span>
+    <span class="nt">allow_read</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+    <span class="c1"># Additional paths with write and execute permissions.</span>
+    <span class="nt">allow_write</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+
+  <span class="c1"># If set to true, Spack will use ccache to cache C compiles.</span>
+  <span class="nt">ccache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+  <span class="c1"># How long to wait to lock the Spack installation database. This lock is used</span>
+  <span class="c1"># when Spack needs to manage its own package metadata and all operations are</span>
+  <span class="c1"># expected to complete within the default time limit. The timeout should</span>
+  <span class="c1"># therefore generally be left untouched.</span>
+  <span class="nt">db_lock_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+
+
+  <span class="c1"># How long to wait when attempting to modify a package (e.g. to install it).</span>
+  <span class="c1"># This value should typically be &#39;null&#39; (never time out) unless the Spack</span>
+  <span class="c1"># instance only ever has a single user at a time, and only if the user</span>
+  <span class="c1"># anticipates that a significant delay indicates that the lock attempt will</span>
+  <span class="c1"># never succeed.</span>
+  <span class="nt">package_lock_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
+
+
+  <span class="c1"># Control how shared libraries are located at runtime on Linux. See the</span>
+  <span class="c1"># the Spack documentation for details.</span>
+  <span class="nt">shared_linking</span><span class="p">:</span>
+    <span class="c1"># Spack automatically embeds runtime search paths in ELF binaries for their</span>
+    <span class="c1"># dependencies. Their type can either be &quot;rpath&quot; or &quot;runpath&quot;. For glibc, rpath is</span>
+    <span class="c1"># inherited and has precedence over LD_LIBRARY_PATH; runpath is not inherited</span>
+    <span class="c1"># and of lower precedence. DO NOT MIX these within the same install tree.</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">rpath</span>
+
+
+    <span class="c1"># (Experimental) Embed absolute paths of dependent libraries directly in ELF</span>
+    <span class="c1"># binaries to avoid runtime search. This can improve startup time of</span>
+    <span class="c1"># executables with many dependencies, in particular on slow filesystems.</span>
+    <span class="nt">bind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+    <span class="c1"># Controls the handling of missing dynamic libraries after installation.</span>
+    <span class="c1"># Options are ignore (default), warn, or error. If set to error, the</span>
+    <span class="c1"># installation fails if installed binaries reference dynamic libraries that</span>
+    <span class="c1"># are not found in their specified rpaths.</span>
+    <span class="nt">missing_library_policy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ignore</span>
+
+
+  <span class="c1"># Set to &#39;false&#39; to allow installation on filesystems that doesn&#39;t allow setgid bit</span>
+  <span class="c1"># manipulation by unprivileged user (e.g. AFS)</span>
+  <span class="nt">allow_sgid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="c1"># Whether to show status information during building and installing packages.</span>
+  <span class="c1"># This gives information about Spack&#39;s current progress as well as the current</span>
+  <span class="c1"># and total number of packages. Information is shown both in the terminal</span>
+  <span class="c1"># title and inline.</span>
+  <span class="nt">install_status</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="c1"># Number of seconds a buildcache&#39;s index.json is cached locally before probing</span>
+  <span class="c1"># for updates, within a single Spack invocation. Defaults to 10 minutes.</span>
+  <span class="nt">binary_index_ttl</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">600</span>
+
+  <span class="nt">flags</span><span class="p">:</span>
+    <span class="c1"># Whether to keep -Werror flags active in package builds.</span>
+    <span class="nt">keep_werror</span><span class="p">:</span> <span class="s">&#39;none&#39;</span>
+
+  <span class="c1"># A mapping of aliases that can be used to define new commands. For instance,</span>
+  <span class="c1"># `sp: spec -I` will define a new command `sp` that will execute `spec` with</span>
+  <span class="c1"># the `-I` argument. Aliases cannot override existing commands.</span>
+  <span class="nt">aliases</span><span class="p">:</span>
+    <span class="nt">concretise</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">concretize</span>
+    <span class="nt">containerise</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">containerize</span>
+    <span class="nt">rm</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove</span>
+</pre></div>
+</div>
+<p>These settings can be overridden in <code class="docutils literal notranslate"><span class="pre">etc/spack/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code>.
+See <a class="reference internal" href="configuration.html#configuration-scopes"><span class="std std-ref">Configuration Scopes</span></a> for details.</p>
+<section id="install-tree-root">
+<h2><code class="docutils literal notranslate"><span class="pre">install_tree:root</span></code><a class="headerlink" href="#install-tree-root" title="連結到這個標頭">¶</a></h2>
+<p>The location where Spack will install packages and their dependencies.
+The default is <code class="docutils literal notranslate"><span class="pre">$spack/opt/spack</span></code>.</p>
+</section>
+<section id="projections">
+<h2><code class="docutils literal notranslate"><span class="pre">projections</span></code><a class="headerlink" href="#projections" title="連結到這個標頭">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Modifying projections of the install tree is strongly discouraged.</p>
+</div>
+<p>By default, Spack installs all packages into a unique directory relative to the install tree root with the following layout:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{architecture.platform}-{architecture.target}/{name}-{version}-{hash}
+</pre></div>
+</div>
+<p>In very rare cases, it may be necessary to reduce the length of this path.
+For example, very old versions of the Intel compiler are known to segfault when input paths are too long:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">: internal error: ** The compiler has encountered an unexpected problem.</span>
+<span class="go">** Segmentation violation signal raised. **</span>
+<span class="go">Access violation or stack overflow. Please contact Intel Support for assistance.</span>
+</pre></div>
+</div>
+<p>Another case is Python and R packages with many runtime dependencies, which can result in very large <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> and <code class="docutils literal notranslate"><span class="pre">R_LIBS</span></code> environment variables.
+This can cause the <code class="docutils literal notranslate"><span class="pre">execve</span></code> system call to fail with <code class="docutils literal notranslate"><span class="pre">E2BIG</span></code>, preventing processes from starting.</p>
+<p>For this reason, Spack allows users to modify the installation layout through custom projections.
+For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$spack/opt/spack</span>
+    <span class="nt">projections</span><span class="p">:</span>
+      <span class="nt">all</span><span class="p">:</span> <span class="s">&quot;{name}/{version}/{hash:16}&quot;</span>
+</pre></div>
+</div>
+<p>would install packages into subdirectories using only the package name, version, and a hash length of 16 characters.</p>
+<p>Notice that reducing the hash length increases the likelihood of hash collisions.</p>
+</section>
+<section id="build-stage">
+<h2><code class="docutils literal notranslate"><span class="pre">build_stage</span></code><a class="headerlink" href="#build-stage" title="連結到這個標頭">¶</a></h2>
+<p>Spack is designed to run from a user home directory, and on many systems, the home directory is a (slow) network file system.
+On most systems, building in a temporary file system is faster.
+Usually, there is also more space available in the temporary location than in the home directory.
+If the username is not already in the path, Spack will append the value of <code class="docutils literal notranslate"><span class="pre">$user</span></code> to the selected <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> path.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>We highly recommend specifying <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> paths that distinguish between staging and other activities to ensure <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">clean</span></code> does not inadvertently remove unrelated files.
+Spack prepends <code class="docutils literal notranslate"><span class="pre">spack-stage-</span></code> to temporary staging directory names to reduce this risk.
+Using a combination of <code class="docutils literal notranslate"><span class="pre">spack</span></code> and or <code class="docutils literal notranslate"><span class="pre">stage</span></code> in each specified path, as shown in the default settings and documented examples, will add another layer of protection.</p>
+</div>
+<p>By default, Spack's <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> is configured like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">build_stage</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$tempdir/$user/spack-stage</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/.spack/stage</span>
+</pre></div>
+</div>
+<p>This can be an ordered list of paths that Spack should search when trying to find a temporary directory for the build stage.
+The list is searched in order, and Spack will use the first directory to which it has write access.</p>
+<p>Specifying <cite>~/.spack/stage</cite> first will ensure each user builds in their home directory.
+The historic Spack stage path <cite>$spack/var/spack/stage</cite> will build directly inside the Spack instance.
+See <a class="reference internal" href="configuration.html#config-file-variables"><span class="std std-ref">Config File Variables</span></a> for more on <code class="docutils literal notranslate"><span class="pre">$tempdir</span></code> and <code class="docutils literal notranslate"><span class="pre">$spack</span></code>.</p>
+<p>When Spack builds a package, it creates a temporary directory within the <code class="docutils literal notranslate"><span class="pre">build_stage</span></code>.
+After the package is successfully installed, Spack deletes the temporary directory it used to build.
+Unsuccessful builds are not deleted, but you can manually purge them with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">clean</span> <span class="pre">--stage</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>The build will fail if there is no writable directory in the <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> list, where any user- and site-specific setting will be searched first.</p>
+</div>
+</section>
+<section id="source-cache">
+<h2><code class="docutils literal notranslate"><span class="pre">source_cache</span></code><a class="headerlink" href="#source-cache" title="連結到這個標頭">¶</a></h2>
+<p>Location to cache downloaded tarballs and repositories.
+By default, these are stored in <code class="docutils literal notranslate"><span class="pre">$spack/var/spack/cache</span></code>.
+These are stored indefinitely by default and can be purged with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">clean</span> <span class="pre">--downloads</span></code>.</p>
+</section>
+<section id="misc-cache">
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">misc_cache</span></code><a class="headerlink" href="#misc-cache" title="連結到這個標頭">¶</a></h2>
+<p>Temporary directory to store long-lived cache files, such as indices of packages available in repositories.
+Defaults to <code class="docutils literal notranslate"><span class="pre">~/.spack/cache</span></code>.
+Can be purged with <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">clean</span> <span class="pre">--misc-cache</span></code>.</p>
+<p>In some cases, e.g., if you work with many Spack instances or many different versions of Spack, it makes sense to have a cache per instance or per version.
+You can do that by changing the value to either:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">~/.spack/$spack_instance_id/cache</span></code> for per-instance caches, or</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/.spack/$spack_short_version/cache</span></code> for per-spack-version caches.</p></li>
+</ul>
+</section>
+<section id="verify-ssl">
+<h2><code class="docutils literal notranslate"><span class="pre">verify_ssl</span></code><a class="headerlink" href="#verify-ssl" title="連結到這個標頭">¶</a></h2>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code> (default), Spack will verify certificates of remote hosts when making <code class="docutils literal notranslate"><span class="pre">ssl</span></code> connections.
+Set to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable, and tools like <code class="docutils literal notranslate"><span class="pre">curl</span></code> will use their <code class="docutils literal notranslate"><span class="pre">--insecure</span></code> options.
+Disabling this can expose you to attacks.
+Use at your own risk.</p>
+</section>
+<section id="ssl-certs">
+<h2><code class="docutils literal notranslate"><span class="pre">ssl_certs</span></code><a class="headerlink" href="#ssl-certs" title="連結到這個標頭">¶</a></h2>
+<p>Path to custom certificates for SSL verification.
+The value can be a filesystem path, or an environment variable that expands to an absolute file path.
+The default value is set to the environment variable <code class="docutils literal notranslate"><span class="pre">SSL_CERT_FILE</span></code> to use the same syntax used by many other applications that automatically detect custom certificates.
+When <code class="docutils literal notranslate"><span class="pre">url_fetch_method:curl</span></code>, the <code class="docutils literal notranslate"><span class="pre">config:ssl_certs</span></code> should resolve to a single file.
+Spack will then set the environment variable <code class="docutils literal notranslate"><span class="pre">CURL_CA_BUNDLE</span></code> in the subprocess calling <code class="docutils literal notranslate"><span class="pre">curl</span></code>.
+If additional <code class="docutils literal notranslate"><span class="pre">curl</span></code> arguments are required, they can be set in the config, e.g., <code class="docutils literal notranslate"><span class="pre">url_fetch_method:'curl</span> <span class="pre">-k</span> <span class="pre">-q'</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">url_fetch_method:urllib</span></code>, then files and directories are supported, i.e., <code class="docutils literal notranslate"><span class="pre">config:ssl_certs:$SSL_CERT_FILE</span></code> or <code class="docutils literal notranslate"><span class="pre">config:ssl_certs:$SSL_CERT_DIR</span></code> will work.
+In all cases, the expanded path must be absolute for Spack to use the certificates.
+Certificates relative to an environment can be created by prepending the path variable with the Spack configuration variable <code class="docutils literal notranslate"><span class="pre">$env</span></code>.</p>
+</section>
+<section id="checksum">
+<h2><code class="docutils literal notranslate"><span class="pre">checksum</span></code><a class="headerlink" href="#checksum" title="連結到這個標頭">¶</a></h2>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, Spack verifies downloaded source code using a checksum and will refuse to build packages that it cannot verify.
+Set to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable these checks.
+Disabling this can expose you to attacks.
+Use at your own risk.</p>
+</section>
+<section id="locks">
+<h2><code class="docutils literal notranslate"><span class="pre">locks</span></code><a class="headerlink" href="#locks" title="連結到這個標頭">¶</a></h2>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, concurrent instances of Spack will use locks to avoid modifying the install tree, database file, etc.
+If <code class="docutils literal notranslate"><span class="pre">false</span></code>, Spack will disable all locking, but you must <strong>not</strong> run concurrent instances of Spack.
+For file systems that do not support locking, you should set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> and run one Spack instance at a time; otherwise, we recommend enabling locks.</p>
+</section>
+<section id="dirty">
+<h2><code class="docutils literal notranslate"><span class="pre">dirty</span></code><a class="headerlink" href="#dirty" title="連結到這個標頭">¶</a></h2>
+<p>By default, Spack unsets variables in your environment that can change the way packages build.
+This includes <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">CPATH</span></code>, <code class="docutils literal notranslate"><span class="pre">LIBRARY_PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code>, and others.</p>
+<p>By default, builds are <code class="docutils literal notranslate"><span class="pre">clean</span></code>, but on some machines, compilers and other tools may need custom <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> settings to run.
+You can set <code class="docutils literal notranslate"><span class="pre">dirty</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> to skip the cleaning step and make all builds &quot;dirty&quot; by default.
+Be aware that this will reduce the reproducibility of builds.</p>
+</section>
+<section id="build-jobs">
+<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">build_jobs</span></code><a class="headerlink" href="#build-jobs" title="連結到這個標頭">¶</a></h2>
+<p>Unless overridden in a package or on the command line, Spack builds all packages in parallel.
+The default parallelism is equal to the number of cores available to the process, up to 16 (the default of <code class="docutils literal notranslate"><span class="pre">build_jobs</span></code>).
+For a build system that uses Makefiles, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code> runs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j&lt;build_jobs&gt;</span></code>, when <code class="docutils literal notranslate"><span class="pre">build_jobs</span></code> is less than the number of cores available</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j&lt;ncores&gt;</span></code>, when <code class="docutils literal notranslate"><span class="pre">build_jobs</span></code> is greater or equal to the number of cores available</p></li>
+</ul>
+<p>If you work on a shared login node or have a strict ulimit, it may be necessary to set the default to a lower value.
+By setting <code class="docutils literal notranslate"><span class="pre">build_jobs</span></code> to 4, for example, commands like <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code> will run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j4</span></code> instead of using every core.
+To build all software in serial, set <code class="docutils literal notranslate"><span class="pre">build_jobs</span></code> to 1.</p>
+<p>Note that specifying the number of jobs on the command line always takes priority, so that <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">-j&lt;n&gt;</span></code> always runs <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j&lt;n&gt;</span></code>, even when that exceeds the number of cores available.</p>
+</section>
+<section id="ccache">
+<h2><code class="docutils literal notranslate"><span class="pre">ccache</span></code><a class="headerlink" href="#ccache" title="連結到這個標頭">¶</a></h2>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, Spack will use ccache to cache compiles.
+This is useful specifically in two cases: (1) when using <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">dev-build</span></code> and (2) when building the same package with many different variants.
+The default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>When enabled, Spack will look inside your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> for a <code class="docutils literal notranslate"><span class="pre">ccache</span></code> executable and stop if it is not found.
+Some systems come with <code class="docutils literal notranslate"><span class="pre">ccache</span></code>, but it can also be installed using <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">ccache</span></code>.
+<code class="docutils literal notranslate"><span class="pre">ccache</span></code> comes with reasonable defaults for cache size and location.
+(See the <em>Configuration settings</em> section of <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">ccache</span></code> to learn more about the default settings and how to change them.)
+Please note that we currently disable ccache's <code class="docutils literal notranslate"><span class="pre">hash_dir</span></code> feature to avoid an issue with the stage directory (see <a class="reference external" href="https://github.com/spack/spack/pull/3761#issuecomment-294352232">https://github.com/spack/spack/pull/3761#issuecomment-294352232</a>).</p>
+</section>
+<section id="shared-linking-type">
+<h2><code class="docutils literal notranslate"><span class="pre">shared_linking:type</span></code><a class="headerlink" href="#shared-linking-type" title="連結到這個標頭">¶</a></h2>
+<p>Controls whether Spack embeds <code class="docutils literal notranslate"><span class="pre">RPATH</span></code> or <code class="docutils literal notranslate"><span class="pre">RUNPATH</span></code> attributes in ELF binaries so that they can find their dependencies.
+This has no effect on macOS.
+Two options are allowed:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rpath</span></code> uses <code class="docutils literal notranslate"><span class="pre">RPATH</span></code> and forces the <code class="docutils literal notranslate"><span class="pre">--disable-new-tags</span></code> flag to be passed to the linker.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">runpath</span></code> uses <code class="docutils literal notranslate"><span class="pre">RUNPATH</span></code> and forces the <code class="docutils literal notranslate"><span class="pre">--enable-new-tags</span></code> flag to be passed to the linker.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">RPATH</span></code> search paths have higher precedence than <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>, and <code class="docutils literal notranslate"><span class="pre">ld.so</span></code> will search for libraries in transitive RPATHs of parent objects.</p>
+<p><code class="docutils literal notranslate"><span class="pre">RUNPATH</span></code> search paths have lower precedence than <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>, and <code class="docutils literal notranslate"><span class="pre">ld.so</span></code> will ONLY search for dependencies in the <code class="docutils literal notranslate"><span class="pre">RUNPATH</span></code> of the loading object.</p>
+<p>DO NOT MIX the two options within the same install tree.</p>
+</section>
+<section id="shared-linking-bind">
+<h2><code class="docutils literal notranslate"><span class="pre">shared_linking:bind</span></code><a class="headerlink" href="#shared-linking-bind" title="連結到這個標頭">¶</a></h2>
+<p>This is an <em>experimental option</em> that controls whether Spack embeds absolute paths to needed shared libraries in ELF executables and shared libraries on Linux.
+Setting this option to <code class="docutils literal notranslate"><span class="pre">true</span></code> has two advantages:</p>
+<ol class="arabic simple">
+<li><p><strong>Improved startup time</strong>: when running an executable, the dynamic loader does not have to search for needed libraries.
+They are loaded directly.</p></li>
+<li><p><strong>Reliability</strong>: libraries loaded at runtime are those that were linked during the build.
+This minimizes the risk of accidentally picking up system libraries.</p></li>
+</ol>
+<p>In the current implementation, Spack sets the soname (shared object name) of libraries to their install path upon installation.
+This has two implications:</p>
+<ol class="arabic simple">
+<li><p>Binding does not apply to libraries installed <em>before</em> the option was enabled.</p></li>
+<li><p>Disabling the option does <em>not</em> prevent binding of libraries installed when the option was still enabled.</p></li>
+</ol>
+<p>It is also worth noting that:</p>
+<ol class="arabic simple">
+<li><p>Applications relying on <code class="docutils literal notranslate"><span class="pre">dlopen(3)</span></code> will continue to work, even when they open a library by name.
+This is because RPATHs are retained in binaries also when <code class="docutils literal notranslate"><span class="pre">bind</span></code> is enabled.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code> continues to work for the typical use case of overriding symbols, such as preloading a library with a more efficient <code class="docutils literal notranslate"><span class="pre">malloc</span></code>.
+However, the preloaded library will be loaded <em>in addition to</em>, rather than <em>in place of</em>, another library with the same name -- which can be problematic in rare cases where libraries rely on a particular <code class="docutils literal notranslate"><span class="pre">init</span></code> or <code class="docutils literal notranslate"><span class="pre">fini</span></code> order.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>In some cases, packages provide <em>stub libraries</em> that only contain an interface for linking but lack an implementation for runtime.
+An example of this is <code class="docutils literal notranslate"><span class="pre">libcuda.so</span></code>, provided by the CUDA toolkit; it can be used to link against, but the library needed at runtime is the one installed with the CUDA driver.
+To avoid binding those libraries, they can be marked as non-bindable using a property in the package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Example</span><span class="p">(</span><span class="n">Package</span><span class="p">):</span>
+    <span class="n">non_bindable_shared_objects</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;libinterface.so&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="install-status">
+<h2><code class="docutils literal notranslate"><span class="pre">install_status</span></code><a class="headerlink" href="#install-status" title="連結到這個標頭">¶</a></h2>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, Spack will show information about its current progress as well as the current and total package numbers.
+Progress is shown both in the terminal title and inline.
+Setting it to <code class="docutils literal notranslate"><span class="pre">false</span></code> will not show any progress information.</p>
+<p>To work properly, this requires your terminal to reset its title after Spack has finished its work; otherwise, Spack's status information will remain in the terminal's title indefinitely.
+Most terminals should already be set up this way and clear Spack's status information.</p>
+</section>
+<section id="aliases">
+<h2><code class="docutils literal notranslate"><span class="pre">aliases</span></code><a class="headerlink" href="#aliases" title="連結到這個標頭">¶</a></h2>
+<p>Aliases can be used to define new Spack commands.
+They can be either shortcuts for longer commands or include specific arguments for convenience.
+For instance, if users want to use <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span></code>'s <code class="docutils literal notranslate"><span class="pre">-v</span></code> argument all the time, they can create a new alias called <code class="docutils literal notranslate"><span class="pre">inst</span></code> that will always call <code class="docutils literal notranslate"><span class="pre">install</span> <span class="pre">-v</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">aliases</span><span class="p">:</span>
+  <span class="nt">inst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">install -v</span>
+</pre></div>
+</div>
+</section>
+<section id="concretization-cache-enable">
+<h2><code class="docutils literal notranslate"><span class="pre">concretization_cache:enable</span></code><a class="headerlink" href="#concretization-cache-enable" title="連結到這個標頭">¶</a></h2>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, Spack will utilize a cache of solver outputs from successful concretization runs.
+When enabled, Spack will check the concretization cache prior to running the solver.
+If a previous request to solve a given problem is present in the cache, Spack will load the concrete specs and other solver data from the cache rather than running the solver.
+Specs not previously concretized will be added to the cache on a successful solve.
+The cache additionally holds solver statistics, so commands like <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">solve</span></code> will still return information about the run that produced a given solver result.</p>
+<p>This cache is a subcache of the <a class="reference internal" href="#misc-cache"><span class="std std-ref">misc_cache</span></a> and as such will be cleaned when the Misc Cache is cleaned.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">false</span></code> or omitted, all concretization requests will be performed from scratch</p>
+</section>
+<section id="concretization-cache-url">
+<h2><code class="docutils literal notranslate"><span class="pre">concretization_cache:url</span></code><a class="headerlink" href="#concretization-cache-url" title="連結到這個標頭">¶</a></h2>
+<p>Path to the location where Spack will root the concretization cache.
+Currently this only supports paths on the local filesystem.</p>
+<p>Default location is under the <a class="reference internal" href="#misc-cache"><span class="std std-ref">misc_cache</span></a> at: <code class="docutils literal notranslate"><span class="pre">$misc_cache/concretization</span></code></p>
+</section>
+<section id="concretization-cache-entry-limit">
+<h2><code class="docutils literal notranslate"><span class="pre">concretization_cache:entry_limit</span></code><a class="headerlink" href="#concretization-cache-entry-limit" title="連結到這個標頭">¶</a></h2>
+<p>Sets a limit on the number of concretization results that Spack will cache.
+The limit is evaluated after each concretization run; if Spack has stored more results than the limit allows, the oldest concretization results are pruned until 10% of the limit has been removed.</p>
+<p>Setting this value to 0 disables automatic pruning.
+It is expected that users will be responsible for maintaining this cache.</p>
+</section>
+<section id="concretization-cache-size-limit">
+<h2><code class="docutils literal notranslate"><span class="pre">concretization_cache:size_limit</span></code><a class="headerlink" href="#concretization-cache-size-limit" title="連結到這個標頭">¶</a></h2>
+<p>Sets a limit on the size of the concretization cache in bytes.
+The limit is evaluated after each concretization run; if Spack has stored more results than the limit allows, the oldest concretization results are pruned until 10% of the limit has been removed.</p>
+<p>Setting this value to 0 disables automatic pruning.
+It is expected that users will be responsible for maintaining this cache.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="packages_yaml.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Package Settings (packages.yaml)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="configuration.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Configuration Files</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 5月 13, 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Spack Settings (config.yaml)</a><ul>
+<li><a class="reference internal" href="#install-tree-root"><code class="docutils literal notranslate"><span class="pre">install_tree:root</span></code></a></li>
+<li><a class="reference internal" href="#projections"><code class="docutils literal notranslate"><span class="pre">projections</span></code></a></li>
+<li><a class="reference internal" href="#build-stage"><code class="docutils literal notranslate"><span class="pre">build_stage</span></code></a></li>
+<li><a class="reference internal" href="#source-cache"><code class="docutils literal notranslate"><span class="pre">source_cache</span></code></a></li>
+<li><a class="reference internal" href="#misc-cache"><code class="docutils literal notranslate"><span class="pre">misc_cache</span></code></a></li>
+<li><a class="reference internal" href="#verify-ssl"><code class="docutils literal notranslate"><span class="pre">verify_ssl</span></code></a></li>
+<li><a class="reference internal" href="#ssl-certs"><code class="docutils literal notranslate"><span class="pre">ssl_certs</span></code></a></li>
+<li><a class="reference internal" href="#checksum"><code class="docutils literal notranslate"><span class="pre">checksum</span></code></a></li>
+<li><a class="reference internal" href="#locks"><code class="docutils literal notranslate"><span class="pre">locks</span></code></a></li>
+<li><a class="reference internal" href="#dirty"><code class="docutils literal notranslate"><span class="pre">dirty</span></code></a></li>
+<li><a class="reference internal" href="#build-jobs"><code class="docutils literal notranslate"><span class="pre">build_jobs</span></code></a></li>
+<li><a class="reference internal" href="#ccache"><code class="docutils literal notranslate"><span class="pre">ccache</span></code></a></li>
+<li><a class="reference internal" href="#shared-linking-type"><code class="docutils literal notranslate"><span class="pre">shared_linking:type</span></code></a></li>
+<li><a class="reference internal" href="#shared-linking-bind"><code class="docutils literal notranslate"><span class="pre">shared_linking:bind</span></code></a></li>
+<li><a class="reference internal" href="#install-status"><code class="docutils literal notranslate"><span class="pre">install_status</span></code></a></li>
+<li><a class="reference internal" href="#aliases"><code class="docutils literal notranslate"><span class="pre">aliases</span></code></a></li>
+<li><a class="reference internal" href="#concretization-cache-enable"><code class="docutils literal notranslate"><span class="pre">concretization_cache:enable</span></code></a></li>
+<li><a class="reference internal" href="#concretization-cache-url"><code class="docutils literal notranslate"><span class="pre">concretization_cache:url</span></code></a></li>
+<li><a class="reference internal" href="#concretization-cache-entry-limit"><code class="docutils literal notranslate"><span class="pre">concretization_cache:entry_limit</span></code></a></li>
+<li><a class="reference internal" href="#concretization-cache-size-limit"><code class="docutils literal notranslate"><span class="pre">concretization_cache:size_limit</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=dfc612df"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>

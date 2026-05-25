@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.windows_registry &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/windows_registry.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.windows_registry</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.util.windows_registry</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utility module for dealing with Windows Registry.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="kn">from</span> <span class="nn">llnl.util</span> <span class="kn">import</span> <span class="n">tty</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">winreg</span>
+
+
+<div class="viewcode-block" id="RegistryValue">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryValue">[docs]</a>
+<span class="k">class</span> <span class="nc">RegistryValue</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class defining a Windows registry entry</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">parent_key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">parent_key</span></div>
+
+
+
+<div class="viewcode-block" id="RegistryKey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey">[docs]</a>
+<span class="k">class</span> <span class="nc">RegistryKey</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class wrapping a Windows registry key</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all subvalues of this key as RegistryValue objects in dictionary</span>
+<span class="sd">        of value name : RegistryValue object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gather_value_info</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns list of all subkeys of this key as RegistryKey objects&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gather_subkey_info</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hkey</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
+
+<div class="viewcode-block" id="RegistryKey.winreg_error_handler">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.winreg_error_handler">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">winreg_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="c1"># Expected errors that occur on occasion, these are easily</span>
+            <span class="c1"># debug-able and have sufficiently verbose reporting and obvious cause</span>
+            <span class="c1"># [WinError 2]: the system cannot find the file specified - lookup item does</span>
+            <span class="c1"># not exist</span>
+            <span class="c1"># [WinError 5]: Access is denied - user not in key&#39;s ACL</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="s2">&quot;winerror&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">err</span><span class="o">.</span><span class="n">winerror</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">err</span>
+            <span class="c1"># Other OS errors are more difficult to diagnose, so we wrap them in some extra</span>
+            <span class="c1"># reporting</span>
+            <span class="k">raise</span> <span class="n">InvalidRegistryOperation</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span></div>
+
+
+<div class="viewcode-block" id="RegistryKey.OpenKeyEx">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.OpenKeyEx">[docs]</a>
+    <span class="k">def</span> <span class="nf">OpenKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience wrapper around winreg.OpenKeyEx&quot;&quot;&quot;</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[WINREG ACCESS] Accessing Reg Key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">subname</span><span class="si">}</span><span class="s2"> with&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;access&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> access&quot;</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">winreg_error_handler</span><span class="p">(</span><span class="s2">&quot;OpenKeyEx&quot;</span><span class="p">,</span> <span class="n">subname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">winreg</span><span class="o">.</span><span class="n">OpenKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hkey</span><span class="p">,</span> <span class="n">subname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RegistryKey.QueryInfoKey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.QueryInfoKey">[docs]</a>
+    <span class="k">def</span> <span class="nf">QueryInfoKey</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience wrapper around winreg.QueryInfoKey&quot;&quot;&quot;</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WINREG ACCESS] Obtaining key,value information from key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">winreg_error_handler</span><span class="p">(</span><span class="s2">&quot;QueryInfoKey&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">winreg</span><span class="o">.</span><span class="n">QueryInfoKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hkey</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RegistryKey.EnumKey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.EnumKey">[docs]</a>
+    <span class="k">def</span> <span class="nf">EnumKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience wrapper around winreg.EnumKey&quot;&quot;&quot;</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;[WINREG ACCESS] Obtaining name of subkey at index &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> from registry key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">winreg_error_handler</span><span class="p">(</span><span class="s2">&quot;EnumKey&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">winreg</span><span class="o">.</span><span class="n">EnumKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hkey</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RegistryKey.EnumValue">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.EnumValue">[docs]</a>
+    <span class="k">def</span> <span class="nf">EnumValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience wrapper around winreg.EnumValue&quot;&quot;&quot;</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[WINREG ACCESS] Obtaining value at index </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> from registry key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">winreg_error_handler</span><span class="p">(</span><span class="s2">&quot;EnumValue&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">winreg</span><span class="o">.</span><span class="n">EnumValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hkey</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RegistryKey.QueryValueEx">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.QueryValueEx">[docs]</a>
+    <span class="k">def</span> <span class="nf">QueryValueEx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience wrapper around winreg.QueryValueEx&quot;&quot;&quot;</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WINREG ACCESS] Obtaining value </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> from registry key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">winreg_error_handler</span><span class="p">(</span><span class="s2">&quot;QueryValueEx&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">_gather_subkey_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Composes all subkeys into a list for access&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">sub_keys</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">QueryInfoKey</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sub_keys</span><span class="p">):</span>
+            <span class="n">sub_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EnumKey</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sub_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">OpenKeyEx</span><span class="p">(</span><span class="n">sub_name</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RegistryKey</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">sub_name</span><span class="p">),</span> <span class="n">sub_handle</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s2">&quot;winerror&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="c1"># This is a permission error, we can&#39;t read this key</span>
+                    <span class="c1"># move on</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span>
+
+    <span class="k">def</span> <span class="nf">_gather_value_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compose all values for this key into a dict of form value name: RegistryValue Object&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">QueryInfoKey</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">value_name</span><span class="p">,</span> <span class="n">value_data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EnumValue</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">value_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">RegistryValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">value_data</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RegistryKey.get_subkey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.get_subkey">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns subkey of name sub_key in a RegistryKey objects&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RegistryKey</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">sub_key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">OpenKeyEx</span><span class="p">(</span><span class="n">sub_key</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">winreg</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RegistryKey.get_value">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryKey.get_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns value associated with this key in RegistryValue object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RegistryValue</span><span class="p">(</span><span class="n">val_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="n">val_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">class</span> <span class="nc">_HKEY_CONSTANT</span><span class="p">(</span><span class="n">RegistryKey</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass of RegistryKey to represent the prebaked, always open registry HKEY constants&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hkey_constant</span><span class="p">):</span>
+        <span class="n">hkey_name</span> <span class="o">=</span> <span class="n">hkey_constant</span>
+        <span class="c1"># This class is instantiated at module import time</span>
+        <span class="c1"># on non Windows platforms, winreg would not have been</span>
+        <span class="c1"># imported. For this reason we can&#39;t reference winreg yet,</span>
+        <span class="c1"># so handle is none for now to avoid invalid references to a module.</span>
+        <span class="c1"># _handle provides a workaround to prevent null references to self.handle</span>
+        <span class="c1"># when coupled with the handle property.</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_HKEY_CONSTANT</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">hkey_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_hkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">winreg</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hkey</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hkey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
+
+
+<div class="viewcode-block" id="HKEY">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.HKEY">[docs]</a>
+<span class="k">class</span> <span class="nc">HKEY</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Predefined, open registry HKEYs</span>
+<span class="sd">    From the Microsoft docs:</span>
+<span class="sd">    An application must open a key before it can read data from the registry.</span>
+<span class="sd">    To open a key, an application must supply a handle to another key in</span>
+<span class="sd">    the registry that is already open. The system defines predefined keys</span>
+<span class="sd">    that are always open. Predefined keys help an application navigate in</span>
+<span class="sd">    the registry.&quot;&quot;&quot;</span>
+
+    <span class="n">HKEY_CLASSES_ROOT</span> <span class="o">=</span> <span class="n">_HKEY_CONSTANT</span><span class="p">(</span><span class="s2">&quot;HKEY_CLASSES_ROOT&quot;</span><span class="p">)</span>
+    <span class="n">HKEY_CURRENT_USER</span> <span class="o">=</span> <span class="n">_HKEY_CONSTANT</span><span class="p">(</span><span class="s2">&quot;HKEY_CURRENT_USER&quot;</span><span class="p">)</span>
+    <span class="n">HKEY_USERS</span> <span class="o">=</span> <span class="n">_HKEY_CONSTANT</span><span class="p">(</span><span class="s2">&quot;HKEY_USERS&quot;</span><span class="p">)</span>
+    <span class="n">HKEY_LOCAL_MACHINE</span> <span class="o">=</span> <span class="n">_HKEY_CONSTANT</span><span class="p">(</span><span class="s2">&quot;HKEY_LOCAL_MACHINE&quot;</span><span class="p">)</span>
+    <span class="n">HKEY_CURRENT_CONFIG</span> <span class="o">=</span> <span class="n">_HKEY_CONSTANT</span><span class="p">(</span><span class="s2">&quot;HKEY_CURRENT_CONFIG&quot;</span><span class="p">)</span>
+    <span class="n">HKEY_PERFORMANCE_DATA</span> <span class="o">=</span> <span class="n">_HKEY_CONSTANT</span><span class="p">(</span><span class="s2">&quot;HKEY_PERFORMANCE_DATA&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="WindowsRegistryView">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView">[docs]</a>
+<span class="k">class</span> <span class="nc">WindowsRegistryView</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface to provide access, querying, and searching to Windows registry entries.</span>
+<span class="sd">    This class represents a single key entrypoint into the Windows registry</span>
+<span class="sd">    and provides an interface to this key&#39;s values, its subkeys, and those subkey&#39;s values.</span>
+<span class="sd">    This class cannot be used to move freely about the registry, only subkeys/values of</span>
+<span class="sd">    the root key used to instantiate this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root_key</span><span class="o">=</span><span class="n">HKEY</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs a Windows Registry entrypoint to key provided</span>
+<span class="sd">        root_key should be an already open root key or an hkey constant if provided</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (str): registry key to provide root for registry key for this clas</span>
+<span class="sd">            root_key: Already open registry key or HKEY constant to provide access into</span>
+<span class="sd">                         the Windows registry. Registry access requires an already open key</span>
+<span class="sd">                         to get an entrypoint, the HKEY constants are always open, or an already</span>
+<span class="sd">                         open key can be used instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot instantiate Windows Registry class on non Windows platforms&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reg</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="WindowsRegistryView.KeyMatchConditions">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.KeyMatchConditions">[docs]</a>
+    <span class="k">class</span> <span class="nc">KeyMatchConditions</span><span class="p">:</span>
+<div class="viewcode-block" id="WindowsRegistryView.KeyMatchConditions.regex_matcher">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.KeyMatchConditions.regex_matcher">[docs]</a>
+        <span class="nd">@staticmethod</span>
+        <span class="k">def</span> <span class="nf">regex_matcher</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.KeyMatchConditions.name_matcher">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.KeyMatchConditions.name_matcher">[docs]</a>
+        <span class="nd">@staticmethod</span>
+        <span class="k">def</span> <span class="nf">name_matcher</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">subkey_name</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span></div>
+</div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.invalid_reg_ref_error_handler">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.invalid_reg_ref_error_handler">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">invalid_reg_ref_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> at position </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_load_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">get_subkey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> at position </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">def</span> <span class="nf">_valid_reg_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WINREG ACCESS] Cannot perform operation for nonexistent key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_regex_match_subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subkey</span><span class="p">):</span>
+        <span class="n">r_subkey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">subkey</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_subkeys</span><span class="p">()</span> <span class="k">if</span> <span class="n">r_subkey</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reg</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_key</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reg</span>
+
+<div class="viewcode-block" id="WindowsRegistryView.get_value">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.get_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return registry value corresponding to provided argument (if it exists)&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_reg_check</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">RegistryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot query value from invalid key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">invalid_reg_ref_error_handler</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">value_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.get_subkey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.get_subkey">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subkey_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_reg_check</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">RegistryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot query subkey from invalid key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">invalid_reg_ref_error_handler</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">get_subkey</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.get_subkeys">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.get_subkeys">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_reg_check</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">RegistryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot query subkeys from invalid key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">invalid_reg_ref_error_handler</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">subkeys</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.get_matching_subkeys">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.get_matching_subkeys">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_matching_subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subkey_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all subkeys regex matching subkey name</span>
+
+<span class="sd">        Note: this method obtains only direct subkeys of the given key and does not</span>
+<span class="sd">        desced to transtitve subkeys. For this behavior, see `find_matching_subkeys`&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_regex_match_subkeys</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.get_values">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.get_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_reg_check</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">RegistryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot query values from invalid key </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">invalid_reg_ref_error_handler</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">values</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_traverse_subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop_condition</span><span class="p">,</span> <span class="n">collect_all_matching</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform simple BFS of subkeys, returning the key</span>
+<span class="sd">        that successfully triggers the stop condition.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            stop_condition: lambda or function pointer that takes a single argument</span>
+<span class="sd">                            a key and returns a boolean value based on that key</span>
+<span class="sd">            collect_all_matching: boolean value, if True, the traversal collects and returns</span>
+<span class="sd">                            all keys meeting stop condition. If false, once stop</span>
+<span class="sd">                            condition is met, the key that triggered the condition &#39;</span>
+<span class="sd">                            is returned.</span>
+<span class="sd">            recusrive: boolean value, if True perform a recursive search of subkeys</span>
+<span class="sd">        Return:</span>
+<span class="sd">            the key if stop_condition is triggered, or None if not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_reg_check</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">InvalidKeyError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">invalid_reg_ref_error_handler</span><span class="p">():</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">subkeys</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">queue</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">stop_condition</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">collect_all_matching</span><span class="p">:</span>
+                        <span class="n">collection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">key</span>
+                <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">subkeys</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">collection</span> <span class="k">if</span> <span class="n">collection</span> <span class="k">else</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="WindowsRegistryView.find_subkey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.find_subkey">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subkey_name</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a BFS of subkeys until desired key is found</span>
+<span class="sd">        Returns None or RegistryKey object corresponding to requested key name</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            subkey_name (str): subkey to be searched for</span>
+<span class="sd">            recursive (bool):  perform a recursive search</span>
+<span class="sd">        Return:</span>
+<span class="sd">            the desired subkey as a RegistryKey object, or none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traverse_subkeys</span><span class="p">(</span>
+            <span class="n">WindowsRegistryView</span><span class="o">.</span><span class="n">KeyMatchConditions</span><span class="o">.</span><span class="n">name_matcher</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.find_matching_subkey">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.find_matching_subkey">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_matching_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subkey_name</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a BFS of subkeys until a key matching subkey name regex is found</span>
+<span class="sd">        Returns None or the first RegistryKey object corresponding to requested key name</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            subkey_name (str): subkey to be searched for</span>
+<span class="sd">            recursive (bool):  perform a recursive search</span>
+<span class="sd">        Return:</span>
+<span class="sd">            the desired subkey as a RegistryKey object, or none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traverse_subkeys</span><span class="p">(</span>
+            <span class="n">WindowsRegistryView</span><span class="o">.</span><span class="n">KeyMatchConditions</span><span class="o">.</span><span class="n">regex_matcher</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.find_subkeys">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.find_subkeys">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subkey_name</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exactly the same as find_subkey, except this function tries to match</span>
+<span class="sd">        a regex to multiple keys</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            subkey_name (str)</span>
+<span class="sd">        Return:</span>
+<span class="sd">            the desired subkeys as a list of RegistryKey object, or none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;collect_all_matching&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;recursive&quot;</span><span class="p">:</span> <span class="n">recursive</span><span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traverse_subkeys</span><span class="p">(</span>
+            <span class="n">WindowsRegistryView</span><span class="o">.</span><span class="n">KeyMatchConditions</span><span class="o">.</span><span class="n">regex_matcher</span><span class="p">(</span><span class="n">subkey_name</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WindowsRegistryView.find_value">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.WindowsRegistryView.find_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_name</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If non recursive, return RegistryValue object corresponding to name</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            val_name (str): name of value desired from registry</span>
+<span class="sd">            recursive (bool): optional argument, if True, the registry is searched recursively</span>
+<span class="sd">                              for the value of name val_name, else only the current key is searched</span>
+<span class="sd">        Return:</span>
+<span class="sd">            The desired registry value as a RegistryValue object if it exists, otherwise, None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">val_name</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traverse_subkeys</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">val_name</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">val_name</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RegistryError">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.RegistryError">[docs]</a>
+<span class="k">class</span> <span class="nc">RegistryError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RunTime Error concerning the Windows Registry&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="InvalidKeyError">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.InvalidKeyError">[docs]</a>
+<span class="k">class</span> <span class="nc">InvalidKeyError</span><span class="p">(</span><span class="n">RegistryError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runtime Error describing issue with invalid key access to Windows registry&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot query invalid key: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="InvalidRegistryOperation">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.windows_registry.InvalidRegistryOperation">[docs]</a>
+<span class="k">class</span> <span class="nc">InvalidRegistryOperation</span><span class="p">(</span><span class="n">RegistryError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Runtime Error ecountered when a registry operation is invalid for</span>
+<span class="sd">    an indeterminate reason&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Windows registry operations: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> encountered error: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Method invoked with parameters:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.s3 &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/s3.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.s3</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.s3 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib.error</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">urllib.response</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BufferedReader</span><span class="p">,</span> <span class="n">BytesIO</span><span class="p">,</span> <span class="n">IOBase</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">spack.config</span>
+
+<span class="c1">#: Map (mirror name, method) tuples to s3 client instances.</span>
+<span class="n">s3_client_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_s3_session">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.get_s3_session">[文档]</a>
+<span class="k">def</span> <span class="nf">get_s3_session</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fetch&quot;</span><span class="p">):</span>
+    <span class="c1"># import boto and friends as late as possible.  We don&#39;t want to require boto as a</span>
+    <span class="c1"># dependency unless the user actually wants to access S3 mirrors.</span>
+    <span class="kn">from</span> <span class="nn">boto3</span> <span class="kn">import</span> <span class="n">Session</span>
+    <span class="kn">from</span> <span class="nn">botocore</span> <span class="kn">import</span> <span class="n">UNSIGNED</span>
+    <span class="kn">from</span> <span class="nn">botocore.client</span> <span class="kn">import</span> <span class="n">Config</span>
+    <span class="kn">from</span> <span class="nn">botocore.exceptions</span> <span class="kn">import</span> <span class="n">ClientError</span>
+
+    <span class="c1"># Circular dependency</span>
+    <span class="kn">from</span> <span class="nn">spack.mirror</span> <span class="kn">import</span> <span class="n">MirrorCollection</span>
+
+    <span class="k">global</span> <span class="n">s3_client_cache</span>
+
+    <span class="c1"># Parse the URL if not already done.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">ParseResult</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">url_str</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_mirror_url</span><span class="p">(</span><span class="n">mirror</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mirror</span><span class="o">.</span><span class="n">fetch_url</span> <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fetch&quot;</span> <span class="k">else</span> <span class="n">mirror</span><span class="o">.</span><span class="n">push_url</span>
+
+    <span class="c1"># Get all configured mirrors that could match.</span>
+    <span class="n">all_mirrors</span> <span class="o">=</span> <span class="n">MirrorCollection</span><span class="p">()</span>
+    <span class="n">mirrors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mirror</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mirror</span> <span class="ow">in</span> <span class="n">all_mirrors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">url_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">get_mirror_url</span><span class="p">(</span><span class="n">mirror</span><span class="p">))</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mirrors</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">mirror</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># In case we have more than one mirror, we pick the longest matching url.</span>
+        <span class="c1"># The heuristic being that it&#39;s more specific, and you can have different</span>
+        <span class="c1"># credentials for a sub-bucket (if that is a thing).</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">mirror</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="n">mirrors</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">name_and_mirror</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">get_mirror_url</span><span class="p">(</span><span class="n">name_and_mirror</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="p">)</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="c1"># Did we already create a client for this? Then return it.</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">s3_client_cache</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s3_client_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="c1"># Otherwise, create it.</span>
+    <span class="n">s3_connection</span><span class="p">,</span> <span class="n">s3_client_args</span> <span class="o">=</span> <span class="n">get_mirror_s3_connection_info</span><span class="p">(</span><span class="n">mirror</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="o">**</span><span class="n">s3_connection</span><span class="p">)</span>
+    <span class="c1"># if no access credentials provided above, then access anonymously</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">session</span><span class="o">.</span><span class="n">get_credentials</span><span class="p">():</span>
+        <span class="n">s3_client_args</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">signature_version</span><span class="o">=</span><span class="n">UNSIGNED</span><span class="p">)</span>
+
+    <span class="n">client</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">s3_client_args</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">ClientError</span> <span class="o">=</span> <span class="n">ClientError</span>
+
+    <span class="c1"># Cache the client.</span>
+    <span class="n">s3_client_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span>
+    <span class="k">return</span> <span class="n">client</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_parse_s3_endpoint_url</span><span class="p">(</span><span class="n">endpoint_url</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">endpoint_url</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span><span class="p">:</span>
+        <span class="n">endpoint_url</span> <span class="o">=</span> <span class="s2">&quot;://&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s2">&quot;https&quot;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">endpoint_url</span>
+
+
+<div class="viewcode-block" id="get_mirror_s3_connection_info">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.get_mirror_s3_connection_info">[文档]</a>
+<span class="k">def</span> <span class="nf">get_mirror_s3_connection_info</span><span class="p">(</span><span class="n">mirror</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create s3 config for session/client from a Mirror instance (or just set defaults</span>
+<span class="sd">    when no mirror is given.)&quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">spack.mirror</span> <span class="kn">import</span> <span class="n">Mirror</span>
+
+    <span class="n">s3_connection</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">s3_client_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;use_ssl&quot;</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config:verify_ssl&quot;</span><span class="p">)}</span>
+
+    <span class="c1"># access token</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mirror</span><span class="p">,</span> <span class="n">Mirror</span><span class="p">):</span>
+        <span class="n">credentials</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">get_credentials</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">credentials</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;access_token&quot;</span> <span class="ow">in</span> <span class="n">credentials</span><span class="p">:</span>
+                <span class="n">s3_connection</span><span class="p">[</span><span class="s2">&quot;aws_session_token&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">credentials</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s2">&quot;access_pair&quot;</span> <span class="ow">in</span> <span class="n">credentials</span><span class="p">:</span>
+                <span class="n">s3_connection</span><span class="p">[</span><span class="s2">&quot;aws_access_key_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">credentials</span><span class="p">[</span><span class="s2">&quot;access_pair&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">s3_connection</span><span class="p">[</span><span class="s2">&quot;aws_secret_access_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">credentials</span><span class="p">[</span><span class="s2">&quot;access_pair&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s2">&quot;profile&quot;</span> <span class="ow">in</span> <span class="n">credentials</span><span class="p">:</span>
+                <span class="n">s3_connection</span><span class="p">[</span><span class="s2">&quot;profile_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">credentials</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span>
+
+        <span class="c1"># endpoint url</span>
+        <span class="n">endpoint_url</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">get_endpoint_url</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;S3_ENDPOINT_URL&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">endpoint_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;S3_ENDPOINT_URL&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">endpoint_url</span><span class="p">:</span>
+        <span class="n">s3_client_args</span><span class="p">[</span><span class="s2">&quot;endpoint_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_parse_s3_endpoint_url</span><span class="p">(</span><span class="n">endpoint_url</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">s3_connection</span><span class="p">,</span> <span class="n">s3_client_args</span></div>
+
+
+
+<span class="c1"># NOTE(opadron): Workaround issue in boto where its StreamingBody</span>
+<span class="c1"># implementation is missing several APIs expected from IOBase.  These missing</span>
+<span class="c1"># APIs prevent the streams returned by boto from being passed as-are along to</span>
+<span class="c1"># urllib.</span>
+<span class="c1">#</span>
+<span class="c1"># https://github.com/boto/botocore/issues/879</span>
+<span class="c1"># https://github.com/python/cpython/pull/3249</span>
+<div class="viewcode-block" id="WrapStream">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.WrapStream">[文档]</a>
+<span class="k">class</span> <span class="nc">WrapStream</span><span class="p">(</span><span class="n">BufferedReader</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw</span><span class="p">):</span>
+        <span class="c1"># In botocore &gt;=1.23.47, StreamingBody inherits from IOBase, so we</span>
+        <span class="c1"># only add missing attributes in older versions.</span>
+        <span class="c1"># https://github.com/boto/botocore/commit/a624815eabac50442ed7404f3c4f2664cd0aa784</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">IOBase</span><span class="p">):</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">readable</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">writable</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">seekable</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">flush</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+
+<div class="viewcode-block" id="WrapStream.detach">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.WrapStream.detach">[文档]</a>
+    <span class="k">def</span> <span class="nf">detach</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="WrapStream.read">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.WrapStream.read">[文档]</a>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_s3_open</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">):</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">s3</span> <span class="o">=</span> <span class="n">get_s3_session</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fetch&quot;</span><span class="p">)</span>
+
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span>
+
+    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span><span class="p">(</span>
+            <span class="s2">&quot;Only GET and HEAD verbs are currently supported for the s3:// scheme&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+            <span class="c1"># NOTE(opadron): Apply workaround here (see above)</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">WrapStream</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;Body&quot;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">head_object</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">s3</span><span class="o">.</span><span class="n">ClientError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;ResponseMetadata&quot;</span><span class="p">][</span><span class="s2">&quot;HTTPHeaders&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">stream</span>
+
+
+<div class="viewcode-block" id="UrllibS3Handler">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.UrllibS3Handler">[文档]</a>
+<span class="k">class</span> <span class="nc">UrllibS3Handler</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">BaseHandler</span><span class="p">):</span>
+<div class="viewcode-block" id="UrllibS3Handler.s3_open">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.s3.UrllibS3Handler.s3_open">[文档]</a>
+    <span class="k">def</span> <span class="nf">s3_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="n">orig_url</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_full_url</span><span class="p">()</span>
+        <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">_s3_open</span><span class="p">(</span><span class="n">orig_url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">get_method</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">urllib</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">addinfourl</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

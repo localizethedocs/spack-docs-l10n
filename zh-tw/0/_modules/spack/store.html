@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.store &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/store.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.store</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.store 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="sd">&quot;&quot;&quot;Components that manage Spack&#39;s installation tree.</span>
+
+<span class="sd">An install tree, or &quot;build store&quot; consists of two parts:</span>
+
+<span class="sd">  1. A package database that tracks what is installed.</span>
+<span class="sd">  2. A directory layout that determines how the installations</span>
+<span class="sd">     are laid out.</span>
+
+<span class="sd">The store contains all the install prefixes for packages installed by</span>
+<span class="sd">Spack.  The simplest store could just contain prefixes named by DAG hash,</span>
+<span class="sd">but we use a fancier directory layout to make browsing the store and</span>
+<span class="sd">debugging easier.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.lang</span>
+<span class="kn">from</span> <span class="nn">llnl.util</span> <span class="kn">import</span> <span class="n">tty</span>
+
+<span class="kn">import</span> <span class="nn">spack.config</span>
+<span class="kn">import</span> <span class="nn">spack.database</span>
+<span class="kn">import</span> <span class="nn">spack.directory_layout</span>
+<span class="kn">import</span> <span class="nn">spack.error</span>
+<span class="kn">import</span> <span class="nn">spack.paths</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.util.path</span>
+
+<span class="c1">#: default installation root, relative to the Spack install path</span>
+<span class="n">DEFAULT_INSTALL_TREE_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">opt_path</span><span class="p">,</span> <span class="s2">&quot;spack&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="parse_install_tree">
+<a class="viewcode-back" href="../../spack.html#spack.store.parse_install_tree">[文件]</a>
+<span class="k">def</span> <span class="nf">parse_install_tree</span><span class="p">(</span><span class="n">config_dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse config settings and return values relevant to the store object.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        config_dict (dict): dictionary of config values, as returned from</span>
+<span class="sd">            spack.config.get(&#39;config&#39;)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (tuple): triple of the install tree root, the unpadded install tree</span>
+<span class="sd">            root (before padding was applied), and the projections for the</span>
+<span class="sd">            install tree</span>
+
+<span class="sd">    Encapsulate backwards compatibility capabilities for install_tree</span>
+<span class="sd">    and deprecated values that are now parsed as part of install_tree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The following two configs are equivalent, the first being the old format</span>
+    <span class="c1"># and the second the new format. The new format is also more flexible.</span>
+
+    <span class="c1"># config:</span>
+    <span class="c1">#   install_tree: /path/to/root$padding:128</span>
+    <span class="c1">#   install_path_scheme: &#39;{name}-{version}&#39;</span>
+
+    <span class="c1"># config:</span>
+    <span class="c1">#   install_tree:</span>
+    <span class="c1">#     root: /path/to/root</span>
+    <span class="c1">#     padding: 128</span>
+    <span class="c1">#     projections:</span>
+    <span class="c1">#       all: &#39;{name}-{version}&#39;</span>
+
+    <span class="n">install_tree</span> <span class="o">=</span> <span class="n">config_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;install_tree&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="n">padded_length</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">install_tree</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Using deprecated format for configuring install_tree&quot;</span><span class="p">)</span>
+        <span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">install_tree</span>
+        <span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">unpadded_root</span><span class="p">)</span>
+        <span class="c1"># construct projection from previous values for backwards compatibility</span>
+        <span class="n">all_projection</span> <span class="o">=</span> <span class="n">config_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;install_path_scheme&quot;</span><span class="p">,</span> <span class="n">spack</span><span class="o">.</span><span class="n">directory_layout</span><span class="o">.</span><span class="n">default_projections</span><span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">projections</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="n">all_projection</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">install_tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">,</span> <span class="n">DEFAULT_INSTALL_TREE_ROOT</span><span class="p">)</span>
+        <span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">unpadded_root</span><span class="p">)</span>
+
+        <span class="n">padded_length</span> <span class="o">=</span> <span class="n">install_tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;padded_length&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">padded_length</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">padded_length</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">get_system_path_max</span><span class="p">()</span>
+            <span class="n">padded_length</span> <span class="o">-=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">SPACK_MAX_INSTALL_PATH_LENGTH</span>
+
+        <span class="n">projections</span> <span class="o">=</span> <span class="n">install_tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;projections&quot;</span><span class="p">,</span> <span class="n">spack</span><span class="o">.</span><span class="n">directory_layout</span><span class="o">.</span><span class="n">default_projections</span><span class="p">)</span>
+
+        <span class="n">path_scheme</span> <span class="o">=</span> <span class="n">config_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;install_path_scheme&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path_scheme</span><span class="p">:</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Deprecated config value &#39;install_path_scheme&#39; ignored&quot;</span>
+                <span class="s2">&quot; when using new install_tree syntax&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Handle backwards compatibility for padding</span>
+    <span class="n">old_pad</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\$padding(:\d+)?|\${padding(:\d+)?}&quot;</span><span class="p">,</span> <span class="n">unpadded_root</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">old_pad</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">padded_length</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Ignoring deprecated padding option in install_tree root &quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;because new syntax padding is present.&quot;</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">unpadded_root</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old_pad</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">old_pad</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">old_pad</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">length_group</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="s2">&quot;{&quot;</span> <span class="ow">in</span> <span class="n">old_pad</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+                <span class="n">padded_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">old_pad</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">length_group</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">padded_length</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">get_system_path_max</span><span class="p">()</span>
+                <span class="n">padded_length</span> <span class="o">-=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">SPACK_MAX_INSTALL_PATH_LENGTH</span>
+
+    <span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">unpadded_root</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">padded_length</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">add_padding</span><span class="p">(</span><span class="n">unpadded_root</span><span class="p">,</span> <span class="n">padded_length</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">!=</span> <span class="n">padded_length</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot pad </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2"> characters.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">padded_length</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; It is already </span><span class="si">%s</span><span class="s2"> characters long&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">unpadded_root</span>
+
+    <span class="k">return</span> <span class="n">root</span><span class="p">,</span> <span class="n">unpadded_root</span><span class="p">,</span> <span class="n">projections</span></div>
+
+
+
+<div class="viewcode-block" id="Store">
+<a class="viewcode-back" href="../../spack.html#spack.store.Store">[文件]</a>
+<span class="k">class</span> <span class="nc">Store</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A store is a path full of installed Spack packages.</span>
+
+<span class="sd">    Stores consist of packages installed according to a ``DirectoryLayout``, along with a database</span>
+<span class="sd">    of their contents.</span>
+
+<span class="sd">    The directory layout controls what paths look like and how Spack ensures that each unique spec</span>
+<span class="sd">    gets its own unique directory (or not, though we don&#39;t recommend that).</span>
+
+<span class="sd">    The database is a single file that caches metadata for the entire Spack installation. It</span>
+<span class="sd">    prevents us from having to spider the install tree to figure out what&#39;s there.</span>
+
+<span class="sd">    The store is also able to lock installation prefixes, and to mark installation failures.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        root: path to the root of the install tree</span>
+<span class="sd">        unpadded_root: path to the root of the install tree without padding. The sbang script has</span>
+<span class="sd">            to be installed here to work with padded roots</span>
+<span class="sd">        projections: expression according to guidelines that describes how to construct a path to</span>
+<span class="sd">            a package prefix in this store</span>
+<span class="sd">        hash_length: length of the hashes used in the directory layout. Spec hash suffixes will be</span>
+<span class="sd">            truncated to this length</span>
+<span class="sd">        upstreams: optional list of upstream databases</span>
+<span class="sd">        lock_cfg: lock configuration for the database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">unpadded_root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">projections</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">hash_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">upstreams</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">lock_cfg</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">LockConfiguration</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">NO_LOCK</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unpadded_root</span> <span class="o">=</span> <span class="n">unpadded_root</span> <span class="ow">or</span> <span class="n">root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projections</span> <span class="o">=</span> <span class="n">projections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash_length</span> <span class="o">=</span> <span class="n">hash_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upstreams</span> <span class="o">=</span> <span class="n">upstreams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock_cfg</span> <span class="o">=</span> <span class="n">lock_cfg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">directory_layout</span><span class="o">.</span><span class="n">DirectoryLayout</span><span class="p">(</span>
+            <span class="n">root</span><span class="p">,</span> <span class="n">projections</span><span class="o">=</span><span class="n">projections</span><span class="p">,</span> <span class="n">hash_length</span><span class="o">=</span><span class="n">hash_length</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span>
+            <span class="n">root</span><span class="p">,</span> <span class="n">upstream_dbs</span><span class="o">=</span><span class="n">upstreams</span><span class="p">,</span> <span class="n">lock_cfg</span><span class="o">=</span><span class="n">lock_cfg</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span>
+        <span class="p">)</span>
+
+        <span class="n">timeout_format_str</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">lock_cfg</span><span class="o">.</span><span class="n">package_timeout</span><span class="p">)</span><span class="si">}</span><span class="s2">s&quot;</span> <span class="k">if</span> <span class="n">lock_cfg</span><span class="o">.</span><span class="n">package_timeout</span> <span class="k">else</span> <span class="s2">&quot;No timeout&quot;</span>
+        <span class="p">)</span>
+        <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;PACKAGE LOCK TIMEOUT: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">timeout_format_str</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_locker</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">SpecLocker</span><span class="p">(</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">prefix_lock_path</span><span class="p">(</span><span class="n">root</span><span class="p">),</span> <span class="n">default_timeout</span><span class="o">=</span><span class="n">lock_cfg</span><span class="o">.</span><span class="n">package_timeout</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failure_tracker</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">FailureTracker</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">default_timeout</span><span class="o">=</span><span class="n">lock_cfg</span><span class="o">.</span><span class="n">package_timeout</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Store.reindex">
+<a class="viewcode-back" href="../../spack.html#spack.store.Store.reindex">[文件]</a>
+    <span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience function to reindex the store DB with its own layout.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">reindex</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Store</span><span class="p">,</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unpadded_root</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">projections</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hash_length</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upstreams</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_cfg</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create">
+<a class="viewcode-back" href="../../spack.html#spack.store.create">[文件]</a>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Configuration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Store</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a store from the configuration passed as input.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        configuration: configuration to create a store.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">configuration</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">or</span> <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span>
+    <span class="n">config_dict</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">)</span>
+    <span class="n">root</span><span class="p">,</span> <span class="n">unpadded_root</span><span class="p">,</span> <span class="n">projections</span> <span class="o">=</span> <span class="n">parse_install_tree</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
+    <span class="n">hash_length</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config:install_hash_length&quot;</span><span class="p">)</span>
+
+    <span class="n">install_roots</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">install_properties</span><span class="p">[</span><span class="s2">&quot;install_tree&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">install_properties</span> <span class="ow">in</span> <span class="n">configuration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;upstreams&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="p">]</span>
+    <span class="n">upstreams</span> <span class="o">=</span> <span class="n">_construct_upstream_dbs_from_install_roots</span><span class="p">(</span><span class="n">install_roots</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Store</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+        <span class="n">unpadded_root</span><span class="o">=</span><span class="n">unpadded_root</span><span class="p">,</span>
+        <span class="n">projections</span><span class="o">=</span><span class="n">projections</span><span class="p">,</span>
+        <span class="n">hash_length</span><span class="o">=</span><span class="n">hash_length</span><span class="p">,</span>
+        <span class="n">upstreams</span><span class="o">=</span><span class="n">upstreams</span><span class="p">,</span>
+        <span class="n">lock_cfg</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">lock_configuration</span><span class="p">(</span><span class="n">configuration</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_create_global</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Store</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">configuration</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1">#: Singleton store instance</span>
+<span class="n">STORE</span><span class="p">:</span> <span class="n">Store</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">Singleton</span><span class="p">(</span><span class="n">_create_global</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+
+<div class="viewcode-block" id="reinitialize">
+<a class="viewcode-back" href="../../spack.html#spack.store.reinitialize">[文件]</a>
+<span class="k">def</span> <span class="nf">reinitialize</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Restore globals to the same state they would have at start-up. Return a token</span>
+<span class="sd">    containing the state of the store before reinitialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">STORE</span>
+
+    <span class="n">token</span> <span class="o">=</span> <span class="n">STORE</span>
+    <span class="n">STORE</span> <span class="o">=</span> <span class="n">llnl</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">Singleton</span><span class="p">(</span><span class="n">_create_global</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">token</span></div>
+
+
+
+<div class="viewcode-block" id="restore">
+<a class="viewcode-back" href="../../spack.html#spack.store.restore">[文件]</a>
+<span class="k">def</span> <span class="nf">restore</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Restore the environment from a token returned by reinitialize&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">STORE</span>
+    <span class="n">STORE</span> <span class="o">=</span> <span class="n">token</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_construct_upstream_dbs_from_install_roots</span><span class="p">(</span>
+    <span class="n">install_roots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">]:</span>
+    <span class="n">accumulated_upstream_dbs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">install_root</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">install_roots</span><span class="p">):</span>
+        <span class="n">upstream_dbs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">accumulated_upstream_dbs</span><span class="p">)</span>
+        <span class="n">next_db</span> <span class="o">=</span> <span class="n">spack</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span>
+            <span class="n">spack</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">canonicalize_path</span><span class="p">(</span><span class="n">install_root</span><span class="p">),</span>
+            <span class="n">is_upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">upstream_dbs</span><span class="o">=</span><span class="n">upstream_dbs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">next_db</span><span class="o">.</span><span class="n">_read</span><span class="p">()</span>
+        <span class="n">accumulated_upstream_dbs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">next_db</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">accumulated_upstream_dbs</span>
+
+
+<div class="viewcode-block" id="find">
+<a class="viewcode-back" href="../../spack.html#spack.store.find">[文件]</a>
+<span class="k">def</span> <span class="nf">find</span><span class="p">(</span>
+    <span class="n">constraints</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]],</span>
+    <span class="n">multiple</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">query_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list of specs matching the constraints passed as inputs.</span>
+
+<span class="sd">    At least one spec per constraint must match, otherwise the function</span>
+<span class="sd">    will error with an appropriate message.</span>
+
+<span class="sd">    By default, this function queries the current store, but a custom query</span>
+<span class="sd">    function can be passed to hit any other source of concretized specs</span>
+<span class="sd">    (e.g. a binary cache).</span>
+
+<span class="sd">    The query function must accept a spec as its first argument.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        constraints: spec(s) to be matched against installed packages</span>
+<span class="sd">        multiple: if True multiple matches per constraint are admitted</span>
+<span class="sd">        query_fn (Callable): query function to get matching specs. By default,</span>
+<span class="sd">            ``spack.store.STORE.db.query``</span>
+<span class="sd">        **kwargs: keyword arguments forwarded to the query function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraints</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">constraints</span><span class="p">)]</span>
+
+    <span class="n">matching_specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">query_fn</span> <span class="o">=</span> <span class="n">query_fn</span> <span class="ow">or</span> <span class="n">STORE</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">constraints</span><span class="p">:</span>
+        <span class="n">current_matches</span> <span class="o">=</span> <span class="n">query_fn</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># For each spec provided, make sure it refers to only one package.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">multiple</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg_fmt</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; matches multiple packages: [</span><span class="si">{1}</span><span class="s1">]&#39;</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">format</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">current_matches</span><span class="p">])))</span>
+
+        <span class="c1"># No installed package matches the query</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">:</span>
+            <span class="n">msg_fmt</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; does not match any installed packages&#39;</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
+
+        <span class="n">matching_specs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">current_matches</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MatchError</span><span class="p">(</span>
+            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;errors occurred when looking for specs in the store&quot;</span><span class="p">,</span>
+            <span class="n">long_message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">matching_specs</span></div>
+
+
+
+<div class="viewcode-block" id="specfile_matches">
+<a class="viewcode-back" href="../../spack.html#spack.store.specfile_matches">[文件]</a>
+<span class="k">def</span> <span class="nf">specfile_matches</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Same as find but reads the query from a spec file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: YAML or JSON file from which to read the query.</span>
+<span class="sd">        **kwargs: keyword arguments forwarded to &quot;find&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="o">.</span><span class="n">from_specfile</span><span class="p">(</span><span class="n">filename</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_singleton_created">
+<a class="viewcode-back" href="../../spack.html#spack.store.ensure_singleton_created">[文件]</a>
+<span class="k">def</span> <span class="nf">ensure_singleton_created</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensures the lazily evaluated singleton is created&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">STORE</span><span class="o">.</span><span class="n">db</span></div>
+
+
+
+<div class="viewcode-block" id="use_store">
+<a class="viewcode-back" href="../../spack.html#spack.store.use_store">[文件]</a>
+<span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">use_store</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">extra_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Store</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use the store passed as argument within the context manager.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: path to the store.</span>
+<span class="sd">        extra_data: extra configuration under &quot;config:install_tree&quot; to be</span>
+<span class="sd">            taken into account.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        Store object associated with the context manager&#39;s store</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">STORE</span>
+
+    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">Store</span><span class="p">),</span> <span class="s2">&quot;cannot pass a store anymore&quot;</span>
+    <span class="n">scope_name</span> <span class="o">=</span> <span class="s2">&quot;use-store-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)}</span>
+    <span class="k">if</span> <span class="n">extra_data</span><span class="p">:</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra_data</span><span class="p">)</span>
+
+    <span class="c1"># Swap the store with the one just constructed and return it</span>
+    <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span><span class="o">.</span><span class="n">push_scope</span><span class="p">(</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">InternalConfigScope</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">scope_name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;install_tree&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}})</span>
+    <span class="p">)</span>
+    <span class="n">temporary_store</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">configuration</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">)</span>
+    <span class="n">original_store</span><span class="p">,</span> <span class="n">STORE</span> <span class="o">=</span> <span class="n">STORE</span><span class="p">,</span> <span class="n">temporary_store</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">temporary_store</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Restore the original store</span>
+        <span class="n">STORE</span> <span class="o">=</span> <span class="n">original_store</span>
+        <span class="n">spack</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CONFIG</span><span class="o">.</span><span class="n">remove_scope</span><span class="p">(</span><span class="n">scope_name</span><span class="o">=</span><span class="n">scope_name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="MatchError">
+<a class="viewcode-back" href="../../spack.html#spack.store.MatchError">[文件]</a>
+<span class="k">class</span> <span class="nc">MatchError</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SpackError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error occurring when trying to match specs in store against a constraint&quot;&quot;&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

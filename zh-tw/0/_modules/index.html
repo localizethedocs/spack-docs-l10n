@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>概要：模組原始碼 &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/index.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cbf116e0"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜尋" href="../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../ltd-provenance.js"></script>
+<script type="text/javascript" src="../ltd-current.js"></script>
+<script type="text/javascript" src="../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">概要：模組原始碼</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>所有可得程式碼的模組</h1>
+<ul><li><a href="builtins.html">builtins</a></li>
+<li><a href="collections.html">collections</a></li>
+<li><a href="llnl/path.html">llnl.path</a></li>
+<li><a href="llnl/string.html">llnl.string</a></li>
+<li><a href="llnl/url.html">llnl.url</a></li>
+<li><a href="llnl/util/argparsewriter.html">llnl.util.argparsewriter</a></li>
+<li><a href="llnl/util/filesystem.html">llnl.util.filesystem</a></li>
+<li><a href="llnl/util/lang.html">llnl.util.lang</a></li>
+<li><a href="llnl/util/link_tree.html">llnl.util.link_tree</a></li>
+<li><a href="llnl/util/lock.html">llnl.util.lock</a></li>
+<li><a href="llnl/util/multiproc.html">llnl.util.multiproc</a></li>
+<li><a href="llnl/util/symlink.html">llnl.util.symlink</a></li>
+<li><a href="llnl/util/tty.html">llnl.util.tty</a></li>
+<ul><li><a href="llnl/util/tty/colify.html">llnl.util.tty.colify</a></li>
+<li><a href="llnl/util/tty/color.html">llnl.util.tty.color</a></li>
+<li><a href="llnl/util/tty/log.html">llnl.util.tty.log</a></li>
+<li><a href="llnl/util/tty/pty.html">llnl.util.tty.pty</a></li>
+</ul><li><a href="re.html">re</a></li>
+<li><a href="spack.html">spack</a></li>
+<ul><li><a href="spack/audit.html">spack.audit</a></li>
+<li><a href="spack/binary_distribution.html">spack.binary_distribution</a></li>
+<li><a href="spack/bootstrap/clingo.html">spack.bootstrap.clingo</a></li>
+<li><a href="spack/bootstrap/config.html">spack.bootstrap.config</a></li>
+<li><a href="spack/bootstrap/core.html">spack.bootstrap.core</a></li>
+<li><a href="spack/bootstrap/environment.html">spack.bootstrap.environment</a></li>
+<li><a href="spack/bootstrap/status.html">spack.bootstrap.status</a></li>
+<li><a href="spack/build_environment.html">spack.build_environment</a></li>
+<li><a href="spack/build_systems/aspell_dict.html">spack.build_systems.aspell_dict</a></li>
+<li><a href="spack/build_systems/autotools.html">spack.build_systems.autotools</a></li>
+<li><a href="spack/build_systems/bundle.html">spack.build_systems.bundle</a></li>
+<li><a href="spack/build_systems/cached_cmake.html">spack.build_systems.cached_cmake</a></li>
+<li><a href="spack/build_systems/cargo.html">spack.build_systems.cargo</a></li>
+<li><a href="spack/build_systems/cmake.html">spack.build_systems.cmake</a></li>
+<li><a href="spack/build_systems/compiler.html">spack.build_systems.compiler</a></li>
+<li><a href="spack/build_systems/cuda.html">spack.build_systems.cuda</a></li>
+<li><a href="spack/build_systems/generic.html">spack.build_systems.generic</a></li>
+<li><a href="spack/build_systems/gnu.html">spack.build_systems.gnu</a></li>
+<li><a href="spack/build_systems/go.html">spack.build_systems.go</a></li>
+<li><a href="spack/build_systems/intel.html">spack.build_systems.intel</a></li>
+<li><a href="spack/build_systems/lua.html">spack.build_systems.lua</a></li>
+<li><a href="spack/build_systems/makefile.html">spack.build_systems.makefile</a></li>
+<li><a href="spack/build_systems/maven.html">spack.build_systems.maven</a></li>
+<li><a href="spack/build_systems/meson.html">spack.build_systems.meson</a></li>
+<li><a href="spack/build_systems/msbuild.html">spack.build_systems.msbuild</a></li>
+<li><a href="spack/build_systems/nmake.html">spack.build_systems.nmake</a></li>
+<li><a href="spack/build_systems/octave.html">spack.build_systems.octave</a></li>
+<li><a href="spack/build_systems/oneapi.html">spack.build_systems.oneapi</a></li>
+<li><a href="spack/build_systems/perl.html">spack.build_systems.perl</a></li>
+<li><a href="spack/build_systems/python.html">spack.build_systems.python</a></li>
+<li><a href="spack/build_systems/qmake.html">spack.build_systems.qmake</a></li>
+<li><a href="spack/build_systems/r.html">spack.build_systems.r</a></li>
+<li><a href="spack/build_systems/racket.html">spack.build_systems.racket</a></li>
+<li><a href="spack/build_systems/rocm.html">spack.build_systems.rocm</a></li>
+<li><a href="spack/build_systems/ruby.html">spack.build_systems.ruby</a></li>
+<li><a href="spack/build_systems/scons.html">spack.build_systems.scons</a></li>
+<li><a href="spack/build_systems/sip.html">spack.build_systems.sip</a></li>
+<li><a href="spack/build_systems/sourceforge.html">spack.build_systems.sourceforge</a></li>
+<li><a href="spack/build_systems/sourceware.html">spack.build_systems.sourceware</a></li>
+<li><a href="spack/build_systems/waf.html">spack.build_systems.waf</a></li>
+<li><a href="spack/build_systems/xorg.html">spack.build_systems.xorg</a></li>
+<li><a href="spack/builder.html">spack.builder</a></li>
+<li><a href="spack/caches.html">spack.caches</a></li>
+<li><a href="spack/ci.html">spack.ci</a></li>
+<li><a href="spack/cmd.html">spack.cmd</a></li>
+<ul><li><a href="spack/cmd/add.html">spack.cmd.add</a></li>
+<li><a href="spack/cmd/arch.html">spack.cmd.arch</a></li>
+<li><a href="spack/cmd/audit.html">spack.cmd.audit</a></li>
+<li><a href="spack/cmd/blame.html">spack.cmd.blame</a></li>
+<li><a href="spack/cmd/bootstrap.html">spack.cmd.bootstrap</a></li>
+<li><a href="spack/cmd/build_env.html">spack.cmd.build_env</a></li>
+<li><a href="spack/cmd/buildcache.html">spack.cmd.buildcache</a></li>
+<li><a href="spack/cmd/cd.html">spack.cmd.cd</a></li>
+<li><a href="spack/cmd/change.html">spack.cmd.change</a></li>
+<li><a href="spack/cmd/checksum.html">spack.cmd.checksum</a></li>
+<li><a href="spack/cmd/ci.html">spack.cmd.ci</a></li>
+<li><a href="spack/cmd/clean.html">spack.cmd.clean</a></li>
+<li><a href="spack/cmd/clone.html">spack.cmd.clone</a></li>
+<li><a href="spack/cmd/commands.html">spack.cmd.commands</a></li>
+<li><a href="spack/cmd/common.html">spack.cmd.common</a></li>
+<ul><li><a href="spack/cmd/common/arguments.html">spack.cmd.common.arguments</a></li>
+<li><a href="spack/cmd/common/confirmation.html">spack.cmd.common.confirmation</a></li>
+<li><a href="spack/cmd/common/env_utility.html">spack.cmd.common.env_utility</a></li>
+</ul><li><a href="spack/cmd/compiler.html">spack.cmd.compiler</a></li>
+<li><a href="spack/cmd/compilers.html">spack.cmd.compilers</a></li>
+<li><a href="spack/cmd/concretize.html">spack.cmd.concretize</a></li>
+<li><a href="spack/cmd/config.html">spack.cmd.config</a></li>
+<li><a href="spack/cmd/containerize.html">spack.cmd.containerize</a></li>
+<li><a href="spack/cmd/create.html">spack.cmd.create</a></li>
+<li><a href="spack/cmd/debug.html">spack.cmd.debug</a></li>
+<li><a href="spack/cmd/deconcretize.html">spack.cmd.deconcretize</a></li>
+<li><a href="spack/cmd/dependencies.html">spack.cmd.dependencies</a></li>
+<li><a href="spack/cmd/dependents.html">spack.cmd.dependents</a></li>
+<li><a href="spack/cmd/deprecate.html">spack.cmd.deprecate</a></li>
+<li><a href="spack/cmd/dev_build.html">spack.cmd.dev_build</a></li>
+<li><a href="spack/cmd/develop.html">spack.cmd.develop</a></li>
+<li><a href="spack/cmd/diff.html">spack.cmd.diff</a></li>
+<li><a href="spack/cmd/docs.html">spack.cmd.docs</a></li>
+<li><a href="spack/cmd/edit.html">spack.cmd.edit</a></li>
+<li><a href="spack/cmd/env.html">spack.cmd.env</a></li>
+<li><a href="spack/cmd/extensions.html">spack.cmd.extensions</a></li>
+<li><a href="spack/cmd/external.html">spack.cmd.external</a></li>
+<li><a href="spack/cmd/fetch.html">spack.cmd.fetch</a></li>
+<li><a href="spack/cmd/find.html">spack.cmd.find</a></li>
+<li><a href="spack/cmd/gc.html">spack.cmd.gc</a></li>
+<li><a href="spack/cmd/gpg.html">spack.cmd.gpg</a></li>
+<li><a href="spack/cmd/graph.html">spack.cmd.graph</a></li>
+<li><a href="spack/cmd/help.html">spack.cmd.help</a></li>
+<li><a href="spack/cmd/info.html">spack.cmd.info</a></li>
+<li><a href="spack/cmd/install.html">spack.cmd.install</a></li>
+<li><a href="spack/cmd/license.html">spack.cmd.license</a></li>
+<li><a href="spack/cmd/list.html">spack.cmd.list</a></li>
+<li><a href="spack/cmd/load.html">spack.cmd.load</a></li>
+<li><a href="spack/cmd/location.html">spack.cmd.location</a></li>
+<li><a href="spack/cmd/log_parse.html">spack.cmd.log_parse</a></li>
+<li><a href="spack/cmd/logs.html">spack.cmd.logs</a></li>
+<li><a href="spack/cmd/maintainers.html">spack.cmd.maintainers</a></li>
+<li><a href="spack/cmd/make_installer.html">spack.cmd.make_installer</a></li>
+<li><a href="spack/cmd/mark.html">spack.cmd.mark</a></li>
+<li><a href="spack/cmd/mirror.html">spack.cmd.mirror</a></li>
+<li><a href="spack/cmd/module.html">spack.cmd.module</a></li>
+<li><a href="spack/cmd/modules.html">spack.cmd.modules</a></li>
+<ul><li><a href="spack/cmd/modules/lmod.html">spack.cmd.modules.lmod</a></li>
+<li><a href="spack/cmd/modules/tcl.html">spack.cmd.modules.tcl</a></li>
+</ul><li><a href="spack/cmd/patch.html">spack.cmd.patch</a></li>
+<li><a href="spack/cmd/pkg.html">spack.cmd.pkg</a></li>
+<li><a href="spack/cmd/providers.html">spack.cmd.providers</a></li>
+<li><a href="spack/cmd/pydoc.html">spack.cmd.pydoc</a></li>
+<li><a href="spack/cmd/python.html">spack.cmd.python</a></li>
+<li><a href="spack/cmd/reindex.html">spack.cmd.reindex</a></li>
+<li><a href="spack/cmd/remove.html">spack.cmd.remove</a></li>
+<li><a href="spack/cmd/repo.html">spack.cmd.repo</a></li>
+<li><a href="spack/cmd/resource.html">spack.cmd.resource</a></li>
+<li><a href="spack/cmd/restage.html">spack.cmd.restage</a></li>
+<li><a href="spack/cmd/solve.html">spack.cmd.solve</a></li>
+<li><a href="spack/cmd/spec.html">spack.cmd.spec</a></li>
+<li><a href="spack/cmd/stage.html">spack.cmd.stage</a></li>
+<li><a href="spack/cmd/style.html">spack.cmd.style</a></li>
+<li><a href="spack/cmd/tags.html">spack.cmd.tags</a></li>
+<li><a href="spack/cmd/test.html">spack.cmd.test</a></li>
+<li><a href="spack/cmd/test_env.html">spack.cmd.test_env</a></li>
+<li><a href="spack/cmd/tutorial.html">spack.cmd.tutorial</a></li>
+<li><a href="spack/cmd/undevelop.html">spack.cmd.undevelop</a></li>
+<li><a href="spack/cmd/uninstall.html">spack.cmd.uninstall</a></li>
+<li><a href="spack/cmd/unit_test.html">spack.cmd.unit_test</a></li>
+<li><a href="spack/cmd/unload.html">spack.cmd.unload</a></li>
+<li><a href="spack/cmd/url.html">spack.cmd.url</a></li>
+<li><a href="spack/cmd/verify.html">spack.cmd.verify</a></li>
+<li><a href="spack/cmd/versions.html">spack.cmd.versions</a></li>
+<li><a href="spack/cmd/view.html">spack.cmd.view</a></li>
+</ul><li><a href="spack/compiler.html">spack.compiler</a></li>
+<li><a href="spack/compilers.html">spack.compilers</a></li>
+<ul><li><a href="spack/compilers/aocc.html">spack.compilers.aocc</a></li>
+<li><a href="spack/compilers/apple_clang.html">spack.compilers.apple_clang</a></li>
+<li><a href="spack/compilers/arm.html">spack.compilers.arm</a></li>
+<li><a href="spack/compilers/cce.html">spack.compilers.cce</a></li>
+<li><a href="spack/compilers/clang.html">spack.compilers.clang</a></li>
+<li><a href="spack/compilers/fj.html">spack.compilers.fj</a></li>
+<li><a href="spack/compilers/gcc.html">spack.compilers.gcc</a></li>
+<li><a href="spack/compilers/intel.html">spack.compilers.intel</a></li>
+<li><a href="spack/compilers/msvc.html">spack.compilers.msvc</a></li>
+<li><a href="spack/compilers/nag.html">spack.compilers.nag</a></li>
+<li><a href="spack/compilers/nvhpc.html">spack.compilers.nvhpc</a></li>
+<li><a href="spack/compilers/oneapi.html">spack.compilers.oneapi</a></li>
+<li><a href="spack/compilers/pgi.html">spack.compilers.pgi</a></li>
+<li><a href="spack/compilers/rocmcc.html">spack.compilers.rocmcc</a></li>
+<li><a href="spack/compilers/xl.html">spack.compilers.xl</a></li>
+<li><a href="spack/compilers/xl_r.html">spack.compilers.xl_r</a></li>
+</ul><li><a href="spack/concretize.html">spack.concretize</a></li>
+<li><a href="spack/config.html">spack.config</a></li>
+<li><a href="spack/container.html">spack.container</a></li>
+<ul><li><a href="spack/container/images.html">spack.container.images</a></li>
+<li><a href="spack/container/writers.html">spack.container.writers</a></li>
+</ul><li><a href="spack/context.html">spack.context</a></li>
+<li><a href="spack/cray_manifest.html">spack.cray_manifest</a></li>
+<li><a href="spack/database.html">spack.database</a></li>
+<li><a href="spack/dependency.html">spack.dependency</a></li>
+<li><a href="spack/deptypes.html">spack.deptypes</a></li>
+<li><a href="spack/detection/common.html">spack.detection.common</a></li>
+<li><a href="spack/detection/path.html">spack.detection.path</a></li>
+<li><a href="spack/detection/test.html">spack.detection.test</a></li>
+<li><a href="spack/directives.html">spack.directives</a></li>
+<li><a href="spack/directives_meta.html">spack.directives_meta</a></li>
+<li><a href="spack/directory_layout.html">spack.directory_layout</a></li>
+<li><a href="spack/environment/depfile.html">spack.environment.depfile</a></li>
+<li><a href="spack/environment/environment.html">spack.environment.environment</a></li>
+<li><a href="spack/environment/shell.html">spack.environment.shell</a></li>
+<li><a href="spack/error.html">spack.error</a></li>
+<li><a href="spack/extensions.html">spack.extensions</a></li>
+<li><a href="spack/fetch_strategy.html">spack.fetch_strategy</a></li>
+<li><a href="spack/filesystem_view.html">spack.filesystem_view</a></li>
+<li><a href="spack/graph.html">spack.graph</a></li>
+<li><a href="spack/hash_types.html">spack.hash_types</a></li>
+<li><a href="spack/hooks/absolutify_elf_sonames.html">spack.hooks.absolutify_elf_sonames</a></li>
+<li><a href="spack/hooks/autopush.html">spack.hooks.autopush</a></li>
+<li><a href="spack/hooks/drop_redundant_rpaths.html">spack.hooks.drop_redundant_rpaths</a></li>
+<li><a href="spack/hooks/licensing.html">spack.hooks.licensing</a></li>
+<li><a href="spack/hooks/module_file_generation.html">spack.hooks.module_file_generation</a></li>
+<li><a href="spack/hooks/permissions_setters.html">spack.hooks.permissions_setters</a></li>
+<li><a href="spack/hooks/sbang.html">spack.hooks.sbang</a></li>
+<li><a href="spack/hooks/windows_runtime_linkage.html">spack.hooks.windows_runtime_linkage</a></li>
+<li><a href="spack/hooks/write_install_manifest.html">spack.hooks.write_install_manifest</a></li>
+<li><a href="spack/install_test.html">spack.install_test</a></li>
+<li><a href="spack/installer.html">spack.installer</a></li>
+<li><a href="spack/main.html">spack.main</a></li>
+<li><a href="spack/mirror.html">spack.mirror</a></li>
+<li><a href="spack/mixins.html">spack.mixins</a></li>
+<li><a href="spack/modules/common.html">spack.modules.common</a></li>
+<li><a href="spack/modules/lmod.html">spack.modules.lmod</a></li>
+<li><a href="spack/modules/tcl.html">spack.modules.tcl</a></li>
+<li><a href="spack/multimethod.html">spack.multimethod</a></li>
+<li><a href="spack/oci/image.html">spack.oci.image</a></li>
+<li><a href="spack/oci/oci.html">spack.oci.oci</a></li>
+<li><a href="spack/oci/opener.html">spack.oci.opener</a></li>
+<li><a href="spack/operating_systems/_operating_system.html">spack.operating_systems._operating_system</a></li>
+<li><a href="spack/operating_systems/freebsd.html">spack.operating_systems.freebsd</a></li>
+<li><a href="spack/operating_systems/linux_distro.html">spack.operating_systems.linux_distro</a></li>
+<li><a href="spack/operating_systems/mac_os.html">spack.operating_systems.mac_os</a></li>
+<li><a href="spack/operating_systems/windows_os.html">spack.operating_systems.windows_os</a></li>
+<li><a href="spack/package_base.html">spack.package_base</a></li>
+<li><a href="spack/package_completions.html">spack.package_completions</a></li>
+<li><a href="spack/package_prefs.html">spack.package_prefs</a></li>
+<li><a href="spack/package_test.html">spack.package_test</a></li>
+<li><a href="spack/parser.html">spack.parser</a></li>
+<li><a href="spack/patch.html">spack.patch</a></li>
+<li><a href="spack/paths.html">spack.paths</a></li>
+<li><a href="spack/platforms/_functions.html">spack.platforms._functions</a></li>
+<li><a href="spack/platforms/_platform.html">spack.platforms._platform</a></li>
+<li><a href="spack/platforms/cray.html">spack.platforms.cray</a></li>
+<li><a href="spack/platforms/darwin.html">spack.platforms.darwin</a></li>
+<li><a href="spack/platforms/freebsd.html">spack.platforms.freebsd</a></li>
+<li><a href="spack/platforms/linux.html">spack.platforms.linux</a></li>
+<li><a href="spack/platforms/test.html">spack.platforms.test</a></li>
+<li><a href="spack/platforms/windows.html">spack.platforms.windows</a></li>
+<li><a href="spack/projections.html">spack.projections</a></li>
+<li><a href="spack/provider_index.html">spack.provider_index</a></li>
+<li><a href="spack/relocate.html">spack.relocate</a></li>
+<li><a href="spack/relocate_text.html">spack.relocate_text</a></li>
+<li><a href="spack/repo.html">spack.repo</a></li>
+<li><a href="spack/report.html">spack.report</a></li>
+<li><a href="spack/reporters/base.html">spack.reporters.base</a></li>
+<li><a href="spack/reporters/cdash.html">spack.reporters.cdash</a></li>
+<li><a href="spack/reporters/extract.html">spack.reporters.extract</a></li>
+<li><a href="spack/reporters/junit.html">spack.reporters.junit</a></li>
+<li><a href="spack/resource.html">spack.resource</a></li>
+<li><a href="spack/rewiring.html">spack.rewiring</a></li>
+<li><a href="spack/schema.html">spack.schema</a></li>
+<ul><li><a href="spack/schema/ci.html">spack.schema.ci</a></li>
+<li><a href="spack/schema/config.html">spack.schema.config</a></li>
+<li><a href="spack/schema/develop.html">spack.schema.develop</a></li>
+<li><a href="spack/schema/env.html">spack.schema.env</a></li>
+<li><a href="spack/schema/environment.html">spack.schema.environment</a></li>
+<li><a href="spack/schema/mirrors.html">spack.schema.mirrors</a></li>
+<li><a href="spack/schema/packages.html">spack.schema.packages</a></li>
+</ul><li><a href="spack/solver/asp.html">spack.solver.asp</a></li>
+<li><a href="spack/solver/core.html">spack.solver.core</a></li>
+<li><a href="spack/solver/counter.html">spack.solver.counter</a></li>
+<li><a href="spack/solver/version_order.html">spack.solver.version_order</a></li>
+<li><a href="spack/spec.html">spack.spec</a></li>
+<li><a href="spack/spec_list.html">spack.spec_list</a></li>
+<li><a href="spack/stage.html">spack.stage</a></li>
+<li><a href="spack/store.html">spack.store</a></li>
+<li><a href="spack/subprocess_context.html">spack.subprocess_context</a></li>
+<li><a href="spack/tag.html">spack.tag</a></li>
+<li><a href="spack/tengine.html">spack.tengine</a></li>
+<li><a href="spack/traverse.html">spack.traverse</a></li>
+<li><a href="spack/url.html">spack.url</a></li>
+<li><a href="spack/user_environment.html">spack.user_environment</a></li>
+<li><a href="spack/util/archive.html">spack.util.archive</a></li>
+<li><a href="spack/util/compression.html">spack.util.compression</a></li>
+<li><a href="spack/util/cpus.html">spack.util.cpus</a></li>
+<li><a href="spack/util/crypto.html">spack.util.crypto</a></li>
+<li><a href="spack/util/debug.html">spack.util.debug</a></li>
+<li><a href="spack/util/editor.html">spack.util.editor</a></li>
+<li><a href="spack/util/elf.html">spack.util.elf</a></li>
+<li><a href="spack/util/environment.html">spack.util.environment</a></li>
+<li><a href="spack/util/executable.html">spack.util.executable</a></li>
+<li><a href="spack/util/file_cache.html">spack.util.file_cache</a></li>
+<li><a href="spack/util/file_permissions.html">spack.util.file_permissions</a></li>
+<li><a href="spack/util/filesystem.html">spack.util.filesystem</a></li>
+<li><a href="spack/util/format.html">spack.util.format</a></li>
+<li><a href="spack/util/gcs.html">spack.util.gcs</a></li>
+<li><a href="spack/util/git.html">spack.util.git</a></li>
+<li><a href="spack/util/gpg.html">spack.util.gpg</a></li>
+<li><a href="spack/util/hash.html">spack.util.hash</a></li>
+<li><a href="spack/util/ld_so_conf.html">spack.util.ld_so_conf</a></li>
+<li><a href="spack/util/libc.html">spack.util.libc</a></li>
+<li><a href="spack/util/lock.html">spack.util.lock</a></li>
+<li><a href="spack/util/log_parse.html">spack.util.log_parse</a></li>
+<li><a href="spack/util/module_cmd.html">spack.util.module_cmd</a></li>
+<li><a href="spack/util/naming.html">spack.util.naming</a></li>
+<li><a href="spack/util/package_hash.html">spack.util.package_hash</a></li>
+<li><a href="spack/util/parallel.html">spack.util.parallel</a></li>
+<li><a href="spack/util/path.html">spack.util.path</a></li>
+<li><a href="spack/util/pattern.html">spack.util.pattern</a></li>
+<li><a href="spack/util/prefix.html">spack.util.prefix</a></li>
+<li><a href="spack/util/s3.html">spack.util.s3</a></li>
+<li><a href="spack/util/spack_json.html">spack.util.spack_json</a></li>
+<li><a href="spack/util/spack_yaml.html">spack.util.spack_yaml</a></li>
+<li><a href="spack/util/timer.html">spack.util.timer</a></li>
+<li><a href="spack/util/unparse.html">spack.util.unparse</a></li>
+<ul><li><a href="spack/util/unparse/unparser.html">spack.util.unparse.unparser</a></li>
+</ul><li><a href="spack/util/url.html">spack.util.url</a></li>
+<li><a href="spack/util/web.html">spack.util.web</a></li>
+<li><a href="spack/util/windows_registry.html">spack.util.windows_registry</a></li>
+<li><a href="spack/variant.html">spack.variant</a></li>
+<li><a href="spack/verify.html">spack.verify</a></li>
+<li><a href="spack/version/common.html">spack.version.common</a></li>
+<li><a href="spack/version/git_ref_lookup.html">spack.version.git_ref_lookup</a></li>
+<li><a href="spack/version/lookup.html">spack.version.lookup</a></li>
+<li><a href="spack/version/version_types.html">spack.version.version_types</a></li>
+</ul><li><a href="typing.html">typing</a></li>
+</ul>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

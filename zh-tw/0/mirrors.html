@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mirrors (mirrors.yaml) &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/mirrors.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=cbf116e0"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜尋" href="search.html" />
+    <link rel="next" title="Modules (modules.yaml)" href="module_file_support.html" />
+    <link rel="prev" title="Container Images" href="containers.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mirrors (mirrors.yaml)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spack-mirror"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-mirror-create"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">create</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#custom-package-sets">Custom package sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mirror-files">Mirror files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mirror-environment">Mirror environment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-mirror-add"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">add</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-mirror-list"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spack-mirror-remove"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">remove</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mirror-precedence">Mirror precedence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-default-cache">Local Default Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Mirrors (mirrors.yaml)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mirrors.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mirrors-mirrors-yaml">
+<span id="mirrors"></span><h1>Mirrors (mirrors.yaml)<a class="headerlink" href="#mirrors-mirrors-yaml" title="連結到這個標頭"></a></h1>
+<p>Some sites may not have access to the internet for fetching packages.
+These sites will need a local repository of tarballs from which they
+can get their files.  Spack has support for this with <em>mirrors</em>.  A
+mirror is a URL that points to a directory, either on the local
+filesystem or on some server, containing tarballs for all of Spack's
+packages.</p>
+<p>Here's an example of a mirror's directory structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mirror/
+    cmake/
+        cmake-2.8.10.2.tar.gz
+    dyninst/
+        dyninst-8.1.1.tgz
+        dyninst-8.1.2.tgz
+    libdwarf/
+        libdwarf-20130126.tar.gz
+        libdwarf-20130207.tar.gz
+        libdwarf-20130729.tar.gz
+    libelf/
+        libelf-0.8.12.tar.gz
+        libelf-0.8.13.tar.gz
+    libunwind/
+        libunwind-1.1.tar.gz
+    mpich/
+        mpich-3.0.4.tar.gz
+    mvapich2/
+        mvapich2-1.9.tgz
+</pre></div>
+</div>
+<p>The structure is very simple.  There is a top-level directory.  The
+second level directories are named after packages, and the third level
+contains tarballs for each package, named after each package.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Archives are <strong>not</strong> named exactly the way they were in the package's fetch
+URL.  They have the form <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;-&lt;version&gt;.&lt;extension&gt;</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is Spack's name for the package, <code class="docutils literal notranslate"><span class="pre">&lt;version&gt;</span></code> is the
+version of the tarball, and <code class="docutils literal notranslate"><span class="pre">&lt;extension&gt;</span></code> is whatever format the
+package's fetch URL contains.</p>
+<p>In order to make mirror creation reasonably fast, we copy the
+tarball in its original format to the mirror directory, but we do
+not standardize on a particular compression algorithm, because this
+would potentially require expanding and re-compressing each archive.</p>
+</div>
+<section id="spack-mirror">
+<span id="cmd-spack-mirror"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span></code><a class="headerlink" href="#spack-mirror" title="連結到這個標頭"></a></h2>
+<p>Mirrors are managed with the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span></code> command.  The help for
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span></code> looks like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ spack help mirror
+usage: spack mirror [-hn] SUBCOMMAND ...
+
+manage mirrors (source and binary)
+
+positional arguments:
+  SUBCOMMAND
+    create           create a directory to be used as a spack mirror, and fill it with package archives
+    destroy          given a url, recursively delete everything under it
+    add              add a mirror to Spack
+    remove (rm)      remove a mirror by name
+    set-url          change the URL of a mirror
+    set              configure the connection details of a mirror
+    list             print out available mirrors to the console
+
+options:
+  -h, --help         show this help message and exit
+  -n, --no-checksum  do not use checksums to verify downloaded files (unsafe)
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">create</span></code> command actually builds a mirror by fetching all of its
+packages from the internet and checksumming them.</p>
+<p>The other three commands are for managing mirror configuration.  They
+control the URL(s) from which Spack downloads its packages.</p>
+</section>
+<section id="spack-mirror-create">
+<span id="cmd-spack-mirror-create"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">create</span></code><a class="headerlink" href="#spack-mirror-create" title="連結到這個標頭"></a></h2>
+<p>You can create a mirror using the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">create</span></code> command, assuming
+you're on a machine where you can access the internet.</p>
+<p>The command will iterate through all of Spack's packages and download
+the safe ones into a directory structure like the one above.  Here is
+what it looks like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>create<span class="w"> </span>libelf<span class="w"> </span>libdwarf
+<span class="go">==&gt; Created new mirror in spack-mirror-2014-06-24</span>
+<span class="go">==&gt; Trying to fetch from http://www.mr511.de/software/libelf-0.8.13.tar.gz</span>
+<span class="gp">#</span><span class="c1">#########################################################                81.6%</span>
+<span class="go">==&gt; Checksum passed for libelf@0.8.13</span>
+<span class="go">==&gt; Added libelf@0.8.13</span>
+<span class="go">==&gt; Trying to fetch from http://www.mr511.de/software/libelf-0.8.12.tar.gz</span>
+<span class="gp">#</span><span class="c1">#####################################################################    98.6%</span>
+<span class="go">==&gt; Checksum passed for libelf@0.8.12</span>
+<span class="go">==&gt; Added libelf@0.8.12</span>
+<span class="go">==&gt; Trying to fetch from http://www.prevanders.net/libdwarf-20130207.tar.gz</span>
+<span class="gp">#</span><span class="c1">#####################################################################    97.3%</span>
+<span class="go">==&gt; Checksum passed for libdwarf@20130207</span>
+<span class="go">==&gt; Added libdwarf@20130207</span>
+<span class="go">==&gt; Trying to fetch from http://www.prevanders.net/libdwarf-20130126.tar.gz</span>
+<span class="gp">#</span><span class="c1">#######################################################                  78.9%</span>
+<span class="go">==&gt; Checksum passed for libdwarf@20130126</span>
+<span class="go">==&gt; Added libdwarf@20130126</span>
+<span class="go">==&gt; Trying to fetch from http://www.prevanders.net/libdwarf-20130729.tar.gz</span>
+<span class="gp">#</span><span class="c1">############################################################             84.7%</span>
+<span class="go">==&gt; Added libdwarf@20130729</span>
+<span class="go">==&gt; Added spack-mirror-2014-06-24/libdwarf/libdwarf-20130729.tar.gz to mirror</span>
+<span class="go">==&gt; Added python@2.7.8.</span>
+<span class="go">==&gt; Successfully updated mirror in spack-mirror-2015-02-24.</span>
+<span class="go">  Archive stats:</span>
+<span class="go">    0    already present</span>
+<span class="go">    5    added</span>
+<span class="go">    0    failed to fetch.</span>
+</pre></div>
+</div>
+<p>Once this is done, you can tar up the <code class="docutils literal notranslate"><span class="pre">spack-mirror-2014-06-24</span></code> directory and
+copy it over to the machine you want it hosted on.</p>
+<section id="custom-package-sets">
+<h3>Custom package sets<a class="headerlink" href="#custom-package-sets" title="連結到這個標頭"></a></h3>
+<p>Normally, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">create</span></code> downloads all the archives it has
+checksums for.  If you want to only create a mirror for a subset of
+packages, you can do that by supplying a list of package specs on the
+command line after <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">create</span></code>.  For example, this
+command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>create<span class="w"> </span>libelf@0.8.12:<span class="w"> </span>boost@1.44:
+</pre></div>
+</div>
+<p>Will create a mirror for libelf versions greater than or equal to
+0.8.12 and boost versions greater than or equal to 1.44.</p>
+</section>
+<section id="mirror-files">
+<h3>Mirror files<a class="headerlink" href="#mirror-files" title="連結到這個標頭"></a></h3>
+<p>If you have a <em>very</em> large number of packages you want to mirror, you
+can supply a file with specs in it, one per line:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>specs.txt
+<span class="go">libdwarf</span>
+<span class="go">libelf@0.8.12:</span>
+<span class="go">boost@1.44:</span>
+<span class="go">boost@1.39.0</span>
+<span class="go">...</span>
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>specs.txt
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>This is useful if there is a specific suite of software managed by
+your site.</p>
+</section>
+<section id="mirror-environment">
+<h3>Mirror environment<a class="headerlink" href="#mirror-environment" title="連結到這個標頭"></a></h3>
+<p>To create a mirror of all packages required by a concrete environment, activate the environment and call <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">create</span> <span class="pre">-a</span></code>.
+This is especially useful to create a mirror of an environment concretized on another machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[remote] $ </span>spack<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>myenv
+<span class="gp">[remote] $ </span>spack<span class="w"> </span>env<span class="w"> </span>activate<span class="w"> </span>myenv
+<span class="gp">[remote] $ </span>spack<span class="w"> </span>add<span class="w"> </span>...
+<span class="gp">[remote] $ </span>spack<span class="w"> </span>concretize
+
+<span class="gp">$ </span>sftp<span class="w"> </span>remote:/spack/var/environment/myenv/spack.lock
+<span class="gp">$ </span>spack<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>myenv<span class="w"> </span>spack.lock
+<span class="gp">$ </span>spack<span class="w"> </span>env<span class="w"> </span>activate<span class="w"> </span>myenv
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>create<span class="w"> </span>-a
+</pre></div>
+</div>
+</section>
+</section>
+<section id="spack-mirror-add">
+<span id="cmd-spack-mirror-add"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">add</span></code><a class="headerlink" href="#spack-mirror-add" title="連結到這個標頭"></a></h2>
+<p>Once you have a mirror, you need to let spack know about it.  This is
+relatively simple.  First, figure out the URL for the mirror.  If it's
+a directory, you can use a file URL like this one:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>file://$HOME/spack-mirror-2014-06-24
+</pre></div>
+</div>
+<p>That points to the directory on the local filesystem.  If it were on a
+web server, you could use a URL like this one:</p>
+<p><a class="reference external" href="https://example.com/some/web-hosted/directory/spack-mirror-2014-06-24">https://example.com/some/web-hosted/directory/spack-mirror-2014-06-24</a></p>
+<p>Spack will use the URL as the root for all of the packages it fetches.
+You can tell your Spack installation to use that mirror like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>add<span class="w"> </span>local_filesystem<span class="w"> </span>file://<span class="nv">$HOME</span>/spack-mirror-2014-06-24
+</pre></div>
+</div>
+<p>Each mirror has a name so that you can refer to it again later.</p>
+</section>
+<section id="spack-mirror-list">
+<span id="cmd-spack-mirror-list"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">list</span></code><a class="headerlink" href="#spack-mirror-list" title="連結到這個標頭"></a></h2>
+<p>To see all the mirrors Spack knows about, run <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">list</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>list
+<span class="go">local_filesystem    file:///home/username/spack-mirror-2014-06-24</span>
+</pre></div>
+</div>
+</section>
+<section id="spack-mirror-remove">
+<span id="cmd-spack-mirror-remove"></span><h2><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">mirror</span> <span class="pre">remove</span></code><a class="headerlink" href="#spack-mirror-remove" title="連結到這個標頭"></a></h2>
+<p>To remove a mirror by name, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>remove<span class="w"> </span>local_filesystem
+<span class="gp">$ </span>spack<span class="w"> </span>mirror<span class="w"> </span>list
+<span class="go">==&gt; No mirrors configured.</span>
+</pre></div>
+</div>
+</section>
+<section id="mirror-precedence">
+<h2>Mirror precedence<a class="headerlink" href="#mirror-precedence" title="連結到這個標頭"></a></h2>
+<p>Adding a mirror really adds a line in <code class="docutils literal notranslate"><span class="pre">~/.spack/mirrors.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">mirrors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">local_filesystem</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file:///home/username/spack-mirror-2014-06-24</span>
+<span class="w">  </span><span class="nt">remote_server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.com/some/web-hosted/directory/spack-mirror-2014-06-24</span>
+</pre></div>
+</div>
+<p>If you want to change the order in which mirrors are searched for
+packages, you can edit this file and reorder the sections.  Spack will
+search the topmost mirror first and the bottom-most mirror last.</p>
+</section>
+<section id="local-default-cache">
+<span id="caching"></span><h2>Local Default Cache<a class="headerlink" href="#local-default-cache" title="連結到這個標頭"></a></h2>
+<p>Spack caches resources that are downloaded as part of installs. The cache is
+a valid spack mirror: it uses the same directory structure and naming scheme
+as other Spack mirrors (so it can be copied anywhere and referenced with a URL
+like other mirrors). The mirror is maintained locally (within the Spack
+installation directory) at <code class="file docutils literal notranslate"><span class="pre">var/spack/cache/</span></code>. It is always enabled (and
+is always searched first when attempting to retrieve files for an installation)
+but can be cleared with <a class="reference internal" href="packaging_guide.html#cmd-spack-clean"><span class="std std-ref">clean</span></a>; the cache directory can also
+be deleted manually without issue.</p>
+<p>Caching includes retrieved tarball archives and source control repositories, but
+only resources with an associated digest or commit ID (e.g. a revision number
+for SVN) will be cached.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="containers.html" class="btn btn-neutral float-left" title="Container Images" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="module_file_support.html" class="btn btn-neutral float-right" title="Modules (modules.yaml)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

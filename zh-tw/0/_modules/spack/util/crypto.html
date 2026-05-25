@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.util.crypto &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/crypto.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.util.crypto</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.util.crypto 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+
+<span class="n">HashFactory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="s2">&quot;hashlib._Hash&quot;</span><span class="p">]</span>
+
+<span class="c1">#: Set of hash algorithms that Spack can use, mapped to digest size in bytes</span>
+<span class="n">hashes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sha256&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;md5&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;sha1&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;sha224&quot;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s2">&quot;sha384&quot;</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="s2">&quot;sha512&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">}</span>
+<span class="c1"># Note: keys are ordered by popularity for earliest return in ``hash_key in version_dict`` checks.</span>
+
+
+<span class="c1">#: size of hash digests in bytes, mapped to algoritm names</span>
+<span class="n">_size_to_hash</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hashes</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+
+<span class="c1">#: List of deprecated hash functions. On some systems, these cannot be</span>
+<span class="c1">#: used without special options to hashlib.</span>
+<span class="n">_deprecated_hash_algorithms</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;md5&quot;</span><span class="p">]</span>
+
+
+<span class="c1">#: cache of hash functions generated</span>
+<span class="n">_hash_functions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">HashFactory</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="DeprecatedHash">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.DeprecatedHash">[文件]</a>
+<span class="k">class</span> <span class="nc">DeprecatedHash</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hash_alg</span><span class="p">,</span> <span class="n">alert_fn</span><span class="p">,</span> <span class="n">disable_security_check</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash_alg</span> <span class="o">=</span> <span class="n">hash_alg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alert_fn</span> <span class="o">=</span> <span class="n">alert_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disable_security_check</span> <span class="o">=</span> <span class="n">disable_security_check</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">disable_alert</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">disable_alert</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alert_fn</span><span class="p">(</span>
+                <span class="s2">&quot;Deprecation warning: </span><span class="si">{0}</span><span class="s2"> checksums will not be&quot;</span>
+                <span class="s2">&quot; supported in future Spack releases.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hash_alg</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_security_check</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hash_alg</span><span class="p">,</span> <span class="n">usedforsecurity</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># novermin</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hash_alg</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="hash_fun_for_algo">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.hash_fun_for_algo">[文件]</a>
+<span class="k">def</span> <span class="nf">hash_fun_for_algo</span><span class="p">(</span><span class="n">algo</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HashFactory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a function that can perform the specified hash algorithm.&quot;&quot;&quot;</span>
+    <span class="n">fun</span> <span class="o">=</span> <span class="n">_hash_functions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fun</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fun</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_deprecated_hash_algorithms</span><span class="p">:</span>
+        <span class="n">_hash_functions</span><span class="p">[</span><span class="n">algo</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hashlib</span><span class="p">,</span> <span class="n">algo</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">deprecated_fun</span> <span class="o">=</span> <span class="n">DeprecatedHash</span><span class="p">(</span><span class="n">algo</span><span class="p">,</span> <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span> <span class="n">disable_security_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># call once to get a ValueError if usedforsecurity is needed</span>
+            <span class="n">deprecated_fun</span><span class="p">(</span><span class="n">disable_alert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># Some systems may support the &#39;usedforsecurity&#39; option</span>
+            <span class="c1"># so try with that (but display a warning when it is used)</span>
+            <span class="n">deprecated_fun</span> <span class="o">=</span> <span class="n">DeprecatedHash</span><span class="p">(</span><span class="n">algo</span><span class="p">,</span> <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">,</span> <span class="n">disable_security_check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">_hash_functions</span><span class="p">[</span><span class="n">algo</span><span class="p">]</span> <span class="o">=</span> <span class="n">deprecated_fun</span>
+    <span class="k">return</span> <span class="n">_hash_functions</span><span class="p">[</span><span class="n">algo</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="hash_algo_for_digest">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.hash_algo_for_digest">[文件]</a>
+<span class="k">def</span> <span class="nf">hash_algo_for_digest</span><span class="p">(</span><span class="n">hexdigest</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets name of the hash algorithm for a hex digest.&quot;&quot;&quot;</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">_size_to_hash</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hexdigest</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">algo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spack knows no hash algorithm for this digest: </span><span class="si">{</span><span class="n">hexdigest</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">algo</span></div>
+
+
+
+<div class="viewcode-block" id="hash_fun_for_digest">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.hash_fun_for_digest">[文件]</a>
+<span class="k">def</span> <span class="nf">hash_fun_for_digest</span><span class="p">(</span><span class="n">hexdigest</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HashFactory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets a hash function corresponding to a hex digest.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hash_fun_for_algo</span><span class="p">(</span><span class="n">hash_algo_for_digest</span><span class="p">(</span><span class="n">hexdigest</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="checksum_stream">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.checksum_stream">[文件]</a>
+<span class="k">def</span> <span class="nf">checksum_stream</span><span class="p">(</span><span class="n">hashlib_algo</span><span class="p">:</span> <span class="n">HashFactory</span><span class="p">,</span> <span class="n">fp</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a hex digest of the stream generated using given algorithm from hashlib.&quot;&quot;&quot;</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib_algo</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="checksum">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.checksum">[文件]</a>
+<span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">hashlib_algo</span><span class="p">:</span> <span class="n">HashFactory</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a hex digest of the filename generated using an algorithm from hashlib.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">checksum_stream</span><span class="p">(</span><span class="n">hashlib_algo</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="n">block_size</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Checker">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.Checker">[文件]</a>
+<span class="k">class</span> <span class="nc">Checker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A checker checks files against one particular hex digest.</span>
+<span class="sd">    It will automatically determine what hashing algorithm</span>
+<span class="sd">    to used based on the length of the digest it&#39;s initialized</span>
+<span class="sd">    with.  e.g., if the digest is 32 hex characters long this will</span>
+<span class="sd">    use md5.</span>
+
+<span class="sd">    Example: know your tarball should hash to &#39;abc123&#39;.  You want</span>
+<span class="sd">    to check files against this.  You would use this class like so::</span>
+
+<span class="sd">       hexdigest = &#39;abc123&#39;</span>
+<span class="sd">       checker = Checker(hexdigest)</span>
+<span class="sd">       success = checker.check(&#39;downloaded.tar.gz&#39;)</span>
+
+<span class="sd">    After the call to check, the actual checksum is available in</span>
+<span class="sd">    checker.sum, in case it&#39;s needed for error output.</span>
+
+<span class="sd">    You can trade read performance and memory usage by</span>
+<span class="sd">    adjusting the block_size optional arg.  By default it&#39;s</span>
+<span class="sd">    a 1MB (2**20 bytes) buffer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hexdigest</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;block_size&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hexdigest</span> <span class="o">=</span> <span class="n">hexdigest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash_fun</span> <span class="o">=</span> <span class="n">hash_fun_for_digest</span><span class="p">(</span><span class="n">hexdigest</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hash_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the hash function this Checker is using.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash_fun</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Checker.check">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.Checker.check">[文件]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the file with the specified name and check its checksum</span>
+<span class="sd">        against self.hexdigest.  Return True if they match, False</span>
+<span class="sd">        otherwise.  Actual checksum is stored in self.sum.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">=</span> <span class="n">checksum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hash_fun</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">block_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">hexdigest</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="prefix_bits">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.prefix_bits">[文件]</a>
+<span class="k">def</span> <span class="nf">prefix_bits</span><span class="p">(</span><span class="n">byte_array</span><span class="p">,</span> <span class="n">bits</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the first &lt;bits&gt; bits of a byte array as an integer.&quot;&quot;&quot;</span>
+    <span class="n">b2i</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span>  <span class="c1"># In Python 3, indexing byte_array gives int</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">byte_array</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">8</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">b2i</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="n">bits</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">result</span> <span class="o">&gt;&gt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">bits</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="bit_length">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.crypto.bit_length">[文件]</a>
+<span class="k">def</span> <span class="nf">bit_length</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of bits required to represent an integer in binary.&quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;-0b&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.environment.depfile &mdash; Spack 0.23.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/environment/depfile.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=1a21acd8"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=cbf116e0"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜尋" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">開發者指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API 文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模組原始碼</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.environment.depfile</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.environment.depfile 的原始碼</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains the traversal logic and models that can be used to generate</span>
+<span class="sd">depfiles from an environment.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">spack.deptypes</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">spack.environment.environment</span> <span class="k">as</span> <span class="nn">ev</span>
+<span class="kn">import</span> <span class="nn">spack.paths</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+<span class="kn">import</span> <span class="nn">spack.traverse</span> <span class="k">as</span> <span class="nn">traverse</span>
+
+
+<div class="viewcode-block" id="UseBuildCache">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.UseBuildCache">[文件]</a>
+<span class="k">class</span> <span class="nc">UseBuildCache</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">ONLY</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">NEVER</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">AUTO</span> <span class="o">=</span> <span class="mi">3</span>
+
+<div class="viewcode-block" id="UseBuildCache.from_string">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.UseBuildCache.from_string">[文件]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;UseBuildCache&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s2">&quot;only&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">ONLY</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s2">&quot;never&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">NEVER</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">AUTO</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid value for UseBuildCache: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span> <span class="nf">_deptypes</span><span class="p">(</span><span class="n">use_buildcache</span><span class="p">:</span> <span class="n">UseBuildCache</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;What edges should we follow for a given node? If it&#39;s a cache-only</span>
+<span class="sd">    node, then we can drop build type deps.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">dt</span><span class="o">.</span><span class="n">LINK</span> <span class="o">|</span> <span class="n">dt</span><span class="o">.</span><span class="n">RUN</span> <span class="k">if</span> <span class="n">use_buildcache</span> <span class="o">==</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">ONLY</span> <span class="k">else</span> <span class="n">dt</span><span class="o">.</span><span class="n">BUILD</span> <span class="o">|</span> <span class="n">dt</span><span class="o">.</span><span class="n">LINK</span> <span class="o">|</span> <span class="n">dt</span><span class="o">.</span><span class="n">RUN</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="DepfileNode">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.DepfileNode">[文件]</a>
+<span class="k">class</span> <span class="nc">DepfileNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains a spec, a subset of its dependencies, and a flag whether it should be</span>
+<span class="sd">    buildcache only/never/auto.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">,</span> <span class="n">prereqs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">],</span> <span class="n">buildcache</span><span class="p">:</span> <span class="n">UseBuildCache</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">MakefileSpec</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prereqs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MakefileSpec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">prereqs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">buildcache</span> <span class="o">==</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">ONLY</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buildcache_flag</span> <span class="o">=</span> <span class="s2">&quot;--use-buildcache=only&quot;</span>
+        <span class="k">elif</span> <span class="n">buildcache</span> <span class="o">==</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">NEVER</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buildcache_flag</span> <span class="o">=</span> <span class="s2">&quot;--use-buildcache=never&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buildcache_flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DepfileSpecVisitor">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.DepfileSpecVisitor">[文件]</a>
+<span class="k">class</span> <span class="nc">DepfileSpecVisitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This visitor produces an adjacency list of a (reduced) DAG, which</span>
+<span class="sd">    is used to generate depfile targets with their prerequisites. Currently</span>
+<span class="sd">    it only drops build deps when using buildcache only mode.</span>
+
+<span class="sd">    Note that the DAG could be reduced even more by dropping build edges of specs</span>
+<span class="sd">    installed at the moment the depfile is generated, but that would produce</span>
+<span class="sd">    stateful depfiles that would not fail when the database is wiped later.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg_buildcache</span><span class="p">:</span> <span class="n">UseBuildCache</span><span class="p">,</span> <span class="n">deps_buildcache</span><span class="p">:</span> <span class="n">UseBuildCache</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DepfileNode</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pkg_buildcache</span> <span class="o">=</span> <span class="n">pkg_buildcache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deps_buildcache</span> <span class="o">=</span> <span class="n">deps_buildcache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depflag_root</span> <span class="o">=</span> <span class="n">_deptypes</span><span class="p">(</span><span class="n">pkg_buildcache</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depflag_deps</span> <span class="o">=</span> <span class="n">_deptypes</span><span class="p">(</span><span class="n">deps_buildcache</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DepfileSpecVisitor.neighbors">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.DepfileSpecVisitor.neighbors">[文件]</a>
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Produce a list of spec to follow from node&quot;&quot;&quot;</span>
+        <span class="n">depflag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depflag_root</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">depflag_deps</span>
+        <span class="k">return</span> <span class="n">traverse</span><span class="o">.</span><span class="n">sort_edges</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">edges_to_dependencies</span><span class="p">(</span><span class="n">depflag</span><span class="o">=</span><span class="n">depflag</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="DepfileSpecVisitor.accept">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.DepfileSpecVisitor.accept">[文件]</a>
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">DepfileNode</span><span class="p">(</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">,</span>
+                <span class="n">prereqs</span><span class="o">=</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)],</span>
+                <span class="n">buildcache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pkg_buildcache</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">deps_buildcache</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># We already accepted this</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MakefileSpec">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileSpec">[文件]</a>
+<span class="k">class</span> <span class="nc">MakefileSpec</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limited interface to spec to help generate targets etc. without</span>
+<span class="sd">    introducing unwanted special characters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_pattern</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span>
+
+<div class="viewcode-block" id="MakefileSpec.safe_name">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileSpec.safe_name">[文件]</a>
+    <span class="k">def</span> <span class="nf">safe_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">safe_format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">-</span><span class="si">{version}</span><span class="s2">-</span><span class="si">{hash}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MakefileSpec.spec_hash">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileSpec.spec_hash">[文件]</a>
+    <span class="k">def</span> <span class="nf">spec_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MakefileSpec.safe_format">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileSpec.safe_format">[文件]</a>
+    <span class="k">def</span> <span class="nf">safe_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_str</span><span class="p">):</span>
+        <span class="n">unsafe_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">format_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">MakefileSpec</span><span class="o">.</span><span class="n">_pattern</span><span class="p">:</span>
+            <span class="n">MakefileSpec</span><span class="o">.</span><span class="n">_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^A-Za-z0-9_.-]&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">MakefileSpec</span><span class="o">.</span><span class="n">_pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">unsafe_result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MakefileSpec.unsafe_format">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileSpec.unsafe_format">[文件]</a>
+    <span class="k">def</span> <span class="nf">unsafe_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">format_str</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MakefileModel">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileModel">[文件]</a>
+<span class="k">class</span> <span class="nc">MakefileModel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class produces all data to render a makefile for specs of an environment.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">env</span><span class="p">:</span> <span class="n">ev</span><span class="o">.</span><span class="n">Environment</span><span class="p">,</span>
+        <span class="n">roots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">],</span>
+        <span class="n">adjacency_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DepfileNode</span><span class="p">],</span>
+        <span class="n">make_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">jobserver</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            env: environment to generate the makefile for</span>
+<span class="sd">            roots: specs that get built in the default target</span>
+<span class="sd">            adjacency_list: list of DepfileNode, mapping specs to their dependencies</span>
+<span class="sd">            make_prefix: prefix for makefile targets</span>
+<span class="sd">            jobserver: when enabled, make will invoke Spack with jobserver support. For</span>
+<span class="sd">                dry-run this should be disabled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Currently we can only use depfile with an environment since Spack needs to</span>
+        <span class="c1"># find the concrete specs somewhere.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env_path</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">path</span>
+
+        <span class="c1"># These specs are built in the default target.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roots</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MakefileSpec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">)</span>
+
+        <span class="c1"># The SPACK_PACKAGE_IDS variable is &quot;exported&quot;, which can be used when including</span>
+        <span class="c1"># generated makefiles to add post-install hooks, like pushing to a buildcache,</span>
+        <span class="c1"># running tests, etc.</span>
+        <span class="k">if</span> <span class="n">make_prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">env_subdir_path</span><span class="p">,</span> <span class="s2">&quot;makedeps&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg_identifier_variable</span> <span class="o">=</span> <span class="s2">&quot;SPACK_PACKAGE_IDS&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># NOTE: GNU Make allows directory separators in variable names, so for consistency</span>
+            <span class="c1"># we can namespace this variable with the same prefix as targets.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_prefix</span> <span class="o">=</span> <span class="n">make_prefix</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pkg_identifier_variable</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">make_prefix</span><span class="p">,</span> <span class="s2">&quot;SPACK_PACKAGE_IDS&quot;</span><span class="p">)</span>
+
+        <span class="c1"># And here we collect a tuple of (target, prereqs, dag_hash, nice_name, buildcache_flag)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_adjacency_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">safe_name</span><span class="p">(),</span>
+                <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_install_target</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">safe_name</span><span class="p">())</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">prereqs</span><span class="p">),</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spec_hash</span><span class="p">(),</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">unsafe_format</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">{@version}{</span><span class="si">%c</span><span class="s2">ompiler}</span><span class="si">{variants}</span><span class="s2">{arch=architecture}&quot;</span>
+                <span class="p">),</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">buildcache_flag</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">adjacency_list</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Root specs without deps are the prereqs for the environment target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_install_targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_install_target</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">safe_name</span><span class="p">())</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">roots</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">jobserver_support</span> <span class="o">=</span> <span class="s2">&quot;+&quot;</span> <span class="k">if</span> <span class="n">jobserver</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># All package identifiers, used to generate the SPACK_PACKAGE_IDS variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_pkg_identifiers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># All install and install-deps targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_install_related_targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Convenience shortcuts: ensure that `make install/pkg-version-hash` triggers</span>
+        <span class="c1"># &lt;absolute path to env&gt;/.spack-env/makedeps/install/pkg-version-hash in case</span>
+        <span class="c1"># we don&#39;t have a custom make target prefix.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phony_convenience_targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">adjacency_list</span><span class="p">:</span>
+            <span class="n">tgt</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">safe_name</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_pkg_identifiers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tgt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_install_related_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_install_target</span><span class="p">(</span><span class="n">tgt</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_install_related_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_install_deps_target</span><span class="p">(</span><span class="n">tgt</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">make_prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phony_convenience_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">tgt</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phony_convenience_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;install-deps&quot;</span><span class="p">,</span> <span class="n">tgt</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># The `all` and `clean` targets are phony. It doesn&#39;t make sense to</span>
+        <span class="c1"># have /abs/path/to/env/metadir/{all,clean} targets. But it *does* make</span>
+        <span class="c1"># sense to have a prefix like `env/all`, `env/clean` when they are</span>
+        <span class="c1"># supposed to be included</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;clean&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_prefix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_prefix</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_install_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_prefix</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_install_deps_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_prefix</span><span class="p">,</span> <span class="s2">&quot;install-deps&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MakefileModel.to_dict">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileModel.to_dict">[文件]</a>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;all_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;env_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;clean_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;clean&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;all_install_related_targets&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_install_related_targets</span><span class="p">),</span>
+            <span class="s2">&quot;root_install_targets&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_install_targets</span><span class="p">),</span>
+            <span class="s2">&quot;dirs_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;dirs&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_path</span><span class="p">,</span>
+            <span class="s2">&quot;install_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;install&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;install_deps_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;install-deps&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;any_hash_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;jobserver_support&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobserver_support</span><span class="p">,</span>
+            <span class="s2">&quot;spack_script&quot;</span><span class="p">:</span> <span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">spack</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">spack_script</span><span class="p">),</span>
+            <span class="s2">&quot;adjacency_list&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_adjacency_list</span><span class="p">,</span>
+            <span class="s2">&quot;phony_convenience_targets&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phony_convenience_targets</span><span class="p">),</span>
+            <span class="s2">&quot;pkg_ids_variable&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pkg_identifier_variable</span><span class="p">,</span>
+            <span class="s2">&quot;pkg_ids&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_pkg_identifiers</span><span class="p">),</span>
+        <span class="p">}</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roots</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="MakefileModel.from_env">
+<a class="viewcode-back" href="../../../spack.environment.html#spack.environment.depfile.MakefileModel.from_env">[文件]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_env</span><span class="p">(</span>
+        <span class="n">env</span><span class="p">:</span> <span class="n">ev</span><span class="o">.</span><span class="n">Environment</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">filter_specs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Spec</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">pkg_buildcache</span><span class="p">:</span> <span class="n">UseBuildCache</span> <span class="o">=</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">AUTO</span><span class="p">,</span>
+        <span class="n">dep_buildcache</span><span class="p">:</span> <span class="n">UseBuildCache</span> <span class="o">=</span> <span class="n">UseBuildCache</span><span class="o">.</span><span class="n">AUTO</span><span class="p">,</span>
+        <span class="n">make_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">jobserver</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MakefileModel&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Produces a MakefileModel from an environment and a list of specs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            env: the environment to use</span>
+<span class="sd">            filter_specs: if provided, only these specs will be built from the environment,</span>
+<span class="sd">                otherwise the environment roots are used.</span>
+<span class="sd">            pkg_buildcache: whether to only use the buildcache for top-level specs.</span>
+<span class="sd">            dep_buildcache: whether to only use the buildcache for non-top-level specs.</span>
+<span class="sd">            make_prefix: the prefix for the makefile targets</span>
+<span class="sd">            jobserver: when enabled, make will invoke Spack with jobserver support. For</span>
+<span class="sd">                dry-run this should be disabled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">roots</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">all_matching_specs</span><span class="p">(</span><span class="o">*</span><span class="n">filter_specs</span><span class="p">)</span> <span class="k">if</span> <span class="n">filter_specs</span> <span class="k">else</span> <span class="n">env</span><span class="o">.</span><span class="n">concrete_roots</span><span class="p">()</span>
+        <span class="n">visitor</span> <span class="o">=</span> <span class="n">DepfileSpecVisitor</span><span class="p">(</span><span class="n">pkg_buildcache</span><span class="p">,</span> <span class="n">dep_buildcache</span><span class="p">)</span>
+        <span class="n">traverse</span><span class="o">.</span><span class="n">traverse_breadth_first_with_visitor</span><span class="p">(</span>
+            <span class="n">roots</span><span class="p">,</span> <span class="n">traverse</span><span class="o">.</span><span class="n">CoverNodesVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">())</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">MakefileModel</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">roots</span><span class="p">,</span> <span class="n">visitor</span><span class="o">.</span><span class="n">adjacency_list</span><span class="p">,</span> <span class="n">make_prefix</span><span class="p">,</span> <span class="n">jobserver</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">最後更新於 5月 25, 2026。
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.traverse &mdash; Spack 0.23.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/traverse.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=6a3e8c2f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.traverse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>spack.traverse 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">spack.deptypes</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">spack.spec</span>
+
+<span class="c1"># Export only the high-level API.</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;traverse_edges&quot;</span><span class="p">,</span> <span class="s2">&quot;traverse_nodes&quot;</span><span class="p">,</span> <span class="s2">&quot;traverse_tree&quot;</span><span class="p">]</span>
+
+
+<span class="c1">#: Data class that stores a directed edge together with depth at</span>
+<span class="c1">#: which the target vertex was found. It is passed to ``accept``</span>
+<span class="c1">#: and ``neighbors`` of visitors, so they can decide whether to</span>
+<span class="c1">#: follow the edge or not.</span>
+<span class="k">class</span> <span class="nc">EdgeAndDepth</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">edge</span><span class="p">:</span> <span class="s2">&quot;spack.spec.DependencySpec&quot;</span>
+    <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span>
+
+
+<span class="k">def</span> <span class="nf">sort_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+    <span class="n">edges</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">edge</span><span class="p">:</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">abstract_hash</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">edges</span>
+
+
+<span class="k">class</span> <span class="nc">BaseVisitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A simple visitor that accepts all edges unconditionally and follows all</span>
+<span class="sd">    edges to dependencies of a given ``deptype``.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depflag</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">ALL</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depflag</span> <span class="o">=</span> <span class="n">depflag</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            item (EdgeAndDepth): Provides the depth and the edge through which the</span>
+<span class="sd">                node was discovered</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: Returns ``True`` if the node is accepted. When ``False``, this</span>
+<span class="sd">                indicates that the node won&#39;t be yielded by iterators and dependencies</span>
+<span class="sd">                are not followed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sort_edges</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">edges_to_dependencies</span><span class="p">(</span><span class="n">depflag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depflag</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">ReverseVisitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A visitor that reverses the arrows in the DAG, following dependents.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">depflag</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">ALL</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span> <span class="o">=</span> <span class="n">visitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depflag</span> <span class="o">=</span> <span class="n">depflag</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return dependents, note that we actually flip the edge direction to allow</span>
+<span class="sd">        generic programming&quot;&quot;&quot;</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span>
+        <span class="k">return</span> <span class="n">sort_edges</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">edges_from_dependents</span><span class="p">(</span><span class="n">depflag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depflag</span><span class="p">)]</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CoverNodesVisitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A visitor that traverses each node once.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span> <span class="o">=</span> <span class="n">visitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">visited</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="c1"># Covering nodes means: visit nodes once and only once.</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visited</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">accept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">accept</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CoverEdgesVisitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A visitor that traverses all edges once.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span> <span class="o">=</span> <span class="n">visitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">visited</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="c1"># Covering edges means: drop dependencies of visited nodes.</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visited</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TopoVisitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visitor that can be used in :py:func:`depth-first traversal</span>
+<span class="sd">    &lt;spack.traverse.traverse_depth_first_with_visitor&gt;` to generate</span>
+<span class="sd">    a topologically ordered list of specs.</span>
+
+<span class="sd">    Algorithm based on &quot;Section 22.4: Topological sort&quot;, Introduction to Algorithms</span>
+<span class="sd">    (2001, 2nd edition) by Cormen, Thomas H.; Leiserson, Charles E.; Rivest, Ronald L.;</span>
+<span class="sd">    Stein, Clifford.</span>
+
+<span class="sd">    Summary of the algorithm: prepend each vertex to a list in depth-first post-order,</span>
+<span class="sd">    not following edges to nodes already seen. This ensures all descendants occur after</span>
+<span class="sd">    their parent, yielding a topological order.</span>
+
+<span class="sd">    Note: in this particular implementation we collect the *edges* through which the</span>
+<span class="sd">    vertices are discovered, meaning that a topological order of *vertices* is obtained</span>
+<span class="sd">    by taking the specs pointed to: ``map(lambda edge: edge.spec, visitor.edges)``.</span>
+<span class="sd">    Lastly, ``all_edges=True`` can be used to retrieve a list of all reachable</span>
+<span class="sd">    edges, with the property that for each vertex all in-edges precede all out-edges.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">all_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            visitor: visitor that implements accept(), pre(), post() and neighbors()</span>
+<span class="sd">            key: uniqueness key for nodes</span>
+<span class="sd">            root (bool): Whether to include the root node.</span>
+<span class="sd">            all_edges (bool): when ``False`` (default): Each node is reached once,</span>
+<span class="sd">                and ``map(lambda edge: edge.spec, visitor.edges)`` is topologically</span>
+<span class="sd">                ordered. When ``True``, every edge is listed, ordered such that for</span>
+<span class="sd">                each node all in-edges precede all out-edges.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span> <span class="o">=</span> <span class="n">visitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_edges</span> <span class="o">=</span> <span class="n">all_edges</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visited</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_edges</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reverse_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">pre</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="c1"># You could add a temporary marker for cycle detection</span>
+        <span class="c1"># that&#39;s cleared in `post`, but we assume no cycles.</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reverse_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return edges in topological order (in-edges precede out-edges).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reverse_order</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">get_visitor_from_args</span><span class="p">(</span>
+    <span class="n">cover</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">depflag</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepTypes</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visitor</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a visitor object from common keyword arguments.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        cover (str): Determines how extensively to cover the dag.  Possible values:</span>
+<span class="sd">            ``nodes`` -- Visit each unique node in the dag only once.</span>
+<span class="sd">            ``edges`` -- If a node has been visited once but is reached along a</span>
+<span class="sd">            new path, it&#39;s accepted, but not recurisvely followed. This traverses</span>
+<span class="sd">            each &#39;edge&#39; in the DAG once.</span>
+<span class="sd">            ``paths`` -- Explore every unique path reachable from the root.</span>
+<span class="sd">            This descends into visited subtrees and will accept nodes multiple</span>
+<span class="sd">            times if they&#39;re reachable by multiple paths.</span>
+<span class="sd">        direction (str): ``children`` or ``parents``. If ``children``, does a traversal</span>
+<span class="sd">            of this spec&#39;s children.  If ``parents``, traverses upwards in the DAG</span>
+<span class="sd">            towards the root.</span>
+<span class="sd">        deptype: allowed dependency types</span>
+<span class="sd">        key: function that takes a spec and outputs a key for uniqueness test.</span>
+<span class="sd">        visited (set or None): a set of nodes not to follow (when using cover=nodes/edges)</span>
+<span class="sd">        visitor: An initial visitor that is used for composition.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A visitor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">depflag</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">):</span>
+        <span class="n">depflag</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">canonicalize</span><span class="p">(</span><span class="n">depflag</span><span class="p">)</span>
+    <span class="n">visitor</span> <span class="o">=</span> <span class="n">visitor</span> <span class="ow">or</span> <span class="n">BaseVisitor</span><span class="p">(</span><span class="n">depflag</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cover</span> <span class="o">==</span> <span class="s2">&quot;nodes&quot;</span><span class="p">:</span>
+        <span class="n">visitor</span> <span class="o">=</span> <span class="n">CoverNodesVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cover</span> <span class="o">==</span> <span class="s2">&quot;edges&quot;</span><span class="p">:</span>
+        <span class="n">visitor</span> <span class="o">=</span> <span class="n">CoverEdgesVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;parents&quot;</span><span class="p">:</span>
+        <span class="n">visitor</span> <span class="o">=</span> <span class="n">ReverseVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="p">,</span> <span class="n">depflag</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">visitor</span>
+
+
+<span class="k">def</span> <span class="nf">with_artificial_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize a list of edges from an imaginary root node to the root specs.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">EdgeAndDepth</span><span class="p">(</span>
+            <span class="n">edge</span><span class="o">=</span><span class="n">spack</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">DependencySpec</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">depflag</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">virtuals</span><span class="o">=</span><span class="p">()),</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">specs</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">traverse_depth_first_edges_generator</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">post_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generator that takes explores a DAG in depth-first fashion starting from</span>
+<span class="sd">    a list of edges. Note that typically DFS would take a vertex not a list of edges,</span>
+<span class="sd">    but the API is like this so we don&#39;t have to create an artificial root node when</span>
+<span class="sd">    traversing from multiple roots in a DAG.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        edges (list): List of EdgeAndDepth instances</span>
+<span class="sd">        visitor: class instance implementing accept() and neigbors()</span>
+<span class="sd">        post_order (bool): Whether to yield nodes when backtracking</span>
+<span class="sd">        root (bool): whether to yield at depth 0</span>
+<span class="sd">        depth (bool): when ``True`` yield a tuple of depth and edge, otherwise only the</span>
+<span class="sd">            edge.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">yield_me</span> <span class="o">=</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">edge</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="c1"># Pre</span>
+        <span class="k">if</span> <span class="n">yield_me</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">post_order</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span> <span class="k">if</span> <span class="n">depth</span> <span class="k">else</span> <span class="n">edge</span><span class="o">.</span><span class="n">edge</span>
+
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="n">EdgeAndDepth</span><span class="p">(</span><span class="n">edge</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">edge</span><span class="p">)]</span>
+
+        <span class="c1"># This extra branch is just for efficiency.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">traverse_depth_first_edges_generator</span><span class="p">(</span>
+                <span class="n">neighbors</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">post_order</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">depth</span>
+            <span class="p">):</span>
+                <span class="k">yield</span> <span class="n">item</span>
+
+        <span class="c1"># Post</span>
+        <span class="k">if</span> <span class="n">yield_me</span> <span class="ow">and</span> <span class="n">post_order</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span> <span class="k">if</span> <span class="n">depth</span> <span class="k">else</span> <span class="n">edge</span><span class="o">.</span><span class="n">edge</span>
+
+
+<span class="k">def</span> <span class="nf">traverse_breadth_first_edges_generator</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># If the visitor doesn&#39;t accept the node, we don&#39;t yield it nor follow its edges.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">edge</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span> <span class="k">if</span> <span class="n">depth</span> <span class="k">else</span> <span class="n">edge</span><span class="o">.</span><span class="n">edge</span>
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EdgeAndDepth</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">traverse_breadth_first_with_visitor</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">visitor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs breadth first traversal for a list of specs (not a generator).</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        specs (list): List of Spec instances.</span>
+<span class="sd">        visitor: object that implements accept and neighbors interface, see</span>
+<span class="sd">            for example BaseVisitor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">with_artificial_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># If the visitor doesn&#39;t accept the node, we don&#39;t traverse it further.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EdgeAndDepth</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">traverse_depth_first_with_visitor</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">visitor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Traverse a DAG in depth-first fashion using a visitor, starting from</span>
+<span class="sd">    a list of edges. Note that typically DFS would take a vertex not a list of edges,</span>
+<span class="sd">    but the API is like this so we don&#39;t have to create an artificial root node when</span>
+<span class="sd">    traversing from multiple roots in a DAG.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        edges (list): List of EdgeAndDepth instances</span>
+<span class="sd">        visitor: class instance implementing accept(), pre(), post() and neighbors()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visitor</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">visitor</span><span class="o">.</span><span class="n">pre</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="n">EdgeAndDepth</span><span class="p">(</span><span class="n">edge</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">edge</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">visitor</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">edge</span><span class="p">)]</span>
+
+        <span class="n">traverse_depth_first_with_visitor</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">visitor</span><span class="p">)</span>
+
+        <span class="n">visitor</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+
+<span class="c1"># Helper functions for generating a tree using breadth-first traversal</span>
+
+
+<span class="k">def</span> <span class="nf">breadth_first_to_tree_edges</span><span class="p">(</span><span class="n">roots</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This produces an adjacency list (with edges) and a map of parents.</span>
+<span class="sd">    There may be nodes that are reached through multiple edges. To print as</span>
+<span class="sd">    a tree, one should use the parents dict to verify if the path leading to</span>
+<span class="sd">    the node is through the correct parent. If not, the branch should be</span>
+<span class="sd">    truncated.&quot;&quot;&quot;</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">parents</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">traverse_edges</span><span class="p">(</span><span class="n">roots</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;breadth&quot;</span><span class="p">,</span> <span class="n">cover</span><span class="o">=</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">):</span>
+        <span class="n">parent_id</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">key</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">child_id</span> <span class="o">=</span> <span class="n">key</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+        <span class="n">edges</span><span class="p">[</span><span class="n">parent_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">child_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
+            <span class="n">parents</span><span class="p">[</span><span class="n">child_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_id</span>
+
+    <span class="k">return</span> <span class="n">edges</span><span class="p">,</span> <span class="n">parents</span>
+
+
+<span class="k">def</span> <span class="nf">breadth_first_to_tree_nodes</span><span class="p">(</span><span class="n">roots</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This produces a list of edges that forms a tree; every node has no more</span>
+<span class="sd">    that one incoming edge.&quot;&quot;&quot;</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">traverse_edges</span><span class="p">(</span><span class="n">roots</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;breadth&quot;</span><span class="p">,</span> <span class="n">cover</span><span class="o">=</span><span class="s2">&quot;nodes&quot;</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">):</span>
+        <span class="n">parent_id</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">key</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">edges</span><span class="p">[</span><span class="n">parent_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">edges</span>
+
+
+<span class="k">def</span> <span class="nf">traverse_breadth_first_tree_edges</span><span class="p">(</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">parents</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Do a depth-first search on edges generated by bread-first traversal,</span>
+<span class="sd">    which can be used to produce a tree.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">[</span><span class="n">parent_id</span><span class="p">]:</span>
+        <span class="k">yield</span> <span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+
+        <span class="n">child_id</span> <span class="o">=</span> <span class="n">key</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
+
+        <span class="c1"># Don&#39;t follow further if we&#39;re not the parent</span>
+        <span class="k">if</span> <span class="n">parents</span><span class="p">[</span><span class="n">child_id</span><span class="p">]</span> <span class="o">!=</span> <span class="n">parent_id</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># yield from ... in Python 3.</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">traverse_breadth_first_tree_edges</span><span class="p">(</span><span class="n">child_id</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">parents</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">item</span>
+
+
+<span class="k">def</span> <span class="nf">traverse_breadth_first_tree_nodes</span><span class="p">(</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">[</span><span class="n">parent_id</span><span class="p">]:</span>
+        <span class="k">yield</span> <span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">traverse_breadth_first_tree_nodes</span><span class="p">(</span><span class="n">key</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">spec</span><span class="p">),</span> <span class="n">edges</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">item</span>
+
+
+<span class="c1"># Topologic order</span>
+<span class="k">def</span> <span class="nf">traverse_edges_topo</span><span class="p">(</span>
+    <span class="n">specs</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">,</span>
+    <span class="n">deptype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepTypes</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">all_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of edges in topological order, in the sense that all in-edges of a</span>
+<span class="sd">    vertex appear before all out-edges. By default with direction=children edges are</span>
+<span class="sd">    directed from dependent to dependency. With directions=parents, the edges are</span>
+<span class="sd">    directed from dependency to dependent.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        specs (list): List of root specs (considered to be depth 0)</span>
+<span class="sd">        direction (str): ``children`` (edges are directed from dependent to dependency)</span>
+<span class="sd">            or ``parents`` (edges are flipped / directed from dependency to dependent)</span>
+<span class="sd">        deptype: allowed dependency types</span>
+<span class="sd">        key: function that takes a spec and outputs a key for uniqueness test.</span>
+<span class="sd">        root (bool): Yield the root nodes themselves</span>
+<span class="sd">        all_edges (bool): When ``False`` only one in-edge per node is returned, when</span>
+<span class="sd">            ``True`` all reachable edges are returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">deptype</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">):</span>
+        <span class="n">deptype</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">canonicalize</span><span class="p">(</span><span class="n">deptype</span><span class="p">)</span>
+    <span class="n">visitor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseVisitor</span><span class="p">,</span> <span class="n">ReverseVisitor</span><span class="p">,</span> <span class="n">TopoVisitor</span><span class="p">]</span> <span class="o">=</span> <span class="n">BaseVisitor</span><span class="p">(</span><span class="n">deptype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;parents&quot;</span><span class="p">:</span>
+        <span class="n">visitor</span> <span class="o">=</span> <span class="n">ReverseVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="p">,</span> <span class="n">deptype</span><span class="p">)</span>
+    <span class="n">visitor</span> <span class="o">=</span> <span class="n">TopoVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">all_edges</span><span class="o">=</span><span class="n">all_edges</span><span class="p">)</span>
+    <span class="n">traverse_depth_first_with_visitor</span><span class="p">(</span><span class="n">with_artificial_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">),</span> <span class="n">visitor</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">visitor</span><span class="o">.</span><span class="n">edges</span>
+
+
+<span class="c1"># High-level API: traverse_edges, traverse_nodes, traverse_tree.</span>
+
+
+<div class="viewcode-block" id="traverse_edges">
+<a class="viewcode-back" href="../../spack.html#spack.traverse.traverse_edges">[文档]</a>
+<span class="k">def</span> <span class="nf">traverse_edges</span><span class="p">(</span>
+    <span class="n">specs</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">order</span><span class="o">=</span><span class="s2">&quot;pre&quot;</span><span class="p">,</span>
+    <span class="n">cover</span><span class="o">=</span><span class="s2">&quot;nodes&quot;</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">,</span>
+    <span class="n">deptype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepTypes</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">depth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+    <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generator that yields edges from the DAG, starting from a list of root specs.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">        specs (list): List of root specs (considered to be depth 0)</span>
+<span class="sd">        root (bool): Yield the root nodes themselves</span>
+<span class="sd">        order (str): What order of traversal to use in the DAG. For depth-first</span>
+<span class="sd">            search this can be ``pre`` or ``post``. For BFS this should be ``breadth``.</span>
+<span class="sd">            For topological order use ``topo``</span>
+<span class="sd">        cover (str): Determines how extensively to cover the dag.  Possible values:</span>
+<span class="sd">            ``nodes`` -- Visit each unique node in the dag only once.</span>
+<span class="sd">            ``edges`` -- If a node has been visited once but is reached along a</span>
+<span class="sd">            new path, it&#39;s accepted, but not recurisvely followed. This traverses</span>
+<span class="sd">            each &#39;edge&#39; in the DAG once.</span>
+<span class="sd">            ``paths`` -- Explore every unique path reachable from the root.</span>
+<span class="sd">            This descends into visited subtrees and will accept nodes multiple</span>
+<span class="sd">            times if they&#39;re reachable by multiple paths.</span>
+<span class="sd">        direction (str): ``children`` or ``parents``. If ``children``, does a traversal</span>
+<span class="sd">            of this spec&#39;s children.  If ``parents``, traverses upwards in the DAG</span>
+<span class="sd">            towards the root.</span>
+<span class="sd">        deptype: allowed dependency types</span>
+<span class="sd">        depth (bool): When ``False``, yield just edges. When ``True`` yield</span>
+<span class="sd">            the tuple (depth, edge), where depth corresponds to the depth</span>
+<span class="sd">            at which edge.spec was discovered.</span>
+<span class="sd">        key: function that takes a spec and outputs a key for uniqueness test.</span>
+<span class="sd">        visited (set or None): a set of nodes not to follow</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A generator that yields ``DependencySpec`` if depth is ``False``</span>
+<span class="sd">        or a tuple of ``(depth, DependencySpec)`` if depth is ``True``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;topo&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cover</span> <span class="o">==</span> <span class="s2">&quot;paths&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cover=paths not supported for order=topo&quot;</span><span class="p">)</span>
+        <span class="c1"># TODO: There is no known need for topological ordering of traversals (edge or node)</span>
+        <span class="c1"># with an initialized &quot;visited&quot; set. Revisit if needed.</span>
+        <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;visited set not implemented for order=topo&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">traverse_edges_topo</span><span class="p">(</span>
+            <span class="n">specs</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">all_edges</span><span class="o">=</span><span class="n">cover</span> <span class="o">==</span> <span class="s2">&quot;edges&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">root_edges</span> <span class="o">=</span> <span class="n">with_artificial_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">)</span>
+    <span class="n">visitor</span> <span class="o">=</span> <span class="n">get_visitor_from_args</span><span class="p">(</span><span class="n">cover</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+    <span class="c1"># Depth-first</span>
+    <span class="k">if</span> <span class="n">order</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pre&quot;</span><span class="p">,</span> <span class="s2">&quot;post&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">traverse_depth_first_edges_generator</span><span class="p">(</span>
+            <span class="n">root_edges</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">depth</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;breadth&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">traverse_breadth_first_edges_generator</span><span class="p">(</span><span class="n">root_edges</span><span class="p">,</span> <span class="n">visitor</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown order </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">order</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="traverse_nodes">
+<a class="viewcode-back" href="../../spack.html#spack.traverse.traverse_nodes">[文档]</a>
+<span class="k">def</span> <span class="nf">traverse_nodes</span><span class="p">(</span>
+    <span class="n">specs</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">order</span><span class="o">=</span><span class="s2">&quot;pre&quot;</span><span class="p">,</span>
+    <span class="n">cover</span><span class="o">=</span><span class="s2">&quot;nodes&quot;</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">,</span>
+    <span class="n">deptype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepTypes</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">depth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+    <span class="n">visited</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generator that yields specs from the DAG, starting from a list of root specs.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        specs (list): List of root specs (considered to be depth 0)</span>
+<span class="sd">        root (bool): Yield the root nodes themselves</span>
+<span class="sd">        order (str): What order of traversal to use in the DAG. For depth-first</span>
+<span class="sd">            search this can be ``pre`` or ``post``. For BFS this should be ``breadth``.</span>
+<span class="sd">        cover (str): Determines how extensively to cover the dag.  Possible values:</span>
+<span class="sd">            ``nodes`` -- Visit each unique node in the dag only once.</span>
+<span class="sd">            ``edges`` -- If a node has been visited once but is reached along a</span>
+<span class="sd">            new path, it&#39;s accepted, but not recurisvely followed. This traverses</span>
+<span class="sd">            each &#39;edge&#39; in the DAG once.</span>
+<span class="sd">            ``paths`` -- Explore every unique path reachable from the root.</span>
+<span class="sd">            This descends into visited subtrees and will accept nodes multiple</span>
+<span class="sd">            times if they&#39;re reachable by multiple paths.</span>
+<span class="sd">        direction (str): ``children`` or ``parents``. If ``children``, does a traversal</span>
+<span class="sd">            of this spec&#39;s children.  If ``parents``, traverses upwards in the DAG</span>
+<span class="sd">            towards the root.</span>
+<span class="sd">        deptype: allowed dependency types</span>
+<span class="sd">        depth (bool): When ``False``, yield just edges. When ``True`` yield</span>
+<span class="sd">            the tuple ``(depth, edge)``, where depth corresponds to the depth</span>
+<span class="sd">            at which ``edge.spec`` was discovered.</span>
+<span class="sd">        key: function that takes a spec and outputs a key for uniqueness test.</span>
+<span class="sd">        visited (set or None): a set of nodes not to follow</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        By default :class:`~spack.spec.Spec`, or a tuple ``(depth, Spec)`` if depth is</span>
+<span class="sd">        set to ``True``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">traverse_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">cover</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">deptype</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">visited</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span> <span class="k">if</span> <span class="n">depth</span> <span class="k">else</span> <span class="n">item</span><span class="o">.</span><span class="n">spec</span></div>
+
+
+
+<div class="viewcode-block" id="traverse_tree">
+<a class="viewcode-back" href="../../spack.html#spack.traverse.traverse_tree">[文档]</a>
+<span class="k">def</span> <span class="nf">traverse_tree</span><span class="p">(</span>
+    <span class="n">specs</span><span class="p">,</span> <span class="n">cover</span><span class="o">=</span><span class="s2">&quot;nodes&quot;</span><span class="p">,</span> <span class="n">deptype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">dt</span><span class="o">.</span><span class="n">DepFlag</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">DepTypes</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">depth_first</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generator that yields ``(depth, DependencySpec)`` tuples in the depth-first</span>
+<span class="sd">    pre-order, so that a tree can be printed from it.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">        specs (list): List of root specs (considered to be depth 0)</span>
+<span class="sd">        cover (str): Determines how extensively to cover the dag.  Possible values:</span>
+<span class="sd">            ``nodes`` -- Visit each unique node in the dag only once.</span>
+<span class="sd">            ``edges`` -- If a node has been visited once but is reached along a</span>
+<span class="sd">            new path, it&#39;s accepted, but not recurisvely followed. This traverses</span>
+<span class="sd">            each &#39;edge&#39; in the DAG once.</span>
+<span class="sd">            ``paths`` -- Explore every unique path reachable from the root.</span>
+<span class="sd">            This descends into visited subtrees and will accept nodes multiple</span>
+<span class="sd">            times if they&#39;re reachable by multiple paths.</span>
+<span class="sd">        deptype: allowed dependency types</span>
+<span class="sd">        key: function that takes a spec and outputs a key for uniqueness test.</span>
+<span class="sd">        depth_first (bool): Explore the tree in depth-first or breadth-first order.</span>
+<span class="sd">            When setting ``depth_first=True`` and ``cover=nodes``, each spec only</span>
+<span class="sd">            occurs once at the shallowest level, which is useful when rendering</span>
+<span class="sd">            the tree in a terminal.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A generator that yields ``(depth, DependencySpec)`` tuples in such an order</span>
+<span class="sd">        that a tree can be printed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># BFS only makes sense when going over edges and nodes, for paths the tree is</span>
+    <span class="c1"># identical to DFS, which is much more efficient then.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">depth_first</span> <span class="ow">and</span> <span class="n">cover</span> <span class="o">==</span> <span class="s2">&quot;edges&quot;</span><span class="p">:</span>
+        <span class="n">edges</span><span class="p">,</span> <span class="n">parents</span> <span class="o">=</span> <span class="n">breadth_first_to_tree_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">traverse_breadth_first_tree_edges</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">parents</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">depth_first</span> <span class="ow">and</span> <span class="n">cover</span> <span class="o">==</span> <span class="s2">&quot;nodes&quot;</span><span class="p">:</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">breadth_first_to_tree_nodes</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">traverse_breadth_first_tree_nodes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">traverse_edges</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;pre&quot;</span><span class="p">,</span> <span class="n">cover</span><span class="o">=</span><span class="n">cover</span><span class="p">,</span> <span class="n">deptype</span><span class="o">=</span><span class="n">deptype</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">by_dag_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="s2">&quot;spack.spec.Spec&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Used very often as a key function for traversals.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">dag_hash</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2013-2023, Lawrence Livermore National Laboratory.。
+      <span class="lastupdated">最后更新于 5月 25, 2026.
+      </span></p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

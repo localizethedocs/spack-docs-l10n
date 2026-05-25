@@ -1,0 +1,1220 @@
+<!doctype html>
+<html class="no-js" lang="en-US" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/util/elf.html">
+        <link rel="prefetch" href="../../../_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="../../../_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>spack.util.elf - Spack 1.2.0.dev0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Spack 1.2.0.dev0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="../../../_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="../../../_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">Installing Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for spack.util.elf</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright Spack Project Developers. See COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+
+<span class="kn">import</span> <span class="nn">bisect</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">calcsize</span><span class="p">,</span> <span class="n">unpack</span><span class="p">,</span> <span class="n">unpack_from</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Pattern</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="ElfHeader">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ElfHeader">[docs]</a>
+<span class="k">class</span> <span class="nc">ElfHeader</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">e_type</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_machine</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_version</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_entry</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_phoff</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_shoff</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_flags</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_ehsize</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_phentsize</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_phnum</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_shentsize</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_shnum</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">e_shstrndx</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="SectionHeader">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.SectionHeader">[docs]</a>
+<span class="k">class</span> <span class="nc">SectionHeader</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">sh_name</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_type</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_flags</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_addr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_size</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_link</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_info</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_addralign</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sh_entsize</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="ProgramHeader32">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ProgramHeader32">[docs]</a>
+<span class="k">class</span> <span class="nc">ProgramHeader32</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">p_type</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_vaddr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_paddr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_filesz</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_memsz</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_flags</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_align</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="ProgramHeader64">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ProgramHeader64">[docs]</a>
+<span class="k">class</span> <span class="nc">ProgramHeader64</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">p_type</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_flags</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_vaddr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_paddr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_filesz</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_memsz</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">p_align</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="ELF_CONSTANTS">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ELF_CONSTANTS">[docs]</a>
+<span class="k">class</span> <span class="nc">ELF_CONSTANTS</span><span class="p">:</span>
+    <span class="n">MAGIC</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x7f</span><span class="s2">ELF&quot;</span>
+    <span class="n">CLASS32</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">CLASS64</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">DATA2LSB</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">DATA2MSB</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">ET_EXEC</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">ET_DYN</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">PT_LOAD</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">PT_DYNAMIC</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">PT_INTERP</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">DT_NULL</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">DT_NEEDED</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">DT_STRTAB</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">DT_SONAME</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">DT_RPATH</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">DT_RUNPATH</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">SHT_STRTAB</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+
+
+<div class="viewcode-block" id="ElfFile">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ElfFile">[docs]</a>
+<span class="k">class</span> <span class="nc">ElfFile</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parsed ELF file.&quot;&quot;&quot;</span>
+
+    <span class="n">is_64_bit</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">is_little_endian</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">byte_order</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">elf_hdr</span><span class="p">:</span> <span class="n">ElfHeader</span>
+    <span class="n">pt_load</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+    <span class="n">has_pt_interp</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">pt_interp_p_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pt_interp_p_filesz</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pt_interp_str</span><span class="p">:</span> <span class="nb">bytes</span>
+    <span class="n">has_pt_dynamic</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">pt_dynamic_p_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pt_dynamic_p_filesz</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pt_dynamic_strtab_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">has_rpath</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">dt_rpath_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">dt_rpath_str</span><span class="p">:</span> <span class="nb">bytes</span>
+    <span class="n">rpath_strtab_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">is_runpath</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">has_needed</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">dt_needed_strtab_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">dt_needed_strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]</span>
+    <span class="n">has_soname</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">dt_soname_strtab_offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">dt_soname_str</span><span class="p">:</span> <span class="nb">bytes</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;is_64_bit&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;is_little_endian&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;byte_order&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elf_hdr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_load&quot;</span><span class="p">,</span>
+        <span class="c1"># pt_interp</span>
+        <span class="s2">&quot;has_pt_interp&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_interp_p_offset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_interp_p_filesz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_interp_str&quot;</span><span class="p">,</span>
+        <span class="c1"># pt_dynamic</span>
+        <span class="s2">&quot;has_pt_dynamic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_dynamic_p_offset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_dynamic_p_filesz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pt_dynamic_strtab_offset&quot;</span><span class="p">,</span>  <span class="c1"># string table for dynamic section</span>
+        <span class="c1"># rpath</span>
+        <span class="s2">&quot;has_rpath&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dt_rpath_offset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dt_rpath_str&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rpath_strtab_offset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;is_runpath&quot;</span><span class="p">,</span>
+        <span class="c1"># dt needed</span>
+        <span class="s2">&quot;has_needed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dt_needed_strtab_offsets&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dt_needed_strs&quot;</span><span class="p">,</span>
+        <span class="c1"># dt soname</span>
+        <span class="s2">&quot;has_soname&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dt_soname_strtab_offset&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dt_soname_str&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_needed_strtab_offsets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_soname</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_rpath</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_needed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt_load</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_pt_dynamic</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_pt_interp</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="parse_c_string">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.parse_c_string">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_c_string</span><span class="p">(</span><span class="n">byte_string</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve a C-string at a given offset in a byte string</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        byte_string: String</span>
+<span class="sd">        start: Offset into the string</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: A copy of the C-string excluding the terminating null byte</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">str_end</span> <span class="o">=</span> <span class="n">byte_string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\0</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">str_end</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;C-string is not null terminated&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">byte_string</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">str_end</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="read_exactly">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.read_exactly">[docs]</a>
+<span class="k">def</span> <span class="nf">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">num_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read exactly num_bytes at the current offset, otherwise raise</span>
+<span class="sd">    a parsing error with the given error message.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        f: file handle</span>
+<span class="sd">        num_bytes: Number of bytes to read</span>
+<span class="sd">        msg: Error to show when bytes cannot be read</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: the ``num_bytes`` bytes that were read.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">num_bytes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_bytes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="parse_program_headers">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.parse_program_headers">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_program_headers</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse program headers</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        f: file handle</span>
+<span class="sd">        elf: ELF file parser data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Forward to the program header</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span><span class="o">.</span><span class="n">e_phoff</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not seek to program header&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Here we have to make a mapping from virtual address to offset in the file.</span>
+    <span class="n">ph_fmt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">byte_order</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;LLQQQQQQ&quot;</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="k">else</span> <span class="s2">&quot;LLLLLLLL&quot;</span><span class="p">)</span>
+    <span class="n">ph_size</span> <span class="o">=</span> <span class="n">calcsize</span><span class="p">(</span><span class="n">ph_fmt</span><span class="p">)</span>
+    <span class="n">ph_num</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span><span class="o">.</span><span class="n">e_phnum</span>
+
+    <span class="c1"># Read all program headers in one go</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ph_num</span> <span class="o">*</span> <span class="n">ph_size</span><span class="p">,</span> <span class="s2">&quot;Malformed program header&quot;</span><span class="p">)</span>
+
+    <span class="n">ProgramHeader</span> <span class="o">=</span> <span class="n">ProgramHeader64</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="k">else</span> <span class="n">ProgramHeader32</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ph_num</span><span class="p">):</span>
+        <span class="c1"># mypy currently does not understand the union of two named tuples with equal fields</span>
+        <span class="n">ph</span> <span class="o">=</span> <span class="n">ProgramHeader</span><span class="p">(</span><span class="o">*</span><span class="n">unpack_from</span><span class="p">(</span><span class="n">ph_fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="n">ph_size</span><span class="p">))</span>
+
+        <span class="c1"># Skip segments of size 0; we don&#39;t distinguish between missing segment and</span>
+        <span class="c1"># empty segments. I&#39;ve see an empty PT_DYNAMIC section for an ELF file that</span>
+        <span class="c1"># contained debug data.</span>
+        <span class="k">if</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_filesz</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># For PT_LOAD entries: Save offsets and virtual addrs of the loaded ELF segments</span>
+        <span class="c1"># This way we can map offsets by virtual address to offsets in the file.</span>
+        <span class="k">if</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_type</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">PT_LOAD</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">pt_load</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ph</span><span class="o">.</span><span class="n">p_offset</span><span class="p">,</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_vaddr</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">elif</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_type</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">PT_INTERP</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_p_offset</span> <span class="o">=</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_offset</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_p_filesz</span> <span class="o">=</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_filesz</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_interp</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">elif</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_type</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">PT_DYNAMIC</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_offset</span> <span class="o">=</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_offset</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_filesz</span> <span class="o">=</span> <span class="n">ph</span><span class="o">.</span><span class="n">p_filesz</span>  <span class="c1"># type: ignore</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_dynamic</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># The linker sorts PT_LOAD segments by vaddr, but let&#39;s do it just to be sure, since</span>
+    <span class="c1"># patchelf for example has a flag to leave them in an arbitrary order.</span>
+    <span class="n">elf</span><span class="o">.</span><span class="n">pt_load</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="parse_pt_interp">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.parse_pt_interp">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_pt_interp</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse the interpreter (i.e. absolute path to the dynamic linker)</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        f: file handle</span>
+<span class="sd">        elf: ELF file parser data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_p_offset</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not seek to PT_INTERP entry&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_p_filesz</span><span class="p">,</span> <span class="s2">&quot;Malformed PT_INTERP entry&quot;</span><span class="p">)</span>
+    <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_str</span> <span class="o">=</span> <span class="n">parse_c_string</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find_strtab_size_at_offset">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.find_strtab_size_at_offset">[docs]</a>
+<span class="k">def</span> <span class="nf">find_strtab_size_at_offset</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve the size of a string table section at a particular known offset</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        f: file handle</span>
+<span class="sd">        elf: ELF file parser data</span>
+<span class="sd">        offset: offset of the section in the file (i.e. ``sh_offset``)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: the size of the string table in bytes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">section_hdr_fmt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">byte_order</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;LLQQQQLLQQ&quot;</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="k">else</span> <span class="s2">&quot;LLLLLLLLLL&quot;</span><span class="p">)</span>
+    <span class="n">section_hdr_size</span> <span class="o">=</span> <span class="n">calcsize</span><span class="p">(</span><span class="n">section_hdr_fmt</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span><span class="o">.</span><span class="n">e_shoff</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not seek to section header table&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span><span class="o">.</span><span class="n">e_shnum</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">section_hdr_size</span><span class="p">,</span> <span class="s2">&quot;Malformed section header&quot;</span><span class="p">)</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="n">SectionHeader</span><span class="p">(</span><span class="o">*</span><span class="n">unpack</span><span class="p">(</span><span class="n">section_hdr_fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">sh</span><span class="o">.</span><span class="n">sh_type</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">SHT_STRTAB</span> <span class="ow">and</span> <span class="n">sh</span><span class="o">.</span><span class="n">sh_offset</span> <span class="o">==</span> <span class="n">offset</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sh</span><span class="o">.</span><span class="n">sh_size</span>
+
+    <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not determine strtab size&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="retrieve_strtab">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.retrieve_strtab">[docs]</a>
+<span class="k">def</span> <span class="nf">retrieve_strtab</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read a full string table at the given offset, which</span>
+<span class="sd">    requires looking it up in the section headers.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        elf: ELF file parser data</span>
+<span class="sd">        vaddr: virtual address</span>
+
+<span class="sd">    Returns: file offset</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">find_strtab_size_at_offset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not seek to string table&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="s2">&quot;Could not read string table&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="vaddr_to_offset">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.vaddr_to_offset">[docs]</a>
+<span class="k">def</span> <span class="nf">vaddr_to_offset</span><span class="p">(</span><span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">vaddr</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a virtual address, find the corresponding offset in the ELF file itself.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        elf: ELF file parser data</span>
+<span class="sd">        vaddr: virtual address</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">bisect</span><span class="o">.</span><span class="n">bisect_right</span><span class="p">([</span><span class="n">p_vaddr</span> <span class="k">for</span> <span class="p">(</span><span class="n">p_offset</span><span class="p">,</span> <span class="n">p_vaddr</span><span class="p">)</span> <span class="ow">in</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_load</span><span class="p">],</span> <span class="n">vaddr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">p_offset</span><span class="p">,</span> <span class="n">p_vaddr</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_load</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">p_offset</span> <span class="o">-</span> <span class="n">p_vaddr</span> <span class="o">+</span> <span class="n">vaddr</span></div>
+
+
+
+<div class="viewcode-block" id="parse_pt_dynamic">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.parse_pt_dynamic">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_pt_dynamic</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse the dynamic section of an ELF file</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        f: file handle</span>
+<span class="sd">        elf: ELF file parse data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dynamic_array_fmt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">byte_order</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;qQ&quot;</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="k">else</span> <span class="s2">&quot;lL&quot;</span><span class="p">)</span>
+    <span class="n">dynamic_array_size</span> <span class="o">=</span> <span class="n">calcsize</span><span class="p">(</span><span class="n">dynamic_array_fmt</span><span class="p">)</span>
+
+    <span class="n">current_offset</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_offset</span>
+    <span class="n">count_rpath</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">count_runpath</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">count_strtab</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_offset</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not seek to PT_DYNAMIC entry&quot;</span><span class="p">)</span>
+
+    <span class="c1"># In case of broken ELF files, don&#39;t read beyond the advertised size.</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_filesz</span> <span class="o">//</span> <span class="n">dynamic_array_size</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dynamic_array_size</span><span class="p">,</span> <span class="s2">&quot;Malformed dynamic array entry&quot;</span><span class="p">)</span>
+        <span class="n">tag</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="n">dynamic_array_fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_NULL</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_RPATH</span><span class="p">:</span>
+            <span class="n">count_rpath</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">rpath_strtab_offset</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_offset</span> <span class="o">=</span> <span class="n">current_offset</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">is_runpath</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_RUNPATH</span><span class="p">:</span>
+            <span class="n">count_runpath</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">rpath_strtab_offset</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_offset</span> <span class="o">=</span> <span class="n">current_offset</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">is_runpath</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_STRTAB</span><span class="p">:</span>
+            <span class="n">count_strtab</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">strtab_vaddr</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_NEEDED</span><span class="p">:</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">has_needed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">dt_needed_strtab_offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_SONAME</span><span class="p">:</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">has_soname</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">elf</span><span class="o">.</span><span class="n">dt_soname_strtab_offset</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="n">current_offset</span> <span class="o">+=</span> <span class="n">dynamic_array_size</span>
+
+    <span class="c1"># No rpath/runpath, that happens.</span>
+    <span class="k">if</span> <span class="n">count_rpath</span> <span class="o">==</span> <span class="n">count_runpath</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">elif</span> <span class="n">count_rpath</span> <span class="o">+</span> <span class="n">count_runpath</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not find a unique rpath/runpath.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">count_strtab</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not find a unique strtab of for the dynamic section strings&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Nothing to retrieve, so don&#39;t bother getting the string table.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span> <span class="ow">or</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_soname</span> <span class="ow">or</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_needed</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_strtab_offset</span> <span class="o">=</span> <span class="n">vaddr_to_offset</span><span class="p">(</span><span class="n">elf</span><span class="p">,</span> <span class="n">strtab_vaddr</span><span class="p">)</span>
+    <span class="n">string_table</span> <span class="o">=</span> <span class="n">retrieve_strtab</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_strtab_offset</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_needed</span><span class="p">:</span>
+        <span class="n">elf</span><span class="o">.</span><span class="n">dt_needed_strs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">parse_c_string</span><span class="p">(</span><span class="n">string_table</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span> <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">elf</span><span class="o">.</span><span class="n">dt_needed_strtab_offsets</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_soname</span><span class="p">:</span>
+        <span class="n">elf</span><span class="o">.</span><span class="n">dt_soname_str</span> <span class="o">=</span> <span class="n">parse_c_string</span><span class="p">(</span><span class="n">string_table</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">dt_soname_strtab_offset</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span><span class="p">:</span>
+        <span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_str</span> <span class="o">=</span> <span class="n">parse_c_string</span><span class="p">(</span><span class="n">string_table</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">rpath_strtab_offset</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="parse_header">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.parse_header">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Read the 32/64 bit class independent part of the header and validate</span>
+    <span class="n">e_ident</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="c1"># Require ELF magic bytes.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e_ident</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">16</span> <span class="ow">or</span> <span class="n">e_ident</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">MAGIC</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Not an ELF file&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Defensively require a valid class and data.</span>
+    <span class="n">e_ident_class</span><span class="p">,</span> <span class="n">e_ident_data</span> <span class="o">=</span> <span class="n">e_ident</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">e_ident</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">e_ident_class</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">CLASS32</span><span class="p">,</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">CLASS64</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Invalid class found&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">e_ident_data</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DATA2LSB</span><span class="p">,</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DATA2MSB</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Invalid data type&quot;</span><span class="p">)</span>
+
+    <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="o">=</span> <span class="n">e_ident_class</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">CLASS64</span>
+    <span class="n">elf</span><span class="o">.</span><span class="n">is_little_endian</span> <span class="o">=</span> <span class="n">e_ident_data</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DATA2LSB</span>
+
+    <span class="c1"># Set up byte order and types for unpacking</span>
+    <span class="n">elf</span><span class="o">.</span><span class="n">byte_order</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_little_endian</span> <span class="k">else</span> <span class="s2">&quot;&gt;&quot;</span>
+
+    <span class="c1"># Parse the rest of the header</span>
+    <span class="n">elf_header_fmt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">byte_order</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;HHLQQQLHHHHHH&quot;</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="k">else</span> <span class="s2">&quot;HHLLLLLHHHHHH&quot;</span><span class="p">)</span>
+    <span class="n">hdr_size</span> <span class="o">=</span> <span class="n">calcsize</span><span class="p">(</span><span class="n">elf_header_fmt</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">hdr_size</span><span class="p">,</span> <span class="s2">&quot;ELF header malformed&quot;</span><span class="p">)</span>
+    <span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span> <span class="o">=</span> <span class="n">ElfHeader</span><span class="p">(</span><span class="o">*</span><span class="n">unpack</span><span class="p">(</span><span class="n">elf_header_fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_do_parse_elf</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dynamic_section</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">only_header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ElfFile</span><span class="p">:</span>
+    <span class="c1"># We don&#39;t (yet?) allow parsing ELF files at a nonzero offset, we just</span>
+    <span class="c1"># jump to absolute offsets as they are specified in the ELF file.</span>
+    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Cannot parse at a nonzero offset&quot;</span><span class="p">)</span>
+
+    <span class="n">elf</span> <span class="o">=</span> <span class="n">ElfFile</span><span class="p">()</span>
+    <span class="n">parse_header</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">only_header</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">elf</span>
+
+    <span class="c1"># We don&#39;t handle anything but executables and shared libraries now.</span>
+    <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span><span class="o">.</span><span class="n">e_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">ET_EXEC</span><span class="p">,</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">ET_DYN</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Not an ET_DYN or ET_EXEC type&quot;</span><span class="p">)</span>
+
+    <span class="n">parse_program_headers</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">)</span>
+
+    <span class="c1"># Parse PT_INTERP section</span>
+    <span class="k">if</span> <span class="n">interpreter</span> <span class="ow">and</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_interp</span><span class="p">:</span>
+        <span class="n">parse_pt_interp</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">)</span>
+
+    <span class="c1"># Parse PT_DYNAMIC section.</span>
+    <span class="k">if</span> <span class="n">dynamic_section</span> <span class="ow">and</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_dynamic</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_load</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">parse_pt_dynamic</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">elf</span>
+
+
+<div class="viewcode-block" id="parse_elf">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.parse_elf">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_elf</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span>
+    <span class="n">interpreter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">dynamic_section</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">only_header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ElfFile</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Given a file handle ``f`` for an ELF file opened in binary mode, return an</span>
+<span class="sd">    :class:`~spack.util.elf.ElfFile` object with the parsed contents.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_do_parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">dynamic_section</span><span class="p">,</span> <span class="n">only_header</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+        <span class="c1"># According to the docs old versions of Python can throw DeprecationWarning</span>
+        <span class="c1"># instead of struct.error.</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Malformed ELF file&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_rpaths">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.get_rpaths">[docs]</a>
+<span class="k">def</span> <span class="nf">get_rpaths</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Returns list of rpaths of the given file as UTF-8 strings, or None if not set.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">elf</span> <span class="o">=</span> <span class="n">parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dynamic_section</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_str</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">except</span> <span class="n">ElfParsingError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_interpreter">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.get_interpreter">[docs]</a>
+<span class="k">def</span> <span class="nf">get_interpreter</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Returns the interpreter of the given file as UTF-8 string, or None if not set.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">elf</span> <span class="o">=</span> <span class="n">parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dynamic_section</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_str</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_interp</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">except</span> <span class="n">ElfParsingError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_delete_dynamic_array_entry</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">should_delete</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_offset</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ElfParsingError</span><span class="p">(</span><span class="s2">&quot;Could not seek to PT_DYNAMIC entry&quot;</span><span class="p">)</span>
+    <span class="n">dynamic_array_fmt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">byte_order</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;qQ&quot;</span> <span class="k">if</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span> <span class="k">else</span> <span class="s2">&quot;lL&quot;</span><span class="p">)</span>
+    <span class="n">dynamic_array_size</span> <span class="o">=</span> <span class="n">calcsize</span><span class="p">(</span><span class="n">dynamic_array_fmt</span><span class="p">)</span>
+    <span class="n">new_offset</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_offset</span>  <span class="c1"># points to the new dynamic array</span>
+    <span class="n">old_offset</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_offset</span>  <span class="c1"># points to the current dynamic array</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_p_filesz</span> <span class="o">//</span> <span class="n">dynamic_array_size</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">read_exactly</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dynamic_array_size</span><span class="p">,</span> <span class="s2">&quot;Malformed dynamic array entry&quot;</span><span class="p">)</span>
+        <span class="n">tag</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="n">dynamic_array_fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_NULL</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">should_delete</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">new_offset</span> <span class="o">!=</span> <span class="n">old_offset</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">new_offset</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">old_offset</span> <span class="o">+</span> <span class="n">dynamic_array_size</span><span class="p">)</span>
+            <span class="n">new_offset</span> <span class="o">+=</span> <span class="n">dynamic_array_size</span>
+
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_NULL</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="n">old_offset</span> <span class="o">+=</span> <span class="n">dynamic_array_size</span>
+
+
+<div class="viewcode-block" id="delete_rpath">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.delete_rpath">[docs]</a>
+<span class="k">def</span> <span class="nf">delete_rpath</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Modifies a binary to remove the rpath. It zeros out the rpath string and also drops the</span>
+<span class="sd">    ``DT_RPATH`` / ``DT_RUNPATH`` entry from the dynamic section, so it doesn&#39;t show up in</span>
+<span class="sd">    ``readelf -d file``, nor in ``strings file``.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">elf</span> <span class="o">=</span> <span class="n">parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dynamic_section</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Zero out the rpath *string* in the binary</span>
+        <span class="n">new_rpath_string</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_str</span><span class="p">)</span>
+        <span class="n">rpath_offset</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_strtab_offset</span> <span class="o">+</span> <span class="n">elf</span><span class="o">.</span><span class="n">rpath_strtab_offset</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">rpath_offset</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_rpath_string</span><span class="p">)</span>
+
+        <span class="c1"># Delete DT_RPATH / DT_RUNPATH entries from the dynamic section</span>
+        <span class="n">_delete_dynamic_array_entry</span><span class="p">(</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">tag</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_RPATH</span> <span class="ow">or</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_RUNPATH</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_needed_from_elf">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.delete_needed_from_elf">[docs]</a>
+<span class="k">def</span> <span class="nf">delete_needed_from_elf</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">needed</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Delete a needed library from the dynamic section of an ELF file&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_needed</span> <span class="ow">or</span> <span class="n">needed</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">elf</span><span class="o">.</span><span class="n">dt_needed_strs</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">dt_needed_strtab_offsets</span><span class="p">[</span><span class="n">elf</span><span class="o">.</span><span class="n">dt_needed_strs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">needed</span><span class="p">)]</span>
+
+    <span class="n">_delete_dynamic_array_entry</span><span class="p">(</span>
+        <span class="n">f</span><span class="p">,</span> <span class="n">elf</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">tag</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">ELF_CONSTANTS</span><span class="o">.</span><span class="n">DT_NEEDED</span> <span class="ow">and</span> <span class="n">val</span> <span class="o">==</span> <span class="n">offset</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CStringType">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.CStringType">[docs]</a>
+<span class="k">class</span> <span class="nc">CStringType</span><span class="p">:</span>
+    <span class="n">PT_INTERP</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">RPATH</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+
+<div class="viewcode-block" id="UpdateCStringAction">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.UpdateCStringAction">[docs]</a>
+<span class="k">class</span> <span class="nc">UpdateCStringAction</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_value</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">new_value</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_value</span> <span class="o">=</span> <span class="n">old_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span> <span class="o">=</span> <span class="n">new_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UpdateCStringAction.apply">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.UpdateCStringAction.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span>
+
+        <span class="c1"># We zero out the bits we shortened because (a) it should be a</span>
+        <span class="c1"># C-string and (b) it&#39;s nice not to have spurious parts of old</span>
+        <span class="c1"># paths in the output of `strings file`. Note that we&#39;re all</span>
+        <span class="c1"># good when pad == 0; the original terminating null is used.</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_value</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)))</span></div>
+</div>
+
+
+
+<span class="k">def</span> <span class="nf">_get_rpath_substitution</span><span class="p">(</span>
+    <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">regex</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UpdateCStringAction</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Make rpath substitutions in-place.&quot;&quot;&quot;</span>
+    <span class="c1"># If there&#39;s no RPATH, then there&#39;s no need to replace anything.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_rpath</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Get the non-empty rpaths. Sometimes there&#39;s a bunch of trailing</span>
+    <span class="c1"># colons ::::: used for padding, we don&#39;t add them back to make it</span>
+    <span class="c1"># more likely that the string doesn&#39;t grow.</span>
+    <span class="n">rpaths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span>
+
+    <span class="n">num_rpaths</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rpaths</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_rpaths</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rpaths</span><span class="p">):</span>
+        <span class="n">old_rpath</span> <span class="o">=</span> <span class="n">rpaths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">old_rpath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">rpaths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">substitutions</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">()]</span> <span class="o">+</span> <span class="n">old_rpath</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="p">:]</span>
+
+    <span class="c1"># Nothing to replace!</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">changed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">UpdateCStringAction</span><span class="p">(</span>
+        <span class="n">old_value</span><span class="o">=</span><span class="n">elf</span><span class="o">.</span><span class="n">dt_rpath_str</span><span class="p">,</span>
+        <span class="n">new_value</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rpaths</span><span class="p">),</span>
+        <span class="c1"># The rpath is at a given offset in the string table used by the dynamic section.</span>
+        <span class="n">offset</span><span class="o">=</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_dynamic_strtab_offset</span> <span class="o">+</span> <span class="n">elf</span><span class="o">.</span><span class="n">rpath_strtab_offset</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_pt_interp_substitution</span><span class="p">(</span>
+    <span class="n">elf</span><span class="p">:</span> <span class="n">ElfFile</span><span class="p">,</span> <span class="n">regex</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UpdateCStringAction</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Make interpreter substitutions in-place.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_interp</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">match</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">UpdateCStringAction</span><span class="p">(</span>
+        <span class="n">old_value</span><span class="o">=</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_str</span><span class="p">,</span>
+        <span class="n">new_value</span><span class="o">=</span><span class="n">substitutions</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">()]</span> <span class="o">+</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="p">:],</span>
+        <span class="n">offset</span><span class="o">=</span><span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_p_offset</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="substitute_rpath_and_pt_interp_in_place_or_raise">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.substitute_rpath_and_pt_interp_in_place_or_raise">[docs]</a>
+<span class="k">def</span> <span class="nf">substitute_rpath_and_pt_interp_in_place_or_raise</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns true if the rpath and interpreter were modified, false if there was nothing to do.</span>
+<span class="sd">    Raises ElfCStringUpdatesFailed if the ELF file cannot be updated in-place. This exception</span>
+<span class="sd">    contains a list of actions to perform with other tools. The file is left untouched in this</span>
+<span class="sd">    case.&quot;&quot;&quot;</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">substitutions</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">elf</span> <span class="o">=</span> <span class="n">parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dynamic_section</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Get the actions to perform.</span>
+            <span class="n">rpath</span> <span class="o">=</span> <span class="n">_get_rpath_substitution</span><span class="p">(</span><span class="n">elf</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">)</span>
+            <span class="n">pt_interp</span> <span class="o">=</span> <span class="n">_get_pt_interp_substitution</span><span class="p">(</span><span class="n">elf</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">)</span>
+
+            <span class="c1"># Nothing to do.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rpath</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pt_interp</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># If we can&#39;t update in-place, leave it to other tools, don&#39;t do partial updates.</span>
+            <span class="k">if</span> <span class="n">rpath</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rpath</span><span class="o">.</span><span class="n">inplace</span> <span class="ow">or</span> <span class="n">pt_interp</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pt_interp</span><span class="o">.</span><span class="n">inplace</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ElfCStringUpdatesFailed</span><span class="p">(</span><span class="n">rpath</span><span class="p">,</span> <span class="n">pt_interp</span><span class="p">)</span>
+
+            <span class="c1"># Otherwise, apply the updates.</span>
+            <span class="k">if</span> <span class="n">rpath</span><span class="p">:</span>
+                <span class="n">rpath</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">pt_interp</span><span class="p">:</span>
+                <span class="n">pt_interp</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">except</span> <span class="n">ElfParsingError</span><span class="p">:</span>
+        <span class="c1"># This just means the file wasn&#39;t an elf file, so there&#39;s no point</span>
+        <span class="c1"># in updating its rpath anyways; ignore this problem.</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="pt_interp">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.pt_interp">[docs]</a>
+<span class="k">def</span> <span class="nf">pt_interp</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve the interpreter of an executable at ``path``.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">elf</span> <span class="o">=</span> <span class="n">parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">ElfParsingError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elf</span><span class="o">.</span><span class="n">has_pt_interp</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">elf</span><span class="o">.</span><span class="n">pt_interp_str</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_elf_compat">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.get_elf_compat">[docs]</a>
+<span class="k">def</span> <span class="nf">get_elf_compat</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Get a triplet (is_64_bit, is_little_endian, e_machine) from an ELF file, which can be used</span>
+<span class="sd">    to see if two ELF files are compatible.&quot;&quot;&quot;</span>
+    <span class="c1"># On ELF platforms supporting, we try to be a bit smarter when it comes to shared</span>
+    <span class="c1"># libraries, by dropping those that are not host compatible.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">elf</span> <span class="o">=</span> <span class="n">parse_elf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">only_header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">elf</span><span class="o">.</span><span class="n">is_64_bit</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">is_little_endian</span><span class="p">,</span> <span class="n">elf</span><span class="o">.</span><span class="n">elf_hdr</span><span class="o">.</span><span class="n">e_machine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ElfCStringUpdatesFailed">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ElfCStringUpdatesFailed">[docs]</a>
+<span class="k">class</span> <span class="nc">ElfCStringUpdatesFailed</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">rpath</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UpdateCStringAction</span><span class="p">],</span> <span class="n">pt_interp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UpdateCStringAction</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rpath</span> <span class="o">=</span> <span class="n">rpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt_interp</span> <span class="o">=</span> <span class="n">pt_interp</span></div>
+
+
+
+<div class="viewcode-block" id="ElfParsingError">
+<a class="viewcode-back" href="../../../spack.util.html#spack.util.elf.ElfParsingError">[docs]</a>
+<span class="k">class</span> <span class="nc">ElfParsingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=1e8e702b"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
+    </body>
+</html>

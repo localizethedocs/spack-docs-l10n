@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spack.reporters.extract &mdash; Spack 0.23.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5f00b823" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/_modules/spack/reporters/extract.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=db69ce2c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="../../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../../ltd-flyout.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/spack-logo-white-text.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../replace_conda_homebrew.html">Spack for Homebrew/Conda Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../frequently_asked_questions.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packaging_guide.html">Packaging Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_systems.html">Build Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer_guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../spack.html">Spack API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../llnl.html">LLNL API Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Spack</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../spack.html">spack</a></li>
+      <li class="breadcrumb-item active">spack.reporters.extract</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spack.reporters.extract</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2024 Lawrence Livermore National Security, LLC and other</span>
+<span class="c1"># Spack Project Developers. See the top-level COPYRIGHT file for details.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: (Apache-2.0 OR MIT)</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">xml.sax.saxutils</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">llnl.util.tty</span> <span class="k">as</span> <span class="nn">tty</span>
+
+<span class="kn">from</span> <span class="nn">spack.install_test</span> <span class="kn">import</span> <span class="n">TestStatus</span>
+
+<span class="c1"># The keys here represent the only recognized (ctest/cdash) status values</span>
+<span class="n">completed</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;failed&quot;</span><span class="p">:</span> <span class="s2">&quot;Completed&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;passed&quot;</span><span class="p">:</span> <span class="s2">&quot;Completed&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;skipped&quot;</span><span class="p">:</span> <span class="s2">&quot;Completed&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;notrun&quot;</span><span class="p">:</span> <span class="s2">&quot;No tests to run&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">log_regexp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^==&gt; \[([0-9:.\-]*)(?:, [0-9]*)?\] (.*)&quot;</span><span class="p">)</span>
+<span class="n">returns_regexp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[([0-9 ,]*)\]&quot;</span><span class="p">)</span>
+
+<span class="n">skip_msgs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Testing package&quot;</span><span class="p">,</span> <span class="s2">&quot;Results for&quot;</span><span class="p">,</span> <span class="s2">&quot;Detected the following&quot;</span><span class="p">,</span> <span class="s2">&quot;Warning:&quot;</span><span class="p">]</span>
+<span class="n">skip_regexps</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">skip_msgs</span><span class="p">]</span>
+
+<span class="n">status_regexps</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(</span><span class="si">{0}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stat</span><span class="p">)))</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">TestStatus</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="add_part_output">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.add_part_output">[docs]</a>
+<span class="k">def</span> <span class="nf">add_part_output</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">part</span><span class="p">:</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;loglines&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">sax</span><span class="o">.</span><span class="n">saxutils</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">line</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="elapsed">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.elapsed">[docs]</a>
+<span class="k">def</span> <span class="nf">elapsed</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">previous</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">current</span> <span class="ow">and</span> <span class="n">previous</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">current</span> <span class="o">-</span> <span class="n">previous</span>
+    <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;elapsed = </span><span class="si">%s</span><span class="s2"> - </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">diff</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">diff</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="new_part">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.new_part">[docs]</a>
+<span class="k">def</span> <span class="nf">new_part</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;elapsed&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;loglines&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="process_part_end">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.process_part_end">[docs]</a>
+<span class="k">def</span> <span class="nf">process_part_end</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">curr_time</span><span class="p">,</span> <span class="n">last_time</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">part</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">part</span><span class="p">[</span><span class="s2">&quot;elapsed&quot;</span><span class="p">]:</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;elapsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elapsed</span><span class="p">(</span><span class="n">curr_time</span><span class="p">,</span> <span class="n">last_time</span><span class="p">)</span>
+
+        <span class="n">stat</span> <span class="o">=</span> <span class="n">part</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">completed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">part</span><span class="p">[</span><span class="s2">&quot;completed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">:</span>
+                <span class="n">part</span><span class="p">[</span><span class="s2">&quot;completed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">completed</span><span class="p">[</span><span class="n">stat</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">stat</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">stat</span> <span class="o">==</span> <span class="s2">&quot;unknown&quot;</span><span class="p">:</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;passed&quot;</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">part</span><span class="p">[</span><span class="s2">&quot;loglines&quot;</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="timestamp">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.timestamp">[docs]</a>
+<span class="k">def</span> <span class="nf">timestamp</span><span class="p">(</span><span class="n">time_string</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">time_string</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">-%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="skip">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.skip">[docs]</a>
+<span class="k">def</span> <span class="nf">skip</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">skip_regexps</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span></div>
+
+
+
+<div class="viewcode-block" id="status">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.status">[docs]</a>
+<span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">status_regexps</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="s2">&quot;notrun&quot;</span> <span class="k">if</span> <span class="n">stat</span> <span class="o">==</span> <span class="s2">&quot;NO_TESTS&quot;</span> <span class="k">else</span> <span class="n">stat</span>
+            <span class="k">return</span> <span class="n">stat</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="extract_test_parts">
+<a class="viewcode-back" href="../../../spack.reporters.html#spack.reporters.extract.extract_test_parts">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_test_parts</span><span class="p">(</span><span class="n">default_name</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">part</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">last_time</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">curr_time</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">add_part_output</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">skip</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># The spec was explicitly reported as skipped (e.g., installation</span>
+        <span class="c1"># failed, package known to have failing tests, won&#39;t test external</span>
+        <span class="c1"># package).</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Skipped&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;package&quot;</span><span class="p">):</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="s2">&quot;skipped&quot;</span>
+            <span class="n">part</span> <span class="o">=</span> <span class="n">new_part</span><span class="p">()</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Not Applicable&quot;</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;completed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">completed</span><span class="p">[</span><span class="n">stat</span><span class="p">]</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;elapsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;loglines&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_name</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;notrun&quot;</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Process Spack log messages</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;==&gt;&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">log_regexp</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">curr_time</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+                <span class="c1"># Skip logged message for caching build-time data</span>
+                <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Installing&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Terminate without further parsing if no more test messages</span>
+                <span class="k">if</span> <span class="s2">&quot;Completed testing&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                    <span class="c1"># Process last lingering part IF it didn&#39;t generate status</span>
+                    <span class="n">process_part_end</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">curr_time</span><span class="p">,</span> <span class="n">last_time</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">parts</span>
+
+                <span class="c1"># New test parts start &quot;test: &lt;name&gt;: &lt;desc&gt;&quot;.</span>
+                <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;test: &quot;</span><span class="p">):</span>
+                    <span class="c1"># Update the last part processed</span>
+                    <span class="n">process_part_end</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">curr_time</span><span class="p">,</span> <span class="n">last_time</span><span class="p">)</span>
+
+                    <span class="n">part</span> <span class="o">=</span> <span class="n">new_part</span><span class="p">()</span>
+                    <span class="n">desc</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                    <span class="n">part</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">part</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+
+                <span class="c1"># There is no guarantee of a 1-to-1 mapping of a test part and</span>
+                <span class="c1"># a (single) command (or executable) since the introduction of</span>
+                <span class="c1"># PR 34236.</span>
+                <span class="c1">#</span>
+                <span class="c1"># Note that tests where the package does not save the output</span>
+                <span class="c1"># (e.g., output=str.split, error=str.split) will not have</span>
+                <span class="c1"># a command printed to the test log.</span>
+                <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">msg</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">part</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">part</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]:</span>
+                            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;; &quot;</span> <span class="o">+</span> <span class="n">msg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">part</span> <span class="o">=</span> <span class="n">new_part</span><span class="p">()</span>
+                        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Update the last part processed since a new log message</span>
+                    <span class="c1"># means a non-test action</span>
+                    <span class="n">process_part_end</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">curr_time</span><span class="p">,</span> <span class="n">last_time</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Did not recognize test output &#39;</span><span class="si">{0}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+
+            <span class="c1"># Each log message potentially represents a new test part so</span>
+            <span class="c1"># save off the last timestamp</span>
+            <span class="n">last_time</span> <span class="o">=</span> <span class="n">curr_time</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Check for status values</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="n">status</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stat</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">part</span><span class="p">:</span>
+                <span class="n">part</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
+                <span class="n">add_part_output</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tty</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No part to add status from &#39;</span><span class="si">{0}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+            <span class="k">continue</span>
+
+        <span class="n">add_part_output</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+
+    <span class="c1"># Process the last lingering part IF it didn&#39;t generate status</span>
+    <span class="n">process_part_end</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">curr_time</span><span class="p">,</span> <span class="n">last_time</span><span class="p">)</span>
+
+    <span class="c1"># If no parts, create a skeleton to flag that the tests are not run</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parts</span><span class="p">:</span>
+        <span class="n">part</span> <span class="o">=</span> <span class="n">new_part</span><span class="p">()</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span> <span class="k">if</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Cannot open log&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;notrun&quot;</span>
+
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;completed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">completed</span><span class="p">[</span><span class="n">stat</span><span class="p">]</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;elapsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_name</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parts</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2023, Lawrence Livermore National Laboratory..
+      <span class="lastupdated">Last updated on May 25, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
