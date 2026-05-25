@@ -1,0 +1,899 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../config_yaml.rst:-1
+msgid ""
+"A detailed guide to the config.yaml file in Spack, which allows you to set "
+"core configuration options like installation paths, build parallelism, and "
+"trusted sources."
+msgstr ""
+
+#: ../../../config_yaml.rst:13
+msgid "Spack Settings (config.yaml)"
+msgstr ""
+
+#: ../../../config_yaml.rst:15
+msgid ""
+"Spack's basic configuration options are set in ``config.yaml``. You can see "
+"the default settings by looking at ``etc/spack/defaults/config.yaml``:"
+msgstr ""
+
+#: ../../../config_yaml.rst:18
+msgid ""
+"# -------------------------------------------------------------------------\n"
+"# This is the default spack configuration file.\n"
+"#\n"
+"# Settings here are versioned with Spack and are intended to provide\n"
+"# sensible defaults out of the box. Spack maintainers should edit this\n"
+"# file to keep it current.\n"
+"#\n"
+"# Users can override these settings by editing files in:\n"
+"#\n"
+"#  * $SPACK_ROOT/etc/spack/     - Spack instance settings\n"
+"#  * ~/.spack/                  - user settings\n"
+"#  * $SPACK_ROOT/etc/spack/site - Spack \"site\" settings. Like instance "
+"settings\n"
+"#                                 but lower priority then user settings.\n"
+"#\n"
+"# -------------------------------------------------------------------------\n"
+"config:\n"
+"  # This is the path to the root of the Spack install tree.\n"
+"  # You can use $spack here to refer to the root of the spack instance.\n"
+"  install_tree:\n"
+"    root: $spack/opt/spack\n"
+"    projections:\n"
+"      all: \"{architecture.platform}-{architecture.target}/{name}-{version}-"
+"{hash}\"\n"
+"    # install_tree can include an optional padded length (int or boolean)\n"
+"    # default is False (do not pad)\n"
+"    # if padded_length is True, Spack will pad as close to the system max "
+"path\n"
+"    # length as possible\n"
+"    # if padded_length is an integer, Spack will pad to that many "
+"characters,\n"
+"    # assuming it is higher than the length of the install_tree root.\n"
+"    # padded_length: 128\n"
+"\n"
+"\n"
+"  # Locations where templates should be found\n"
+"  template_dirs:\n"
+"    - $spack/share/spack/templates\n"
+"\n"
+"  # Directory where licenses should be located\n"
+"  license_dir: $spack/etc/spack/licenses\n"
+"\n"
+"  # Temporary locations Spack can try to use for builds.\n"
+"  #\n"
+"  # Recommended options are given below.\n"
+"  #\n"
+"  # Builds can be faster in temporary directories on some (e.g., HPC) "
+"systems.\n"
+"  # Specifying `$tempdir` will ensure use of the default temporary "
+"directory\n"
+"  # (i.e., ``$TMP` or ``$TMPDIR``).\n"
+"  #\n"
+"  # Another option that prevents conflicts and potential permission issues "
+"is\n"
+"  # to specify `$user_cache_path/stage`, which ensures each user builds in "
+"their\n"
+"  # home directory.\n"
+"  #\n"
+"  # A more traditional path uses the value of `$spack/var/spack/stage`, "
+"which\n"
+"  # builds directly inside Spack's instance without staging them in a\n"
+"  # temporary space.  Problems with specifying a path inside a Spack "
+"instance\n"
+"  # are that it precludes its use as a system package and its ability to be\n"
+"  # pip installable.\n"
+"  #\n"
+"  # In Spack environment files, chaining onto existing system Spack\n"
+"  # installations, the $env variable can be used to download, cache and "
+"build\n"
+"  # into user-writable paths that are relative to the currently active\n"
+"  # environment.\n"
+"  #\n"
+"  # In any case, if the username is not already in the path, Spack will "
+"append\n"
+"  # the value of `$user` in an attempt to avoid potential conflicts between\n"
+"  # users in shared temporary spaces.\n"
+"  #\n"
+"  # The build stage can be purged with `spack clean --stage` and\n"
+"  # `spack clean -a`, so it is important that the specified directory "
+"uniquely\n"
+"  # identifies Spack staging to avoid accidentally wiping out non-Spack "
+"work.\n"
+"  build_stage:\n"
+"    - $tempdir/$user/spack-stage\n"
+"    - $user_cache_path/stage\n"
+"  # - $spack/var/spack/stage\n"
+"\n"
+"  # Naming format for individual stage directories\n"
+"  stage_name: \"spack-stage-{name}-{version}-{hash}\"\n"
+"\n"
+"  # Directory in which to run tests and store test results.\n"
+"  # Tests will be stored in directories named by date/time and package\n"
+"  # name/hash.\n"
+"  test_stage: $user_cache_path/test\n"
+"\n"
+"  # Cache directory for already downloaded source tarballs and archived\n"
+"  # repositories. This can be purged with `spack clean --downloads`.\n"
+"  source_cache: $spack/var/spack/cache\n"
+"\n"
+"\n"
+"  ## Directory where spack managed environments are created and stored\n"
+"  # environments_root: $spack/var/spack/environments\n"
+"\n"
+"\n"
+"  # Cache directory for miscellaneous files, like the package index.\n"
+"  # This can be purged with `spack clean --misc-cache`\n"
+"  misc_cache: $user_cache_path/cache\n"
+"\n"
+"  # Abort downloads after this many seconds if not data is received.\n"
+"  # Setting this to 0 will disable the timeout.\n"
+"  connect_timeout: 30\n"
+"\n"
+"\n"
+"  # If this is false, tools like curl that use SSL will not verify\n"
+"  # certificates. (e.g., curl will use use the -k option)\n"
+"  verify_ssl: true\n"
+"\n"
+"\n"
+"  # This is where custom certs for proxy/firewall are stored.\n"
+"  # It can be a path or environment variable. To match ssl env "
+"configuration\n"
+"  # the default is the environment variable SSL_CERT_FILE\n"
+"  ssl_certs: $SSL_CERT_FILE\n"
+"\n"
+"\n"
+"  # Suppress gpg warnings from binary package verification\n"
+"  # Only suppresses warnings, gpg failure will still fail the install\n"
+"  # Potential rationale to set True: users have already explicitly trusted "
+"the\n"
+"  # gpg key they are using, and may not want to see repeated warnings that "
+"it\n"
+"  # is self-signed or something of the sort.\n"
+"  suppress_gpg_warnings: false\n"
+"\n"
+"\n"
+"  # If set to true, Spack will always check checksums after downloading\n"
+"  # archives. If false, Spack skips the checksum step.\n"
+"  checksum: true\n"
+"\n"
+"\n"
+"  # If set to true, Spack will fetch deprecated versions without warning.\n"
+"  # If false, Spack will raise an error when trying to install a deprecated "
+"version.\n"
+"  deprecated: false\n"
+"\n"
+"\n"
+"  # If set to true, `spack install` and friends will NOT clean\n"
+"  # potentially harmful variables from the build environment. Use wisely.\n"
+"  dirty: false\n"
+"\n"
+"\n"
+"  # The language the build environment will use. This will produce English\n"
+"  # compiler messages by default, so the log parser can highlight errors.\n"
+"  # If set to C, it will use English (see man locale).\n"
+"  # If set to the empty string (''), it will use the language from the\n"
+"  # user's environment.\n"
+"  build_language: C\n"
+"\n"
+"\n"
+"  # When set to true, concurrent instances of Spack will use locks to\n"
+"  # avoid modifying the install tree, database file, etc. If false, Spack\n"
+"  # will disable all locking, but you must NOT run concurrent instances\n"
+"  # of Spack.  For filesystems that don't support locking, you should set\n"
+"  # this to false and run one Spack at a time, but otherwise we recommend\n"
+"  # enabling locks.\n"
+"  locks: true\n"
+"\n"
+"  # The default url fetch method to use.\n"
+"  # If set to 'curl', Spack will require curl on the user's system\n"
+"  # If set to 'urllib', Spack will use python built-in libs to fetch\n"
+"  url_fetch_method: urllib\n"
+"\n"
+"  # The maximum number of jobs to use for the build. When using the old\n"
+"  # installer, this is the number of jobs per package. In the new "
+"installer,\n"
+"  # this is the global maximum number of jobs across all packages. When "
+"fewer\n"
+"  # cores are available, Spack will use fewer jobs. The `-j` command line\n"
+"  # argument overrides this option.\n"
+"  build_jobs: 16\n"
+"\n"
+"  # The maximum number of concurrent package builds a single Spack process\n"
+"  # will perform. The default value of 0 means no package parallelism when "
+"using\n"
+"  # the old installer, and unlimited package parallelism (other than the "
+"limit\n"
+"  # set by build_jobs) when using the new installer. Setting this to 1 will\n"
+"  # disable package parallelism in both installers. This option is ignored "
+"on\n"
+"  # Windows.\n"
+"  concurrent_packages: 0\n"
+"\n"
+"  # Which installer to use: \"old\" or \"new\".\n"
+"  installer: new\n"
+"\n"
+"  # Restrict filesystem and network access during builds. The stage "
+"directory,\n"
+"  # install prefix, and system temp directory are always writable.\n"
+"  # Spack-installed dependency prefixes are always readable. Use the "
+"allow_read\n"
+"  # and allow_write lists to grant additional permissions to other paths.\n"
+"  # This feature is only available on Linux kernels with Landlock support, "
+"and\n"
+"  # only works with the new installer.\n"
+"  sandbox:\n"
+"    enable: false\n"
+"    # Allow TCP network access during the build phase.\n"
+"    allow_network: true\n"
+"    # Additional paths with read and execute permissions.\n"
+"    allow_read: []\n"
+"    # Additional paths with write and execute permissions.\n"
+"    allow_write: []\n"
+"\n"
+"  # If set to true, Spack will use ccache to cache C compiles.\n"
+"  ccache: false\n"
+"\n"
+"  # How long to wait to lock the Spack installation database. This lock is "
+"used\n"
+"  # when Spack needs to manage its own package metadata and all operations "
+"are\n"
+"  # expected to complete within the default time limit. The timeout should\n"
+"  # therefore generally be left untouched.\n"
+"  db_lock_timeout: 60\n"
+"\n"
+"\n"
+"  # How long to wait when attempting to modify a package (e.g. to install "
+"it).\n"
+"  # This value should typically be 'null' (never time out) unless the Spack\n"
+"  # instance only ever has a single user at a time, and only if the user\n"
+"  # anticipates that a significant delay indicates that the lock attempt "
+"will\n"
+"  # never succeed.\n"
+"  package_lock_timeout: null\n"
+"\n"
+"\n"
+"  # Control how shared libraries are located at runtime on Linux. See the\n"
+"  # the Spack documentation for details.\n"
+"  shared_linking:\n"
+"    # Spack automatically embeds runtime search paths in ELF binaries for "
+"their\n"
+"    # dependencies. Their type can either be \"rpath\" or \"runpath\". For "
+"glibc, rpath is\n"
+"    # inherited and has precedence over LD_LIBRARY_PATH; runpath is not "
+"inherited\n"
+"    # and of lower precedence. DO NOT MIX these within the same install "
+"tree.\n"
+"    type: rpath\n"
+"\n"
+"\n"
+"    # (Experimental) Embed absolute paths of dependent libraries directly in "
+"ELF\n"
+"    # binaries to avoid runtime search. This can improve startup time of\n"
+"    # executables with many dependencies, in particular on slow "
+"filesystems.\n"
+"    bind: false\n"
+"\n"
+"    # Controls the handling of missing dynamic libraries after "
+"installation.\n"
+"    # Options are ignore (default), warn, or error. If set to error, the\n"
+"    # installation fails if installed binaries reference dynamic libraries "
+"that\n"
+"    # are not found in their specified rpaths.\n"
+"    missing_library_policy: ignore\n"
+"\n"
+"\n"
+"  # Set to 'false' to allow installation on filesystems that doesn't allow "
+"setgid bit\n"
+"  # manipulation by unprivileged user (e.g. AFS)\n"
+"  allow_sgid: true\n"
+"\n"
+"  # Whether to show status information during building and installing "
+"packages.\n"
+"  # This gives information about Spack's current progress as well as the "
+"current\n"
+"  # and total number of packages. Information is shown both in the terminal\n"
+"  # title and inline.\n"
+"  install_status: true\n"
+"\n"
+"  # Number of seconds a buildcache's index.json is cached locally before "
+"probing\n"
+"  # for updates, within a single Spack invocation. Defaults to 10 minutes.\n"
+"  binary_index_ttl: 600\n"
+"\n"
+"  flags:\n"
+"    # Whether to keep -Werror flags active in package builds.\n"
+"    keep_werror: 'none'\n"
+"\n"
+"  # A mapping of aliases that can be used to define new commands. For "
+"instance,\n"
+"  # `sp: spec -I` will define a new command `sp` that will execute `spec` "
+"with\n"
+"  # the `-I` argument. Aliases cannot override existing commands.\n"
+"  aliases:\n"
+"    concretise: concretize\n"
+"    containerise: containerize\n"
+"    rm: remove\n"
+msgstr ""
+
+#: ../../../config_yaml.rst:21
+msgid ""
+"These settings can be overridden in ``etc/spack/config.yaml`` or ``~/.spack/"
+"config.yaml``. See :ref:`configuration-scopes` for details."
+msgstr ""
+
+#: ../../../config_yaml.rst:25
+msgid "``install_tree:root``"
+msgstr ""
+
+#: ../../../config_yaml.rst:27
+msgid ""
+"The location where Spack will install packages and their dependencies. The "
+"default is ``$spack/opt/spack``."
+msgstr ""
+
+#: ../../../config_yaml.rst:31
+msgid "``projections``"
+msgstr ""
+
+#: ../../../config_yaml.rst:35
+msgid "Modifying projections of the install tree is strongly discouraged."
+msgstr ""
+
+#: ../../../config_yaml.rst:37
+msgid ""
+"By default, Spack installs all packages into a unique directory relative to "
+"the install tree root with the following layout:"
+msgstr ""
+
+#: ../../../config_yaml.rst:39
+msgid "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+msgstr ""
+
+#: ../../../config_yaml.rst:43
+msgid ""
+"In very rare cases, it may be necessary to reduce the length of this path. "
+"For example, very old versions of the Intel compiler are known to segfault "
+"when input paths are too long:"
+msgstr ""
+
+#: ../../../config_yaml.rst:46
+msgid ""
+": internal error: ** The compiler has encountered an unexpected problem.\n"
+"** Segmentation violation signal raised. **\n"
+"Access violation or stack overflow. Please contact Intel Support for "
+"assistance."
+msgstr ""
+
+#: ../../../config_yaml.rst:52
+msgid ""
+"Another case is Python and R packages with many runtime dependencies, which "
+"can result in very large ``PYTHONPATH`` and ``R_LIBS`` environment "
+"variables. This can cause the ``execve`` system call to fail with ``E2BIG``, "
+"preventing processes from starting."
+msgstr ""
+
+#: ../../../config_yaml.rst:55
+msgid ""
+"For this reason, Spack allows users to modify the installation layout "
+"through custom projections. For example:"
+msgstr ""
+
+#: ../../../config_yaml.rst:58
+msgid ""
+"config:\n"
+"  install_tree:\n"
+"    root: $spack/opt/spack\n"
+"    projections:\n"
+"      all: \"{name}/{version}/{hash:16}\""
+msgstr ""
+
+#: ../../../config_yaml.rst:66
+msgid ""
+"would install packages into subdirectories using only the package name, "
+"version, and a hash length of 16 characters."
+msgstr ""
+
+#: ../../../config_yaml.rst:68
+msgid ""
+"Notice that reducing the hash length increases the likelihood of hash "
+"collisions."
+msgstr ""
+
+#: ../../../config_yaml.rst:71
+msgid "``build_stage``"
+msgstr ""
+
+#: ../../../config_yaml.rst:73
+msgid ""
+"Spack is designed to run from a user home directory, and on many systems, "
+"the home directory is a (slow) network file system. On most systems, "
+"building in a temporary file system is faster. Usually, there is also more "
+"space available in the temporary location than in the home directory. If the "
+"username is not already in the path, Spack will append the value of "
+"``$user`` to the selected ``build_stage`` path."
+msgstr ""
+
+#: ../../../config_yaml.rst:79
+msgid ""
+"We highly recommend specifying ``build_stage`` paths that distinguish "
+"between staging and other activities to ensure ``spack clean`` does not "
+"inadvertently remove unrelated files. Spack prepends ``spack-stage-`` to "
+"temporary staging directory names to reduce this risk. Using a combination "
+"of ``spack`` and or ``stage`` in each specified path, as shown in the "
+"default settings and documented examples, will add another layer of "
+"protection."
+msgstr ""
+
+#: ../../../config_yaml.rst:83
+msgid "By default, Spack's ``build_stage`` is configured like this:"
+msgstr ""
+
+#: ../../../config_yaml.rst:85
+msgid ""
+"build_stage:\n"
+"- $tempdir/$user/spack-stage\n"
+"- ~/.spack/stage"
+msgstr ""
+
+#: ../../../config_yaml.rst:91
+msgid ""
+"This can be an ordered list of paths that Spack should search when trying to "
+"find a temporary directory for the build stage. The list is searched in "
+"order, and Spack will use the first directory to which it has write access."
+msgstr ""
+
+#: ../../../config_yaml.rst:94
+msgid ""
+"Specifying `~/.spack/stage` first will ensure each user builds in their home "
+"directory. The historic Spack stage path `$spack/var/spack/stage` will build "
+"directly inside the Spack instance. See :ref:`config-file-variables` for "
+"more on ``$tempdir`` and ``$spack``."
+msgstr ""
+
+#: ../../../config_yaml.rst:98
+msgid ""
+"When Spack builds a package, it creates a temporary directory within the "
+"``build_stage``. After the package is successfully installed, Spack deletes "
+"the temporary directory it used to build. Unsuccessful builds are not "
+"deleted, but you can manually purge them with ``spack clean --stage``."
+msgstr ""
+
+#: ../../../config_yaml.rst:104
+msgid ""
+"The build will fail if there is no writable directory in the ``build_stage`` "
+"list, where any user- and site-specific setting will be searched first."
+msgstr ""
+
+#: ../../../config_yaml.rst:107
+msgid "``source_cache``"
+msgstr ""
+
+#: ../../../config_yaml.rst:109
+msgid ""
+"Location to cache downloaded tarballs and repositories. By default, these "
+"are stored in ``$spack/var/spack/cache``. These are stored indefinitely by "
+"default and can be purged with ``spack clean --downloads``."
+msgstr ""
+
+#: ../../../config_yaml.rst:116
+msgid "``misc_cache``"
+msgstr ""
+
+#: ../../../config_yaml.rst:118
+msgid ""
+"Temporary directory to store long-lived cache files, such as indices of "
+"packages available in repositories. Defaults to ``~/.spack/cache``. Can be "
+"purged with ``spack clean --misc-cache``."
+msgstr ""
+
+#: ../../../config_yaml.rst:122
+msgid ""
+"In some cases, e.g., if you work with many Spack instances or many different "
+"versions of Spack, it makes sense to have a cache per instance or per "
+"version. You can do that by changing the value to either:"
+msgstr ""
+
+#: ../../../config_yaml.rst:125
+msgid "``~/.spack/$spack_instance_id/cache`` for per-instance caches, or"
+msgstr ""
+
+#: ../../../config_yaml.rst:126
+msgid "``~/.spack/$spack_short_version/cache`` for per-spack-version caches."
+msgstr ""
+
+#: ../../../config_yaml.rst:129
+msgid "``verify_ssl``"
+msgstr ""
+
+#: ../../../config_yaml.rst:131
+msgid ""
+"When set to ``true`` (default), Spack will verify certificates of remote "
+"hosts when making ``ssl`` connections. Set to ``false`` to disable, and "
+"tools like ``curl`` will use their ``--insecure`` options. Disabling this "
+"can expose you to attacks. Use at your own risk."
+msgstr ""
+
+#: ../../../config_yaml.rst:137
+msgid "``ssl_certs``"
+msgstr ""
+
+#: ../../../config_yaml.rst:139
+msgid ""
+"Path to custom certificates for SSL verification. The value can be a "
+"filesystem path, or an environment variable that expands to an absolute file "
+"path. The default value is set to the environment variable ``SSL_CERT_FILE`` "
+"to use the same syntax used by many other applications that automatically "
+"detect custom certificates. When ``url_fetch_method:curl``, the ``config:"
+"ssl_certs`` should resolve to a single file. Spack will then set the "
+"environment variable ``CURL_CA_BUNDLE`` in the subprocess calling ``curl``. "
+"If additional ``curl`` arguments are required, they can be set in the "
+"config, e.g., ``url_fetch_method:'curl -k -q'``. If ``url_fetch_method:"
+"urllib``, then files and directories are supported, i.e., ``config:ssl_certs:"
+"$SSL_CERT_FILE`` or ``config:ssl_certs:$SSL_CERT_DIR`` will work. In all "
+"cases, the expanded path must be absolute for Spack to use the certificates. "
+"Certificates relative to an environment can be created by prepending the "
+"path variable with the Spack configuration variable ``$env``."
+msgstr ""
+
+#: ../../../config_yaml.rst:150
+msgid "``checksum``"
+msgstr ""
+
+#: ../../../config_yaml.rst:152
+msgid ""
+"When set to ``true``, Spack verifies downloaded source code using a checksum "
+"and will refuse to build packages that it cannot verify. Set to ``false`` to "
+"disable these checks. Disabling this can expose you to attacks. Use at your "
+"own risk."
+msgstr ""
+
+#: ../../../config_yaml.rst:158
+msgid "``locks``"
+msgstr ""
+
+#: ../../../config_yaml.rst:160
+msgid ""
+"When set to ``true``, concurrent instances of Spack will use locks to avoid "
+"modifying the install tree, database file, etc. If ``false``, Spack will "
+"disable all locking, but you must **not** run concurrent instances of Spack. "
+"For file systems that do not support locking, you should set this to "
+"``false`` and run one Spack instance at a time; otherwise, we recommend "
+"enabling locks."
+msgstr ""
+
+#: ../../../config_yaml.rst:165
+msgid "``dirty``"
+msgstr ""
+
+#: ../../../config_yaml.rst:167
+msgid ""
+"By default, Spack unsets variables in your environment that can change the "
+"way packages build. This includes ``LD_LIBRARY_PATH``, ``CPATH``, "
+"``LIBRARY_PATH``, ``DYLD_LIBRARY_PATH``, and others."
+msgstr ""
+
+#: ../../../config_yaml.rst:170
+msgid ""
+"By default, builds are ``clean``, but on some machines, compilers and other "
+"tools may need custom ``LD_LIBRARY_PATH`` settings to run. You can set "
+"``dirty`` to ``true`` to skip the cleaning step and make all builds "
+"\"dirty\" by default. Be aware that this will reduce the reproducibility of "
+"builds."
+msgstr ""
+
+#: ../../../config_yaml.rst:177
+msgid "``build_jobs``"
+msgstr ""
+
+#: ../../../config_yaml.rst:179
+msgid ""
+"Unless overridden in a package or on the command line, Spack builds all "
+"packages in parallel. The default parallelism is equal to the number of "
+"cores available to the process, up to 16 (the default of ``build_jobs``). "
+"For a build system that uses Makefiles, ``spack install`` runs:"
+msgstr ""
+
+#: ../../../config_yaml.rst:183
+msgid ""
+"``make -j<build_jobs>``, when ``build_jobs`` is less than the number of "
+"cores available"
+msgstr ""
+
+#: ../../../config_yaml.rst:184
+msgid ""
+"``make -j<ncores>``, when ``build_jobs`` is greater or equal to the number "
+"of cores available"
+msgstr ""
+
+#: ../../../config_yaml.rst:186
+msgid ""
+"If you work on a shared login node or have a strict ulimit, it may be "
+"necessary to set the default to a lower value. By setting ``build_jobs`` to "
+"4, for example, commands like ``spack install`` will run ``make -j4`` "
+"instead of using every core. To build all software in serial, set "
+"``build_jobs`` to 1."
+msgstr ""
+
+#: ../../../config_yaml.rst:190
+msgid ""
+"Note that specifying the number of jobs on the command line always takes "
+"priority, so that ``spack install -j<n>`` always runs ``make -j<n>``, even "
+"when that exceeds the number of cores available."
+msgstr ""
+
+#: ../../../config_yaml.rst:193
+msgid "``ccache``"
+msgstr ""
+
+#: ../../../config_yaml.rst:195
+msgid ""
+"When set to ``true``, Spack will use ccache to cache compiles. This is "
+"useful specifically in two cases: (1) when using ``spack dev-build`` and (2) "
+"when building the same package with many different variants. The default is "
+"``false``."
+msgstr ""
+
+#: ../../../config_yaml.rst:199
+msgid ""
+"When enabled, Spack will look inside your ``PATH`` for a ``ccache`` "
+"executable and stop if it is not found. Some systems come with ``ccache``, "
+"but it can also be installed using ``spack install ccache``. ``ccache`` "
+"comes with reasonable defaults for cache size and location. (See the "
+"*Configuration settings* section of ``man ccache`` to learn more about the "
+"default settings and how to change them.) Please note that we currently "
+"disable ccache's ``hash_dir`` feature to avoid an issue with the stage "
+"directory (see https://github.com/spack/spack/"
+"pull/3761#issuecomment-294352232)."
+msgstr ""
+
+#: ../../../config_yaml.rst:206
+msgid "``shared_linking:type``"
+msgstr ""
+
+#: ../../../config_yaml.rst:208
+msgid ""
+"Controls whether Spack embeds ``RPATH`` or ``RUNPATH`` attributes in ELF "
+"binaries so that they can find their dependencies. This has no effect on "
+"macOS. Two options are allowed:"
+msgstr ""
+
+#: ../../../config_yaml.rst:212
+msgid ""
+"``rpath`` uses ``RPATH`` and forces the ``--disable-new-tags`` flag to be "
+"passed to the linker."
+msgstr ""
+
+#: ../../../config_yaml.rst:213
+msgid ""
+"``runpath`` uses ``RUNPATH`` and forces the ``--enable-new-tags`` flag to be "
+"passed to the linker."
+msgstr ""
+
+#: ../../../config_yaml.rst:215
+msgid ""
+"``RPATH`` search paths have higher precedence than ``LD_LIBRARY_PATH``, and "
+"``ld.so`` will search for libraries in transitive RPATHs of parent objects."
+msgstr ""
+
+#: ../../../config_yaml.rst:217
+msgid ""
+"``RUNPATH`` search paths have lower precedence than ``LD_LIBRARY_PATH``, and "
+"``ld.so`` will ONLY search for dependencies in the ``RUNPATH`` of the "
+"loading object."
+msgstr ""
+
+#: ../../../config_yaml.rst:219
+msgid "DO NOT MIX the two options within the same install tree."
+msgstr ""
+
+#: ../../../config_yaml.rst:222
+msgid "``shared_linking:bind``"
+msgstr ""
+
+#: ../../../config_yaml.rst:224
+msgid ""
+"This is an *experimental option* that controls whether Spack embeds absolute "
+"paths to needed shared libraries in ELF executables and shared libraries on "
+"Linux. Setting this option to ``true`` has two advantages:"
+msgstr ""
+
+#: ../../../config_yaml.rst:227
+msgid ""
+"**Improved startup time**: when running an executable, the dynamic loader "
+"does not have to search for needed libraries. They are loaded directly."
+msgstr ""
+
+#: ../../../config_yaml.rst:229
+msgid ""
+"**Reliability**: libraries loaded at runtime are those that were linked "
+"during the build. This minimizes the risk of accidentally picking up system "
+"libraries."
+msgstr ""
+
+#: ../../../config_yaml.rst:232
+msgid ""
+"In the current implementation, Spack sets the soname (shared object name) of "
+"libraries to their install path upon installation. This has two implications:"
+msgstr ""
+
+#: ../../../config_yaml.rst:235
+msgid ""
+"Binding does not apply to libraries installed *before* the option was "
+"enabled."
+msgstr ""
+
+#: ../../../config_yaml.rst:236
+msgid ""
+"Disabling the option does *not* prevent binding of libraries installed when "
+"the option was still enabled."
+msgstr ""
+
+#: ../../../config_yaml.rst:238
+msgid "It is also worth noting that:"
+msgstr ""
+
+#: ../../../config_yaml.rst:240
+msgid ""
+"Applications relying on ``dlopen(3)`` will continue to work, even when they "
+"open a library by name. This is because RPATHs are retained in binaries also "
+"when ``bind`` is enabled."
+msgstr ""
+
+#: ../../../config_yaml.rst:242
+msgid ""
+"``LD_PRELOAD`` continues to work for the typical use case of overriding "
+"symbols, such as preloading a library with a more efficient ``malloc``. "
+"However, the preloaded library will be loaded *in addition to*, rather than "
+"*in place of*, another library with the same name -- which can be "
+"problematic in rare cases where libraries rely on a particular ``init`` or "
+"``fini`` order."
+msgstr ""
+
+#: ../../../config_yaml.rst:247
+msgid ""
+"In some cases, packages provide *stub libraries* that only contain an "
+"interface for linking but lack an implementation for runtime. An example of "
+"this is ``libcuda.so``, provided by the CUDA toolkit; it can be used to link "
+"against, but the library needed at runtime is the one installed with the "
+"CUDA driver. To avoid binding those libraries, they can be marked as non-"
+"bindable using a property in the package:"
+msgstr ""
+
+#: ../../../config_yaml.rst:251
+msgid ""
+"class Example(Package):\n"
+"    non_bindable_shared_objects = [\"libinterface.so\"]"
+msgstr ""
+
+#: ../../../config_yaml.rst:257
+msgid "``install_status``"
+msgstr ""
+
+#: ../../../config_yaml.rst:259
+msgid ""
+"When set to ``true``, Spack will show information about its current progress "
+"as well as the current and total package numbers. Progress is shown both in "
+"the terminal title and inline. Setting it to ``false`` will not show any "
+"progress information."
+msgstr ""
+
+#: ../../../config_yaml.rst:263
+msgid ""
+"To work properly, this requires your terminal to reset its title after Spack "
+"has finished its work; otherwise, Spack's status information will remain in "
+"the terminal's title indefinitely. Most terminals should already be set up "
+"this way and clear Spack's status information."
+msgstr ""
+
+#: ../../../config_yaml.rst:267
+msgid "``aliases``"
+msgstr ""
+
+#: ../../../config_yaml.rst:269
+msgid ""
+"Aliases can be used to define new Spack commands. They can be either "
+"shortcuts for longer commands or include specific arguments for convenience. "
+"For instance, if users want to use ``spack install``'s ``-v`` argument all "
+"the time, they can create a new alias called ``inst`` that will always call "
+"``install -v``:"
+msgstr ""
+
+#: ../../../config_yaml.rst:273
+msgid ""
+"aliases:\n"
+"  inst: install -v"
+msgstr ""
+
+#: ../../../config_yaml.rst:279
+msgid "``concretization_cache:enable``"
+msgstr ""
+
+#: ../../../config_yaml.rst:281
+msgid ""
+"When set to ``true``, Spack will utilize a cache of solver outputs from "
+"successful concretization runs. When enabled, Spack will check the "
+"concretization cache prior to running the solver. If a previous request to "
+"solve a given problem is present in the cache, Spack will load the concrete "
+"specs and other solver data from the cache rather than running the solver. "
+"Specs not previously concretized will be added to the cache on a successful "
+"solve. The cache additionally holds solver statistics, so commands like "
+"``spack solve`` will still return information about the run that produced a "
+"given solver result."
+msgstr ""
+
+#: ../../../config_yaml.rst:287
+msgid ""
+"This cache is a subcache of the :ref:`Misc Cache` and as such will be "
+"cleaned when the Misc Cache is cleaned."
+msgstr ""
+
+#: ../../../config_yaml.rst:289
+msgid ""
+"When ``false`` or omitted, all concretization requests will be performed "
+"from scratch"
+msgstr ""
+
+#: ../../../config_yaml.rst:292
+msgid "``concretization_cache:url``"
+msgstr ""
+
+#: ../../../config_yaml.rst:294
+msgid ""
+"Path to the location where Spack will root the concretization cache. "
+"Currently this only supports paths on the local filesystem."
+msgstr ""
+
+#: ../../../config_yaml.rst:297
+msgid ""
+"Default location is under the :ref:`Misc Cache` at: ``$misc_cache/"
+"concretization``"
+msgstr ""
+
+#: ../../../config_yaml.rst:300
+msgid "``concretization_cache:entry_limit``"
+msgstr ""
+
+#: ../../../config_yaml.rst:302
+msgid ""
+"Sets a limit on the number of concretization results that Spack will cache. "
+"The limit is evaluated after each concretization run; if Spack has stored "
+"more results than the limit allows, the oldest concretization results are "
+"pruned until 10% of the limit has been removed."
+msgstr ""
+
+#: ../../../config_yaml.rst:305 ../../../config_yaml.rst:314
+msgid ""
+"Setting this value to 0 disables automatic pruning. It is expected that "
+"users will be responsible for maintaining this cache."
+msgstr ""
+
+#: ../../../config_yaml.rst:309
+msgid "``concretization_cache:size_limit``"
+msgstr ""
+
+#: ../../../config_yaml.rst:311
+msgid ""
+"Sets a limit on the size of the concretization cache in bytes. The limit is "
+"evaluated after each concretization run; if Spack has stored more results "
+"than the limit allows, the oldest concretization results are pruned until "
+"10% of the limit has been removed."
+msgstr ""

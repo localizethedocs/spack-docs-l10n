@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../build_systems/cachedcmakepackage.rst:-1
+msgid ""
+"Learn about the CachedCMakePackage build system in Spack for CMake-based "
+"projects."
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:13
+msgid "CachedCMake"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:15
+msgid ""
+"The CachedCMakePackage base class is used for CMake-based workflows that "
+"create a CMake cache file prior to running ``cmake``. This is useful for "
+"packages with arguments longer than the system limit, and for "
+"reproducibility."
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:18
+msgid ""
+"The documentation for this class assumes that the user is familiar with the "
+"``CMakePackage`` class from which it inherits. See the documentation for :"
+"ref:`CMakePackage <cmakepackage>`."
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:22
+msgid "Phases"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:24
+msgid "The ``CachedCMakePackage`` base class comes with the following phases:"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:26
+msgid "``initconfig`` - generate the CMake cache file"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:27
+msgid "``cmake`` - generate the Makefile"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:28
+msgid "``build`` - build the package"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:29
+msgid "``install`` - install the package"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:31
+msgid "By default, these phases run:"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:33
+msgid ""
+"$ mkdir spack-build\n"
+"$ cd spack-build\n"
+"$ cat << EOF > name-arch-compiler@version.cmake\n"
+"# Write information on compilers and dependencies\n"
+"# includes information on mpi and cuda if applicable\n"
+"$ cmake .. -DCMAKE_INSTALL_PREFIX=/path/to/installation/prefix -C name-arch-"
+"compiler@version.cmake\n"
+"$ make\n"
+"$ make test  # optional\n"
+"$ make install"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:45
+msgid ""
+"The ``CachedCMakePackage`` class inherits from the ``CMakePackage`` class, "
+"and accepts all of the same options and adds all of the same flags to the "
+"``cmake`` command. Similar to the ``CMakePackage`` class, you may need to "
+"add a few arguments yourself, and the ``CachedCMakePackage`` provides the "
+"same interface to add those flags."
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:49
+msgid "Adding entries to the CMake cache"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:51
+msgid ""
+"In addition to adding flags to the ``cmake`` command, you may need to add "
+"entries to the CMake cache in the ``initconfig`` phase. This can be done by "
+"overriding one of four methods:"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:54
+msgid "``CachedCMakePackage.initconfig_compiler_entries``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:55
+msgid "``CachedCMakePackage.initconfig_mpi_entries``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:56
+msgid "``CachedCMakePackage.initconfig_hardware_entries``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:57
+msgid "``CachedCMakePackage.initconfig_package_entries``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:59
+msgid ""
+"Each of these methods returns a list of CMake cache strings. The distinction "
+"between these methods is merely to provide a well-structured and legible "
+"CMake cache file -- otherwise, entries from each of these methods are "
+"handled identically."
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:62
+msgid ""
+"Spack also provides convenience methods for generating CMake cache entries. "
+"These methods are available at module scope in every Spack package. Because "
+"CMake parses boolean options, strings, and paths differently, there are "
+"three such methods:"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:66
+msgid "``cmake_cache_option``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:67
+msgid "``cmake_cache_string``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:68
+msgid "``cmake_cache_path``"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:70
+msgid ""
+"These methods each accept three parameters -- the name of the CMake variable "
+"associated with the entry, the value of the entry, and an optional comment "
+"-- and return strings in the appropriate format to be returned from any of "
+"the ``initconfig*`` methods. Additionally, these methods may return comments "
+"beginning with the ``#`` character."
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:73
+msgid "A typical usage of these methods may look something like this:"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:75
+msgid ""
+"def initconfig_mpi_entries(self):\n"
+"    # Get existing MPI configurations\n"
+"    entries = super(self, Foo).initconfig_mpi_entries()\n"
+"\n"
+"    # The existing MPI configurations key on whether ``mpi`` is in the spec\n"
+"    # This spec has an MPI variant, and we need to enable MPI when it is "
+"on.\n"
+"    # This hypothetical package controls MPI with the ``FOO_MPI`` option to\n"
+"    # cmake.\n"
+"    if self.spec.satisfies(\"+mpi\"):\n"
+"        entries.append(cmake_cache_option(\"FOO_MPI\", True, \"enable "
+"mpi\"))\n"
+"    else:\n"
+"        entries.append(cmake_cache_option(\"FOO_MPI\", False, \"disable "
+"mpi\"))\n"
+"\n"
+"\n"
+"def initconfig_package_entries(self):\n"
+"    # Package specific options\n"
+"    entries = []\n"
+"\n"
+"    entries.append(\"#Entries for build options\")\n"
+"\n"
+"    bar_on = self.spec.satisfies(\"+bar\")\n"
+"    entries.append(cmake_cache_option(\"FOO_BAR\", bar_on, \"toggle bar\"))\n"
+"\n"
+"    entries.append(\"#Entries for dependencies\")\n"
+"\n"
+"    if self.spec[\"blas\"].name == \"baz\":  # baz is our blas provider\n"
+"        entries.append(cmake_cache_string(\"FOO_BLAS\", \"baz\", \"Use "
+"baz\"))\n"
+"        entries.append(cmake_cache_path(\"BAZ_PREFIX\", self.spec[\"baz\"]."
+"prefix))"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:107
+msgid "External documentation"
+msgstr ""
+
+#: ../../../build_systems/cachedcmakepackage.rst:109
+msgid ""
+"For more information on CMake cache files, see: https://cmake.org/cmake/help/"
+"latest/manual/cmake.1.html"
+msgstr ""
