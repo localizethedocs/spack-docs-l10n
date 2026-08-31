@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"POT-Creation-Date: 2026-08-31 16:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -794,16 +795,161 @@ msgid "Unit testing"
 msgstr ""
 
 #: ../../../developer_guide.rst:405
+msgid "Debugging Unit Tests in CI"
+msgstr ""
+
+#: ../../../developer_guide.rst:407
+msgid ""
+"Spack runs its CI for unit tests via Github Actions from the Spack repo. The "
+"unit tests are run for each platform Spack supports, Windows, Linux, and "
+"MacOS. It may be the case that a unit test fails or passes on just one of "
+"these platforms. When the platform is one the PR author does not have access "
+"to, it can be difficult to reproduce, diagnose, and fix a CI failure. "
+"Thankfully, PR authors can take advantage of a Github Actions Action to gain "
+"temporary access to the failing platform from the context of their PRs. "
+"Simply copy the following Github actions yaml stanza into `the GHA workflow "
+"file <https://github.com/spack/spack/blob/develop/.github/workflows/"
+"unit_tests.yaml>`__ in the `steps` section of whatever unit test needs "
+"debugging."
+msgstr ""
+
+#: ../../../developer_guide.rst:414
+msgid ""
+"- name: Setup tmate session\n"
+"  uses: mxschmitt/action-tmate@c0afd6f790e3a5564914980036ebf83216678101"
+msgstr ""
+
+#: ../../../developer_guide.rst:419
+msgid ""
+"Ideally this would be inserted somewhere after GHA checks out Spack and does "
+"any setup, but before the unit tests themselves are run. You can of course "
+"put this stanza after the unit-tests, but then you'll be stuck waiting for "
+"the unit tests to complete (potentially up to ~30m) and will need to add "
+"additional logic to the yaml in the case where the unit tests fail."
+msgstr ""
+
+#: ../../../developer_guide.rst:422
+msgid ""
+"For example, if you were to add this step to the Linux unit test CI, it "
+"would look something like:"
+msgstr ""
+
+#: ../../../developer_guide.rst:424
+msgid ""
+"- name: Bootstrap clingo\n"
+"  if: ${{ matrix.concretizer == 'clingo' }}\n"
+"  env:\n"
+"    SPACK_PYTHON: python\n"
+"  run: |\n"
+"    . share/spack/setup-env.sh\n"
+"    spack bootstrap disable spack-install\n"
+"    spack bootstrap now\n"
+"    spack -v solve zlib\n"
+"- name: Setup tmate session\n"
+"  uses: mxschmitt/action-tmate@c0afd6f790e3a5564914980036ebf83216678101\n"
+"- name: Run unit tests\n"
+"  env:\n"
+"    SPACK_PYTHON: python\n"
+"    SPACK_TEST_PARALLEL: 4\n"
+"    COVERAGE: true\n"
+"    COVERAGE_FILE: coverage/.coverage-${{ matrix.os }}-python${{ matrix."
+"python-version }}\n"
+"    UNIT_TEST_COVERAGE: ${{ matrix.python-version == '3.14' }}\n"
+"  run: |-\n"
+"    share/spack/qa/run-unit-tests"
+msgstr ""
+
+#: ../../../developer_guide.rst:448
+msgid ""
+"Note that the ssh session comes after Spack does its setup but before it "
+"runs the unit tests."
+msgstr ""
+
+#: ../../../developer_guide.rst:450
+msgid ""
+"Once this step is present in the job definition, it will be triggered for "
+"each CI run. This action provides access to an SSH server running on the GHA "
+"runner that is hosting a given CI run. As the action runs, you should "
+"observe output similar to:"
+msgstr ""
+
+#: ../../../developer_guide.rst:454
+msgid ""
+"ssh 5RjFs7LPdtwGG8cwSPkGrdMNg@sfo2.tmate.io\n"
+"https://tmate.io/t/5RjFs7LPdtwGG8cwSPkGrdMNg"
+msgstr ""
+
+#: ../../../developer_guide.rst:459
+msgid ""
+"The first line is the ssh command necessary to connect to the server, the "
+"second line is a tmate web UI that also provides access to the ssh server on "
+"the runner."
+msgstr ""
+
+#: ../../../developer_guide.rst:461
+msgid ""
+"The web UI has occasionally been unresponsive, if it does not respond within "
+"~10s, you'll need to use your local ssh utility."
+msgstr ""
+
+#: ../../../developer_guide.rst:463
+msgid ""
+"Once connected via SSH, you have the same level of access to the machine "
+"that the CI job's user does. Spack's source should be available already "
+"(depending on where the step was inserted). So you can just setup the shell "
+"to run Spack via the setup scripts and then debug as needed."
+msgstr ""
+
+#: ../../../developer_guide.rst:467
+msgid ""
+"If you have configured your Github profile with SSH keys, the action will be "
+"aware of this and require those keys to access the SSH session."
+msgstr ""
+
+#: ../../../developer_guide.rst:469
+msgid ""
+"If you are on Windows you'll be dropped into an MSYS shell, Spack is not "
+"supported inside MSYS, so it is strongly recommended to drop into a CMD or "
+"powershell prompt."
+msgstr ""
+
+#: ../../../developer_guide.rst:471
+msgid ""
+"You will have access to this ssh session for as long as Github allows a job "
+"to be alive."
+msgstr ""
+
+#: ../../../developer_guide.rst:473
+msgid ""
+"Once you have finished debugging, remove this action from the Github actions "
+"workflow."
+msgstr ""
+
+#: ../../../developer_guide.rst:475
+msgid ""
+"If you want to continue a workflow and you are inside a session, just create "
+"a empty file with the name continue either in the root directory or in the "
+"project directory."
+msgstr ""
+
+#: ../../../developer_guide.rst:477
+msgid ""
+"This action has a few option to configure behavior like ssh key handling, "
+"tmate server, detached mode, etc. For more on how to use those options, see "
+"the actions docs at https://github.com/mxschmitt/action-tmate"
+msgstr ""
+
+#: ../../../developer_guide.rst:481
 msgid "Developer environment"
 msgstr ""
 
-#: ../../../developer_guide.rst:409
+#: ../../../developer_guide.rst:485
 msgid ""
 "This is an experimental feature. It is expected to change and you should not "
 "use it in a production environment."
 msgstr ""
 
-#: ../../../developer_guide.rst:413
+#: ../../../developer_guide.rst:489
 msgid ""
 "When installing a package, we currently have support to export environment "
 "variables to specify adding debug flags to the build. By default, a package "
@@ -811,82 +957,82 @@ msgid ""
 "them, you can export:"
 msgstr ""
 
-#: ../../../developer_guide.rst:417
+#: ../../../developer_guide.rst:493
 msgid ""
 "export SPACK_ADD_DEBUG_FLAGS=true\n"
 "spack install zlib"
 msgstr ""
 
-#: ../../../developer_guide.rst:423
+#: ../../../developer_guide.rst:499
 msgid ""
 "If you want to add custom flags, you should export an additional variable:"
 msgstr ""
 
-#: ../../../developer_guide.rst:425
+#: ../../../developer_guide.rst:501
 msgid ""
 "export SPACK_ADD_DEBUG_FLAGS=true\n"
 "export SPACK_DEBUG_FLAGS=\"-g\"\n"
 "spack install zlib"
 msgstr ""
 
-#: ../../../developer_guide.rst:431
+#: ../../../developer_guide.rst:507
 msgid ""
 "These environment variables will eventually be integrated into Spack so they "
 "are set from the command line."
 msgstr ""
 
-#: ../../../developer_guide.rst:434
+#: ../../../developer_guide.rst:510
 msgid "Developer commands"
 msgstr ""
 
-#: ../../../developer_guide.rst:439
+#: ../../../developer_guide.rst:515
 msgid "``spack doc``"
 msgstr ""
 
-#: ../../../developer_guide.rst:444
+#: ../../../developer_guide.rst:520
 msgid "``spack style``"
 msgstr ""
 
-#: ../../../developer_guide.rst:446
+#: ../../../developer_guide.rst:522
 msgid ""
 "``spack style`` exists to help the developer check imports and style with "
 "mypy, Flake8, isort, and (soon) Black. To run all style checks, simply do:"
 msgstr ""
 
-#: ../../../developer_guide.rst:449
+#: ../../../developer_guide.rst:525
 msgid "$ spack style"
 msgstr ""
 
-#: ../../../developer_guide.rst:453
+#: ../../../developer_guide.rst:529
 msgid "To run automatic fixes for isort, you can do:"
 msgstr ""
 
-#: ../../../developer_guide.rst:455
+#: ../../../developer_guide.rst:531
 msgid "$ spack style --fix"
 msgstr ""
 
-#: ../../../developer_guide.rst:459
+#: ../../../developer_guide.rst:535
 msgid ""
 "You do not need any of these Python packages installed on your system for "
 "the checks to work! Spack will bootstrap install them from packages for your "
 "use."
 msgstr ""
 
-#: ../../../developer_guide.rst:463
+#: ../../../developer_guide.rst:539
 msgid "``spack unit-test``"
 msgstr ""
 
-#: ../../../developer_guide.rst:465
+#: ../../../developer_guide.rst:541
 msgid ""
 "See the :ref:`contributor guide section <cmd-spack-unit-test>` on ``spack "
 "unit-test``."
 msgstr ""
 
-#: ../../../developer_guide.rst:470
+#: ../../../developer_guide.rst:546
 msgid "``spack python``"
 msgstr ""
 
-#: ../../../developer_guide.rst:472
+#: ../../../developer_guide.rst:548
 msgid ""
 "``spack python`` is a command that lets you import and debug things as if "
 "you were in a Spack interactive shell. Without any arguments, it is similar "
@@ -894,7 +1040,7 @@ msgid ""
 "any other Spack modules:"
 msgstr ""
 
-#: ../../../developer_guide.rst:475
+#: ../../../developer_guide.rst:551
 msgid ""
 "$ spack python\n"
 ">>> from spack.version import Version\n"
@@ -908,23 +1054,23 @@ msgid ""
 ">>>"
 msgstr ""
 
-#: ../../../developer_guide.rst:488
+#: ../../../developer_guide.rst:564
 msgid ""
 "If you prefer using an IPython interpreter, given that IPython is installed, "
 "you can specify the interpreter with ``-i``:"
 msgstr ""
 
-#: ../../../developer_guide.rst:490
+#: ../../../developer_guide.rst:566
 msgid ""
 "$ spack python -i ipython\n"
 "In [1]:"
 msgstr ""
 
-#: ../../../developer_guide.rst:496
+#: ../../../developer_guide.rst:572
 msgid "With either interpreter you can run a single command:"
 msgstr ""
 
-#: ../../../developer_guide.rst:498
+#: ../../../developer_guide.rst:574
 msgid ""
 "$ spack python -c 'from spack.concretize import concretize_one; "
 "concretize_one(\"python\")'\n"
@@ -935,25 +1081,25 @@ msgid ""
 "Out[1]: ..."
 msgstr ""
 
-#: ../../../developer_guide.rst:506
+#: ../../../developer_guide.rst:582
 msgid "or a file:"
 msgstr ""
 
-#: ../../../developer_guide.rst:508
+#: ../../../developer_guide.rst:584
 msgid ""
 "$ spack python ~/test_fetching.py\n"
 "$ spack python -i ipython ~/test_fetching.py"
 msgstr ""
 
-#: ../../../developer_guide.rst:513
+#: ../../../developer_guide.rst:589
 msgid "just like you would with the normal Python command."
 msgstr ""
 
-#: ../../../developer_guide.rst:519
+#: ../../../developer_guide.rst:595
 msgid "``spack blame``"
 msgstr ""
 
-#: ../../../developer_guide.rst:521
+#: ../../../developer_guide.rst:597
 msgid ""
 "``spack blame`` is a way to quickly see contributors to packages or files in "
 "Spack's source tree. For built-in packages, this shows contributors to the "
@@ -962,7 +1108,7 @@ msgid ""
 "example asking to see contributions for the package \"python\":"
 msgstr ""
 
-#: ../../../developer_guide.rst:526
+#: ../../../developer_guide.rst:602
 msgid ""
 "$ spack blame python\n"
 "LAST_COMMIT  LINES  %      AUTHOR            EMAIL\n"
@@ -972,38 +1118,38 @@ msgid ""
 "2 weeks ago  930    100.0"
 msgstr ""
 
-#: ../../../developer_guide.rst:536
+#: ../../../developer_guide.rst:612
 msgid ""
 "By default, you will get a table view (shown above) sorted by date of "
 "contribution, with the most recent contribution at the top. If you want to "
 "sort instead by percentage of code contribution, then add ``-p``:"
 msgstr ""
 
-#: ../../../developer_guide.rst:539
+#: ../../../developer_guide.rst:615
 msgid "$ spack blame -p python"
 msgstr ""
 
-#: ../../../developer_guide.rst:544
+#: ../../../developer_guide.rst:620
 msgid "And to see the Git blame view, add ``-g`` instead:"
 msgstr ""
 
-#: ../../../developer_guide.rst:547
+#: ../../../developer_guide.rst:623
 msgid "$ spack blame -g python"
 msgstr ""
 
-#: ../../../developer_guide.rst:552
+#: ../../../developer_guide.rst:628
 msgid "Finally, to get a JSON export of the data, add ``--json``:"
 msgstr ""
 
-#: ../../../developer_guide.rst:554
+#: ../../../developer_guide.rst:630
 msgid "$ spack blame --json python"
 msgstr ""
 
-#: ../../../developer_guide.rst:562
+#: ../../../developer_guide.rst:638
 msgid "``spack url``"
 msgstr ""
 
-#: ../../../developer_guide.rst:564
+#: ../../../developer_guide.rst:640
 msgid ""
 "A package containing a single URL can be used to download several different "
 "versions of the package. If you have ever wondered how this works, all of "
@@ -1014,7 +1160,7 @@ msgid ""
 "where to download them from."
 msgstr ""
 
-#: ../../../developer_guide.rst:570
+#: ../../../developer_guide.rst:646
 msgid ""
 "The regular expressions in ``parse_name_offset`` and "
 "``parse_version_offset`` are used to extract the name and version, but they "
@@ -1022,15 +1168,15 @@ msgid ""
 "url`` command can be used."
 msgstr ""
 
-#: ../../../developer_guide.rst:577
+#: ../../../developer_guide.rst:653
 msgid "``spack url parse``"
 msgstr ""
 
-#: ../../../developer_guide.rst:579
+#: ../../../developer_guide.rst:655
 msgid "If you need to debug a single URL, you can use the following command:"
 msgstr ""
 
-#: ../../../developer_guide.rst:583
+#: ../../../developer_guide.rst:659
 msgid ""
 "You will notice that the name and version of this URL are correctly "
 "detected, and you can even see which regular expressions it was matched to. "
@@ -1040,17 +1186,17 @@ msgid ""
 "``url_for_version`` function."
 msgstr ""
 
-#: ../../../developer_guide.rst:587
+#: ../../../developer_guide.rst:663
 msgid ""
 "This command also accepts a ``--spider`` flag. If provided, Spack searches "
 "for other versions of the package and prints the matching URLs."
 msgstr ""
 
-#: ../../../developer_guide.rst:594
+#: ../../../developer_guide.rst:670
 msgid "``spack url list``"
 msgstr ""
 
-#: ../../../developer_guide.rst:596
+#: ../../../developer_guide.rst:672
 msgid ""
 "This command lists every URL in every package in Spack. If given the ``--"
 "color`` and ``--extrapolation`` flags, it also colors the part of the string "
@@ -1059,11 +1205,11 @@ msgid ""
 "parsed correctly."
 msgstr ""
 
-#: ../../../developer_guide.rst:604
+#: ../../../developer_guide.rst:680
 msgid "``spack url summary``"
 msgstr ""
 
-#: ../../../developer_guide.rst:606
+#: ../../../developer_guide.rst:682
 msgid ""
 "This command attempts to parse every URL for every package in Spack and "
 "prints a summary of how many of them are being correctly parsed. It also "
@@ -1071,7 +1217,7 @@ msgid ""
 "how frequently:"
 msgstr ""
 
-#: ../../../developer_guide.rst:611
+#: ../../../developer_guide.rst:687
 msgid ""
 "This command is essential for anyone adding or changing the regular "
 "expressions that parse names and versions. By running this command before "
@@ -1079,37 +1225,146 @@ msgid ""
 "more packages than it breaks."
 msgstr ""
 
-#: ../../../developer_guide.rst:615
+#: ../../../developer_guide.rst:691
 msgid "Profiling"
 msgstr ""
 
-#: ../../../developer_guide.rst:617
+#: ../../../developer_guide.rst:693
 msgid ""
-"Spack has some limited built-in support for profiling, and can report "
-"statistics using standard Python timing tools. To use this feature, supply "
-"``--profile`` to Spack on the command line, before any subcommands."
+"To profile Spack, use Python's built-in `cProfile <https://docs.python.org/3/"
+"library/profile.html#module-cProfile>`_ module directly:"
 msgstr ""
 
-#: ../../../developer_guide.rst:623
-msgid "``spack --profile``"
-msgstr ""
-
-#: ../../../developer_guide.rst:625
-msgid "``spack --profile`` output looks like this:"
-msgstr ""
-
-#: ../../../developer_guide.rst:630
+#: ../../../developer_guide.rst:695
 msgid ""
-"The bottom of the output shows the most time-consuming functions, slowest on "
-"top. The profiling support is from Python's built-in tool, `cProfile "
-"<https://docs.python.org/3/library/profile.html#module-cProfile>`_."
+"$ python3 -m cProfile -s cumtime bin/spack find\n"
+"$ python3 -m cProfile -o profile.out bin/spack find"
 msgstr ""
 
-#: ../../../developer_guide.rst:636
+#: ../../../developer_guide.rst:703
+msgid "Debugging concretization"
+msgstr ""
+
+#: ../../../developer_guide.rst:705
+msgid ""
+"When working on the ASP-based solver in ``lib/spack/spack/solver/``, it is "
+"often useful to inspect the raw facts and rules that clingo sees, and to run "
+"clingo directly outside of Spack."
+msgstr ""
+
+#: ../../../developer_guide.rst:708
+msgid "Generating ASP facts"
+msgstr ""
+
+#: ../../../developer_guide.rst:710
+msgid ""
+"The ``spack solve --show=asp`` flag dumps all ASP facts generated for a "
+"given spec to stdout:"
+msgstr ""
+
+#: ../../../developer_guide.rst:712
+msgid "$ spack solve --show=asp zlib-ng > zlib.lp"
+msgstr ""
+
+#: ../../../developer_guide.rst:716
+msgid ""
+"The resulting file contains both the package facts (versions, variants, "
+"dependencies) and the problem-specific facts derived from the user's "
+"configuration. It can be fed directly to clingo alongside the solver rules."
+msgstr ""
+
+#: ../../../developer_guide.rst:720
+msgid "Running clingo directly"
+msgstr ""
+
+#: ../../../developer_guide.rst:722
+msgid ""
+"Once you have the facts file, you can invoke clingo directly. This bypasses "
+"Spack's Python layer and lets you iterate on ``.lp`` rule files quickly."
+msgstr ""
+
+#: ../../../developer_guide.rst:725
+msgid "On Linux (includes libc compatibility rules):"
+msgstr ""
+
+#: ../../../developer_guide.rst:727
+msgid ""
+"$ LP_FILES=\"lib/spack/spack/solver/concretize.lp \\\n"
+"            lib/spack/spack/solver/heuristic.lp \\\n"
+"            lib/spack/spack/solver/display.lp \\\n"
+"            lib/spack/spack/solver/libc_compatibility.lp \\\n"
+"            lib/spack/spack/solver/direct_dependency.lp\"\n"
+"$ clingo --verbose=3 --stats=2 --quiet=1,0,0 [--project-anonymous] \\\n"
+"         --configuration=tweety --opt-strategy=usc,one \\\n"
+"         --heuristic=Domain $LP_FILES zlib.lp"
+msgstr ""
+
+#: ../../../developer_guide.rst:738
+msgid ""
+"On macOS, replace ``libc_compatibility.lp`` with ``os_compatibility.lp``."
+msgstr ""
+
+#: ../../../developer_guide.rst:741
+msgid "Reading the output"
+msgstr ""
+
+#: ../../../developer_guide.rst:743
+msgid ""
+"``--quiet=1,0,0`` suppresses intermediate models and shows only the optimal "
+"answer. ``--stats=2`` appends a detailed statistics block at the end of the "
+"output. The most useful fields are:"
+msgstr ""
+
+#: ../../../developer_guide.rst:747
+msgid ""
+"**Grounding**: total number of ground rules; a sudden increase usually "
+"indicates a rule is producing a combinatorial blowup."
+msgstr ""
+
+#: ../../../developer_guide.rst:748
+msgid ""
+"**Solve time**: wall-clock time spent in the search phase alone, excluding "
+"grounding."
+msgstr ""
+
+#: ../../../developer_guide.rst:749
+msgid ""
+"**Optimization**: the vector of objective values at each priority level, "
+"useful for verifying that the solver is minimizing the right criteria."
+msgstr ""
+
+#: ../../../developer_guide.rst:751
+msgid ""
+"``--verbose=3`` prints each rule as it is grounded, which helps identify "
+"which rule is responsible for an unexpected grounding explosion. Because the "
+"output is very large, redirect it to a file and search for the rule body of "
+"interest."
+msgstr ""
+
+#: ../../../developer_guide.rst:754
+msgid ""
+"If a solve takes a long time to finish, you can interrupt it with "
+"``Ctrl+C``. The partial statistics printed on interrupt are still useful for "
+"diagnosing the bottleneck."
+msgstr ""
+
+#: ../../../developer_guide.rst:758
+msgid "Running the concretization test suite"
+msgstr ""
+
+#: ../../../developer_guide.rst:760
+msgid "After modifying any solver ``.lp`` file, verify correctness with:"
+msgstr ""
+
+#: ../../../developer_guide.rst:762
+msgid "$ pytest -n 8 lib/spack/spack/test/concretization"
+msgstr ""
+
+#: ../../../developer_guide.rst:769
 msgid "Releases"
 msgstr ""
 
-#: ../../../developer_guide.rst:638
+#: ../../../developer_guide.rst:771
 msgid ""
 "This section documents Spack's release process. It is intended for project "
 "maintainers, as the tasks described here require maintainer privileges on "
@@ -1117,11 +1372,11 @@ msgid ""
 "some insight into how the Spack project works."
 msgstr ""
 
-#: ../../../developer_guide.rst:645
+#: ../../../developer_guide.rst:778
 msgid "Release branches"
 msgstr ""
 
-#: ../../../developer_guide.rst:647
+#: ../../../developer_guide.rst:780
 msgid ""
 "There are currently two types of Spack releases: :ref:`minor releases <minor-"
 "releases>` (``1.1.0``, ``1.2.0``, etc.) and :ref:`patch releases <patch-"
@@ -1129,7 +1384,7 @@ msgid ""
 "Spack release branches work:"
 msgstr ""
 
-#: ../../../developer_guide.rst:650
+#: ../../../developer_guide.rst:783
 msgid ""
 "o    branch: develop  (latest version, v1.2.0.dev0)\n"
 "|\n"
@@ -1154,14 +1409,14 @@ msgid ""
 "o"
 msgstr ""
 
-#: ../../../developer_guide.rst:674
+#: ../../../developer_guide.rst:807
 msgid ""
 "The ``develop`` branch has the latest contributions, and nearly all pull "
 "requests target ``develop``. The ``develop`` branch will report that its "
 "version is that of the next **minor** release with a ``.dev0`` suffix."
 msgstr ""
 
-#: ../../../developer_guide.rst:677
+#: ../../../developer_guide.rst:810
 msgid ""
 "Each Spack release series also has a corresponding branch, e.g., ``releases/"
 "v1.1`` has ``v1.1.x`` versions of Spack, and ``releases/v1.0`` has ``v1.0."
@@ -1170,7 +1425,7 @@ msgid ""
 "This is typically done by cherry-picking bugfix commits off of ``develop``."
 msgstr ""
 
-#: ../../../developer_guide.rst:682
+#: ../../../developer_guide.rst:815
 msgid ""
 "To avoid version churn for users of a release series, patch releases "
 "**should not** make changes that would change the concretization of "
@@ -1179,7 +1434,7 @@ msgid ""
 "added to a patch release."
 msgstr ""
 
-#: ../../../developer_guide.rst:686
+#: ../../../developer_guide.rst:819
 msgid ""
 "Both minor and patch releases are tagged. As a convenience, we also tag the "
 "latest release as ``releases/latest``, so that users can easily check it out "
@@ -1187,11 +1442,11 @@ msgid ""
 "more details."
 msgstr ""
 
-#: ../../../developer_guide.rst:690
+#: ../../../developer_guide.rst:823
 msgid "PEP 440 compliance"
 msgstr ""
 
-#: ../../../developer_guide.rst:693
+#: ../../../developer_guide.rst:826
 msgid ""
 "Spack releases up to ``v0.17`` were merged back into the ``develop`` branch "
 "to ensure that release tags would appear among its ancestors. Since "
@@ -1201,11 +1456,11 @@ msgid ""
 "pep-0440/>`_ compliant versions."
 msgstr ""
 
-#: ../../../developer_guide.rst:698
+#: ../../../developer_guide.rst:831
 msgid "Scheduling work for releases"
 msgstr ""
 
-#: ../../../developer_guide.rst:700
+#: ../../../developer_guide.rst:833
 msgid ""
 "We schedule work for **minor releases** through `milestones <https://github."
 "com/spack/spack/milestones>`_ and `GitHub Projects <https://github.com/spack/"
@@ -1213,7 +1468,7 @@ msgid ""
 "spack/spack/labels>`_."
 msgstr ""
 
-#: ../../../developer_guide.rst:702
+#: ../../../developer_guide.rst:835
 msgid ""
 "While there can be multiple milestones open at a given time, only one is "
 "usually active. Its name corresponds to the next major/minor version, for "
@@ -1223,7 +1478,7 @@ msgid ""
 "milestone is created for the next major/minor release, if not already there."
 msgstr ""
 
-#: ../../../developer_guide.rst:707
+#: ../../../developer_guide.rst:840
 msgid ""
 "Bug reports in GitHub issues are automatically labelled ``bug`` and "
 "``triage``. Spack developers assign one of the labels ``impact-low``, "
@@ -1233,7 +1488,7 @@ msgid ""
 "appear at the top of the project board."
 msgstr ""
 
-#: ../../../developer_guide.rst:712
+#: ../../../developer_guide.rst:845
 msgid ""
 "Spack's milestones are not firm commitments so we move work between releases "
 "frequently. If we need to make a release and some tasks are not yet done, we "
@@ -1241,11 +1496,11 @@ msgid ""
 "delaying the release to complete them."
 msgstr ""
 
-#: ../../../developer_guide.rst:716
+#: ../../../developer_guide.rst:849
 msgid "Backporting bug fixes"
 msgstr ""
 
-#: ../../../developer_guide.rst:718
+#: ../../../developer_guide.rst:851
 msgid ""
 "When a bug is fixed in the ``develop`` branch, it is often necessary to "
 "backport the fix to one (or more) of the ``releases/vX.Y`` branches. Only "
@@ -1256,7 +1511,7 @@ msgid ""
 "backported to."
 msgstr ""
 
-#: ../../../developer_guide.rst:722
+#: ../../../developer_guide.rst:855
 msgid ""
 "Backports are done publicly by the release manager using a pull request "
 "named ``Backports vX.Y.Z``. This pull request is opened from the ``backports/"
@@ -1265,107 +1520,107 @@ msgid ""
 "Typically there are one or two backport pull requests open at any given time."
 msgstr ""
 
-#: ../../../developer_guide.rst:729
+#: ../../../developer_guide.rst:862
 msgid "Making minor releases"
 msgstr ""
 
-#: ../../../developer_guide.rst:731
+#: ../../../developer_guide.rst:864
 msgid ""
 "Assuming all required work from the milestone is completed, the steps to "
 "make the minor release are:"
 msgstr ""
 
-#: ../../../developer_guide.rst:733
+#: ../../../developer_guide.rst:866
 msgid ""
 "`Create a new milestone <https://github.com/spack/spack/milestones>`_ for "
 "the next major/minor release."
 msgstr ""
 
-#: ../../../developer_guide.rst:735
+#: ../../../developer_guide.rst:868
 msgid ""
 "`Create a new label <https://github.com/spack/spack/labels>`_ for the next "
 "patch release."
 msgstr ""
 
-#: ../../../developer_guide.rst:737
+#: ../../../developer_guide.rst:870
 msgid "Move any optional tasks that are not done to the next milestone."
 msgstr ""
 
-#: ../../../developer_guide.rst:739
+#: ../../../developer_guide.rst:872
 msgid "Create a branch for the release, based on ``develop``:"
 msgstr ""
 
-#: ../../../developer_guide.rst:741
+#: ../../../developer_guide.rst:874
 msgid "$ git checkout -b releases/v1.1 develop"
 msgstr ""
 
-#: ../../../developer_guide.rst:745
+#: ../../../developer_guide.rst:878
 msgid ""
 "For a version ``vX.Y.Z``, the branch's name should be ``releases/vX.Y``. "
 "That is, you should create a ``releases/vX.Y`` branch if you are preparing "
 "the ``X.Y.0`` release."
 msgstr ""
 
-#: ../../../developer_guide.rst:748
+#: ../../../developer_guide.rst:881
 msgid ""
 "Remove the ``dev0`` development release segment from the version tuple in "
 "``lib/spack/spack/__init__.py``."
 msgstr ""
 
-#: ../../../developer_guide.rst:750
+#: ../../../developer_guide.rst:883
 msgid ""
 "The version number itself should already be correct and should not be "
 "modified."
 msgstr ""
 
-#: ../../../developer_guide.rst:752
+#: ../../../developer_guide.rst:885
 msgid "Update ``CHANGELOG.md`` with major highlights in bullet form."
 msgstr ""
 
-#: ../../../developer_guide.rst:754
+#: ../../../developer_guide.rst:887
 msgid ""
 "Use proper Markdown formatting, like `this example from v1.0.0 <https://"
 "github.com/spack/spack/commit/b187f8758227abdfc9eb349a48f8b725aa27a162>`_."
 msgstr ""
 
-#: ../../../developer_guide.rst:756
+#: ../../../developer_guide.rst:889
 msgid "Push the release branch to GitHub."
 msgstr ""
 
-#: ../../../developer_guide.rst:758
+#: ../../../developer_guide.rst:891
 msgid "Make sure CI passes on the release branch, including:"
 msgstr ""
 
-#: ../../../developer_guide.rst:760 ../../../developer_guide.rst:824
+#: ../../../developer_guide.rst:893 ../../../developer_guide.rst:960
 msgid "Regular unit tests"
 msgstr ""
 
-#: ../../../developer_guide.rst:761 ../../../developer_guide.rst:825
+#: ../../../developer_guide.rst:894 ../../../developer_guide.rst:961
 msgid "Build tests"
 msgstr ""
 
-#: ../../../developer_guide.rst:762 ../../../developer_guide.rst:826
+#: ../../../developer_guide.rst:895 ../../../developer_guide.rst:962
 msgid "The E4S pipeline at `gitlab.spack.io <https://gitlab.spack.io>`_"
 msgstr ""
 
-#: ../../../developer_guide.rst:764
+#: ../../../developer_guide.rst:897
 msgid ""
 "If CI is not passing, submit pull requests to ``develop`` as normal and keep "
 "rebasing the release branch on ``develop`` until CI passes."
 msgstr ""
 
-#: ../../../developer_guide.rst:766
+#: ../../../developer_guide.rst:899
 msgid ""
 "Make sure the entire documentation is up to date. If documentation is "
 "outdated, submit pull requests to ``develop`` as normal and keep rebasing "
 "the release branch on ``develop``."
 msgstr ""
 
-#: ../../../developer_guide.rst:769
+#: ../../../developer_guide.rst:902
 msgid "Bump the minor version in the ``develop`` branch."
 msgstr ""
 
-#: ../../../developer_guide.rst:771
+#: ../../../developer_guide.rst:904
 msgid ""
 "Create a pull request targeting the ``develop`` branch, bumping the minor "
 "version in ``lib/spack/spack/__init__.py`` with a ``dev0`` release segment. "
@@ -1373,23 +1628,23 @@ msgid ""
 "``(1, 2, 0, 'dev0')`` on ``develop``."
 msgstr ""
 
-#: ../../../developer_guide.rst:774 ../../../developer_guide.rst:836
+#: ../../../developer_guide.rst:907 ../../../developer_guide.rst:972
 msgid "Follow the steps in :ref:`publishing-releases`."
 msgstr ""
 
-#: ../../../developer_guide.rst:776 ../../../developer_guide.rst:838
+#: ../../../developer_guide.rst:909 ../../../developer_guide.rst:974
 msgid "Follow the steps in :ref:`updating-latest-release`."
 msgstr ""
 
-#: ../../../developer_guide.rst:778 ../../../developer_guide.rst:840
+#: ../../../developer_guide.rst:911 ../../../developer_guide.rst:976
 msgid "Follow the steps in :ref:`announcing-releases`."
 msgstr ""
 
-#: ../../../developer_guide.rst:784
+#: ../../../developer_guide.rst:917
 msgid "Making patch releases"
 msgstr ""
 
-#: ../../../developer_guide.rst:786
+#: ../../../developer_guide.rst:919
 msgid ""
 "To make the patch release process both efficient and transparent, we use a "
 "*backports pull request* which contains cherry-picked commits from the "
@@ -1399,14 +1654,22 @@ msgid ""
 "resolve since the changes are fresh in the mind of the developer."
 msgstr ""
 
-#: ../../../developer_guide.rst:789
+#: ../../../developer_guide.rst:922
 msgid ""
 "The backports pull request is always titled ``Backports vX.Y.Z`` and is "
 "labelled ``backports``. It is opened from a branch named ``backports/vX.Y."
 "Z`` and targets the ``releases/vX.Y`` branch."
 msgstr ""
 
-#: ../../../developer_guide.rst:792
+#: ../../../developer_guide.rst:925
+msgid ""
+"The first commit on the ``backports/vX.Y.Z`` branch should update the Spack "
+"version to ``X.Y.Z.dev0``, and should have the commit message ``set version "
+"to X.Y.Z.dev0``. This ensures that if users check out an intermediate commit "
+"between two patch releases, Spack reports the version correctly."
+msgstr ""
+
+#: ../../../developer_guide.rst:928
 msgid ""
 "Whenever a pull request labelled ``vX.Y.Z`` is merged, cherry-pick the "
 "associated squashed commit on ``develop`` to the ``backports/vX.Y.Z`` "
@@ -1415,7 +1678,7 @@ msgid ""
 "Y.Z`` branch."
 msgstr ""
 
-#: ../../../developer_guide.rst:798
+#: ../../../developer_guide.rst:934
 msgid ""
 "Sometimes you may **still** get merge conflicts even if you have cherry-"
 "picked all the commits in order. This generally means there is some other "
@@ -1425,11 +1688,11 @@ msgid ""
 "differences."
 msgstr ""
 
-#: ../../../developer_guide.rst:803
+#: ../../../developer_guide.rst:939
 msgid "If the changes are small, you might just cherry-pick it."
 msgstr ""
 
-#: ../../../developer_guide.rst:805
+#: ../../../developer_guide.rst:941
 msgid ""
 "If the changes are large, then you may decide that this fix is not worth "
 "including in a patch release, in which case you should remove the label from "
@@ -1437,62 +1700,62 @@ msgid ""
 "choice for a patch release."
 msgstr ""
 
-#: ../../../developer_guide.rst:808
+#: ../../../developer_guide.rst:944
 msgid ""
 "When all commits are cherry-picked in the ``backports/vX.Y.Z`` branch, make "
 "the patch release as follows:"
 msgstr ""
 
-#: ../../../developer_guide.rst:810
+#: ../../../developer_guide.rst:946
 msgid ""
 "`Create a new label <https://github.com/spack/spack/labels>`_ ``vX.Y.{Z+1}`` "
 "for the next patch release."
 msgstr ""
 
-#: ../../../developer_guide.rst:812
+#: ../../../developer_guide.rst:948
 msgid ""
 "Replace the label ``vX.Y.Z`` with ``vX.Y.{Z+1}`` for all PRs and issues that "
 "are not yet done."
 msgstr ""
 
-#: ../../../developer_guide.rst:814
+#: ../../../developer_guide.rst:950
 msgid ""
 "Manually push a single commit with commit message ``Set version to vX.Y.Z`` "
 "to the ``backports/vX.Y.Z`` branch, that both bumps the Spack version number "
 "and updates the changelog:"
 msgstr ""
 
-#: ../../../developer_guide.rst:816
+#: ../../../developer_guide.rst:952
 msgid "Bump the version in ``lib/spack/spack/__init__.py``."
 msgstr ""
 
-#: ../../../developer_guide.rst:817
+#: ../../../developer_guide.rst:953
 msgid "Update ``CHANGELOG.md`` with a list of the changes."
 msgstr ""
 
-#: ../../../developer_guide.rst:819
+#: ../../../developer_guide.rst:955
 msgid ""
 "This is typically a summary of the commits you cherry-picked onto the "
 "release branch. See `the changelog from v1.0.2 <https://github.com/spack/"
 "spack/commit/734c5db2121b01c373eed6538e452f18887e9e44>`_."
 msgstr ""
 
-#: ../../../developer_guide.rst:822
+#: ../../../developer_guide.rst:958
 msgid "Make sure CI passes on the **backports pull request**, including:"
 msgstr ""
 
-#: ../../../developer_guide.rst:828
+#: ../../../developer_guide.rst:964
 msgid ""
 "Merge the ``Backports vX.Y.Z`` PR with the **Rebase and merge** strategy. "
 "This is needed to keep track in the release branch of all the commits that "
 "were cherry-picked."
 msgstr ""
 
-#: ../../../developer_guide.rst:831
+#: ../../../developer_guide.rst:967
 msgid "Make sure CI passes on the last commit of the **release branch**."
 msgstr ""
 
-#: ../../../developer_guide.rst:833
+#: ../../../developer_guide.rst:969
 msgid ""
 "In the rare case you need to include additional commits in the patch release "
 "after the backports PR is merged, it is best to delete the last commit ``Set "
@@ -1501,237 +1764,237 @@ msgid ""
 "Avoid repeated force-pushes to the release branch."
 msgstr ""
 
-#: ../../../developer_guide.rst:842
+#: ../../../developer_guide.rst:978
 msgid ""
 "Submit a PR to update the ``CHANGELOG.md`` in the ``develop`` branch with "
 "the addition of this patch release."
 msgstr ""
 
-#: ../../../developer_guide.rst:847
+#: ../../../developer_guide.rst:983
 msgid "Publishing a release on GitHub"
 msgstr ""
 
-#: ../../../developer_guide.rst:849
+#: ../../../developer_guide.rst:985
 msgid "Create the release in GitHub."
 msgstr ""
 
-#: ../../../developer_guide.rst:851
+#: ../../../developer_guide.rst:987
 msgid ""
 "Go to `github.com/spack/spack/releases <https://github.com/spack/spack/"
 "releases>`_ and click ``Draft a new release``."
 msgstr ""
 
-#: ../../../developer_guide.rst:853
+#: ../../../developer_guide.rst:989
 msgid "Set ``Tag version`` to the name of the tag that will be created."
 msgstr ""
 
-#: ../../../developer_guide.rst:855
+#: ../../../developer_guide.rst:991
 msgid ""
 "The name should start with ``v`` and contain *all three* parts of the "
 "version (e.g., ``v1.1.0`` or ``v1.1.1``)."
 msgstr ""
 
-#: ../../../developer_guide.rst:857
+#: ../../../developer_guide.rst:993
 msgid ""
 "Set ``Target`` to the ``releases/vX.Y`` branch (e.g., ``releases/v1.0``)."
 msgstr ""
 
-#: ../../../developer_guide.rst:859
+#: ../../../developer_guide.rst:995
 msgid ""
 "Set ``Release title`` to ``vX.Y.Z`` to match the tag (e.g., ``v1.0.1``)."
 msgstr ""
 
-#: ../../../developer_guide.rst:861
+#: ../../../developer_guide.rst:997
 msgid ""
 "Paste the latest release Markdown from your ``CHANGELOG.md`` file as the "
 "text."
 msgstr ""
 
-#: ../../../developer_guide.rst:863
+#: ../../../developer_guide.rst:999
 msgid ""
 "Save the draft so you can keep coming back to it as you prepare the release."
 msgstr ""
 
-#: ../../../developer_guide.rst:865
+#: ../../../developer_guide.rst:1001
 msgid "When you are ready to finalize the release, click ``Publish release``."
 msgstr ""
 
-#: ../../../developer_guide.rst:867
+#: ../../../developer_guide.rst:1003
 msgid ""
 "Immediately after publishing, go back to `github.com/spack/spack/releases "
 "<https://github.com/spack/spack/releases>`_ and download the auto-generated "
 "``.tar.gz`` file for the release. It is the ``Source code (tar.gz)`` link."
 msgstr ""
 
-#: ../../../developer_guide.rst:870
+#: ../../../developer_guide.rst:1006
 msgid ""
 "Click ``Edit`` on the release you just made and attach the downloaded "
 "release tarball as a binary. This does two things:"
 msgstr ""
 
-#: ../../../developer_guide.rst:873
+#: ../../../developer_guide.rst:1009
 msgid "Makes sure that the hash of our releases does not change over time."
 msgstr ""
 
-#: ../../../developer_guide.rst:875
+#: ../../../developer_guide.rst:1011
 msgid ""
 "GitHub sometimes annoyingly changes the way they generate tarballs that can "
 "result in the hashes changing if you rely on the auto-generated tarball "
 "links."
 msgstr ""
 
-#: ../../../developer_guide.rst:877
+#: ../../../developer_guide.rst:1013
 msgid "Gets download counts on releases visible through the GitHub API."
 msgstr ""
 
-#: ../../../developer_guide.rst:879
+#: ../../../developer_guide.rst:1015
 msgid ""
 "GitHub tracks downloads of artifacts, but *not* the source links. See the "
 "`releases page <https://api.github.com/repos/spack/spack/releases>`_ and "
 "search for ``download_count`` to see this."
 msgstr ""
 
-#: ../../../developer_guide.rst:882
+#: ../../../developer_guide.rst:1018
 msgid ""
 "Go to `readthedocs.org <https://readthedocs.org/projects/spack>`_ and "
 "activate the release tag."
 msgstr ""
 
-#: ../../../developer_guide.rst:884
+#: ../../../developer_guide.rst:1020
 msgid ""
 "This builds the documentation and makes the released version selectable in "
 "the versions menu."
 msgstr ""
 
-#: ../../../developer_guide.rst:890
+#: ../../../developer_guide.rst:1026
 msgid "Updating `releases/latest`"
 msgstr ""
 
-#: ../../../developer_guide.rst:892
+#: ../../../developer_guide.rst:1028
 msgid ""
 "If the new release is the **highest** Spack release yet, you should also tag "
 "it as ``releases/latest``. For example, suppose the highest release is "
 "currently ``v1.1.3``:"
 msgstr ""
 
-#: ../../../developer_guide.rst:895
+#: ../../../developer_guide.rst:1031
 msgid ""
 "If you are releasing ``v1.1.4`` or ``v1.2.0``, then you should tag it with "
 "``releases/latest``, as these are higher than ``v1.1.3``."
 msgstr ""
 
-#: ../../../developer_guide.rst:897
+#: ../../../developer_guide.rst:1033
 msgid ""
 "If you are making a new release of an **older** minor version of Spack, e."
 "g., ``v1.0.5``, then you should not tag it as ``releases/latest`` (as there "
 "are newer major/minor versions)."
 msgstr ""
 
-#: ../../../developer_guide.rst:899
+#: ../../../developer_guide.rst:1035
 msgid ""
 "To do so, first fetch the latest tag created on GitHub, since you may not "
 "have it locally:"
 msgstr ""
 
-#: ../../../developer_guide.rst:901
+#: ../../../developer_guide.rst:1037
 msgid "$ git fetch --force git@github.com:spack/spack tag vX.Y.Z"
 msgstr ""
 
-#: ../../../developer_guide.rst:905
+#: ../../../developer_guide.rst:1041
 msgid ""
 "Then tag ``vX.Y.Z`` as ``releases/latest`` and push the individual tag to "
 "GitHub."
 msgstr ""
 
-#: ../../../developer_guide.rst:907
+#: ../../../developer_guide.rst:1043
 msgid ""
 "$ git tag --force releases/latest vX.Y.Z\n"
 "$ git push --force git@github.com:spack/spack releases/latest"
 msgstr ""
 
-#: ../../../developer_guide.rst:912
+#: ../../../developer_guide.rst:1048
 msgid ""
 "The ``--force`` argument to ``git tag`` makes Git overwrite the existing "
 "``releases/latest`` tag with the new one. Do **not** use the ``--tags`` flag "
 "when pushing, as this will push *all* local tags."
 msgstr ""
 
-#: ../../../developer_guide.rst:919
+#: ../../../developer_guide.rst:1055
 msgid "Announcing a release"
 msgstr ""
 
-#: ../../../developer_guide.rst:921
+#: ../../../developer_guide.rst:1057
 msgid ""
 "We announce releases in all of the major Spack communication channels. "
 "Publishing the release takes care of GitHub. The remaining channels are X, "
 "Slack, and the mailing list. Here are the steps:"
 msgstr ""
 
-#: ../../../developer_guide.rst:926
+#: ../../../developer_guide.rst:1062
 msgid "Announce the release on X."
 msgstr ""
 
-#: ../../../developer_guide.rst:928
+#: ../../../developer_guide.rst:1064
 msgid ""
 "Compose the tweet on the ``@spackpm`` account per the ``spack-twitter`` "
 "slack channel."
 msgstr ""
 
-#: ../../../developer_guide.rst:930 ../../../developer_guide.rst:948
+#: ../../../developer_guide.rst:1066 ../../../developer_guide.rst:1084
 msgid "Be sure to include a link to the release's page on GitHub."
 msgstr ""
 
-#: ../../../developer_guide.rst:932
+#: ../../../developer_guide.rst:1068
 msgid ""
 "You can base the tweet on `this example <https://twitter.com/spackpm/"
 "status/1231761858182307840>`_."
 msgstr ""
 
-#: ../../../developer_guide.rst:934
+#: ../../../developer_guide.rst:1070
 msgid "Announce the release on Slack."
 msgstr ""
 
-#: ../../../developer_guide.rst:936
+#: ../../../developer_guide.rst:1072
 msgid ""
 "Compose a message in the ``#announcements`` Slack channel (`spackpm.slack."
 "com <https://spackpm.slack.com>`_)."
 msgstr ""
 
-#: ../../../developer_guide.rst:938
+#: ../../../developer_guide.rst:1074
 msgid ""
 "Preface the message with ``@channel`` to notify even those people not "
 "currently logged in."
 msgstr ""
 
-#: ../../../developer_guide.rst:940
+#: ../../../developer_guide.rst:1076
 msgid "Be sure to include a link to the tweet above."
 msgstr ""
 
-#: ../../../developer_guide.rst:942
+#: ../../../developer_guide.rst:1078
 msgid ""
 "The tweet will be shown inline so that you do not have to retype your "
 "release announcement."
 msgstr ""
 
-#: ../../../developer_guide.rst:944
+#: ../../../developer_guide.rst:1080
 msgid "Announce the release on the Spack mailing list."
 msgstr ""
 
-#: ../../../developer_guide.rst:946
+#: ../../../developer_guide.rst:1082
 msgid "Compose an email to the Spack mailing list."
 msgstr ""
 
-#: ../../../developer_guide.rst:950
+#: ../../../developer_guide.rst:1086
 msgid "It is also helpful to include some information directly in the email."
 msgstr ""
 
-#: ../../../developer_guide.rst:952
+#: ../../../developer_guide.rst:1088
 msgid ""
 "You can base your announcement on this `example email <https://groups.google."
 "com/forum/#!topic/spack/WT4CT9i_X4s>`_."
 msgstr ""
 
-#: ../../../developer_guide.rst:954
+#: ../../../developer_guide.rst:1090
 msgid ""
 "Once you have completed the above steps, congratulations, you are done! You "
 "have finished making the release!"
