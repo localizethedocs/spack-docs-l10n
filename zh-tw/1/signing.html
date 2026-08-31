@@ -1,0 +1,757 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Understand the Spack package signing process, which ensures data integrity for official packages from automated CI pipelines through cryptographic signing." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-09-23T06:15:07+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜尋" href="search.html"><link rel="next" title="Using External GPU Support" href="gpu_configuration.html"><link rel="prev" title="CI Pipelines" href="pipelines.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/signing.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>Spack Package Signing - Spack 1.1.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/signing.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="spack-package-signing">
+<span id="signing"></span><h1>Spack Package Signing<a class="headerlink" href="#spack-package-signing" title="連結到這個標頭">¶</a></h1>
+<p>The goal of package signing in Spack is to provide data integrity assurances around official packages produced by the automated Spack CI pipelines.
+These assurances directly address the security of Spack's software supply chain by explaining why a security-conscious user can be reasonably justified in the belief that packages installed via Spack have an uninterrupted auditable trail back to change management decisions judged to be appropriate by the Spack maintainers.
+This is achieved through cryptographic signing of packages built by Spack CI pipelines based on code that has been transparently reviewed and approved on GitHub.
+This document describes the signing process for interested users.</p>
+<section id="risks-impact-and-threat-model">
+<span id="risks"></span><h2>Risks, Impact and Threat Model<a class="headerlink" href="#risks-impact-and-threat-model" title="連結到這個標頭">¶</a></h2>
+<p>This document addresses the approach taken to safeguard Spack's reputation with regard to the integrity of the package data produced by Spack's CI pipelines.
+It does not address issues of data confidentiality (Spack is intended to be largely open source) or availability (efforts are described elsewhere).
+With that said, the main reputational risk can be broadly categorized as a loss of faith in the data integrity due to a breach of the private key used to sign packages.
+Remediation of a private key breach would require republishing the public key with a revocation certificate, generating a new signing key, an assessment and potential rebuild/resigning of all packages since the key was breached, and finally direct intervention by every spack user to update their copy of Spack's public keys used for local verification.</p>
+<p>The primary threat model used in mitigating the risks of these stated impacts is one of individual error not malicious intent or insider threat.
+The primary objective is to avoid the above impacts by making a private key breach nearly impossible due to oversight or configuration error.
+Obvious and straightforward measures are taken to mitigate issues of malicious interference in data integrity and insider threats but these attack vectors are not systematically addressed.
+It should be hard to exfiltrate the private key intentionally, and almost impossible to leak the key by accident.</p>
+</section>
+<section id="pipeline-overview">
+<span id="overview"></span><h2>Pipeline Overview<a class="headerlink" href="#pipeline-overview" title="連結到這個標頭">¶</a></h2>
+<p>Spack pipelines build software through progressive stages where packages in later stages nominally depend on packages built in earlier stages.
+For both technical and design reasons these dependencies are not implemented through the default GitLab artifacts mechanism; instead built packages are uploaded to AWS S3 mirrors (buckets) where they are retrieved by subsequent stages in the pipeline.
+Two broad categories of pipelines exist: Pull Request (PR) pipelines and Develop/Release pipelines.</p>
+<ul class="simple">
+<li><p>PR pipelines are launched in response to pull requests made by trusted and untrusted users.
+Packages built on these pipelines upload code to quarantined AWS S3 locations which cache the built packages for the purposes of review and iteration on the changes proposed in the pull request.
+Packages built on PR pipelines can come from untrusted users so signing of these pipelines is not implemented.
+Jobs in these pipelines are executed via normal GitLab runners both within the AWS GitLab infrastructure and at affiliated institutions.</p></li>
+<li><p>Develop and Release pipelines <strong>sign</strong> the packages they produce and carry strong integrity assurances that trace back to auditable change management decisions.
+These pipelines only run after members from a trusted group of reviewers verify that the proposed changes in a pull request are appropriate.
+Once the PR is merged, or a release is cut, a pipeline is run on protected GitLab runners which provide access to the required signing keys within the job.
+Intermediary keys are used to sign packages in each stage of the pipeline as they are built and a final job officially signs each package external to any specific package's build environment.
+An intermediate key exists in the AWS infrastructure and for each affiliated institution that maintains protected runners.
+The runners that execute these pipelines exclusively accept jobs from protected branches meaning the intermediate keys are never exposed to unreviewed code and the official keys are never exposed to any specific build environment.</p></li>
+</ul>
+</section>
+<section id="key-architecture">
+<span id="id1"></span><h2>Key Architecture<a class="headerlink" href="#key-architecture" title="連結到這個標頭">¶</a></h2>
+<p>Spack's CI process uses public-key infrastructure (PKI) based on GNU Privacy Guard (gpg) keypairs to sign public releases of spack package metadata, also called specs.
+Two classes of GPG keys are involved in the process to reduce the impact of an individual private key compromise, these key classes are the <em>Intermediate CI Key</em> and <em>Reputational Key</em>.
+Each of these keys has signing sub-keys that are used exclusively for signing packages.
+This can be confusing so for the purpose of this explanation we will refer to Root and Signing keys.
+Each key has a private and a public component as well as one or more identities and zero or more signatures.</p>
+</section>
+<section id="intermediate-ci-key">
+<h2>Intermediate CI Key<a class="headerlink" href="#intermediate-ci-key" title="連結到這個標頭">¶</a></h2>
+<p>The Intermediate key class is used to sign and verify packages between stages within a develop or release pipeline.
+An intermediate key exists for the AWS infrastructure as well as each affiliated institution that maintains protected runners.
+These intermediate keys are made available to the GitLab execution environment building the package so that the package's dependencies may be verified by the Signing Intermediate CI Public Key and the final package may be signed by the Signing Intermediate CI Private Key.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p><strong>Intermediate CI Key (GPG)</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Root Intermediate CI Private Key (RSA 4096)</p></td>
+<td><p>Root Intermediate CI Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Signing Intermediate CI Private Key (RSA 4096)</p></td>
+<td><p>Signing Intermediate CI Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Identity: &quot;Intermediate CI Key &lt;<a class="reference external" href="mailto:maintainers&#37;&#52;&#48;spack&#46;io">maintainers<span>&#64;</span>spack<span>&#46;</span>io</a>&gt;&quot;</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>Signatures: None</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <em>Root intermediate CI Private Key</em>is stripped out of the GPG key and stored offline completely separate from Spack's infrastructure.
+This allows the core development team to append revocation certificates to the GPG key and issue new sub-keys for use in the pipeline.
+It is our expectation that this will happen on a semi-regular basis.
+A corollary of this is that <em>this key should not be used to verify package integrity outside the internal CI process.</em></p>
+</section>
+<section id="reputational-key">
+<h2>Reputational Key<a class="headerlink" href="#reputational-key" title="連結到這個標頭">¶</a></h2>
+<p>The Reputational Key is the public facing key used to sign complete groups of development and release packages.
+Only one key pair exists in this class of keys.
+In contrast to the Intermediate CI Key the Reputational Key <em>should</em> be used to verify package integrity.
+At the end of develop and release pipelines a final pipeline job pulls down all signed package metadata built by the pipeline, verifies they were signed with an Intermediate CI Key, then strips the Intermediate CI Key signature from the package and re-signs them with the Signing Reputational Private Key.
+The officially signed packages are then uploaded back to the AWS S3 mirror.
+Please note that separating use of the reputational key into this final job is done to prevent leakage of the key in a spack package.
+Because the Signing Reputational Private Key is never exposed to a build job it cannot accidentally end up in any built package.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p><strong>Reputational Key (GPG)</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Root Reputational Private Key (RSA 4096)#</p></td>
+<td><p>Root Reputational Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Signing Reputational Private Key (RSA 4096)</p></td>
+<td><p>Signing Reputational Public Key (RSA 4096)</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Identity: &quot;Spack Project &lt;<a class="reference external" href="mailto:maintainers&#37;&#52;&#48;spack&#46;io">maintainers<span>&#64;</span>spack<span>&#46;</span>io</a>&gt;&quot;</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>Signatures: Signed by core development team <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The Root Reputational Private Key is stripped out of the GPG key and stored offline completely separate from Spack's infrastructure.
+This allows the core development team to append revocation certificates to the GPG key in the unlikely event that the Signing Reputation Private Key is compromised.
+In general it is the expectation that rotating this key will happen infrequently if at all.
+This should allow relatively transparent verification for the end-user community without needing deep familiarity with GnuPG or Public Key Infrastructure.</p>
+</section>
+<section id="build-cache-signing">
+<span id="id3"></span><h2>Build Cache Signing<a class="headerlink" href="#build-cache-signing" title="連結到這個標頭">¶</a></h2>
+<p>For an in-depth description of the layout of a binary mirror, see the <a class="reference internal" href="binary_caches.html#build-cache-layout"><span class="std std-ref">documentation</span></a> covering binary caches.
+The key takeaway from that discussion that applies here is that the entry point to a binary package is its manifest.
+The manifest refers unambiguously to the spec metadata and compressed archive, which are stored as content-addressed blobs.</p>
+<p>The manifest files can either be signed or unsigned, but are always given a name ending with <code class="docutils literal notranslate"><span class="pre">.spec.manifest.json</span></code> regardless.
+The difference between signed and unsigned manifests is simply that the signed version is wrapped in a gpg cleartext signature, as illustrated below:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  &quot;version&quot;: 3,
+  &quot;data&quot;: [
+    {
+      &quot;contentLength&quot;: 10731083,
+      &quot;mediaType&quot;: &quot;application/vnd.spack.install.v2.tar+gzip&quot;,
+      &quot;compression&quot;: &quot;gzip&quot;,
+      &quot;checksumAlgorithm&quot;: &quot;sha256&quot;,
+      &quot;checksum&quot;: &quot;0f24aa6b5dd7150067349865217acd3f6a383083f9eca111d2d2fed726c88210&quot;
+    },
+    {
+      &quot;contentLength&quot;: 1000,
+      &quot;mediaType&quot;: &quot;application/vnd.spack.spec.v5+json&quot;,
+      &quot;compression&quot;: &quot;gzip&quot;,
+      &quot;checksumAlgorithm&quot;: &quot;sha256&quot;,
+      &quot;checksum&quot;: &quot;fba751c4796536737c9acbb718dad7429be1fa485f5585d450ab8b25d12ae041&quot;
+    }
+  ]
+}
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEdbwFKBFJCcB24mB0GAEP+tc8mwcFAmf2rr4ACgkQGAEP+tc8
+mwfefwv+KJs8MsQ5ovFaBdmyx5H/3k4rO4QHBzuSPOB6UaxErA9IyOB31iP6vNTU
+HzYpxz6F5dJCJWmmNEMN/0+vjhMHEOkqd7M1l5reVcxduTF2yc4tBZUO2gienEHL
+W0e+SnUznl1yc/aVpChUiahO2zToCsI8HZRNT4tu6iCnE/OpghqjsSdBOZHmSNDD
+5wuuCxfDUyWI6ZlLclaaB7RdbCUUJf/iqi711J+wubvnDFhc6Ynwm1xai5laJ1bD
+ev3NrSb2AAroeNFVo4iECA0fZC1OZQYzaRmAEhBXtCideGJ5Zf2Cp9hmCwNK8Hq6
+bNt94JP9LqC3FCCJJOMsPyOOhMSA5MU44zyyzloRwEQpHHLuFzVdbTHA3dmTc18n
+HxNLkZoEMYRc8zNr40g0yb2lCbc+P11TtL1E+5NlE34MX15mPewRCiIFTMwhCnE3
+gFSKtW1MKustZE35/RUwd2mpJRf+mSRVCl1f1RiFjktLjz7vWQq7imIUSam0fPDr
+XD4aDogm
+=RrFX
+-----END PGP SIGNATURE-----
+</pre></div>
+</div>
+<p>If a user has trusted the public key associated with the private key used to sign the above manifest file, the signature can be verified with gpg, as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gpg --verify gcc-runtime-12.3.0-s2nqujezsce4x6uhtvxscu7jhewqzztx.spec.manifest.json
+</pre></div>
+</div>
+<p>When attempting to install a binary package that has been signed, spack will attempt to verify the signature with one of the trusted keys in its keyring, and will fail if unable to do so.
+While not recommended, it is possible to force installation of a signed package without verification by providing the <code class="docutils literal notranslate"><span class="pre">--no-check-signature</span></code> argument to <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">install</span> <span class="pre">...</span></code>.</p>
+</section>
+<section id="internal-implementation">
+<span id="id4"></span><h2>Internal Implementation<a class="headerlink" href="#internal-implementation" title="連結到這個標頭">¶</a></h2>
+<p>The technical implementation of the pipeline signing process includes components defined in Amazon Web Services, the Kubernetes cluster, at affiliated institutions, and the GitLab/GitLab Runner deployment.
+We present the technical implementation in two interdependent sections.
+The first addresses how secrets are managed through the lifecycle of a develop or release pipeline.
+The second section describes how Gitlab Runner and pipelines are configured and managed to support secure automated signing.</p>
+<section id="secrets-management">
+<h3>Secrets Management<a class="headerlink" href="#secrets-management" title="連結到這個標頭">¶</a></h3>
+<p>As stated above the Root Private Keys (intermediate and reputational) are stripped from the GPG keys and stored outside Spack's infrastructure.</p>
+</section>
+<section id="id5">
+<h3>Intermediate CI Key<a class="headerlink" href="#id5" title="連結到這個標頭">¶</a></h3>
+<p>Multiple intermediate CI signing keys exist, one Intermediate CI Key for jobs run in AWS, and one key for each affiliated institution (e.g. University of Oregon).
+Here we describe how the Intermediate CI Key is managed in AWS:</p>
+<p>The Intermediate CI Key (including the Signing Intermediate CI Private Key) is exported as an ASCII armored file and stored in a Kubernetes secret called <code class="docutils literal notranslate"><span class="pre">spack-intermediate-ci-signing-key</span></code>.
+For convenience sake, this same secret contains an ASCII-armored export of just the <em>public</em> components of the Reputational Key.
+This secret also contains the <em>public</em> components of each of the affiliated institutions' Intermediate CI Key.
+These are potentially needed to verify dependent packages which may have been found in the public mirror or built by a protected job running on an affiliated institution's infrastructure in an earlier stage of the pipeline.</p>
+<p>Procedurally the <code class="docutils literal notranslate"><span class="pre">spack-intermediate-ci-signing-key</span></code> secret is used in the following way:</p>
+<ol class="arabic simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">large-arm-prot</span></code> or <code class="docutils literal notranslate"><span class="pre">large-x86-prot</span></code> protected runner picks up a job tagged <code class="docutils literal notranslate"><span class="pre">protected</span></code> from a protected GitLab branch.
+(See <a class="reference internal" href="#protected-runners"><span class="std std-ref">Protected Runners and Reserved Tags</span></a>).</p></li>
+<li><p>Based on its configuration, the runner creates a job Pod in the pipeline namespace and mounts the spack-intermediate-ci-signing-key Kubernetes secret into the build container</p></li>
+<li><p>The Intermediate CI Key, affiliated institutions' public key and the Reputational Public Key are imported into a keyring by the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">gpg</span> <span class="pre">...</span></code> sub-command.
+This is initiated by the job's build script which is created by the generate job at the beginning of the pipeline.</p></li>
+<li><p>Assuming the package has dependencies those spec manifests are verified using the keyring.</p></li>
+<li><p>The package is built and the spec manifest is generated</p></li>
+<li><p>The spec manifest is signed by the keyring and uploaded to the mirror's build cache.</p></li>
+</ol>
+</section>
+<section id="id6">
+<h3>Reputational Key<a class="headerlink" href="#id6" title="連結到這個標頭">¶</a></h3>
+<p>Because of the increased impact to end users in the case of a private key breach, the Reputational Key is managed separately from the Intermediate CI Keys and has additional controls.
+First, the Reputational Key was generated outside of Spack's infrastructure and has been signed by the core development team.
+The Reputational Key (along with the Signing Reputational Private Key) was then ASCII armor exported to a file.
+Unlike the Intermediate CI Key this exported file is not stored as a base64 encoded secret in Kubernetes.
+Instead<em>the key file itself</em>is encrypted and stored in Kubernetes as the <code class="docutils literal notranslate"><span class="pre">spack-signing-key-encrypted</span></code> secret in the pipeline namespace.</p>
+<p>The encryption of the exported Reputational Key (including the Signing Reputational Private Key) is handled by <a class="reference external" href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys">AWS Key Management Store (KMS) data keys</a>.
+The private key material is decrypted and imported at the time of signing into a memory mounted temporary directory holding the keychain.
+The signing job uses the <a class="reference external" href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html">AWS Encryption SDK</a> (i.e. <code class="docutils literal notranslate"><span class="pre">aws-encryption-cli</span></code>) to decrypt the Reputational Key.
+Permission to decrypt the key is granted to the job Pod through a Kubernetes service account specifically used for this, and only this, function.
+Finally, for convenience sake, this same secret contains an ASCII-armored export of the <em>public</em> components of the Intermediate CI Keys and the Reputational Key.
+This allows the signing script to verify that packages were built by the pipeline (both on AWS or at affiliated institutions), or signed previously as a part of a different pipeline.
+This is done <em>before</em> importing decrypting and importing the Signing Reputational Private Key material and officially signing the packages.</p>
+<p>Procedurally the <code class="docutils literal notranslate"><span class="pre">spack-signing-key-encrypted</span></code> secret is used in the following way:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">spack-package-signing-gitlab-runner</span></code> protected runner picks up a job tagged <code class="docutils literal notranslate"><span class="pre">notary</span></code> from a protected GitLab branch (See <a class="reference internal" href="#protected-runners"><span class="std std-ref">Protected Runners and Reserved Tags</span></a>).</p></li>
+<li><p>Based on its configuration, the runner creates a job pod in the pipeline namespace.
+The job is run in a stripped down purpose-built image <code class="docutils literal notranslate"><span class="pre">ghcr.io/spack/notary:latest</span></code> Docker image.
+The runner is configured to only allow running jobs with this image.</p></li>
+<li><p>The runner also mounts the <code class="docutils literal notranslate"><span class="pre">spack-signing-key-encrypted</span></code> secret to a path on disk.
+Note that this becomes several files on disk, the public components of the Intermediate CI Keys, the public components of the Reputational CI, and an AWS KMS encrypted file containing the Signing Reputational Private Key.</p></li>
+<li><p>In addition to the secret, the runner creates a tmpfs memory mounted directory where the GnuPG keyring will be created to verify, and then resign the package specs.</p></li>
+<li><p>The job script syncs all spec manifest files from the build cache to a working directory in the job's execution environment.</p></li>
+<li><p>The job script then runs the <code class="docutils literal notranslate"><span class="pre">sign.sh</span></code> script built into the Notary Docker image.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">sign.sh</span></code> script imports the public components of the Reputational and Intermediate CI Keys and uses them to verify good signatures on the spec.manifest.json files.
+If any signed manifest does not verify, the job immediately fails.</p></li>
+<li><p>Assuming all manifests are verified, the <code class="docutils literal notranslate"><span class="pre">sign.sh</span></code> script then unpacks the manifest json data from the signed file in preparation for being re-signed with the Reputational Key.</p></li>
+<li><p>The private components of the Reputational Key are decrypted to standard out using <code class="docutils literal notranslate"><span class="pre">aws-encryption-cli</span></code> directly into a <code class="docutils literal notranslate"><span class="pre">gpg</span> <span class="pre">--import</span> <span class="pre">...</span></code> statement which imports the key into the keyring mounted in-memory.</p></li>
+<li><p>The private key is then used to sign each of the manifests and the keyring is removed from disk.</p></li>
+<li><p>The re-signed manifests are resynced to the AWS S3 Mirror and the public signing of the packages for the develop or release pipeline that created them is complete.</p></li>
+</ol>
+<p>Non service-account access to the private components of the Reputational Key that are managed through access to the symmetric secret in KMS used to encrypt the data key (which in turn is used to encrypt the GnuPG key - See:<a class="reference external" href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli-examples.html#cli-example-encrypt-file">Encryption SDK Documentation</a>).
+A small trusted subset of the core development team are the only individuals with access to this symmetric key.</p>
+</section>
+<section id="protected-runners-and-reserved-tags">
+<span id="protected-runners"></span><h3>Protected Runners and Reserved Tags<a class="headerlink" href="#protected-runners-and-reserved-tags" title="連結到這個標頭">¶</a></h3>
+<p>Spack has a large number of Gitlab Runners operating in its build farm.
+These include runners deployed in the AWS Kubernetes cluster as well as runners deployed at affiliated institutions.
+The majority of runners are shared runners that operate across projects in gitlab.spack.io.
+These runners pick up jobs primarily from the spack/spack project and execute them in PR pipelines.</p>
+<p>A small number of runners operating on AWS and at affiliated institutions are registered as specific <em>protected</em> runners on the spack/spack project.
+In addition to protected runners there are protected branches on the spack/spack project.
+These are the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch, any release branch (i.e. managed with the <code class="docutils literal notranslate"><span class="pre">releases/v*</span></code> wildcard) and any tag branch (managed with the <code class="docutils literal notranslate"><span class="pre">v*</span></code> wildcard).
+Finally, Spack's pipeline generation code reserves certain tags to make sure jobs are routed to the correct runners; these tags are <code class="docutils literal notranslate"><span class="pre">public</span></code>, <code class="docutils literal notranslate"><span class="pre">protected</span></code>, and <code class="docutils literal notranslate"><span class="pre">notary</span></code>.
+Understanding how all this works together to protect secrets and provide integrity assurances can be a little confusing so lets break these down:</p>
+<dl class="simple">
+<dt>Protected Branches</dt><dd><p>Protected branches in Spack prevent anyone other than Maintainers in GitLab from pushing code.
+In the case of Spack, the only Maintainer level entity pushing code to protected branches is Spack bot.
+Protecting branches also marks them in such a way that Protected Runners will only run jobs from those branches</p>
+</dd>
+<dt>Protected Runners</dt><dd><p>Protected Runners only run jobs from protected branches.
+Because protected runners have access to secrets, it's critical that they not run jobs from untrusted code (i.e. PR branches).
+If they did, it would be possible for a PR branch to tag a job in such a way that a protected runner executed that job and mounted secrets into a code execution environment that had not been reviewed by Spack maintainers.
+Note however that in the absence of tagging used to route jobs, public runners <em>could</em> run jobs from protected branches.
+No secrets would be at risk of being breached because non-protected runners do not have access to those secrets; lack of secrets would, however, cause the jobs to fail.</p>
+</dd>
+<dt>Reserved Tags</dt><dd><p>To mitigate the issue of public runners picking up protected jobs Spack uses a small set of &quot;reserved&quot; job tags (Note that these are <em>job</em> tags not git tags).
+These tags are &quot;public&quot;, &quot;private&quot;, and &quot;notary.&quot;
+The majority of jobs executed in Spack's GitLab instance are executed via a <code class="docutils literal notranslate"><span class="pre">generate</span></code> job.
+The generate job code systematically ensures that no user defined configuration sets these tags.
+Instead, the <code class="docutils literal notranslate"><span class="pre">generate</span></code> job sets these tags based on rules related to the branch where this pipeline originated.
+If the job is a part of a pipeline on a PR branch it sets the <code class="docutils literal notranslate"><span class="pre">public</span></code> tag.
+If the job is part of a pipeline on a protected branch it sets the <code class="docutils literal notranslate"><span class="pre">protected</span></code> tag.
+Finally if the job is the package signing job and it is running on a pipeline that is part of a protected branch then it sets the <code class="docutils literal notranslate"><span class="pre">notary</span></code> tag.</p>
+</dd>
+</dl>
+<p>Protected Runners are configured to only run jobs from protected branches.
+Only jobs running in pipelines on protected branches are tagged with <code class="docutils literal notranslate"><span class="pre">protected</span></code> or <code class="docutils literal notranslate"><span class="pre">notary</span></code> tags.
+This tightly couples jobs on protected branches to protected runners that provide access to the secrets required to sign the built packages.
+The secrets can <strong>only</strong> be accessed via:</p>
+<ol class="arabic simple">
+<li><p>Runners under direct control of the core development team.</p></li>
+<li><p>Runners under direct control of trusted maintainers at affiliated institutions.</p></li>
+<li><p>By code running the automated pipeline that has been reviewed by the Spack maintainers and judged to be appropriate.</p></li>
+</ol>
+<p>Other attempts (either through malicious intent or incompetence) can at worst grab jobs intended for protected runners which will cause those jobs to fail alerting both Spack maintainers and the core development team.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>The Reputational Key has also cross signed core development team keys.</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="gpu_configuration.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Using External GPU Support</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="pipelines.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">CI Pipelines</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on 9月 23, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Spack Package Signing</a><ul>
+<li><a class="reference internal" href="#risks-impact-and-threat-model">Risks, Impact and Threat Model</a></li>
+<li><a class="reference internal" href="#pipeline-overview">Pipeline Overview</a></li>
+<li><a class="reference internal" href="#key-architecture">Key Architecture</a></li>
+<li><a class="reference internal" href="#intermediate-ci-key">Intermediate CI Key</a></li>
+<li><a class="reference internal" href="#reputational-key">Reputational Key</a></li>
+<li><a class="reference internal" href="#build-cache-signing">Build Cache Signing</a></li>
+<li><a class="reference internal" href="#internal-implementation">Internal Implementation</a><ul>
+<li><a class="reference internal" href="#secrets-management">Secrets Management</a></li>
+<li><a class="reference internal" href="#id5">Intermediate CI Key</a></li>
+<li><a class="reference internal" href="#id6">Reputational Key</a></li>
+<li><a class="reference internal" href="#protected-runners-and-reserved-tags">Protected Runners and Reserved Tags</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=c9930d3e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>

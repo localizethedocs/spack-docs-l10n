@@ -1,0 +1,1074 @@
+<!doctype html>
+<html class="no-js" lang="en-US" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Learn how to generate and run automated build pipelines in Spack for CI instances, enabling the building and deployment of binaries and reporting to CDash." lang="en" name="description" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-09-23T06:15:07+00:00" /><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Spack Package Signing" href="signing.html"><link rel="prev" title="Custom Extensions" href="extensions.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/pipelines.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>CI Pipelines - Spack 1.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/pipelines.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="ci-pipelines">
+<span id="pipelines"></span><h1>CI Pipelines<a class="headerlink" href="#ci-pipelines" title="Link to this heading">¶</a></h1>
+<p>Spack provides commands that support generating and running automated build pipelines in CI instances.
+At the highest level, it works like this: provide a Spack environment describing the set of packages you care about, and include a description of how those packages should be mapped to Gitlab runners.
+Spack can then generate a <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> file containing job descriptions for all your packages that can be run by a properly configured CI instance.
+When run, the generated pipeline will build and deploy binaries, and it can optionally report to a CDash instance regarding the health of the builds as they evolve over time.</p>
+<section id="getting-started-with-pipelines">
+<h2>Getting started with pipelines<a class="headerlink" href="#getting-started-with-pipelines" title="Link to this heading">¶</a></h2>
+<p>To get started with automated build pipelines, a Gitlab instance with version <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">12.9</span></code> (more about Gitlab CI <a class="reference external" href="https://about.gitlab.com/product/continuous-integration/">here</a>) with at least one <a class="reference external" href="https://docs.gitlab.com/runner/">runner</a> configured is required.
+This can be done quickly by setting up a local Gitlab instance.</p>
+<p>It is possible to set up pipelines on gitlab.com, but the builds there are limited to 60 minutes and generic hardware.
+It is also possible to <a class="reference external" href="https://about.gitlab.com/blog/2018/04/24/getting-started-gitlab-ci-gcp">hook up</a> Gitlab to Google Kubernetes Engine (<a class="reference external" href="https://cloud.google.com/kubernetes-engine/">GKE</a>) or Amazon Elastic Kubernetes Service (<a class="reference external" href="https://aws.amazon.com/eks">EKS</a>), though those topics are outside the scope of this document.</p>
+<p>After setting up a Gitlab instance for running CI, the basic steps for setting up a build pipeline are as follows:</p>
+<ol class="arabic simple">
+<li><p>Create a repository in the Gitlab instance with CI and a runner enabled.</p></li>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> at the root containing your pipeline environment</p></li>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> at the root containing two jobs (one to generate the pipeline dynamically, and one to run the generated jobs).</p></li>
+<li><p>Push a commit containing the <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> mentioned above to the GitLab repository</p></li>
+</ol>
+<p>See the <a class="reference internal" href="#functional-example"><span class="std std-ref">Functional Example</span></a> section for a minimal working example.
+See also the <a class="reference internal" href="#custom-workflow"><span class="std std-ref">Custom Workflow</span></a> section for a link to an example of a custom workflow based on Spack pipelines.</p>
+<p>Spack’s pipelines are now making use of the <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/#trigger">trigger</a> syntax to run dynamically generated <a class="reference external" href="https://docs.gitlab.com/ee/ci/pipelines/parent_child_pipelines.html">child pipelines</a>.
+Note that the use of dynamic child pipelines requires running Gitlab version <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">12.9</span></code>.</p>
+</section>
+<section id="functional-example">
+<span id="id1"></span><h2>Functional Example<a class="headerlink" href="#functional-example" title="Link to this heading">¶</a></h2>
+<p>The simplest fully functional standalone example of a working pipeline can be examined live at this example <a class="reference external" href="https://gitlab.com/spack/pipeline-quickstart">project</a> on gitlab.com.</p>
+<p>Here’s the <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> file from that example that builds and runs the pipeline:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;generate&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;build&quot;</span><span class="p p-Indicator">]</span>
+
+<span class="nt">variables</span><span class="p">:</span>
+  <span class="nt">SPACK_REPOSITORY</span><span class="p">:</span> <span class="s">&quot;https://github.com/spack/spack.git&quot;</span>
+  <span class="nt">SPACK_REF</span><span class="p">:</span> <span class="s">&quot;develop-2024-10-06&quot;</span>
+  <span class="nt">SPACK_USER_CONFIG_PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${CI_PROJECT_DIR}</span>
+  <span class="nt">SPACK_BACKTRACE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">generate-pipeline</span><span class="p">:</span>
+  <span class="nt">tags</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">saas-linux-small-amd64</span>
+  <span class="nt">stage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">generate</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ghcr.io/spack/ubuntu20.04-runner-x86_64:2023-01-01</span>
+  <span class="nt">script</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">git clone ${SPACK_REPOSITORY}</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd spack &amp;&amp; git checkout ${SPACK_REF} &amp;&amp; cd ../</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">. &quot;./spack/share/spack/setup-env.sh&quot;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack --version</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack env activate --without-view .</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack -d -v --color=always ci generate --check-index-only --artifacts-root &quot;${CI_PROJECT_DIR}/jobs_scratch_dir&quot; --output-file &quot;${CI_PROJECT_DIR}/jobs_scratch_dir/cloud-ci-pipeline.yml&quot;</span>
+  <span class="nt">artifacts</span><span class="p">:</span>
+    <span class="nt">paths</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;${CI_PROJECT_DIR}/jobs_scratch_dir&quot;</span>
+
+<span class="nt">build-pipeline</span><span class="p">:</span>
+  <span class="nt">stage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">build</span>
+  <span class="nt">trigger</span><span class="p">:</span>
+    <span class="nt">include</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">artifact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jobs_scratch_dir/cloud-ci-pipeline.yml</span>
+      <span class="nt">job</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">generate-pipeline</span>
+    <span class="nt">strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">depend</span>
+  <span class="nt">needs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">artifacts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">job</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">generate-pipeline</span>
+</pre></div>
+</div>
+<p>The key thing to note above is that there are two jobs: The first job to run, <code class="docutils literal notranslate"><span class="pre">generate-pipeline</span></code>, runs the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> command to generate a dynamic child pipeline and write it to a yaml file, which is then picked up by the second job, <code class="docutils literal notranslate"><span class="pre">build-jobs</span></code>, and used to trigger the downstream pipeline.</p>
+<p>And here’s the Spack environment built by the pipeline represented as a <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">view</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">concretizer</span><span class="p">:</span>
+    <span class="nt">unify</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">reuse</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+  <span class="nt">definitions</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">pkgs</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">zlib</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">bzip2 ~debug</span>
+  <span class="p p-Indicator">-</span> <span class="nt">compiler</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;%gcc&quot;</span>
+
+  <span class="nt">specs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">matrix</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$pkgs</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$compiler</span>
+
+  <span class="nt">ci</span><span class="p">:</span>
+    <span class="nt">target</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+
+    <span class="nt">pipeline-gen</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">any-job</span><span class="p">:</span>
+        <span class="nt">tags</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">saas-linux-small-amd64</span>
+        <span class="nt">image</span><span class="p">:</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ghcr.io/spack/ubuntu20.04-runner-x86_64:2023-01-01</span>
+        <span class="nt">before_script</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">git clone ${SPACK_REPOSITORY}</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd spack &amp;&amp; git checkout ${SPACK_REF} &amp;&amp; cd ../</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">. &quot;./spack/share/spack/setup-env.sh&quot;</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack --version</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">export SPACK_USER_CONFIG_PATH=${CI_PROJECT_DIR}</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack config blame mirrors</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The use of <code class="docutils literal notranslate"><span class="pre">reuse:</span> <span class="pre">false</span></code> in Spack environments used for pipelines is almost always what you want, as without it your pipelines will not rebuild packages even if package hashes have changed.
+This is due to the concretizer strongly preferring known hashes when <code class="docutils literal notranslate"><span class="pre">reuse:</span> <span class="pre">true</span></code>.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ci</span></code> section in the above environment file contains the bare minimum configuration required for <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> to create a working pipeline.
+The <code class="docutils literal notranslate"><span class="pre">target:</span> <span class="pre">gitlab</span></code> tells Spack that the desired pipeline output is for GitLab.
+However, this isn’t strictly required, as currently, GitLab is the only possible output format for pipelines.
+The <code class="docutils literal notranslate"><span class="pre">pipeline-gen</span></code> section contains the key information needed to specify attributes for the generated jobs.
+Notice that it contains a list which has only a single element in this case.
+In real pipelines, it will almost certainly have more elements, and in those cases, order is important: Spack starts at the bottom of the list and works upwards when applying attributes.</p>
+<p>But in this simple case, we use only the special key <code class="docutils literal notranslate"><span class="pre">any-job</span></code> to indicate that Spack should apply the specified attributes (<code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code>, and <code class="docutils literal notranslate"><span class="pre">before_script</span></code>) to any job it generates.
+This includes jobs for building/pushing all packages, a <code class="docutils literal notranslate"><span class="pre">rebuild-index</span></code> job at the end of the pipeline, as well as any <code class="docutils literal notranslate"><span class="pre">noop</span></code> jobs that might be needed by GitLab when no rebuilds are required.</p>
+<p>Something to note is that in this simple case, we rely on Spack to generate a reasonable script for the package build jobs (it just creates a script that invokes <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code>).</p>
+<p>Another thing to note is the use of the <code class="docutils literal notranslate"><span class="pre">SPACK_USER_CONFIG_DIR</span></code> environment variable in any generated jobs.
+The purpose of this is to make Spack aware of one final file in the example, the one that contains the mirror configuration.
+This file, <code class="docutils literal notranslate"><span class="pre">mirrors.yaml</span></code> looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">mirrors</span><span class="p">:</span>
+  <span class="nt">buildcache-destination</span><span class="p">:</span>
+    <span class="nt">url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">oci://registry.gitlab.com/spack/pipeline-quickstart</span>
+    <span class="nt">binary</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">access_pair</span><span class="p">:</span>
+      <span class="nt">id_variable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CI_REGISTRY_USER</span>
+      <span class="nt">secret_variable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CI_REGISTRY_PASSWORD</span>
+</pre></div>
+</div>
+<p>Note the name of the mirror is <code class="docutils literal notranslate"><span class="pre">buildcache-destination</span></code>, which is required as of Spack 0.23 (see below for more information).
+The mirror url simply points to the container registry associated with the project, while <code class="docutils literal notranslate"><span class="pre">id_variable</span></code> and <code class="docutils literal notranslate"><span class="pre">secret_variable</span></code> refer to environment variables containing the access credentials for the mirror.</p>
+<p>When Spack builds packages for this example project, they will be pushed to the project container registry, where they will be available for subsequent jobs to install as dependencies or for other pipelines to use to build runnable container images.</p>
+</section>
+<section id="spack-commands-supporting-pipelines">
+<h2>Spack commands supporting pipelines<a class="headerlink" href="#spack-commands-supporting-pipelines" title="Link to this heading">¶</a></h2>
+<p>Spack provides a <code class="docutils literal notranslate"><span class="pre">ci</span></code> command with a few sub-commands supporting Spack CI pipelines.
+These commands are covered in more detail in this section.</p>
+<section id="spack-ci">
+<span id="cmd-spack-ci"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span></code><a class="headerlink" href="#spack-ci" title="Link to this heading">¶</a></h3>
+<p>Super-command for functionality related to generating pipelines and executing pipeline jobs.</p>
+</section>
+<section id="spack-ci-generate">
+<span id="cmd-spack-ci-generate"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code><a class="headerlink" href="#spack-ci-generate" title="Link to this heading">¶</a></h3>
+<p>Throughout this documentation, references to the “mirror” mean the target mirror which is checked for the presence of up-to-date specs, and where any scheduled jobs should push built binary packages.
+In the past, this defaulted to the mirror at index 0 in the mirror configs, and could be overridden using the <code class="docutils literal notranslate"><span class="pre">--buildcache-destination</span></code> argument.
+Starting with Spack 0.23, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> will require you to identify this mirror by the name “buildcache-destination”.
+While you can configure any number of mirrors as sources for your pipelines, you will need to identify the destination mirror by name.</p>
+<p>Concretizes the specs in the active environment, stages them (as described in <a class="reference internal" href="#staging-algorithm"><span class="std std-ref">Summary of .gitlab-ci.yml generation algorithm</span></a>), and writes the resulting <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> to disk.
+During concretization of the environment, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> also writes a <code class="docutils literal notranslate"><span class="pre">spack.lock</span></code> file which is then provided to generated child jobs and made available in all generated job artifacts to aid in reproducing failed builds in a local environment.
+This means there are two artifacts that need to be exported in your pipeline generation job (defined in your <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>).
+The first is the output yaml file of <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code>, and the other is the directory containing the concrete environment files.
+In the <a class="reference internal" href="#functional-example"><span class="std std-ref">Functional Example</span></a> section, we only mentioned one path in the <code class="docutils literal notranslate"><span class="pre">artifacts</span></code> <code class="docutils literal notranslate"><span class="pre">paths</span></code> list because we used <code class="docutils literal notranslate"><span class="pre">--artifacts-root</span></code> as the top level directory containing both the generated pipeline yaml and the concrete environment.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">--prune-dag</span></code> or <code class="docutils literal notranslate"><span class="pre">--no-prune-dag</span></code> configures whether or not jobs are generated for specs that are already up to date on the mirror.
+If enabling DAG pruning using <code class="docutils literal notranslate"><span class="pre">--prune-dag</span></code>, more information may be required in your <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file, see the <a class="reference internal" href="#noop-jobs"><span class="std std-ref">No Op (noop)</span></a> section below regarding <code class="docutils literal notranslate"><span class="pre">noop-job</span></code>.</p>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">--check-index-only</span></code> argument can be used to speed up pipeline generation by telling Spack to consider only remote buildcache indices when checking the remote mirror to determine if each spec in the DAG is up to date or not.
+The default behavior is for Spack to fetch the index and check it, but if the spec is not found in the index, it also performs a direct check for the spec on the mirror.
+If the remote buildcache index is out of date, which can easily happen if it is not updated frequently, this behavior ensures that Spack has a way to know for certain about the status of any concrete spec on the remote mirror, but can slow down pipeline generation significantly.</p>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">--output-file</span></code> argument should be an absolute path (including file name) to the generated pipeline, and if not given, the default is <code class="docutils literal notranslate"><span class="pre">./.gitlab-ci.yml</span></code>.</p>
+<p>While optional, the <code class="docutils literal notranslate"><span class="pre">--artifacts-root</span></code> argument is used to determine where the concretized environment directory should be located.
+This directory will be created by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> and will contain the <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> and generated <code class="docutils literal notranslate"><span class="pre">spack.lock</span></code> which are then passed to all child jobs as an artifact.
+This directory will also be the root directory for all artifacts generated by jobs in the pipeline.</p>
+</section>
+<section id="spack-ci-rebuild">
+<span id="cmd-spack-ci-rebuild"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code><a class="headerlink" href="#spack-ci-rebuild" title="Link to this heading">¶</a></h3>
+<p>The purpose of <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code> is to take an assigned spec and ensure a binary of a successful build exists on the target mirror.
+If the binary does not already exist, it is built from source and pushed to the mirror.
+The associated stand-alone tests are optionally run against the new build.
+Additionally, files for reproducing the build outside the CI environment are created to facilitate debugging.</p>
+<p>If a binary for the spec does not exist on the target mirror, an install shell script, <code class="docutils literal notranslate"><span class="pre">install.sh</span></code>, is created and saved in the current working directory.
+The script is run in a job to install the spec from source.
+The resulting binary package is pushed to the mirror.
+If <code class="docutils literal notranslate"><span class="pre">cdash</span></code> is configured for the environment, the build results will be uploaded to the site.</p>
+<p>Environment variables and values in the <code class="docutils literal notranslate"><span class="pre">ci::pipeline-gen</span></code> section of the <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> environment file provide inputs to this process.
+The two main sources of environment variables are variables written into <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> and the GitLab CI runtime.
+Several key CI pipeline variables are described in <a class="reference internal" href="#ci-environment-variables"><span class="std std-ref">Environment variables affecting pipeline operation</span></a>.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">--tests</span></code> option is provided, stand-alone tests are performed but only if the build was successful <em>and</em> the package does not appear in the list of <code class="docutils literal notranslate"><span class="pre">broken-tests-packages</span></code>.
+A shell script, <code class="docutils literal notranslate"><span class="pre">test.sh</span></code>, is created and run to perform the tests.
+On completion, test logs are exported as job artifacts for review and to facilitate debugging.
+If <code class="docutils literal notranslate"><span class="pre">cdash</span></code> is configured, test results are also uploaded to the site.</p>
+<p>A snippet from an example <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> file illustrating use of this option <em>and</em> specification of a package with broken tests is given below.
+The inclusion of a spec for building <code class="docutils literal notranslate"><span class="pre">gptune</span></code> is not shown here.
+Note that <code class="docutils literal notranslate"><span class="pre">--tests</span></code> is passed to <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code> as part of the <code class="docutils literal notranslate"><span class="pre">build-job</span></code> script.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ci</span><span class="p">:</span>
+  <span class="nt">pipeline-gen</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">build-job</span><span class="p">:</span>
+      <span class="nt">script</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">. &quot;./share/spack/setup-env.sh&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack --version</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd ${SPACK_CONCRETE_ENV_DIR}</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack env activate --without-view .</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack config add &quot;config:install_tree:projections:${SPACK_JOB_SPEC_PKG_NAME}:&#39;morepadding/{architecture.platform}-{architecture.target}/{name}-{version}-{hash}&#39;&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mkdir -p ${SPACK_ARTIFACTS_ROOT}/user_data</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">if [[ -r /mnt/key/intermediate_ci_signing_key.gpg ]]; then spack gpg trust /mnt/key/intermediate_ci_signing_key.gpg; fi</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">if [[ -r /mnt/key/spack_public_key.gpg ]]; then spack gpg trust /mnt/key/spack_public_key.gpg; fi</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack -d ci rebuild --tests &gt; &gt;(tee ${SPACK_ARTIFACTS_ROOT}/user_data/pipeline_out.txt) 2&gt; &gt;(tee ${SPACK_ARTIFACTS_ROOT}/user_data/pipeline_err.txt &gt;&amp;2)</span>
+
+  <span class="nt">broken-tests-packages</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gptune</span>
+</pre></div>
+</div>
+<p>In this case, even if <code class="docutils literal notranslate"><span class="pre">gptune</span></code> is successfully built from source, the pipeline will <em>not</em> run its stand-alone tests since the package is listed under <code class="docutils literal notranslate"><span class="pre">broken-tests-packages</span></code>.</p>
+<p>Spack’s cloud pipelines provide actual, up-to-date examples of the CI/CD configuration and environment files used by Spack.
+You can find them under Spack’s <a class="reference external" href="https://github.com/spack/spack/tree/develop/share/spack/gitlab/cloud_pipelines/stacks">stacks</a> repository directory.</p>
+</section>
+<section id="spack-ci-rebuild-index">
+<span id="cmd-spack-ci-rebuild-index"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild-index</span></code><a class="headerlink" href="#spack-ci-rebuild-index" title="Link to this heading">¶</a></h3>
+<p>This is a convenience command to rebuild the buildcache index associated with the mirror in the active, GitLab-enabled environment (specifying the mirror URL or name is not required).</p>
+</section>
+<section id="spack-ci-reproduce-build">
+<span id="cmd-spack-ci-reproduce-build"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">reproduce-build</span></code><a class="headerlink" href="#spack-ci-reproduce-build" title="Link to this heading">¶</a></h3>
+<p>Given the URL to a GitLab pipeline rebuild job, downloads and unzips the artifacts into a local directory (which can be specified with the optional <code class="docutils literal notranslate"><span class="pre">--working-dir</span></code> argument), then finds the target job in the generated pipeline to extract details about how it was run.
+Assuming the job used a docker image, the command prints a <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command line and some basic instructions on how to reproduce the build locally.</p>
+<p>Note that jobs failing in the pipeline will print messages giving the arguments you can pass to <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">reproduce-build</span></code> in order to reproduce a particular build locally.</p>
+</section>
+</section>
+<section id="job-types">
+<h2>Job Types<a class="headerlink" href="#job-types" title="Link to this heading">¶</a></h2>
+<section id="rebuild-build">
+<h3>Rebuild (build)<a class="headerlink" href="#rebuild-build" title="Link to this heading">¶</a></h3>
+<p>Rebuild jobs, denoted as <code class="docutils literal notranslate"><span class="pre">build-job</span></code>’s in the <code class="docutils literal notranslate"><span class="pre">pipeline-gen</span></code> list, are jobs associated with concrete specs that have been marked for rebuild.
+By default, a simple script for doing rebuild is generated but may be modified as needed.</p>
+<p>The default script does three main steps: change directories to the pipelines concrete environment, activate the concrete environment, and run the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="si">${</span><span class="nv">concrete_environment_dir</span><span class="si">}</span>
+spack env activate --without-view .
+spack ci rebuild
+</pre></div>
+</div>
+</section>
+<section id="update-index-reindex">
+<span id="rebuild-index"></span><h3>Update Index (reindex)<a class="headerlink" href="#update-index-reindex" title="Link to this heading">¶</a></h3>
+<p>By default, while a pipeline job may rebuild a package, create a buildcache entry, and push it to the mirror, it does not automatically re-generate the mirror’s buildcache index afterward.
+Because the index is not needed by the default rebuild jobs in the pipeline, not updating the index at the end of each job avoids possible race conditions between simultaneous jobs, and it avoids the computational expense of regenerating the index.
+This potentially saves minutes per job, depending on the number of binary packages in the mirror.
+As a result, the default is that the mirror’s buildcache index may not correctly reflect the mirror’s contents at the end of a pipeline.</p>
+<p>To make sure the buildcache index is up to date at the end of your pipeline, Spack generates a job to update the buildcache index of the target mirror at the end of each pipeline by default.
+You can disable this behavior by adding <code class="docutils literal notranslate"><span class="pre">rebuild-index:</span> <span class="pre">False</span></code> inside the <code class="docutils literal notranslate"><span class="pre">ci</span></code> section of your Spack environment.</p>
+<p>Reindex jobs do not allow modifying the <code class="docutils literal notranslate"><span class="pre">script</span></code> attribute since it is automatically generated using the target mirror listed in the <code class="docutils literal notranslate"><span class="pre">mirrors::mirror</span></code> configuration.</p>
+</section>
+<section id="signing-signing">
+<h3>Signing (signing)<a class="headerlink" href="#signing-signing" title="Link to this heading">¶</a></h3>
+<p>This job is run after all of the rebuild jobs are completed and is intended to be used to sign the package binaries built by a protected CI run.
+Signing jobs are generated only if a signing job <code class="docutils literal notranslate"><span class="pre">script</span></code> is specified and the Spack CI job type is protected.
+Note, if an <code class="docutils literal notranslate"><span class="pre">any-job</span></code> section contains a script, this will not implicitly create a <code class="docutils literal notranslate"><span class="pre">signing</span></code> job; a signing job may only exist if it is explicitly specified in the configuration with a <code class="docutils literal notranslate"><span class="pre">script</span></code> attribute.
+Specifying a signing job without a script does not create a signing job, and the job configuration attributes will be ignored.
+Signing jobs are always assigned the runner tags <code class="docutils literal notranslate"><span class="pre">aws</span></code>, <code class="docutils literal notranslate"><span class="pre">protected</span></code>, and <code class="docutils literal notranslate"><span class="pre">notary</span></code>.</p>
+</section>
+<section id="no-op-noop">
+<span id="noop-jobs"></span><h3>No Op (noop)<a class="headerlink" href="#no-op-noop" title="Link to this heading">¶</a></h3>
+<p>If no specs in an environment need to be rebuilt during a given pipeline run (meaning all are already up to date on the mirror), a single successful job (a NO-OP) is still generated to avoid an empty pipeline (which GitLab considers to be an error).
+The <code class="docutils literal notranslate"><span class="pre">noop-job*</span></code> sections can be added to your <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> where you can provide <code class="docutils literal notranslate"><span class="pre">tags</span></code> and <code class="docutils literal notranslate"><span class="pre">image</span></code> or <code class="docutils literal notranslate"><span class="pre">variables</span></code> for the generated NO-OP job.
+This section also supports providing <code class="docutils literal notranslate"><span class="pre">before_script</span></code>, <code class="docutils literal notranslate"><span class="pre">script</span></code>, and <code class="docutils literal notranslate"><span class="pre">after_script</span></code>, in case you want to take some custom actions in the case of an empty pipeline.</p>
+<p>Following is an example of this section added to a <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">ci</span><span class="p">:</span>
+    <span class="nt">pipeline-gen</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">noop-job</span><span class="p">:</span>
+        <span class="nt">tags</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;custom&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;tag&quot;</span><span class="p p-Indicator">]</span>
+        <span class="nt">image</span><span class="p">:</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;some.image.registry/custom-image:latest&quot;</span>
+          <span class="nt">entrypoint</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">]</span>
+        <span class="nt">script:</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;Custom message in a custom script&quot;</span>
+</pre></div>
+</div>
+<p>The example above illustrates how you can provide the attributes used to run the NO-OP job in the case of an empty pipeline.
+The only field for the NO-OP job that might be generated for you is <code class="docutils literal notranslate"><span class="pre">script</span></code>, but that will only happen if you do not provide one yourself.
+Notice in this example the <code class="docutils literal notranslate"><span class="pre">script</span></code> uses the <code class="docutils literal notranslate"><span class="pre">::</span></code> notation to prescribe override behavior.
+Without this, the <code class="docutils literal notranslate"><span class="pre">echo</span></code> command would have been prepended to the automatically generated script rather than replacing it.</p>
+</section>
+</section>
+<section id="ci-yaml">
+<h2>ci.yaml<a class="headerlink" href="#ci-yaml" title="Link to this heading">¶</a></h2>
+<p>Here’s an example of a Spack configuration file describing a build pipeline:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="nt">ci</span><span class="p">:</span>
+    <span class="nt">target</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+    <span class="nt">rebuild_index</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">broken-specs-url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://broken.specs.url</span>
+    <span class="nt">broken-tests-packages</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gptune</span>
+    <span class="nt">pipeline-gen</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">submapping</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">match</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">os=ubuntu24.04</span>
+        <span class="nt">build-job</span><span class="p">:</span>
+          <span class="nt">tags</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack-kube</span>
+          <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spack/ubuntu-noble</span>
+      <span class="p p-Indicator">-</span> <span class="nt">match</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">os=almalinux9</span>
+        <span class="nt">build-job</span><span class="p">:</span>
+          <span class="nt">tags</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack-kube</span>
+          <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spack/almalinux9</span>
+
+  <span class="nt">cdash</span><span class="p">:</span>
+    <span class="nt">build-group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Release Testing</span>
+    <span class="nt">url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://cdash.spack.io</span>
+    <span class="nt">project</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Spack</span>
+    <span class="nt">site</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Spack AWS Gitlab Instance</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ci</span></code> config section is used to configure how the pipeline workload should be generated, mainly how the jobs for building specs should be assigned to the configured runners on your instance.
+The main section for configuring pipelines is <code class="docutils literal notranslate"><span class="pre">pipeline-gen</span></code>, which is a list of job attribute sections that are merged, using the same rules as Spack configs (<a class="reference internal" href="configuration.html#config-scope-precedence"><span class="std std-ref">Scope Precedence</span></a>), from the bottom up.
+The order sections are applied is to be consistent with how Spack orders scope precedence when merging lists.
+There are two main section types: <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;-job</span></code> sections and <code class="docutils literal notranslate"><span class="pre">submapping</span></code> sections.</p>
+<section id="job-attribute-sections">
+<h3>Job Attribute Sections<a class="headerlink" href="#job-attribute-sections" title="Link to this heading">¶</a></h3>
+<p>Each type of job may have attributes added or removed via sections in the <code class="docutils literal notranslate"><span class="pre">pipeline-gen</span></code> list.
+Job type specific attributes may be specified using the keys <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;-job</span></code> to add attributes to all jobs of type <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;-job-remove</span></code> to remove attributes of type <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code>.
+Each section may only contain one type of job attribute specification, i.e., <code class="docutils literal notranslate"><span class="pre">build-job</span></code> and <code class="docutils literal notranslate"><span class="pre">noop-job</span></code> may not coexist but <code class="docutils literal notranslate"><span class="pre">build-job</span></code> and <code class="docutils literal notranslate"><span class="pre">build-job-remove</span></code> may.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">*-remove</span></code> specifications are applied before the additive attribute specification.
+For example, in the case where both <code class="docutils literal notranslate"><span class="pre">build-job</span></code> and <code class="docutils literal notranslate"><span class="pre">build-job-remove</span></code> are listed in the same <code class="docutils literal notranslate"><span class="pre">pipeline-gen</span></code> section, the value will still exist in the merged build-job after applying the section.</p>
+</div>
+<p>All of the attributes specified are forwarded to the generated CI jobs, however special treatment is applied to the attributes <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code>, <code class="docutils literal notranslate"><span class="pre">variables</span></code>, <code class="docutils literal notranslate"><span class="pre">script</span></code>, <code class="docutils literal notranslate"><span class="pre">before_script</span></code>, and <code class="docutils literal notranslate"><span class="pre">after_script</span></code> as they are components recognized explicitly by the Spack CI generator.
+For the <code class="docutils literal notranslate"><span class="pre">tags</span></code> attribute, Spack will remove reserved tags (<a class="reference internal" href="#reserved-tags"><span class="std std-ref">Reserved Tags</span></a>) from all jobs specified in the config.
+In some cases, such as for <code class="docutils literal notranslate"><span class="pre">signing</span></code> jobs, reserved tags will be added back based on the type of CI that is being run.</p>
+<p>Once a runner has been chosen to build a release spec, the <code class="docutils literal notranslate"><span class="pre">build-job*</span></code> sections provide information determining details of the job in the context of the runner.
+At least one of the <code class="docutils literal notranslate"><span class="pre">build-job*</span></code> sections must contain a <code class="docutils literal notranslate"><span class="pre">tags</span></code> key, which is a list containing at least one tag used to select the runner from among the runners known to the GitLab instance.
+For Docker executor type runners, the <code class="docutils literal notranslate"><span class="pre">image</span></code> key is used to specify the Docker image used to build the release spec (and could also appear as a dictionary with a <code class="docutils literal notranslate"><span class="pre">name</span></code> specifying the image name, as well as an <code class="docutils literal notranslate"><span class="pre">entrypoint</span></code> to override whatever the default for that image is).
+For other types of runners the <code class="docutils literal notranslate"><span class="pre">variables</span></code> key will be useful to pass any information on to the runner that it needs to do its work (e.g. scheduler parameters, etc.).
+Any <code class="docutils literal notranslate"><span class="pre">variables</span></code> provided here will be added, verbatim, to each job.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">build-job</span></code> section also allows users to supply custom <code class="docutils literal notranslate"><span class="pre">script</span></code>, <code class="docutils literal notranslate"><span class="pre">before_script</span></code>, and <code class="docutils literal notranslate"><span class="pre">after_script</span></code> sections to be applied to every job scheduled on that runner.
+This allows users to do any custom preparation or cleanup tasks that fit their particular workflow, as well as completely customize the rebuilding of a spec if they so choose.
+Spack will not generate a <code class="docutils literal notranslate"><span class="pre">before_script</span></code> or <code class="docutils literal notranslate"><span class="pre">after_script</span></code> for jobs, but if you do not provide a custom <code class="docutils literal notranslate"><span class="pre">script</span></code>, Spack will generate one for you that assumes the concrete environment directory is located within your <code class="docutils literal notranslate"><span class="pre">--artifacts-root</span></code> (or if not provided, within your <code class="docutils literal notranslate"><span class="pre">$CI_PROJECT_DIR</span></code>), activates that environment for you, and invokes <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code>.</p>
+<p>Sections that specify scripts (<code class="docutils literal notranslate"><span class="pre">script</span></code>, <code class="docutils literal notranslate"><span class="pre">before_script</span></code>, <code class="docutils literal notranslate"><span class="pre">after_script</span></code>) are all read as lists of commands or lists of lists of commands.
+It is recommended to write scripts as lists of lists if scripts will be composed via merging.
+The default behavior of merging lists will remove duplicate commands and potentially apply unwanted reordering, whereas merging lists of lists will preserve the local ordering and never removes duplicate commands.
+When writing commands to the CI target script, all lists are expanded and flattened into a single list.</p>
+</section>
+<section id="submapping-sections">
+<h3>Submapping Sections<a class="headerlink" href="#submapping-sections" title="Link to this heading">¶</a></h3>
+<p>A special case of attribute specification is the <code class="docutils literal notranslate"><span class="pre">submapping</span></code> section which may be used to apply job attributes to build jobs based on the package spec associated with the rebuild job.
+Submapping is specified as a list of spec <code class="docutils literal notranslate"><span class="pre">match</span></code> lists associated with <code class="docutils literal notranslate"><span class="pre">build-job</span></code>/<code class="docutils literal notranslate"><span class="pre">build-job-remove</span></code> sections.
+There are two options for <code class="docutils literal notranslate"><span class="pre">match_behavior</span></code>: either <code class="docutils literal notranslate"><span class="pre">first</span></code> or <code class="docutils literal notranslate"><span class="pre">merge</span></code> may be specified.
+In either case, the <code class="docutils literal notranslate"><span class="pre">submapping</span></code> list is processed from the bottom up, and then each <code class="docutils literal notranslate"><span class="pre">match</span></code> list is searched for a string that satisfies the check <code class="docutils literal notranslate"><span class="pre">spec.satisfies({match_item})</span></code> for each concrete spec.</p>
+<p>In the case of <code class="docutils literal notranslate"><span class="pre">match_behavior:</span> <span class="pre">first</span></code>, the first <code class="docutils literal notranslate"><span class="pre">match</span></code> section in the list of <code class="docutils literal notranslate"><span class="pre">submappings</span></code> that contains a string that satisfies the spec will apply its <code class="docutils literal notranslate"><span class="pre">build-job*</span></code> attributes to the rebuild job associated with that spec.
+This is the default behavior and will be the method if no <code class="docutils literal notranslate"><span class="pre">match_behavior</span></code> is specified.</p>
+<p>In the case of <code class="docutils literal notranslate"><span class="pre">merge</span></code> match, all of the <code class="docutils literal notranslate"><span class="pre">match</span></code> sections in the list of <code class="docutils literal notranslate"><span class="pre">submappings</span></code> that contain a string that satisfies the spec will have the associated <code class="docutils literal notranslate"><span class="pre">build-job*</span></code> attributes applied to the rebuild job associated with that spec.
+Again, the attributes will be merged starting from the bottom match going up to the top match.</p>
+<p>In the case that no match is found in a submapping section, no additional attributes will be applied.</p>
+</section>
+<section id="dynamic-mapping-sections">
+<h3>Dynamic Mapping Sections<a class="headerlink" href="#dynamic-mapping-sections" title="Link to this heading">¶</a></h3>
+<p>For large scale CI where cost optimization is required, dynamic mapping allows for the use of real-time mapping schemes served by a web service.
+This type of mapping does not support the <code class="docutils literal notranslate"><span class="pre">-remove</span></code> type behavior, but it does follow the rest of the merge rules for configurations.</p>
+<p>The dynamic mapping service needs to implement a single REST API interface for getting requests <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">&lt;URL&gt;[:PORT][/PATH]?spec=&lt;pkg_name&#64;pkg_version</span> <span class="pre">+variant1+variant2%compiler&#64;compiler_version&gt;</span></code>.</p>
+<p>example request.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>https://my-dyn-mapping.spack.io/allocation?spec=zlib-ng@2.1.6 +compat+opt+shared+pic+new_strategies arch=linux-ubuntu20.04-x86_64_v3%gcc@12.0.0
+</pre></div>
+</div>
+<p>With an example response that updates kubernetes request variables, overrides the max retries for GitLab, and prepends a note about the modifications made by the my-dyn-mapping.spack.io service.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>200 OK
+
+{
+  &quot;variables&quot;:
+  {
+    &quot;KUBERNETES_CPU_REQUEST&quot;: &quot;500m&quot;,
+    &quot;KUBERNETES_MEMORY_REQUEST&quot;: &quot;2G&quot;,
+  },
+  &quot;retry&quot;: { &quot;max:&quot;: &quot;1&quot;}
+  &quot;script+:&quot;:
+  [
+    &quot;echo \&quot;Job modified by my-dyn-mapping.spack.io\&quot;&quot;
+  ]
+}
+</pre></div>
+</div>
+<p>The ci.yaml configuration section takes the URL endpoint as well as a number of options to configure how responses are handled.</p>
+<p>It is possible to specify a list of allowed and ignored configuration attributes under <code class="docutils literal notranslate"><span class="pre">allow</span></code> and <code class="docutils literal notranslate"><span class="pre">ignore</span></code> respectively.
+It is also possible to configure required attributes under <code class="docutils literal notranslate"><span class="pre">required</span></code> section.</p>
+<p>Options to configure the client timeout and SSL verification using the <code class="docutils literal notranslate"><span class="pre">timeout</span></code> and <code class="docutils literal notranslate"><span class="pre">verify_ssl</span></code> options.
+By default, the <code class="docutils literal notranslate"><span class="pre">timeout</span></code> is set to the option in <code class="docutils literal notranslate"><span class="pre">config:timeout</span></code> and <code class="docutils literal notranslate"><span class="pre">verify_ssl</span></code> is set to the option in <code class="docutils literal notranslate"><span class="pre">config:verify_ssl</span></code>.</p>
+<p>Passing header parameters to the request can be achieved through the <code class="docutils literal notranslate"><span class="pre">header</span></code> section.
+The values of the variables passed to the header may be environment variables that are expanded at runtime, such as a private token configured on the runner.</p>
+<p>Here is an example configuration pointing to <code class="docutils literal notranslate"><span class="pre">my-dyn-mapping.spack.io/allocation</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ci</span><span class="p">:</span>
+  <span class="nt">pipeline-gen</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">dynamic-mapping</span><span class="p">:</span>
+      <span class="nt">endpoint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-dyn-mapping.spack.io/allocation</span>
+      <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+      <span class="nt">verify_ssl</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">header</span><span class="p">:</span>
+        <span class="nt">PRIVATE_TOKEN</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MY_PRIVATE_TOKEN}</span>
+        <span class="nt">MY_CONFIG</span><span class="p">:</span> <span class="s">&quot;fuzz_allocation:false&quot;</span>
+      <span class="nt">allow</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">variables</span>
+      <span class="nt">ignore</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">script</span>
+      <span class="nt">require</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+</pre></div>
+</div>
+</section>
+<section id="broken-specs-url">
+<h3>Broken Specs URL<a class="headerlink" href="#broken-specs-url" title="Link to this heading">¶</a></h3>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">broken-specs-url</span></code> key tells Spack to check against a list of specs that are known to be currently broken in <code class="docutils literal notranslate"><span class="pre">develop</span></code>.
+If any such specs are found, the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> command will fail with an error message informing the user what broken specs were encountered.
+This allows the pipeline to fail early and avoid wasting compute resources attempting to build packages that will not succeed.</p>
+</section>
+<section id="cdash">
+<h3>CDash<a class="headerlink" href="#cdash" title="Link to this heading">¶</a></h3>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">cdash</span></code> section provides information that will be used by the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> command (invoked by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">start</span></code>) for reporting to CDash.
+All the jobs generated from this environment will belong to a “build group” within CDash that can be tracked over time.
+As the release progresses, this build group may have jobs added or removed.
+The URL, project, and site are used to specify the CDash instance to which build results should be reported.</p>
+<p>Take a look at the <a class="reference external" href="https://github.com/spack/spack/blob/develop/lib/spack/spack/schema/ci.py">schema</a> for the ci section of the Spack environment file, to see precisely what syntax is allowed there.</p>
+</section>
+<section id="reserved-tags">
+<span id="id2"></span><h3>Reserved Tags<a class="headerlink" href="#reserved-tags" title="Link to this heading">¶</a></h3>
+<p>Spack has a subset of tags (<code class="docutils literal notranslate"><span class="pre">public</span></code>, <code class="docutils literal notranslate"><span class="pre">protected</span></code>, and <code class="docutils literal notranslate"><span class="pre">notary</span></code>) that it reserves for classifying runners that may require special permissions or access.
+The tags <code class="docutils literal notranslate"><span class="pre">public</span></code> and <code class="docutils literal notranslate"><span class="pre">protected</span></code> are used to distinguish between runners that use public permissions and runners with protected permissions.
+The <code class="docutils literal notranslate"><span class="pre">notary</span></code> tag is a special tag that is used to indicate runners that have access to the highly protected information used for signing binaries using the <code class="docutils literal notranslate"><span class="pre">signing</span></code> job.</p>
+</section>
+<section id="summary-of-gitlab-ci-yml-generation-algorithm">
+<span id="staging-algorithm"></span><h3>Summary of <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> generation algorithm<a class="headerlink" href="#summary-of-gitlab-ci-yml-generation-algorithm" title="Link to this heading">¶</a></h3>
+<p>All specs yielded by the matrix (or all the specs in the environment) have their dependencies computed, and the entire resulting set of specs are staged together before being run through the <code class="docutils literal notranslate"><span class="pre">ci/pipeline-gen</span></code> entries, where each staged spec is assigned a runner.
+“Staging” is the name given to the process of figuring out in what order the specs should be built, taking into consideration Gitlab CI rules about jobs/stages.
+In the staging process, the goal is to maximize the number of jobs in any stage of the pipeline, while ensuring that the jobs in any stage only depend on jobs in previous stages (since those jobs are guaranteed to have completed already).
+As a runner is determined for a job, the information in the merged <code class="docutils literal notranslate"><span class="pre">any-job*</span></code> and <code class="docutils literal notranslate"><span class="pre">build-job*</span></code> sections is used to populate various parts of the job description that will be used by the target CI pipelines.
+Once all the jobs have been assigned a runner, the <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> is written to disk.</p>
+<p>The short example provided above would result in the <code class="docutils literal notranslate"><span class="pre">readline</span></code>, <code class="docutils literal notranslate"><span class="pre">ncurses</span></code>, and <code class="docutils literal notranslate"><span class="pre">pkgconf</span></code> packages getting staged and built on the runner chosen by the <code class="docutils literal notranslate"><span class="pre">spack-k8s</span></code> tag.
+In this example, Spack assumes the runner is a Docker executor type runner, and thus certain jobs will be run in the <code class="docutils literal notranslate"><span class="pre">centos7</span></code> container and others in the <code class="docutils literal notranslate"><span class="pre">ubuntu-18.04</span></code> container.
+The resulting <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> will contain 6 jobs in three stages.
+Once the jobs have been generated, the presence of a <code class="docutils literal notranslate"><span class="pre">SPACK_CDASH_AUTH_TOKEN</span></code> environment variable during the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> command would result in all of the jobs being put in a build group on CDash called “Release Testing” (that group will be created if it didn’t already exist).</p>
+</section>
+</section>
+<section id="ci-artifacts-directory-layout">
+<span id="ci-artifacts"></span><h2>CI Artifacts Directory Layout<a class="headerlink" href="#ci-artifacts-directory-layout" title="Link to this heading">¶</a></h2>
+<p>When running the CI build using the command <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code> a number of directories are created for storing data generated during the CI job.
+The default root directory for artifacts is <code class="docutils literal notranslate"><span class="pre">job_scratch_root</span></code>.
+This can be overridden by passing the argument <code class="docutils literal notranslate"><span class="pre">--artifacts-root</span></code> to the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> command or by setting the <code class="docutils literal notranslate"><span class="pre">SPACK_ARTIFACTS_ROOT</span></code> environment variable in the build job scripts.</p>
+<p>The top-level directories under the artifact root are <code class="docutils literal notranslate"><span class="pre">concrete_environment</span></code>, <code class="docutils literal notranslate"><span class="pre">logs</span></code>, <code class="docutils literal notranslate"><span class="pre">reproduction</span></code>, <code class="docutils literal notranslate"><span class="pre">tests</span></code>, and <code class="docutils literal notranslate"><span class="pre">user_data</span></code>.
+Spack does not restrict what is written to any of these directories nor does it require user specified files be written to any specific directory.</p>
+<section id="concrete-environment">
+<h3><code class="docutils literal notranslate"><span class="pre">concrete_environment</span></code><a class="headerlink" href="#concrete-environment" title="Link to this heading">¶</a></h3>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">concrete_environment</span></code> is used to communicate the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code> processed <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> and the concrete <code class="docutils literal notranslate"><span class="pre">spack.lock</span></code> for the CI environment.</p>
+</section>
+<section id="logs">
+<h3><code class="docutils literal notranslate"><span class="pre">logs</span></code><a class="headerlink" href="#logs" title="Link to this heading">¶</a></h3>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">logs</span></code> contains the Spack build log, <code class="docutils literal notranslate"><span class="pre">spack-build-out.txt</span></code>, and the Spack build environment modification file, <code class="docutils literal notranslate"><span class="pre">spack-build-mod-env.txt</span></code>.
+Additionally, all files specified by the packages <code class="docutils literal notranslate"><span class="pre">Builder</span></code> property <code class="docutils literal notranslate"><span class="pre">archive_files</span></code> are also copied here (i.e., <code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code> in <code class="docutils literal notranslate"><span class="pre">CMakeBuilder</span></code>).</p>
+</section>
+<section id="reproduction">
+<h3><code class="docutils literal notranslate"><span class="pre">reproduction</span></code><a class="headerlink" href="#reproduction" title="Link to this heading">¶</a></h3>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">reproduction</span></code> is used to store the files needed by the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">reproduce-build</span></code> command.
+This includes <code class="docutils literal notranslate"><span class="pre">repro.json</span></code>, copies of all of the files in <code class="docutils literal notranslate"><span class="pre">concrete_environment</span></code>, the concrete spec JSON file for the current spec being built, and all of the files written in the artifacts root directory.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">repro.json</span></code> file is not versioned and is only designed to work with the version that Spack CI was run with.
+An example of what a <code class="docutils literal notranslate"><span class="pre">repro.json</span></code> may look like is here.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;job_name&quot;</span><span class="p">:</span> <span class="s2">&quot;adios2@2.9.2 /feaevuj %gcc@11.4.0 arch=linux-ubuntu20.04-x86_64_v3 E4S ROCm External&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;job_spec_json&quot;</span><span class="p">:</span> <span class="s2">&quot;adios2.json&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;ci_project_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;/builds/spack/spack&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="tests">
+<h3><code class="docutils literal notranslate"><span class="pre">tests</span></code><a class="headerlink" href="#tests" title="Link to this heading">¶</a></h3>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">tests</span></code> is used to store output from running <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">test</span> <span class="pre">&lt;job</span> <span class="pre">spec&gt;</span></code>.
+This may or may not have data in it depending on the package that was built and the availability of tests.</p>
+</section>
+<section id="user-data">
+<h3><code class="docutils literal notranslate"><span class="pre">user_data</span></code><a class="headerlink" href="#user-data" title="Link to this heading">¶</a></h3>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">user_data</span></code> is used to store everything else that shouldn’t be copied to the <code class="docutils literal notranslate"><span class="pre">reproduction</span></code> directory.
+Users may use this to store additional logs or metrics or other types of files generated by the build job.</p>
+</section>
+</section>
+<section id="using-a-custom-spack-in-your-pipeline">
+<h2>Using a custom Spack in your pipeline<a class="headerlink" href="#using-a-custom-spack-in-your-pipeline" title="Link to this heading">¶</a></h2>
+<p>If your runners will not have a version of Spack ready to invoke, or if for some other reason you want to use a custom version of Spack to run your pipelines, this section provides an example of how you could take advantage of user-provided pipeline scripts to accomplish this fairly simply.
+First, consider specifying the source and version of Spack you want to use with variables, either written directly into your <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>, or provided by CI variables defined in the GitLab UI or from some upstream pipeline.
+Let’s say you choose the variable names <code class="docutils literal notranslate"><span class="pre">SPACK_REPO</span></code> and <code class="docutils literal notranslate"><span class="pre">SPACK_REF</span></code> to refer to the particular fork of Spack and branch you want for running your pipeline.
+You can then refer to those in a custom shell script invoked both from your pipeline generation job and your rebuild jobs.
+Here’s the <code class="docutils literal notranslate"><span class="pre">generate-pipeline</span></code> job from the top of this document, updated to clone and source a custom Spack:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">generate-pipeline</span><span class="p">:</span>
+  <span class="nt">tags</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;some-other-tag&gt;</span>
+  <span class="nt">before_script</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">git clone ${SPACK_REPO}</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pushd spack &amp;&amp; git checkout ${SPACK_REF} &amp;&amp; popd</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">. &quot;./spack/share/spack/setup-env.sh&quot;</span>
+  <span class="nt">script</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack env activate --without-view .</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack ci generate --check-index-only --artifacts-root &quot;${CI_PROJECT_DIR}/jobs_scratch_dir&quot; --output-file &quot;${CI_PROJECT_DIR}/jobs_scratch_dir/pipeline.yml&quot;</span>
+  <span class="nt">after_script</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">rm -rf ./spack</span>
+  <span class="nt">artifacts</span><span class="p">:</span>
+    <span class="nt">paths</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;${CI_PROJECT_DIR}/jobs_scratch_dir&quot;</span>
+</pre></div>
+</div>
+<p>That takes care of getting the desired version of Spack when your pipeline is generated by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code>.
+You also want your generated rebuild jobs (all of them) to clone that version of Spack, so next you would update your <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> from above as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spack</span><span class="p">:</span>
+  <span class="c1"># ...</span>
+  <span class="nt">ci</span><span class="p">:</span>
+    <span class="nt">pipeline-gen</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">build-job</span><span class="p">:</span>
+        <span class="nt">tags</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack-kube</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spack/ubuntu-noble</span>
+        <span class="nt">before_script</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">git clone ${SPACK_REPO}</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pushd spack &amp;&amp; git checkout ${SPACK_REF} &amp;&amp; popd</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">. &quot;./spack/share/spack/setup-env.sh&quot;</span>
+        <span class="nt">script</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack env activate --without-view ${SPACK_CONCRETE_ENV_DIR}</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spack -d ci rebuild</span>
+        <span class="nt">after_script</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">rm -rf ./spack</span>
+</pre></div>
+</div>
+<p>Now all of the generated rebuild jobs will use the same shell script to clone Spack before running their actual workload.</p>
+<p>Now imagine you have long pipelines with many specs to be built, and you are pointing to a Spack repository and branch that has a tendency to change frequently, such as the main repo and its <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch.
+If each child job checks out the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch, that could result in some jobs running with one SHA of Spack, while later jobs run with another.
+To help avoid this issue, the pipeline generation process saves global variables called <code class="docutils literal notranslate"><span class="pre">SPACK_VERSION</span></code> and <code class="docutils literal notranslate"><span class="pre">SPACK_CHECKOUT_VERSION</span></code> that capture the version of Spack used to generate the pipeline.
+While the <code class="docutils literal notranslate"><span class="pre">SPACK_VERSION</span></code> variable simply contains the human-readable value produced by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">-V</span></code> at pipeline generation time, the <code class="docutils literal notranslate"><span class="pre">SPACK_CHECKOUT_VERSION</span></code> variable can be used in a <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span></code> command to make sure all child jobs checkout the same version of Spack used to generate the pipeline.
+To take advantage of this, you could simply replace <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">${SPACK_REF}</span></code> in the example <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code> above with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">${SPACK_CHECKOUT_VERSION}</span></code>.</p>
+<p>On the other hand, if you’re pointing to a Spack repository and branch under your control, there may be no benefit in using the captured <code class="docutils literal notranslate"><span class="pre">SPACK_CHECKOUT_VERSION</span></code>, and you can instead just clone using the variables you define (<code class="docutils literal notranslate"><span class="pre">SPACK_REPO</span></code> and <code class="docutils literal notranslate"><span class="pre">SPACK_REF</span></code> in the example above).</p>
+</section>
+<section id="custom-workflow">
+<span id="id3"></span><h2>Custom Workflow<a class="headerlink" href="#custom-workflow" title="Link to this heading">¶</a></h2>
+<p>There are many ways to take advantage of Spack CI pipelines to achieve custom workflows for building packages or other resources.
+One example of a custom pipelines workflow is the Spack tutorial container <a class="reference external" href="https://github.com/spack/spack-tutorial-container">repo</a>.
+This project uses GitHub (for source control), GitLab (for automated Spack CI pipelines), and DockerHub automated builds to build Docker images (complete with fully populated binary mirror) used by instructors and participants of a Spack tutorial.</p>
+<p>Take a look at the repo to see how it is accomplished using Spack CI pipelines, and see the following markdown files at the root of the repository for descriptions and documentation describing the workflow: <code class="docutils literal notranslate"><span class="pre">DESCRIPTION.md</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCKERHUB_SETUP.md</span></code>, <code class="docutils literal notranslate"><span class="pre">GITLAB_SETUP.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">UPDATING.md</span></code>.</p>
+</section>
+<section id="environment-variables-affecting-pipeline-operation">
+<span id="ci-environment-variables"></span><h2>Environment variables affecting pipeline operation<a class="headerlink" href="#environment-variables-affecting-pipeline-operation" title="Link to this heading">¶</a></h2>
+<p>Certain secrets and some other information should be provided to the pipeline infrastructure via environment variables, usually for reasons of security, but in some cases to support other pipeline use cases such as PR testing.
+The environment variables used by the pipeline infrastructure are described here.</p>
+<section id="aws-access-key-id">
+<h3><code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code><a class="headerlink" href="#aws-access-key-id" title="Link to this heading">¶</a></h3>
+<p>Optional.
+Only needed when binary mirror is an S3 bucket.</p>
+</section>
+<section id="aws-secret-access-key">
+<h3><code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code><a class="headerlink" href="#aws-secret-access-key" title="Link to this heading">¶</a></h3>
+<p>Optional.
+Only needed when binary mirror is an S3 bucket.</p>
+</section>
+<section id="s3-endpoint-url">
+<h3><code class="docutils literal notranslate"><span class="pre">S3_ENDPOINT_URL</span></code><a class="headerlink" href="#s3-endpoint-url" title="Link to this heading">¶</a></h3>
+<p>Optional.
+Only needed when binary mirror is an S3 bucket that is <em>not</em> on AWS.</p>
+</section>
+<section id="cdash-auth-token">
+<h3><code class="docutils literal notranslate"><span class="pre">CDASH_AUTH_TOKEN</span></code><a class="headerlink" href="#cdash-auth-token" title="Link to this heading">¶</a></h3>
+<p>Optional.
+Only needed to report build groups to CDash.</p>
+</section>
+<section id="spack-signing-key">
+<h3><code class="docutils literal notranslate"><span class="pre">SPACK_SIGNING_KEY</span></code><a class="headerlink" href="#spack-signing-key" title="Link to this heading">¶</a></h3>
+<p>Optional.
+Only needed if you want <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code> to trust the key you store in this variable, in which case, it will subsequently be used to sign and verify binary packages (when installing or creating buildcaches).
+You could also have already trusted a key Spack knows about, or if no key is present anywhere, Spack will install specs using <code class="docutils literal notranslate"><span class="pre">--no-check-signature</span></code> and create buildcaches using <code class="docutils literal notranslate"><span class="pre">-u</span></code> (for unsigned binaries).</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="signing.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Spack Package Signing</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="extensions.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Custom Extensions</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on Sep 23, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">CI Pipelines</a><ul>
+<li><a class="reference internal" href="#getting-started-with-pipelines">Getting started with pipelines</a></li>
+<li><a class="reference internal" href="#functional-example">Functional Example</a></li>
+<li><a class="reference internal" href="#spack-commands-supporting-pipelines">Spack commands supporting pipelines</a><ul>
+<li><a class="reference internal" href="#spack-ci"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span></code></a></li>
+<li><a class="reference internal" href="#spack-ci-generate"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">generate</span></code></a></li>
+<li><a class="reference internal" href="#spack-ci-rebuild"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild</span></code></a></li>
+<li><a class="reference internal" href="#spack-ci-rebuild-index"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">rebuild-index</span></code></a></li>
+<li><a class="reference internal" href="#spack-ci-reproduce-build"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">ci</span> <span class="pre">reproduce-build</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#job-types">Job Types</a><ul>
+<li><a class="reference internal" href="#rebuild-build">Rebuild (build)</a></li>
+<li><a class="reference internal" href="#update-index-reindex">Update Index (reindex)</a></li>
+<li><a class="reference internal" href="#signing-signing">Signing (signing)</a></li>
+<li><a class="reference internal" href="#no-op-noop">No Op (noop)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ci-yaml">ci.yaml</a><ul>
+<li><a class="reference internal" href="#job-attribute-sections">Job Attribute Sections</a></li>
+<li><a class="reference internal" href="#submapping-sections">Submapping Sections</a></li>
+<li><a class="reference internal" href="#dynamic-mapping-sections">Dynamic Mapping Sections</a></li>
+<li><a class="reference internal" href="#broken-specs-url">Broken Specs URL</a></li>
+<li><a class="reference internal" href="#cdash">CDash</a></li>
+<li><a class="reference internal" href="#reserved-tags">Reserved Tags</a></li>
+<li><a class="reference internal" href="#summary-of-gitlab-ci-yml-generation-algorithm">Summary of <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> generation algorithm</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ci-artifacts-directory-layout">CI Artifacts Directory Layout</a><ul>
+<li><a class="reference internal" href="#concrete-environment"><code class="docutils literal notranslate"><span class="pre">concrete_environment</span></code></a></li>
+<li><a class="reference internal" href="#logs"><code class="docutils literal notranslate"><span class="pre">logs</span></code></a></li>
+<li><a class="reference internal" href="#reproduction"><code class="docutils literal notranslate"><span class="pre">reproduction</span></code></a></li>
+<li><a class="reference internal" href="#tests"><code class="docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li><a class="reference internal" href="#user-data"><code class="docutils literal notranslate"><span class="pre">user_data</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-a-custom-spack-in-your-pipeline">Using a custom Spack in your pipeline</a></li>
+<li><a class="reference internal" href="#custom-workflow">Custom Workflow</a></li>
+<li><a class="reference internal" href="#environment-variables-affecting-pipeline-operation">Environment variables affecting pipeline operation</a><ul>
+<li><a class="reference internal" href="#aws-access-key-id"><code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code></a></li>
+<li><a class="reference internal" href="#aws-secret-access-key"><code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code></a></li>
+<li><a class="reference internal" href="#s3-endpoint-url"><code class="docutils literal notranslate"><span class="pre">S3_ENDPOINT_URL</span></code></a></li>
+<li><a class="reference internal" href="#cdash-auth-token"><code class="docutils literal notranslate"><span class="pre">CDASH_AUTH_TOKEN</span></code></a></li>
+<li><a class="reference internal" href="#spack-signing-key"><code class="docutils literal notranslate"><span class="pre">SPACK_SIGNING_KEY</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=08db6fca"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    </body>
+</html>

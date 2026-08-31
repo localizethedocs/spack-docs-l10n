@@ -1,0 +1,789 @@
+<!doctype html>
+<html class="no-js" lang="en-US" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Understand how to control the build process in Spack by customizing package-specific build settings and environment variables." lang="en" name="description" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-11-13T19:37:48+00:00" /><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Package Repositories (repos.yaml)" href="repositories.html"><link rel="prev" title="Toolchains (toolchains.yaml)" href="toolchains_yaml.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/build_settings.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>Concretization Settings (concretizer.yaml) - Spack 1.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/build_settings.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="concretization-settings-concretizer-yaml">
+<span id="concretizer-options"></span><h1>Concretization Settings (concretizer.yaml)<a class="headerlink" href="#concretization-settings-concretizer-yaml" title="Link to this heading">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">concretizer.yaml</span></code> configuration file allows users to customize aspects of the algorithm used to select the dependencies they install.
+The default configuration is the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1"># This is the default spack configuration file.</span>
+<span class="c1">#</span>
+<span class="c1"># Settings here are versioned with Spack and are intended to provide</span>
+<span class="c1"># sensible defaults out of the box. Spack maintainers should edit this</span>
+<span class="c1"># file to keep it current.</span>
+<span class="c1">#</span>
+<span class="c1"># Users can override these settings by editing</span>
+<span class="c1"># `$SPACK_ROOT/etc/spack/concretizer.yaml`, `~/.spack/concretizer.yaml`,</span>
+<span class="c1"># or by adding a `concretizer:` section to an environment.</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="nt">concretizer</span><span class="p">:</span>
+  <span class="c1"># Whether to consider installed packages or packages from buildcaches when</span>
+  <span class="c1"># concretizing specs. If `true`, we&#39;ll try to use as many installs/binaries</span>
+  <span class="c1"># as possible, rather than building. If `false`, we&#39;ll always give you a fresh</span>
+  <span class="c1"># concretization. If `dependencies`, we&#39;ll only reuse dependencies but</span>
+  <span class="c1"># give you a fresh concretization for your root specs.</span>
+  <span class="nt">reuse</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="c1"># Options that tune which targets are considered for concretization. The</span>
+  <span class="c1"># concretization process is very sensitive to the number targets, and the time</span>
+  <span class="c1"># needed to reach a solution increases noticeably with the number of targets</span>
+  <span class="c1"># considered.</span>
+  <span class="nt">targets</span><span class="p">:</span>
+    <span class="c1"># Determine whether we want to target specific or generic</span>
+    <span class="c1"># microarchitectures. Valid values are: &quot;microarchitectures&quot; or &quot;generic&quot;.</span>
+    <span class="c1"># An example of &quot;microarchitectures&quot; would be &quot;skylake&quot; or &quot;bulldozer&quot;,</span>
+    <span class="c1"># while an example of &quot;generic&quot; would be &quot;aarch64&quot; or &quot;x86_64_v4&quot;.</span>
+    <span class="nt">granularity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">microarchitectures</span>
+    <span class="c1"># If &quot;false&quot; allow targets that are incompatible with the current host (for</span>
+    <span class="c1"># instance concretize with target &quot;icelake&quot; while running on &quot;haswell&quot;).</span>
+    <span class="c1"># If &quot;true&quot; only allow targets that are compatible with the host.</span>
+    <span class="nt">host_compatible</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="c1"># When &quot;true&quot; concretize root specs of environments together, so that each unique</span>
+  <span class="c1"># package in an environment corresponds to one concrete spec. This ensures</span>
+  <span class="c1"># environments can always be activated. When &quot;false&quot; perform concretization separately</span>
+  <span class="c1"># on each root spec, allowing different versions and variants of the same package in</span>
+  <span class="c1"># an environment.</span>
+  <span class="nt">unify</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="c1"># Option to deal with possible duplicate nodes (i.e. different nodes from the same package) in the DAG.</span>
+  <span class="nt">duplicates</span><span class="p">:</span>
+    <span class="c1"># &quot;none&quot;: allows a single node for any package in the DAG.</span>
+    <span class="c1"># &quot;minimal&quot;: allows the duplication of &#39;build-tools&#39; nodes only</span>
+    <span class="c1"># (e.g. py-setuptools, cmake etc.)</span>
+    <span class="c1"># &quot;full&quot; (experimental): allows separation of the entire build-tool stack (e.g. the entire &quot;cmake&quot; subDAG)</span>
+    <span class="nt">strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">minimal</span>
+    <span class="c1"># Maximum number of duplicates in a DAG, when using a strategy that allows duplicates. &quot;default&quot; is the</span>
+    <span class="c1"># number used if there isn&#39;t a more specific alternative</span>
+    <span class="nt">max_dupes</span><span class="p">:</span>
+      <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="c1"># Virtuals</span>
+      <span class="nt">c</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">cxx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">fortran</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="c1"># Regular packages</span>
+      <span class="nt">cmake</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">gmake</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">python</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">python-venv</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">py-cython</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">py-flit-core</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">py-pip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">py-setuptools</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">py-versioneer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">py-wheel</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">xcb-proto</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="c1"># Compilers</span>
+      <span class="nt">gcc</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">llvm</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+  <span class="c1"># Option to specify compatibility between operating systems for reuse of compilers and packages</span>
+  <span class="c1"># Specified as a key: [list] where the key is the os that is being targeted, and the list contains the OS&#39;s</span>
+  <span class="c1"># it can reuse. Note this is a directional compatibility so mutual compatibility between two OS&#39;s</span>
+  <span class="c1"># requires two entries i.e. os_compatible: {sonoma: [monterey], monterey: [sonoma]}</span>
+  <span class="nt">os_compatible</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+  <span class="c1"># If false, force all link/run dependencies of root to match c/c++/Fortran compiler. If this is</span>
+  <span class="c1"># a list, then the listed packages are allowed to use a different compiler, but all others must</span>
+  <span class="c1"># match.</span>
+  <span class="nt">compiler_mixing</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="c1"># Option to specify whether to support splicing. Splicing allows for</span>
+  <span class="c1"># the relinking of concrete package dependencies in order to better</span>
+  <span class="c1"># reuse already built packages with ABI compatible dependencies</span>
+  <span class="nt">splice</span><span class="p">:</span>
+    <span class="nt">explicit</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+    <span class="nt">automatic</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="c1"># Maximum time, in seconds, allowed for the &#39;solve&#39; phase. If set to 0, there is no time limit.</span>
+  <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+  <span class="c1"># If set to true, exceeding the timeout will always result in a concretization error. If false,</span>
+  <span class="c1"># the best (suboptimal) model computed before the timeout is used.</span>
+  <span class="c1">#</span>
+  <span class="c1"># Setting this to false yields unreproducible results, so we advise to use that value only</span>
+  <span class="c1"># for debugging purposes (e.g. check which constraints can help Spack concretize faster).</span>
+  <span class="nt">error_on_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="c1"># Static analysis may reduce the concretization time by generating smaller ASP problems, in</span>
+  <span class="c1"># cases where there are requirements that prevent part of the search space to be explored.</span>
+  <span class="nt">static_analysis</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+  <span class="c1"># If enabled, concretizations are cached in the misc_cache. The cache is keyed by the hash</span>
+  <span class="c1"># of solver inputs, so we only need to run setup (not solve) if there is a cache hit.</span>
+  <span class="c1"># Feature is experimental: enabling may result in potentially invalid concretizations</span>
+  <span class="c1"># if package recipes are changed, see: https://github.com/spack/spack/issues/51553</span>
+  <span class="nt">concretization_cache</span><span class="p">:</span>
+    <span class="nt">enable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+  <span class="c1"># Options to control the behavior of the concretizer with external specs</span>
+  <span class="nt">externals</span><span class="p">:</span>
+    <span class="c1"># Either &#39;architecture_only&#39;, to complete external specs with just the architecture of the</span>
+    <span class="c1"># current host, or &#39;default_variants&#39; to complete external specs also with missing variants,</span>
+    <span class="c1"># using their default value.</span>
+    <span class="nt">completion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default_variants</span>
+</pre></div>
+</div>
+<section id="completion-of-external-nodes">
+<h2>Completion of external nodes<a class="headerlink" href="#completion-of-external-nodes" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="packages_yaml.html#sec-external-packages"><span class="std std-ref">The external packages</span></a> available from the <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> configuration file are usually reporting only a few of the variants defined in the corresponding recipe.
+Users can configure how Spack deals with missing information for externals via the <code class="docutils literal notranslate"><span class="pre">concretizer:externals:completion</span></code> attribute:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">externals</span><span class="p">:</span>
+    <span class="nt">completion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default_variants</span>
+</pre></div>
+</div>
+<p>This attribute currently allows two possible values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">architecture_only</span></code>: only the mandatory architectural information is completed on externals</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">default_variants</span></code>: external specs are also completed with missing variants, using their default values</p></li>
+</ul>
+</section>
+<section id="reuse-already-installed-packages">
+<h2>Reuse Already Installed Packages<a class="headerlink" href="#reuse-already-installed-packages" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">reuse</span></code> attribute controls how aggressively Spack reuses binary packages during concretization.
+The attribute can be either a single value or an object for more complex configurations.</p>
+<p>In the former case (“single value”), it allows Spack to:</p>
+<ol class="arabic simple">
+<li><p>Reuse installed packages and build caches for all the specs to be concretized, when <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+<li><p>Reuse installed packages and build caches only for the dependencies of the root specs, when <code class="docutils literal notranslate"><span class="pre">dependencies</span></code>.</p></li>
+<li><p>Disregard reusing installed packages and build caches, when <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ol>
+<p>In case finer control over which specs are reused is needed, the value of this attribute can be an object with the following keys:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">roots</span></code>: if <code class="docutils literal notranslate"><span class="pre">true</span></code> root specs are reused, if <code class="docutils literal notranslate"><span class="pre">false</span></code> only dependencies of root specs are reused</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">from</span></code>: list of sources from which reused specs are taken</p></li>
+</ol>
+<p>Each source in <code class="docutils literal notranslate"><span class="pre">from</span></code> is itself an object with the following attributes:</p>
+<div class="table-wrapper docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Attributes for a source or reusable specs</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type (mandatory, string)</p></td>
+<td><p>Can be <code class="docutils literal notranslate"><span class="pre">local</span></code>, <code class="docutils literal notranslate"><span class="pre">buildcache</span></code>, or <code class="docutils literal notranslate"><span class="pre">external</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>include (optional, list of specs)</p></td>
+<td><p>If present, reusable specs must match at least one of the constraints in the list.</p></td>
+</tr>
+<tr class="row-even"><td><p>exclude (optional, list of specs)</p></td>
+<td><p>If present, reusable specs must not match any of the constraints in the list.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For instance, the following configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">reuse</span><span class="p">:</span>
+    <span class="nt">roots</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">from</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+      <span class="nt">include</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;%gcc&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;%clang&quot;</span>
+</pre></div>
+</div>
+<p>tells the concretizer to reuse all specs compiled with either <code class="docutils literal notranslate"><span class="pre">gcc</span></code> or <code class="docutils literal notranslate"><span class="pre">clang</span></code> that are installed in the local store.
+Any spec from remote build caches is disregarded.</p>
+<p>To reduce the boilerplate in configuration files, default values for the <code class="docutils literal notranslate"><span class="pre">include</span></code> and <code class="docutils literal notranslate"><span class="pre">exclude</span></code> options can be pushed up one level:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">reuse</span><span class="p">:</span>
+    <span class="nt">roots</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">include</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;%gcc&quot;</span>
+    <span class="nt">from</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">buildcache</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+      <span class="nt">include</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;foo</span><span class="nv"> </span><span class="s">%oneapi&quot;</span>
+</pre></div>
+</div>
+<p>In the example above, we reuse all specs compiled with <code class="docutils literal notranslate"><span class="pre">gcc</span></code> from the local store and remote build caches, and we also reuse <code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">%oneapi</span></code>.
+Note that the last source of specs overrides the default <code class="docutils literal notranslate"><span class="pre">include</span></code> attribute.</p>
+<p>For one-off concretizations, there are command-line arguments for each of the simple “single value” configurations.
+This means a user can:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>spack install --reuse &lt;spec&gt;
+</pre></div>
+</div>
+<p>to enable reuse for a single installation, or:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack install --fresh &lt;spec&gt;
+</pre></div>
+</div>
+<p>to do a fresh install if <code class="docutils literal notranslate"><span class="pre">reuse</span></code> is enabled by default.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>FAQ: <a class="reference internal" href="frequently_asked_questions.html#faq-concretizer-precedence"><span class="std std-ref">Why does Spack pick particular versions and variants?</span></a></p>
+</div>
+</section>
+<section id="selection-of-target-microarchitectures">
+<h2>Selection of Target Microarchitectures<a class="headerlink" href="#selection-of-target-microarchitectures" title="Link to this heading">¶</a></h2>
+<p>The options under the <code class="docutils literal notranslate"><span class="pre">targets</span></code> attribute control which targets are considered during a solve.
+Currently, the options in this section are only configurable from the <code class="docutils literal notranslate"><span class="pre">concretizer.yaml</span></code> file, and there are no corresponding command-line arguments to enable them for a single solve.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">granularity</span></code> option can take two possible values: <code class="docutils literal notranslate"><span class="pre">microarchitectures</span></code> and <code class="docutils literal notranslate"><span class="pre">generic</span></code>.
+If set to:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">targets</span><span class="p">:</span>
+    <span class="nt">granularity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">microarchitectures</span>
+</pre></div>
+</div>
+<p>Spack will consider all the microarchitectures known to <code class="docutils literal notranslate"><span class="pre">archspec</span></code> to label nodes for compatibility.
+If instead the option is set to:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">targets</span><span class="p">:</span>
+    <span class="nt">granularity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">generic</span>
+</pre></div>
+</div>
+<p>Spack will consider only generic microarchitectures.
+For instance, when running on a Haswell machine, Spack will consider <code class="docutils literal notranslate"><span class="pre">haswell</span></code> as the best target in the former case and <code class="docutils literal notranslate"><span class="pre">x86_64_v3</span></code> as the best target in the latter case.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">host_compatible</span></code> option is a Boolean option that determines whether or not the microarchitectures considered during the solve are constrained to be compatible with the host Spack is currently running on.
+For instance, if this option is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, a user cannot concretize for <code class="docutils literal notranslate"><span class="pre">target=icelake</span></code> while running on a Haswell machine.</p>
+</section>
+<section id="duplicate-nodes">
+<h2>Duplicate Nodes<a class="headerlink" href="#duplicate-nodes" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">duplicates</span></code> attribute controls whether the DAG can contain multiple configurations of the same package.
+This is mainly relevant for build dependencies, which may have their version pinned by some nodes and thus be required at different versions by different nodes in the same DAG.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">strategy</span></code> option controls how the solver deals with duplicates.
+If the value is <code class="docutils literal notranslate"><span class="pre">none</span></code>, then a single configuration per package is allowed in the DAG.
+This means, for instance, that only a single <code class="docutils literal notranslate"><span class="pre">cmake</span></code> or a single <code class="docutils literal notranslate"><span class="pre">py-setuptools</span></code> version is allowed.
+The result would be a slightly faster concretization at the expense of making a few specs unsolvable.</p>
+<p>If the value is <code class="docutils literal notranslate"><span class="pre">minimal</span></code>, Spack will allow packages tagged as <code class="docutils literal notranslate"><span class="pre">build-tools</span></code> to have duplicates.
+This allows, for instance, to concretize specs whose nodes require different and incompatible ranges of some build tool.
+For instance, in the figure below, the latest <cite>py-shapely</cite> requires a newer <cite>py-setuptools</cite>, while <cite>py-numpy</cite> still needs an older version:</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/shapely_duplicates.svg"><img alt="_images/shapely_duplicates.svg" src="_images/shapely_duplicates.svg" style="width: 100%;" />
+</a>
+</figure>
+<p>Up to Spack v0.20, <code class="docutils literal notranslate"><span class="pre">duplicates:strategy:none</span></code> was the default (and only) behavior.
+From Spack v0.21, the default behavior is <code class="docutils literal notranslate"><span class="pre">duplicates:strategy:minimal</span></code>.</p>
+</section>
+<section id="splicing">
+<h2>Splicing<a class="headerlink" href="#splicing" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">splice</span></code> key covers configuration attributes for splicing specs in the solver.</p>
+<p>“Splicing” is a method for replacing a dependency with another spec that provides the same package or virtual.
+There are two types of splices, referring to different behaviors for shared dependencies between the root spec and the new spec replacing a dependency: “transitive” and “intransitive”.
+A “transitive” splice is one that resolves all conflicts by taking the dependency from the new node.
+An “intransitive” splice is one that resolves all conflicts by taking the dependency from the original root.
+From a theory perspective, hybrid splices are possible but are not modeled by Spack.</p>
+<p>All spliced specs retain a <code class="docutils literal notranslate"><span class="pre">build_spec</span></code> attribute that points to the original spec before any splice occurred.
+The <code class="docutils literal notranslate"><span class="pre">build_spec</span></code> for a non-spliced spec is itself.</p>
+<p>The figure below shows examples of transitive and intransitive splices:</p>
+<figure class="align-center">
+<img alt="_images/splices.png" src="_images/splices.png" />
+</figure>
+<p>The concretizer can be configured to explicitly splice particular replacements for a target spec.
+Splicing will allow the user to make use of generically built public binary caches while swapping in highly optimized local builds for performance-critical components and/or components that interact closely with the specific hardware details of the system.
+The most prominent candidate for splicing is MPI providers.
+MPI packages have relatively well-understood ABI characteristics, and most High Performance Computing facilities deploy highly optimized MPI packages tailored to their particular hardware.
+The following configuration block configures Spack to replace whatever MPI provider each spec was concretized to use with the particular package of <code class="docutils literal notranslate"><span class="pre">mpich</span></code> with the hash that begins <code class="docutils literal notranslate"><span class="pre">abcdef</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">splice</span><span class="p">:</span>
+    <span class="nt">explicit</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">target</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mpi</span>
+      <span class="nt">replacement</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mpich/abcdef</span>
+      <span class="nt">transitive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When configuring an explicit splice, you as the user take on the responsibility for ensuring ABI compatibility between the specs matched by the target and the replacement you provide.
+If they are not compatible, Spack will not warn you, and your application will fail to run.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> field of an explicit splice can be any abstract spec.
+The <code class="docutils literal notranslate"><span class="pre">replacement</span></code> field must be a spec that includes the hash of a concrete spec, and the replacement must either be the same package as the target, provide the virtual that is the target, or provide a virtual that the target provides.
+The <code class="docutils literal notranslate"><span class="pre">transitive</span></code> field is optional – by default, splices will be transitive.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With explicit splices configured, it is possible for Spack to concretize to a spec that does not satisfy the input.
+For example, with the configuration above, <code class="docutils literal notranslate"><span class="pre">hdf5</span> <span class="pre">^mvapich2</span></code> will concretize to use <code class="docutils literal notranslate"><span class="pre">mpich/abcdef</span></code> instead of <code class="docutils literal notranslate"><span class="pre">mvapich2</span></code> as the MPI provider.
+Spack will warn the user in this case, but will not fail the concretization.</p>
+</div>
+<section id="automatic-splicing">
+<span id="id1"></span><h3>Automatic Splicing<a class="headerlink" href="#automatic-splicing" title="Link to this heading">¶</a></h3>
+<p>The Spack solver can be configured to do automatic splicing for ABI-compatible packages.
+Automatic splices are enabled in the concretizer configuration section:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">concretizer</span><span class="p">:</span>
+  <span class="nt">splice</span><span class="p">:</span>
+    <span class="nt">automatic</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>Packages can include ABI-compatibility information using the <code class="docutils literal notranslate"><span class="pre">can_splice</span></code> directive.
+See <a class="reference internal" href="packaging_guide_advanced.html#abi-compatibility"><span class="std std-ref">the packaging guide</span></a> for instructions on specifying ABI compatibility using the <code class="docutils literal notranslate"><span class="pre">can_splice</span></code> directive.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">can_splice</span></code> directive is experimental and may be changed in future versions.</p>
+</div>
+<p>When automatic splicing is enabled, the concretizer will combine any number of ABI-compatible specs if possible to reuse installed packages and packages available from binary caches.
+The end result of these specs is equivalent to a series of transitive/intransitive splices, but the series may be non-obvious.</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="repositories.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Package Repositories (repos.yaml)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="toolchains_yaml.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Toolchains (toolchains.yaml)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on Nov 13, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Concretization Settings (concretizer.yaml)</a><ul>
+<li><a class="reference internal" href="#completion-of-external-nodes">Completion of external nodes</a></li>
+<li><a class="reference internal" href="#reuse-already-installed-packages">Reuse Already Installed Packages</a></li>
+<li><a class="reference internal" href="#selection-of-target-microarchitectures">Selection of Target Microarchitectures</a></li>
+<li><a class="reference internal" href="#duplicate-nodes">Duplicate Nodes</a></li>
+<li><a class="reference internal" href="#splicing">Splicing</a><ul>
+<li><a class="reference internal" href="#automatic-splicing">Automatic Splicing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=08db6fca"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    </body>
+</html>
