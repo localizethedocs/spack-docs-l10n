@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"POT-Creation-Date: 2026-08-31 16:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -219,35 +220,151 @@ msgid ""
 msgstr ""
 
 #: ../../../binary_caches.rst:141
+msgid "Build Cache Index Views"
+msgstr ""
+
+#: ../../../binary_caches.rst:144
+msgid ""
+"Introduced in Spack v1.2. The addition of this feature does not increment "
+"the build cache version (v3)."
+msgstr ""
+
+#: ../../../binary_caches.rst:148
+msgid "Build cache index views are not supported in OCI build caches."
+msgstr ""
+
+#: ../../../binary_caches.rst:150
+msgid ""
+"Build caches can quickly become large and inefficient to search as binaries "
+"are added over time. A common work around to this problem is to break the "
+"build cache into stacks that target specific applications or workflows. This "
+"allows for curation of binaries as smaller collections of packages that push "
+"to their own mirrors that each maintain a smaller search area. However, this "
+"approach comes with the trade off of requiring much larger storage and "
+"computational footprints due to duplication of common dependencies between "
+"stacks. Splitting build caches can also reduce direct fetch hits by reducing "
+"the breadth of binaries available in a single mirror."
+msgstr ""
+
+#: ../../../binary_caches.rst:156
+msgid ""
+"To better address the issues with large search areas, build cache index "
+"views (or just \"views\" in this section) were introduced. A view is a named "
+"index which provides a curated view into a larger build cache. This allows "
+"build cache maintainers to provide the same granularity of build caches "
+"split by stacks without having to pay for the extra storage and compute "
+"required for the duplicated dependencies."
+msgstr ""
+
+#: ../../../binary_caches.rst:160
+msgid ""
+"Views can be created or updated using an active environment, or a list of "
+"environment names or paths. The ``spack buildcache`` commands for views are "
+"alias of the command ``spack buildcache update-index``."
+msgstr ""
+
+#: ../../../binary_caches.rst:163
+msgid ""
+"View indices are stored similarly to the top level build cache index, but "
+"use an additional prefix of the view name ``<build cache prefix>/v3/"
+"manifests/index/my-stack/index.manifest.json``."
+msgstr ""
+
+#: ../../../binary_caches.rst:168
+msgid "Creating a Build Cache Index View"
+msgstr ""
+
+#: ../../../binary_caches.rst:170
+msgid "Here is an example of creating a view using an active environment."
+msgstr ""
+
+#: ../../../binary_caches.rst:172
+msgid ""
+"$ spack env activate my-stack\n"
+"$ spack install\n"
+"$ spack buildcache push my-mirror\n"
+"$ spack buildcache update-index --name my-view my-mirror"
+msgstr ""
+
+#: ../../../binary_caches.rst:179
+msgid ""
+"It is also possible to create a view from a list of one or more environments "
+"by passing the environment names or paths. If a list of environments is "
+"passed while inside of an active environment, the active environment is "
+"ignored and only the passed environments are considered."
+msgstr ""
+
+#: ../../../binary_caches.rst:182
+msgid ""
+"$ spack buildcache update-index --name my-view my-mirror my-stack /path/to/"
+"environment/my-other-stack"
+msgstr ""
+
+#: ../../../binary_caches.rst:189
+msgid "Updating a Build Cache Index View"
+msgstr ""
+
+#: ../../../binary_caches.rst:191
+msgid ""
+"To prevent accidentally overwriting an existing view, it is required to "
+"specify how a view should be updated. It is possible to use one of two "
+"options for updating a view index: ``--force`` or ``--append``. Using the "
+"``--force`` option will replace the index as if the previous one did not "
+"exist. The ``--append`` option will first read the existing index, and then "
+"add the new specs to it."
+msgstr ""
+
+#: ../../../binary_caches.rst:196
+msgid ""
+"$ spack buildcache push my-mirror\n"
+"$ spack buildcache update-index --append --name my-view my-mirror my-stack"
+msgstr ""
+
+#: ../../../binary_caches.rst:204
+msgid ""
+"Using the ``--append`` option with build cache index views is a non-atomic "
+"operation. In the case where multiple writers are appending to the same "
+"view, the result will only include the state of the last to write. When "
+"using ``--append`` for build cache workflows it is up to the user to "
+"correctly serialize the update operations."
+msgstr ""
+
+#: ../../../binary_caches.rst:211
 msgid "List of Popular Build Caches"
 msgstr ""
 
-#: ../../../binary_caches.rst:143
+#: ../../../binary_caches.rst:213
 msgid ""
-"`Extreme-scale Scientific Software Stack (E4S) <https://e4s-project.github."
-"io/>`_: `build cache <https://oaciss.uoregon.edu/e4s/inventory.html>`_"
+"`Spack Public Build Cache <https://spack.io/>`_: `spack build cache <https://"
+"cache.spack.io/>`_"
 msgstr ""
 
-#: ../../../binary_caches.rst:147
+#: ../../../binary_caches.rst:214
+msgid ""
+"`Extreme-scale Scientific Software Stack (E4S) <https://e4s-project.github."
+"io/>`_: `e4s build cache <https://oaciss.uoregon.edu/e4s/inventory.html>`_"
+msgstr ""
+
+#: ../../../binary_caches.rst:218
 msgid "Creating and Trusting GPG keys"
 msgstr ""
 
-#: ../../../binary_caches.rst:152
+#: ../../../binary_caches.rst:223
 msgid "``spack gpg``"
 msgstr ""
 
-#: ../../../binary_caches.rst:154
+#: ../../../binary_caches.rst:225
 msgid ""
 "Spack has support for signing and verifying packages using GPG keys. A "
 "separate keyring is used for Spack, so any keys available in the user's home "
 "directory are not used."
 msgstr ""
 
-#: ../../../binary_caches.rst:158
+#: ../../../binary_caches.rst:229
 msgid "``spack gpg init``"
 msgstr ""
 
-#: ../../../binary_caches.rst:160
+#: ../../../binary_caches.rst:231
 msgid ""
 "When Spack is first installed, its keyring is empty. Keys stored in :file:"
 "`var/spack/gpg` are the default keys for a Spack installation. These keys "
@@ -255,50 +372,50 @@ msgid ""
 "keys into the keyring as trusted keys."
 msgstr ""
 
-#: ../../../binary_caches.rst:166
+#: ../../../binary_caches.rst:237
 msgid "Trusting keys"
 msgstr ""
 
-#: ../../../binary_caches.rst:168
+#: ../../../binary_caches.rst:239
 msgid "Additional keys may be added to the keyring using:"
 msgstr ""
 
-#: ../../../binary_caches.rst:170
+#: ../../../binary_caches.rst:241
 msgid "$ spack gpg trust <keyfile>"
 msgstr ""
 
-#: ../../../binary_caches.rst:174
+#: ../../../binary_caches.rst:245
 msgid ""
 "Once a key is trusted, packages signed by the owner of the key may be "
 "installed."
 msgstr ""
 
-#: ../../../binary_caches.rst:176
+#: ../../../binary_caches.rst:247
 msgid "To remove keys from your keyring, use:"
 msgstr ""
 
-#: ../../../binary_caches.rst:178
+#: ../../../binary_caches.rst:249
 msgid "$ spack gpg untrust <keyid>"
 msgstr ""
 
-#: ../../../binary_caches.rst:182
+#: ../../../binary_caches.rst:253
 msgid "Key IDs can be email addresses, names, or (preferably) fingerprints."
 msgstr ""
 
-#: ../../../binary_caches.rst:185
+#: ../../../binary_caches.rst:256
 msgid "Creating keys"
 msgstr ""
 
-#: ../../../binary_caches.rst:187
+#: ../../../binary_caches.rst:258
 msgid ""
 "You may also create your own key so that you may sign your own packages using"
 msgstr ""
 
-#: ../../../binary_caches.rst:189
+#: ../../../binary_caches.rst:260
 msgid "$ spack gpg create <name> <email>"
 msgstr ""
 
-#: ../../../binary_caches.rst:193
+#: ../../../binary_caches.rst:264
 msgid ""
 "By default, the key has no expiration, but it may be set with the ``--"
 "expires <date>`` flag. It is also recommended to add a comment as to the use "
@@ -309,11 +426,11 @@ msgid ""
 "[<key>...]`` command."
 msgstr ""
 
-#: ../../../binary_caches.rst:198
+#: ../../../binary_caches.rst:269
 msgid "Key creation speed"
 msgstr ""
 
-#: ../../../binary_caches.rst:201
+#: ../../../binary_caches.rst:272
 msgid ""
 "The creation of a new GPG key requires generating a lot of random numbers. "
 "Depending on the entropy produced on your system, the entire process may "
@@ -321,50 +438,50 @@ msgid ""
 "instances are particularly likely to display this behavior."
 msgstr ""
 
-#: ../../../binary_caches.rst:205
+#: ../../../binary_caches.rst:276
 msgid ""
 "To speed it up, you may install tools like ``rngd``, which is usually "
 "available as a package in the host OS. Another alternative is ``haveged``, "
 "which can be installed on RHEL/CentOS machines."
 msgstr ""
 
-#: ../../../binary_caches.rst:208
+#: ../../../binary_caches.rst:279
 msgid ""
 "`This Digital Ocean tutorial <https://www.digitalocean.com/community/"
 "tutorials/how-to-setup-additional-entropy-for-cloud-servers-using-haveged>`_ "
 "provides a good overview of sources of randomness."
 msgstr ""
 
-#: ../../../binary_caches.rst:211
+#: ../../../binary_caches.rst:282
 msgid "Build Cache Signing"
 msgstr ""
 
-#: ../../../binary_caches.rst:213
+#: ../../../binary_caches.rst:284
 msgid ""
 "By default, Spack will add a cryptographic signature to each package pushed "
 "to a build cache and verify the signature when installing from a build cache."
 msgstr ""
 
-#: ../../../binary_caches.rst:215
+#: ../../../binary_caches.rst:286
 msgid ""
 "Keys for signing can be managed with the :ref:`spack gpg <cmd-spack-gpg>` "
 "command, as well as ``spack buildcache keys``, as mentioned above."
 msgstr ""
 
-#: ../../../binary_caches.rst:217
+#: ../../../binary_caches.rst:288
 msgid ""
 "You can disable signing when pushing with ``spack buildcache push --"
 "unsigned`` and disable verification when installing from any build cache "
 "with ``spack install --no-check-signature``."
 msgstr ""
 
-#: ../../../binary_caches.rst:219
+#: ../../../binary_caches.rst:290
 msgid ""
 "Alternatively, signing and verification can be enabled or disabled on a per-"
 "build-cache basis:"
 msgstr ""
 
-#: ../../../binary_caches.rst:221
+#: ../../../binary_caches.rst:292
 msgid ""
 "$ spack mirror add --signed <name> <url>  # enable signing and verification\n"
 "$ spack mirror add --unsigned <name> <url>  # disable signing and "
@@ -376,12 +493,12 @@ msgid ""
 "an existing mirror"
 msgstr ""
 
-#: ../../../binary_caches.rst:229
+#: ../../../binary_caches.rst:300
 msgid ""
 "Alternatively, you can edit the ``mirrors.yaml`` configuration file directly:"
 msgstr ""
 
-#: ../../../binary_caches.rst:231
+#: ../../../binary_caches.rst:302
 msgid ""
 "mirrors:\n"
 "  <name>:\n"
@@ -389,27 +506,58 @@ msgid ""
 "    signed: false # disable signing and verification"
 msgstr ""
 
-#: ../../../binary_caches.rst:238
+#: ../../../binary_caches.rst:309
 msgid "See also :ref:`mirrors`."
 msgstr ""
 
-#: ../../../binary_caches.rst:241
+#: ../../../binary_caches.rst:313
+msgid "Including and Excluding Specs in Build Caches"
+msgstr ""
+
+#: ../../../binary_caches.rst:317
+msgid ""
+"When pushing to or fetching from a build cache, you can specify include and "
+"exclude patterns in the mirror configuration to control which specs are "
+"included in or excluded from the build cache. If a spec satisfies an include "
+"and exclude filter then the exclusion wins. By default, all specs are "
+"included and none are excluded."
+msgstr ""
+
+#: ../../../binary_caches.rst:321
+msgid ""
+"The ``mirrors.yaml`` has to be edited directly to specify include and "
+"exclude patterns:"
+msgstr ""
+
+#: ../../../binary_caches.rst:323
+msgid ""
+"mirrors:\n"
+"  <name>:\n"
+"    url: <url>\n"
+"    include_binary:\n"
+"    - \"%gcc\"  # include only specs that depend on gcc\n"
+"    exclude_binary:\n"
+"    - \"dev_path=*\"  # except development specs\n"
+"    - \"^mpich\"  # and any spec that depends on mpich"
+msgstr ""
+
+#: ../../../binary_caches.rst:336
 msgid "Relocation"
 msgstr ""
 
-#: ../../../binary_caches.rst:243
+#: ../../../binary_caches.rst:338
 msgid ""
 "When using build caches across different machines, it is likely that the "
 "install root is different from the one used to build the binaries."
 msgstr ""
 
-#: ../../../binary_caches.rst:245
+#: ../../../binary_caches.rst:340
 msgid ""
 "To address this issue, Spack automatically relocates all paths encoded in "
 "binaries and scripts to their new location upon installation."
 msgstr ""
 
-#: ../../../binary_caches.rst:247
+#: ../../../binary_caches.rst:342
 msgid ""
 "Note that there are some cases where this is not possible: if binaries are "
 "built in a relatively short path and then installed to a longer path, there "
@@ -418,14 +566,14 @@ msgid ""
 "build is required."
 msgstr ""
 
-#: ../../../binary_caches.rst:250
+#: ../../../binary_caches.rst:345
 msgid ""
 "To reduce the likelihood of this happening, it is highly recommended to add "
 "padding to the install root during the build, as specified in the :ref:"
 "`config <config-yaml>` section of the configuration:"
 msgstr ""
 
-#: ../../../binary_caches.rst:252
+#: ../../../binary_caches.rst:347
 msgid ""
 "config:\n"
 "  install_tree:\n"
@@ -433,26 +581,26 @@ msgid ""
 "    padded_length: 128"
 msgstr ""
 
-#: ../../../binary_caches.rst:261
+#: ../../../binary_caches.rst:356
 msgid "Automatic Push to a Build Cache"
 msgstr ""
 
-#: ../../../binary_caches.rst:263
+#: ../../../binary_caches.rst:358
 msgid ""
 "Sometimes it is convenient to push packages to a build cache immediately "
-"after they are installed. Spack can do this by setting the autopush flag "
-"when adding a mirror:"
+"after they are installed. Spack can do this by setting the ``--autopush`` "
+"flag when adding a mirror:"
 msgstr ""
 
-#: ../../../binary_caches.rst:266
+#: ../../../binary_caches.rst:361
 msgid "$ spack mirror add --autopush <name> <url or path>"
 msgstr ""
 
-#: ../../../binary_caches.rst:270
-msgid "Or the autopush flag can be set for an existing mirror:"
+#: ../../../binary_caches.rst:365
+msgid "Or the ``--autopush`` flag can be set for an existing mirror:"
 msgstr ""
 
-#: ../../../binary_caches.rst:272
+#: ../../../binary_caches.rst:367
 msgid ""
 "$ spack mirror set --autopush <name>  # enable automatic push for an "
 "existing mirror\n"
@@ -460,38 +608,38 @@ msgid ""
 "existing mirror"
 msgstr ""
 
-#: ../../../binary_caches.rst:277
+#: ../../../binary_caches.rst:372
 msgid ""
 "Then, after installing a package, it is automatically pushed to all mirrors "
 "with ``autopush: true``. The command"
 msgstr ""
 
-#: ../../../binary_caches.rst:280
+#: ../../../binary_caches.rst:375
 msgid "$ spack install <package>"
 msgstr ""
 
-#: ../../../binary_caches.rst:284
+#: ../../../binary_caches.rst:379
 msgid "will have the same effect as"
 msgstr ""
 
-#: ../../../binary_caches.rst:286
+#: ../../../binary_caches.rst:381
 msgid ""
 "$ spack install <package>\n"
 "$ spack buildcache push <cache> <package>  # for all caches with autopush: "
 "true"
 msgstr ""
 
-#: ../../../binary_caches.rst:293
+#: ../../../binary_caches.rst:388
 msgid ""
 "Packages are automatically pushed to a build cache only if they are built "
 "from source."
 msgstr ""
 
-#: ../../../binary_caches.rst:298
+#: ../../../binary_caches.rst:393
 msgid "OCI / Docker V2 Registries as Build Cache"
 msgstr ""
 
-#: ../../../binary_caches.rst:300
+#: ../../../binary_caches.rst:395
 msgid ""
 "Spack can also use OCI or Docker V2 registries such as Docker Hub, Quay.io, "
 "Amazon ECR, GitHub Packages, GitLab Container Registry, JFrog Artifactory, "
@@ -501,27 +649,27 @@ msgid ""
 "also to create and distribute runnable container images."
 msgstr ""
 
-#: ../../../binary_caches.rst:304
+#: ../../../binary_caches.rst:399
 msgid ""
 "To get started, configure an OCI mirror using ``oci://`` as the scheme and "
 "optionally specify variables that hold the username and password (or "
 "personal access token) for the registry:"
 msgstr ""
 
-#: ../../../binary_caches.rst:306
+#: ../../../binary_caches.rst:401
 msgid ""
 "$ spack mirror add --oci-username-variable REGISTRY_USER \\\n"
 "                   --oci-password-variable REGISTRY_TOKEN \\\n"
 "                   my_registry oci://example.com/my_image"
 msgstr ""
 
-#: ../../../binary_caches.rst:312
+#: ../../../binary_caches.rst:407
 msgid ""
 "This registers a mirror in your ``mirrors.yaml`` configuration file that "
 "looks as follows:"
 msgstr ""
 
-#: ../../../binary_caches.rst:314
+#: ../../../binary_caches.rst:409
 msgid ""
 "mirrors:\n"
 "  my_registry:\n"
@@ -531,21 +679,21 @@ msgid ""
 "      secret_variable: REGISTRY_TOKEN"
 msgstr ""
 
-#: ../../../binary_caches.rst:323
+#: ../../../binary_caches.rst:418
 msgid ""
 "Spack follows the naming conventions of Docker, with Docker Hub as the "
 "default registry. To use Docker Hub, you can omit the registry domain:"
 msgstr ""
 
-#: ../../../binary_caches.rst:326
+#: ../../../binary_caches.rst:421
 msgid "$ spack mirror add ... my_registry oci://username/my_image"
 msgstr ""
 
-#: ../../../binary_caches.rst:330
+#: ../../../binary_caches.rst:425
 msgid "From here, you can use the mirror as any other build cache:"
 msgstr ""
 
-#: ../../../binary_caches.rst:332
+#: ../../../binary_caches.rst:427
 msgid ""
 "$ export REGISTRY_USER=...\n"
 "$ export REGISTRY_TOKEN=...\n"
@@ -553,55 +701,55 @@ msgid ""
 "$ spack install <specs...>  # or install from the registry"
 msgstr ""
 
-#: ../../../binary_caches.rst:341
+#: ../../../binary_caches.rst:436
 msgid ""
 "Spack defaults to ``https`` for OCI registries, and does not fall back to "
 "``http`` in case of failure. For local registries which use ``http`` instead "
 "of ``https``, you can specify ``oci+http://localhost:5000/my_image``."
 msgstr ""
 
-#: ../../../binary_caches.rst:347
+#: ../../../binary_caches.rst:442
 msgid "Authentication with popular Container Registries"
 msgstr ""
 
-#: ../../../binary_caches.rst:349
+#: ../../../binary_caches.rst:444
 msgid ""
 "Below are instructions for authenticating with some of the most popular "
 "container registries. In all cases, you need to generate a (temporary) token "
 "to use as the password -- this is not the same as your account password."
 msgstr ""
 
-#: ../../../binary_caches.rst:353
+#: ../../../binary_caches.rst:448
 msgid "GHCR"
 msgstr ""
 
-#: ../../../binary_caches.rst:355
+#: ../../../binary_caches.rst:450
 msgid ""
 "To authenticate with GitHub Container Registry (GHCR), you can use your "
 "GitHub username as the username. For the password, you can use either:"
 msgstr ""
 
-#: ../../../binary_caches.rst:358
+#: ../../../binary_caches.rst:453
 msgid "A personal access token (PAT) with ``write:packages`` scope."
 msgstr ""
 
-#: ../../../binary_caches.rst:359
+#: ../../../binary_caches.rst:454
 msgid ""
 "A GitHub Actions token (``GITHUB_TOKEN``) with ``packages:write`` permission."
 msgstr ""
 
-#: ../../../binary_caches.rst:361
+#: ../../../binary_caches.rst:456
 msgid ""
 "See also `GitHub's documentation <https://docs.github.com/en/packages/"
 "working-with-a-github-packages-registry/working-with-the-container-"
 "registry>`_ and :ref:`github-actions-build-cache` below."
 msgstr ""
 
-#: ../../../binary_caches.rst:364
+#: ../../../binary_caches.rst:459
 msgid "Docker Hub"
 msgstr ""
 
-#: ../../../binary_caches.rst:366
+#: ../../../binary_caches.rst:461
 msgid ""
 "To authenticate with Docker Hub, you can use your Docker Hub username as the "
 "username. For the password, you need to generate a personal access token "
@@ -609,17 +757,17 @@ msgid ""
 "docker.com/security/access-tokens/>`_ for more information."
 msgstr ""
 
-#: ../../../binary_caches.rst:371
+#: ../../../binary_caches.rst:466
 msgid "Amazon ECR"
 msgstr ""
 
-#: ../../../binary_caches.rst:373
+#: ../../../binary_caches.rst:468
 msgid ""
 "To authenticate with Amazon ECR, you can use the AWS CLI to generate a "
 "temporary password. The username is always ``AWS``."
 msgstr ""
 
-#: ../../../binary_caches.rst:376
+#: ../../../binary_caches.rst:471
 msgid ""
 "$ export AWS_ECR_PASSWORD=$(aws ecr get-login-password --region <region>)\n"
 "$ spack mirror add \\\n"
@@ -629,24 +777,24 @@ msgid ""
 "      oci://XXX.dkr.ecr.<region>.amazonaws.com/my/image"
 msgstr ""
 
-#: ../../../binary_caches.rst:385
+#: ../../../binary_caches.rst:480
 msgid ""
 "See also `AWS's documentation <https://docs.aws.amazon.com/AmazonECR/latest/"
 "userguide/registry_auth.html>`_."
 msgstr ""
 
-#: ../../../binary_caches.rst:388
+#: ../../../binary_caches.rst:483
 msgid "Azure Container Registry"
 msgstr ""
 
-#: ../../../binary_caches.rst:390
+#: ../../../binary_caches.rst:485
 msgid ""
 "To authenticate with an Azure Container Registry that has RBAC enabled, you "
 "can use the Azure CLI to generate a temporary password for your managed "
 "identity. The username is always ``00000000-0000-0000-0000-000000000000``."
 msgstr ""
 
-#: ../../../binary_caches.rst:393
+#: ../../../binary_caches.rst:488
 msgid ""
 "$ export AZURE_ACR_PASSWORD=$(az acr login --name <registry-name> --expose-"
 "token --output tsv --query accessToken)\n"
@@ -657,18 +805,18 @@ msgid ""
 "      oci://<registry-name>.azurecr.io/my/image"
 msgstr ""
 
-#: ../../../binary_caches.rst:402
+#: ../../../binary_caches.rst:497
 msgid ""
 "See also `Azure's documentation <https://learn.microsoft.com/en-us/azure/"
 "container-registry/container-registry-authentication?tabs=azure-cli#az-acr-"
 "login-with---expose-token>`_."
 msgstr ""
 
-#: ../../../binary_caches.rst:406
+#: ../../../binary_caches.rst:501
 msgid "Build Cache and Container Images"
 msgstr ""
 
-#: ../../../binary_caches.rst:408
+#: ../../../binary_caches.rst:503
 msgid ""
 "A unique feature of build caches on top of OCI registries is that it's "
 "incredibly easy to generate a runnable container image with the binaries "
@@ -677,13 +825,13 @@ msgid ""
 "or any other OCI-compatible container runtime."
 msgstr ""
 
-#: ../../../binary_caches.rst:411
+#: ../../../binary_caches.rst:506
 msgid ""
 "To produce container images, all you need to do is add the ``--base-image`` "
 "flag when pushing to the build cache:"
 msgstr ""
 
-#: ../../../binary_caches.rst:413
+#: ../../../binary_caches.rst:508
 msgid ""
 "$ spack buildcache push --base-image ubuntu:20.04 my_registry ninja\n"
 "Pushed to example.com/my_image:ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz."
@@ -695,7 +843,7 @@ msgid ""
 "1.11.1"
 msgstr ""
 
-#: ../../../binary_caches.rst:422
+#: ../../../binary_caches.rst:517
 msgid ""
 "If ``--base-image`` is not specified, Spack produces distroless images. In "
 "practice, you won't be able to run these as containers because they don't "
@@ -704,51 +852,51 @@ msgid ""
 "pulling and pushing."
 msgstr ""
 
-#: ../../../binary_caches.rst:426
+#: ../../../binary_caches.rst:521
 msgid ""
 "See the section :ref:`exporting-images` for more details on how to create "
 "container images with Spack."
 msgstr ""
 
-#: ../../../binary_caches.rst:431
+#: ../../../binary_caches.rst:526
 msgid "Spack Build Cache for GitHub Actions"
 msgstr ""
 
-#: ../../../binary_caches.rst:433
+#: ../../../binary_caches.rst:528
 msgid ""
 "To significantly speed up Spack in GitHub Actions, binaries can be cached in "
 "GitHub Packages. This service is an OCI registry that can be linked to a "
 "GitHub repository."
 msgstr ""
 
-#: ../../../binary_caches.rst:436
+#: ../../../binary_caches.rst:531
 msgid ""
 "Spack offers a public build cache for GitHub Actions with a set of common "
 "packages, which lets you get started quickly. See the following resources "
 "for more information:"
 msgstr ""
 
-#: ../../../binary_caches.rst:439
+#: ../../../binary_caches.rst:534
 msgid ""
 "`spack/setup-spack <https://github.com/spack/setup-spack>`_ for setting up "
 "Spack in GitHub Actions"
 msgstr ""
 
-#: ../../../binary_caches.rst:440
+#: ../../../binary_caches.rst:535
 msgid ""
 "`spack/github-actions-buildcache <https://github.com/spack/github-actions-"
 "buildcache>`_ for more details on the public build cache"
 msgstr ""
 
-#: ../../../binary_caches.rst:445
+#: ../../../binary_caches.rst:540
 msgid "``spack buildcache``"
 msgstr ""
 
-#: ../../../binary_caches.rst:448
+#: ../../../binary_caches.rst:543
 msgid "``spack buildcache push``"
 msgstr ""
 
-#: ../../../binary_caches.rst:450
+#: ../../../binary_caches.rst:545
 msgid ""
 "Create a tarball of an installed Spack package and all its dependencies. "
 "Tarballs and specfiles are compressed and checksummed; manifests are signed "
@@ -756,148 +904,148 @@ msgid ""
 "Spack mirrors to get the list of build caches."
 msgstr ""
 
-#: ../../../binary_caches.rst:455 ../../../binary_caches.rst:471
-#: ../../../binary_caches.rst:484 ../../../binary_caches.rst:497
+#: ../../../binary_caches.rst:550 ../../../binary_caches.rst:566
+#: ../../../binary_caches.rst:579 ../../../binary_caches.rst:592
 msgid "Arguments"
 msgstr ""
 
-#: ../../../binary_caches.rst:455 ../../../binary_caches.rst:471
-#: ../../../binary_caches.rst:484 ../../../binary_caches.rst:497
+#: ../../../binary_caches.rst:550 ../../../binary_caches.rst:566
+#: ../../../binary_caches.rst:579 ../../../binary_caches.rst:592
 msgid "Description"
 msgstr ""
 
-#: ../../../binary_caches.rst:457 ../../../binary_caches.rst:473
-#: ../../../binary_caches.rst:486
+#: ../../../binary_caches.rst:552 ../../../binary_caches.rst:568
+#: ../../../binary_caches.rst:581
 msgid "``<specs>``"
 msgstr ""
 
-#: ../../../binary_caches.rst:457
+#: ../../../binary_caches.rst:552
 msgid ""
 "list of partial specs or hashes with a leading ``/`` to match from installed "
 "packages and used for creating build caches"
 msgstr ""
 
-#: ../../../binary_caches.rst:458
+#: ../../../binary_caches.rst:553
 msgid "``-d <path>``"
 msgstr ""
 
-#: ../../../binary_caches.rst:458
+#: ../../../binary_caches.rst:553
 msgid ""
 "directory in which ``v3`` and ``blobs`` directories are created, defaults to "
 "``.``"
 msgstr ""
 
-#: ../../../binary_caches.rst:459 ../../../binary_caches.rst:487
+#: ../../../binary_caches.rst:554 ../../../binary_caches.rst:582
 msgid "``-f``"
 msgstr ""
 
-#: ../../../binary_caches.rst:459
+#: ../../../binary_caches.rst:554
 msgid ""
 "overwrite compressed tarball and spec metadata files if they already exist"
 msgstr ""
 
-#: ../../../binary_caches.rst:460
+#: ../../../binary_caches.rst:555
 msgid "``-k <key>``"
 msgstr ""
 
-#: ../../../binary_caches.rst:460
+#: ../../../binary_caches.rst:555
 msgid ""
 "the key to sign package with. In the case where multiple keys exist, the "
 "package will be unsigned unless ``-k`` is used."
 msgstr ""
 
-#: ../../../binary_caches.rst:461
+#: ../../../binary_caches.rst:556
 msgid "``-r``"
 msgstr ""
 
-#: ../../../binary_caches.rst:461
+#: ../../../binary_caches.rst:556
 msgid "make paths in binaries relative before creating tarball"
 msgstr ""
 
-#: ../../../binary_caches.rst:462 ../../../binary_caches.rst:488
-#: ../../../binary_caches.rst:500
+#: ../../../binary_caches.rst:557 ../../../binary_caches.rst:583
+#: ../../../binary_caches.rst:595
 msgid "``-y``"
 msgstr ""
 
-#: ../../../binary_caches.rst:462
+#: ../../../binary_caches.rst:557
 msgid "answer yes to all questions about creating unsigned build caches"
 msgstr ""
 
-#: ../../../binary_caches.rst:466
+#: ../../../binary_caches.rst:561
 msgid "``spack buildcache list``"
 msgstr ""
 
-#: ../../../binary_caches.rst:468
+#: ../../../binary_caches.rst:563
 msgid "Retrieves all specs for build caches available on a Spack mirror."
 msgstr ""
 
-#: ../../../binary_caches.rst:473
+#: ../../../binary_caches.rst:568
 msgid ""
 "list of partial package specs to be matched against specs downloaded for "
 "build caches"
 msgstr ""
 
-#: ../../../binary_caches.rst:476
+#: ../../../binary_caches.rst:571
 msgid ""
 "E.g., ``spack buildcache list gcc`` will print only commands to install "
 "``gcc`` package(s)."
 msgstr ""
 
-#: ../../../binary_caches.rst:479
+#: ../../../binary_caches.rst:574
 msgid "``spack buildcache install``"
 msgstr ""
 
-#: ../../../binary_caches.rst:481
+#: ../../../binary_caches.rst:576
 msgid ""
 "Retrieves all specs for build caches available on a Spack mirror and "
 "installs build caches with specs matching the input specs."
 msgstr ""
 
-#: ../../../binary_caches.rst:486
+#: ../../../binary_caches.rst:581
 msgid ""
 "list of partial package specs or hashes with a leading ``/`` to be installed "
 "from build caches"
 msgstr ""
 
-#: ../../../binary_caches.rst:487
+#: ../../../binary_caches.rst:582
 msgid "remove install directory if it exists before unpacking tarball"
 msgstr ""
 
-#: ../../../binary_caches.rst:488
+#: ../../../binary_caches.rst:583
 msgid "answer yes to all to don't verify package with gpg questions"
 msgstr ""
 
-#: ../../../binary_caches.rst:492
+#: ../../../binary_caches.rst:587
 msgid "``spack buildcache keys``"
 msgstr ""
 
-#: ../../../binary_caches.rst:494
+#: ../../../binary_caches.rst:589
 msgid "List public keys available on a Spack mirror."
 msgstr ""
 
-#: ../../../binary_caches.rst:499
+#: ../../../binary_caches.rst:594
 msgid "``-it``"
 msgstr ""
 
-#: ../../../binary_caches.rst:499
+#: ../../../binary_caches.rst:594
 msgid "trust the keys downloaded with prompt for each"
 msgstr ""
 
-#: ../../../binary_caches.rst:500
+#: ../../../binary_caches.rst:595
 msgid "answer yes to all trust all keys downloaded"
 msgstr ""
 
-#: ../../../binary_caches.rst:506
+#: ../../../binary_caches.rst:601
 msgid "Build Cache Layout"
 msgstr ""
 
-#: ../../../binary_caches.rst:508
+#: ../../../binary_caches.rst:603
 msgid ""
 "This section describes the structure and content of URL-style build caches, "
 "as distinguished from OCI-style build caches."
 msgstr ""
 
-#: ../../../binary_caches.rst:510
+#: ../../../binary_caches.rst:605
 msgid ""
 "The entry point for a binary package is a manifest JSON file that references "
 "at least two other files stored as content-addressed blobs. These files "
@@ -907,11 +1055,11 @@ msgid ""
 "the concrete spec. For example:"
 msgstr ""
 
-#: ../../../binary_caches.rst:515
+#: ../../../binary_caches.rst:610
 msgid "gcc-runtime-12.3.0-qyu2lvgt3nxh7izxycugdbgf5gsdpkjt.spec.manifest.json"
 msgstr ""
 
-#: ../../../binary_caches.rst:519
+#: ../../../binary_caches.rst:614
 msgid ""
 "would contain the manifest for a binary package of ``gcc-runtime@12.3.0``. "
 "The ID of the built package is defined to be the DAG hash of the concrete "
@@ -922,7 +1070,7 @@ msgid ""
 "mirror, for example, ``v3/manifests/spec/``:"
 msgstr ""
 
-#: ../../../binary_caches.rst:525
+#: ../../../binary_caches.rst:620
 msgid ""
 "{\n"
 "  \"version\": 3,\n"
@@ -947,7 +1095,7 @@ msgid ""
 "}"
 msgstr ""
 
-#: ../../../binary_caches.rst:547
+#: ../../../binary_caches.rst:642
 msgid ""
 "The manifest references both the compressed tar file as well as the "
 "compressed spec metadata file, and contains the checksum of each. This "
@@ -963,7 +1111,7 @@ msgid ""
 "binary mirror contents:"
 msgstr ""
 
-#: ../../../binary_caches.rst:553
+#: ../../../binary_caches.rst:648
 msgid ""
 "mirror_directory/\n"
 "  v3/\n"
@@ -994,7 +1142,7 @@ msgid ""
 "      ..."
 msgstr ""
 
-#: ../../../binary_caches.rst:581
+#: ../../../binary_caches.rst:676
 msgid ""
 "Files within the ``manifests`` directory are organized into subdirectories "
 "by the type of entity they represent. Binary package manifests live in the "
@@ -1004,7 +1152,7 @@ msgid ""
 "manifest files are named with an extension ``.manifest.json``."
 msgstr ""
 
-#: ../../../binary_caches.rst:585
+#: ../../../binary_caches.rst:680
 msgid ""
 "Every manifest contains a ``data`` array, each element of which refers to an "
 "associated file stored as a content-addressed blob. Considering the example "
@@ -1015,7 +1163,7 @@ msgid ""
 "sha256/fb/`` for the file named with the complete checksum value."
 msgstr ""
 
-#: ../../../binary_caches.rst:589
+#: ../../../binary_caches.rst:684
 msgid ""
 "As mentioned above, every entity in a build cache is stored as a content-"
 "addressed blob pointed to by a manifest. While an example spec manifest (i."
@@ -1023,7 +1171,7 @@ msgid ""
 "manifest of a build cache index looks like:"
 msgstr ""
 
-#: ../../../binary_caches.rst:592
+#: ../../../binary_caches.rst:687
 msgid ""
 "{\n"
 "  \"version\": 3,\n"
@@ -1040,7 +1188,7 @@ msgid ""
 "}"
 msgstr ""
 
-#: ../../../binary_caches.rst:607
+#: ../../../binary_caches.rst:702
 msgid ""
 "Some things to note about this manifest are that it points to a blob that is "
 "not compressed (``compression: \"none\"``) and that the ``mediaType`` is one "
@@ -1050,13 +1198,13 @@ msgid ""
 "these indices stored as compressed blobs."
 msgstr ""
 
-#: ../../../binary_caches.rst:611
+#: ../../../binary_caches.rst:706
 msgid ""
 "For completeness, here are examples of manifests for the other two types of "
 "entities you might find in a Spack build cache. First, a public key manifest:"
 msgstr ""
 
-#: ../../../binary_caches.rst:614
+#: ../../../binary_caches.rst:709
 msgid ""
 "{\n"
 "  \"version\": 3,\n"
@@ -1073,13 +1221,13 @@ msgid ""
 "}"
 msgstr ""
 
-#: ../../../binary_caches.rst:629
+#: ../../../binary_caches.rst:724
 msgid ""
 "Note the ``mediaType`` of ``application/pgp-keys``. Finally, a public key "
 "index manifest:"
 msgstr ""
 
-#: ../../../binary_caches.rst:632
+#: ../../../binary_caches.rst:727
 msgid ""
 "{\n"
 "  \"version\": 3,\n"
@@ -1096,7 +1244,7 @@ msgid ""
 "}"
 msgstr ""
 
-#: ../../../binary_caches.rst:647
+#: ../../../binary_caches.rst:742
 msgid ""
 "Again, note the ``mediaType`` of ``application/vnd.spack.keyindex.v1+json``. "
 "Also, note that both the above manifest examples refer to uncompressed "
