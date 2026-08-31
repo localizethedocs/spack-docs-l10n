@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack latest\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 13:56+0000\n"
+"POT-Creation-Date: 2026-08-31 15:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 #: spack.modules:1
 msgid ""
 "This package contains code for creating environment modules, which can "
-"include Tcl non-hierarchical modules, Lua hierarchical modules, and others."
+"include Tcl or Lua modules, and others."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
@@ -44,91 +44,95 @@ msgstr ""
 msgid "Disable the generation of modulefiles within the context manager."
 msgstr ""
 
-#: ../../../spack.modules.rst:10
+#: ../../../spack.modules.rst:11
 msgid "Submodules"
 msgstr ""
 
-#: ../../../spack.modules.rst:13
+#: ../../../spack.modules.rst:14
 msgid "spack.modules.common module"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common:1
 msgid ""
-"Here we consolidate the logic for creating an abstract description of the "
-"information that module systems need."
+"This module contains the logic for generating environment module files for "
+"each installed spec."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:4
-msgid "This information maps **a single spec** to:"
+#: spack.modules.common:3
+msgid "The logic is split across four classes:"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common:5
+msgid ""
+"``BaseConfiguration``: queries the ``modules.yaml`` configuration for a "
+"given spec."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common:6
-msgid "a unique module filename"
+msgid ""
+"``FileLayout``: derives the on-disk path and the *use name* of a module file."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common:7
-msgid "the module file content"
+msgid "``ModuleContext``: builds the Jinja2 template context dictionary."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:9
-msgid "and is divided among four classes:"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:11
+#: spack.modules.common:8
 msgid ""
-"a configuration class that provides a convenient interface to query details "
-"about the configuration for the spec under consideration."
+"``BaseModuleFileWriter``: uses the three classes above to write, update, and "
+"remove module files."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:13
+#: spack.modules.common:10
 msgid ""
-"a layout class that provides the information associated with module file "
-"names and directories"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:15
-msgid ""
-"a context class that provides the dictionary used by the template engine to "
-"generate the module file"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:17
-msgid ""
-"a writer that collects and uses the information above to either write or "
-"remove the module file"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common:20
-msgid ""
-"Each of the four classes needs to be sub-classed when implementing a new "
-"module type."
+"To add a new module type, subclass ``BaseConfiguration`` and "
+"``BaseModuleFileWriter``."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration:1
 msgid ""
-"Manipulates the information needed to generate a module file to make "
-"querying easier. It needs to be sub-classed for specific module types."
+"Reads the ``modules`` section of the configuration for a given spec and "
+"exposes it as a set of properties used by ``FileLayout``, ``ModuleContext``, "
+"and ``BaseModuleFileWriter``."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseConfiguration.configuration:1
-msgid "Returns the raw configuration dict for this module system."
+#: spack.modules.common.BaseConfiguration.available:1
+msgid "Returns a dictionary of the services that are currently available."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration.conflicts:1
 msgid "Conflicts for this module file"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.core_compilers:1
+msgid "Returns the list of \"Core\" compilers"
+msgstr ""
+
+#: ../../../spack.modules.rst:0
+msgid "Raises"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.core_compilers:3
+msgid ""
+"if the key was not specified in the configuration file or     the sequence "
+"is empty"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.core_specs:1
+msgid "Returns the list of \"Core\" specs"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -152,15 +156,32 @@ msgid "Returns True if the module has been excluded, False otherwise."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.file_extension:1
+#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring
+#: spack.modules.lmod.LmodConfiguration.file_extension:1
+msgid "File extension for module files (empty string means no extension)"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.filter_hierarchy_specs:1
+msgid "Returns the dict of specs with modified hierarchies"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration.hash:1
 msgid "Hash tag for the module or None"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration.hidden:1
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring
-#: spack.modules.lmod.LmodConfiguration.hidden:1
 msgid "Returns True if the module has been hidden, False otherwise."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.hierarchy_tokens:1
+msgid ""
+"Returns the list of tokens that are part of the modulefile hierarchy. "
+"``compiler`` is always present."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -170,7 +191,22 @@ msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration.make_configuration:1
-msgid "Returns the cached configuration object for spec."
+msgid ""
+"Returns the configuration object for spec, reusing ``cache`` if it already "
+"holds one."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.make_configuration:3
+msgid ""
+"Callers that generate modules for many specs may pass a single shared cache "
+"to deduplicate work across specs. When ``cache`` is ``None`` a fresh one is "
+"created, so the returned object always reflects the current configuration."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.missing:1
+msgid "Returns the list of tokens that are not available."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -185,6 +221,31 @@ msgstr ""
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration.projections:1
 msgid "Projection from specs to module names"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.provides:1
+msgid ""
+"Returns a dictionary mapping all the services provided by this spec to the "
+"spec itself."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.provides:4
+#: spack.modules.common.BaseConfiguration.requires:5
+msgid "Returns an empty dictionary if hierarchical mode is disabled."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.requires:1
+msgid ""
+"Returns a dictionary mapping all the requirements of this spec to the actual "
+"provider."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.BaseConfiguration.requires:3
+msgid "The ``compiler`` key is always present among the requirements."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -211,91 +272,7 @@ msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.BaseConfiguration.verbose:1
-msgid "Returns True if the module file needs to be verbose, False otherwise"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext:1
-msgid "Provides the base context needed for template rendering."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext:3
-msgid ""
-"This class needs to be sub-classed for specific module types. The following "
-"attributes need to be implemented:"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext:6
-msgid "fields"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext.autoload:1
-#: ../../../_spack_root/lib/spack/spack/modules/tcl.py:docstring
-#: spack.modules.tcl.TclContext.prerequisites:1
-msgid "List of modules that needs to be loaded automatically."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext.conflicts:1
-msgid "List of conflicts for the module file."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext.environment_modifications:1
-msgid "List of environment modifications to be processed."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext.has_manpath_modifications:1
-msgid "True if MANPATH environment variable is modified."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext.modification_needs_formatting:1
-msgid "Returns True if environment modification entry needs to be formatted."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseContext.verbose:1
-msgid "Verbosity level."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseFileLayout:1
-msgid ""
-"Provides information on the layout of module files. Needs to be sub-classed "
-"for specific module types."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseFileLayout.dirname:1
-msgid "Root folder for module files of this type."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseFileLayout.extension:1
-msgid "This needs to be redefined"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseFileLayout.filename:1
-msgid "Name of the module file for the current spec."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseFileLayout.spec:1
-msgid "Spec under consideration"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.BaseFileLayout.use_name:1
-msgid ""
-"Returns the 'use' name of the module i.e. the name you have to type to "
-"console to use it. This implementation fits the needs of most non-"
-"hierarchical layouts."
+msgid "Returns the verbosity setting, or None if not configured."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -332,17 +309,179 @@ msgid ""
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.DefaultTemplateNotDefined:1
-msgid ""
-"Raised if the attribute ``default_template`` has not been specified in the "
-"derived classes."
+#: spack.modules.common.FileLayout:1
+msgid "Provides information on the layout of module files."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.HideCmdFormatNotDefined:1
+#: spack.modules.common.FileLayout.arch_dirname:1
+msgid "Returns the root folder for this architecture."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.available_path_parts:1
 msgid ""
-"Raised if the attribute ``hide_cmd_format`` has not been specified in the "
-"derived classes."
+"List of path parts that are currently available. Needed to construct the "
+"file name."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.dirname:1
+msgid "Root folder for module files of this type."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.filename:1
+msgid "Absolute path to the module file for the current spec."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.modulerc:1
+msgid "Returns the modulerc file for this module file."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.spec:1
+msgid "Spec under consideration"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.token_to_path:1
+msgid "Transforms a hierarchy token into the corresponding path part."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.token_to_path:3
+msgid "name of the service in the hierarchy"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.token_to_path:5
+msgid "actual provider of the service"
+msgstr ""
+
+#: ../../../spack.modules.rst:0
+msgid "Returns"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.token_to_path:7
+msgid "part of the path associated with the service"
+msgstr ""
+
+#: ../../../spack.modules.rst:0
+msgid "Return type"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.unlocked_paths:1
+msgid "Returns a dictionary mapping conditions to a list of unlocked paths."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.unlocked_paths:4
+msgid ""
+"The paths that are unconditionally unlocked are under the key 'None'. The "
+"other keys represent the list of services you need loaded to unlock the "
+"corresponding paths."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.FileLayout.use_name:1
+msgid "Returns the name used to load the module (e.g. with ``module load``)."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: typing.Dict:1
+msgid ""
+"Cache of configuration objects, keyed by (dag_hash, module_set_name, "
+"explicit)"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext:1
+msgid ""
+"Provides the context dictionary used by the template engine to render a "
+"module file."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.autoload:1
+msgid "List of modules that need to be loaded automatically."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.conditionally_unlocked_paths:1
+msgid ""
+"Returns the list of paths that are unlocked conditionally. Each item in the "
+"list is a tuple with the structure (condition, path)."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.conflicts:1
+msgid "List of conflicts for the module file."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.environment_modifications:1
+msgid "List of environment modifications to be processed."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.has_conditional_modifications:1
+msgid ""
+"True if this module modifies MODULEPATH conditionally to the presence of "
+"other services in the environment, False otherwise."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.has_manpath_modifications:1
+msgid "True if MANPATH environment variable is modified."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.has_modulepath_modifications:1
+msgid "True if this module modifies MODULEPATH, False otherwise."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.missing:1
+msgid "Returns a list of missing services."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.modification_needs_formatting:1
+msgid "Returns True if environment modification entry needs to be formatted."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.name_part:1
+msgid "Name of this provider."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.prerequisites:1
+msgid "List of modules that must be loaded before this one."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.provides:1
+msgid "Returns the dictionary of provided services."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.unlocked_paths:1
+msgid "Returns the list of paths that are unlocked unconditionally."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.verbose:1
+msgid "Verbosity level."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
+#: spack.modules.common.ModuleContext.version_part:1
+msgid "Version of this provider."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -356,28 +495,6 @@ msgid "Alias for field number 1"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.ModuleNotFoundError:1
-msgid "Raised when a module cannot be found for a spec"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.ModulercHeaderNotDefined:1
-msgid ""
-"Raised if the attribute ``modulerc_header`` has not been specified in the "
-"derived classes."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.ModulesError:1
-msgid "Base error for modules."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.ModulesTemplateNotFoundError:1
-msgid "Raised if the template for a module file was not found."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.UpstreamModuleIndex:1
 msgid ""
 "This is responsible for taking the individual module indices of all upstream "
@@ -387,7 +504,7 @@ msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.dependencies:1
-msgid "Returns the list of dependent specs for a given spec."
+msgid "Returns the list of dependencies for a given spec."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -400,15 +517,6 @@ msgstr ""
 msgid "one of ``\"none\"``, ``\"run\"``, ``\"direct\"``, ``\"all\"``"
 msgstr ""
 
-#: ../../../spack.modules.rst:0
-msgid "Returns"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.dependencies:6
-msgid "list of requested dependencies"
-msgstr ""
-
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.merge_config_rules:1
 msgid ""
@@ -417,23 +525,14 @@ msgid ""
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.merge_config_rules:5
+#: spack.modules.common.merge_config_rules:4
 msgid ""
 "module specific configuration (e.g. entries under the top-level 'tcl' key)"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.merge_config_rules:7
+#: spack.modules.common.merge_config_rules:5
 msgid "spec for which we need to generate a module file"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.merge_config_rules:9
-msgid "actions to be taken on the spec passed as an argument"
-msgstr ""
-
-#: ../../../spack.modules.rst:0
-msgid "Return type"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -443,7 +542,7 @@ msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.root_path:3
-msgid "name of the module system to be used (``\"tcl\"`` or ``\"lmod\"``)"
+msgid "module type to be used"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
@@ -452,34 +551,61 @@ msgid "name of the set of module configs to use"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.root_path:6
-msgid "root folder for module file installation"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
 #: spack.modules.common.update_dictionary_extending_lists:1
 msgid "Updates a dictionary, but extends lists instead of overriding them."
 msgstr ""
 
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.update_dictionary_extending_lists:3
-msgid "dictionary to be updated"
+#: ../../../spack.modules.rst:23
+msgid "spack.modules.error module"
 msgstr ""
 
-#: ../../../_spack_root/lib/spack/spack/modules/common.py:docstring of
-#: spack.modules.common.update_dictionary_extending_lists:4
-msgid "update to be applied"
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error:1
+msgid "Errors and exceptions for the modules package."
 msgstr ""
 
-#: ../../../spack.modules.rst:21
-msgid "spack.modules.lmod module"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.CoreCompilersNotFoundError:1
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.CoreCompilersNotFoundError:1
 msgid ""
-"Error raised if the key ``core_compilers`` has not been specified in the "
-"configuration file."
+"Raised if ``core_compilers`` has not been specified in the configuration "
+"file."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.DefaultTemplateNotDefined:1
+msgid ""
+"Raised if ``default_template`` has not been specified in the derived class."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.HideCmdFormatNotDefined:1
+msgid ""
+"Raised if ``hide_cmd_format`` has not been specified in the derived class."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.ModuleNotFoundError:1
+msgid "Raised when a module cannot be found for a spec"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.ModulercHeaderNotDefined:1
+msgid ""
+"Raised if ``modulerc_header`` has not been specified in the derived class."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.ModulesError:1
+msgid "Base error for modules."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/modules/error.py:docstring of
+#: spack.modules.error.ModulesTemplateNotFoundError:1
+msgid "Raised if the template for a module file was not found."
+msgstr ""
+
+#: ../../../spack.modules.rst:32
+msgid "spack.modules.lmod module"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
@@ -487,222 +613,16 @@ msgstr ""
 msgid "Configuration class for lmod module files."
 msgstr ""
 
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.available:1
-msgid "Returns a dictionary of the services that are currently available."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.core_compilers:1
-msgid "Returns the list of \"Core\" compilers"
-msgstr ""
-
-#: ../../../spack.modules.rst:0
-msgid "Raises"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.core_compilers:3
-msgid ""
-"if the key was not specified in the configuration file or     the sequence "
-"is empty"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.core_specs:1
-msgid "Returns the list of \"Core\" specs"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.filter_hierarchy_specs:1
-msgid "Returns the dict of specs with modified hierarchies"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.hierarchy_tokens:1
-msgid ""
-"Returns the list of tokens that are part of the modulefile hierarchy. "
-"``compiler`` is always present."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.missing:1
-msgid "Returns the list of tokens that are not available."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.provides:1
-msgid ""
-"Returns a dictionary mapping all the services provided by this spec to the "
-"spec itself."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.requires:1
-msgid ""
-"Returns a dictionary mapping all the requirements of this spec to the actual "
-"provider."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodConfiguration.requires:3
-msgid "The ``compiler`` key is always present among the requirements."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext:1
-msgid "Context class for lmod module files."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.conditionally_unlocked_paths:1
-msgid ""
-"Returns the list of paths that are unlocked conditionally. Each item in the "
-"list is a tuple with the structure (condition, path)."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.has_conditional_modifications:1
-msgid ""
-"True if this module modifies MODULEPATH conditionally to the presence of "
-"other services in the environment, False otherwise."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.has_modulepath_modifications:1
-msgid "True if this module modifies MODULEPATH, False otherwise."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.missing:1
-msgid "Returns a list of missing services."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.name_part:1
-msgid "Name of this provider."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.provides:1
-msgid "Returns the dictionary of provided services."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.unlocked_paths:1
-msgid "Returns the list of paths that are unlocked unconditionally."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodContext.version_part:1
-msgid "Version of this provider."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout:1
-msgid "File layout for lmod module files."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.arch_dirname:1
-msgid "Returns the root folder for THIS architecture"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.available_path_parts:1
-msgid ""
-"List of path parts that are currently available. Needed to construct the "
-"file name."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.extension:1
-msgid "file extension of lua module files"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.filename:1
-msgid "Returns the filename for the current module file"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.modulerc:1
-#: ../../../_spack_root/lib/spack/spack/modules/tcl.py:docstring
-#: spack.modules.tcl.TclFileLayout.modulerc:1
-msgid "Returns the modulerc file associated with current module file"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.token_to_path:1
-msgid "Transforms a hierarchy token into the corresponding path part."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.token_to_path:3
-msgid "name of the service in the hierarchy"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.token_to_path:5
-msgid "actual provider of the service"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.token_to_path:7
-msgid "part of the path associated with the service"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.unlocked_paths:1
-msgid "Returns a dictionary mapping conditions to a list of unlocked paths."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.LmodFileLayout.unlocked_paths:4
-msgid ""
-"The paths that are unconditionally unlocked are under the key 'None'. The "
-"other keys represent the list of services you need loaded to unlock the "
-"corresponding paths."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.guess_core_compilers:1
-msgid "Guesses the list of core compilers installed in the system."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.guess_core_compilers:3
-msgid ""
-"if True writes the core compilers to the modules.yaml configuration file"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/lmod.py:docstring of
-#: spack.modules.lmod.guess_core_compilers:7
-msgid "List of found core compilers"
-msgstr ""
-
-#: ../../../spack.modules.rst:29
+#: ../../../spack.modules.rst:41
 msgid "spack.modules.tcl module"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/tcl.py:docstring of
 #: spack.modules.tcl:1
-msgid ""
-"This module implements the classes necessary to generate Tcl non-"
-"hierarchical modules."
+msgid "This module implements the classes necessary to generate Tcl modules."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/modules/tcl.py:docstring of
 #: spack.modules.tcl.TclConfiguration:1
 msgid "Configuration class for tcl module files."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/tcl.py:docstring of
-#: spack.modules.tcl.TclContext:1
-msgid "Context class for tcl module files."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/modules/tcl.py:docstring of
-#: spack.modules.tcl.TclFileLayout:1
-msgid "File layout for tcl module files."
 msgstr ""
