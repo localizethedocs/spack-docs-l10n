@@ -1,0 +1,314 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2013-2023, Lawrence Livermore National Laboratory.
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../build_systems/custompackage.rst:10
+msgid "Custom Build Systems"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:12
+msgid ""
+"While the built-in build systems should meet your needs for the vast "
+"majority of packages, some packages provide custom build scripts. This guide "
+"is intended for the following use cases:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:16
+msgid "Packaging software with its own custom build system"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:17
+msgid "Adding support for new build systems"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:19
+msgid ""
+"If you want to add support for a new build system, a good place to start is "
+"to look at the definitions of other build systems. This guide focuses mostly "
+"on how Spack's build systems work."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:23
+msgid ""
+"In this guide, we will be using the `perl <https://github.com/spack/spack/"
+"blob/develop/var/spack/repos/builtin/packages/perl/package.py>`_ and `cmake "
+"<https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/"
+"packages/cmake/package.py>`_ packages as examples. ``perl``'s build system "
+"is a hand-written ``Configure`` shell script, while ``cmake`` bootstraps "
+"itself during installation. Both of these packages require custom build "
+"systems."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:32
+msgid "Base class"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:34
+msgid ""
+"If your package does not belong to any of the built-in build systems that "
+"Spack already supports, you should inherit from the ``Package`` base class. "
+"``Package`` is a simple base class with a single phase: ``install``. If your "
+"package is simple, you may be able to simply write an ``install`` method "
+"that gets the job done. However, if your package is more complex and "
+"installation involves multiple steps, you should add separate phases as "
+"mentioned in the next section."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:42
+msgid ""
+"If you are creating a new build system base class, you should inherit from "
+"``PackageBase``. This is the superclass for all build systems in Spack."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:48
+msgid "Phases"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:50
+msgid ""
+"The most important concept in Spack's build system support is the idea of "
+"phases. Each build system defines a set of phases that are necessary to "
+"install the package. They usually follow some sort of \"configure\", "
+"\"build\", \"install\" guideline, but any of those phases may be missing or "
+"combined with another phase."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:56
+msgid "If you look at the ``perl`` package, you'll see:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:58
+msgid "phases = [\"configure\", \"build\", \"install\"]"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:62
+msgid "Similarly, ``cmake`` defines:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:64
+msgid "phases = [\"bootstrap\", \"build\", \"install\"]"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:68
+msgid ""
+"If we look at the ``cmake`` example, this tells Spack's ``PackageBase`` "
+"class to run the ``bootstrap``, ``build``, and ``install`` functions in that "
+"order. It is now up to you to define these methods."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:74
+msgid "Phase and phase_args functions"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:76
+msgid "If we look at ``perl``, we see that it defines a ``configure`` method:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:78
+msgid ""
+"def configure(self, spec, prefix):\n"
+"    configure = Executable(\"./Configure\")\n"
+"    configure(*self.configure_args())"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:84
+msgid ""
+"There is also a corresponding ``configure_args`` function that handles all "
+"of the arguments to pass to ``Configure``, just like in "
+"``AutotoolsPackage``. Comparatively, the ``build`` and ``install`` phases "
+"are pretty simple:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:89
+msgid ""
+"def build(self, spec, prefix):\n"
+"    make()\n"
+"\n"
+"def install(self, spec, prefix):\n"
+"    make(\"install\")"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:97
+msgid ""
+"The ``cmake`` package looks very similar, but with a ``bootstrap`` function "
+"instead of ``configure``:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:100
+msgid ""
+"def bootstrap(self, spec, prefix):\n"
+"    bootstrap = Executable(\"./bootstrap\")\n"
+"    bootstrap(*self.bootstrap_args())\n"
+"\n"
+"def build(self, spec, prefix):\n"
+"    make()\n"
+"\n"
+"def install(self, spec, prefix):\n"
+"    make(\"install\")"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:112
+msgid ""
+"Again, there is a ``boostrap_args`` function that determines the correct "
+"bootstrap flags to use."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:117
+msgid "run_before/run_after"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:119
+msgid ""
+"Occasionally, you may want to run extra steps either before or after a given "
+"phase. This applies not just to custom build systems, but to existing build "
+"systems as well. You may need to patch a file that is generated by "
+"configure, or install extra files in addition to what ``make install`` "
+"copies to the installation prefix. This is where ``@run_before`` and "
+"``@run_after`` come in."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:126
+msgid ""
+"These Python decorators allow you to write functions that are called before "
+"or after a particular phase. For example, in ``perl``, we see:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:129
+msgid ""
+"@run_after(\"install\")\n"
+"def install_cpanm(self):\n"
+"     spec = self.spec\n"
+"     maker = make\n"
+"     cpan_dir = join_path(\"cpanm\", \"cpanm\")\n"
+"     if sys.platform == \"win32\":\n"
+"         maker = nmake\n"
+"         cpan_dir = join_path(self.stage.source_path, cpan_dir)\n"
+"         cpan_dir = windows_sfn(cpan_dir)\n"
+"     if \"+cpanm\" in spec:\n"
+"         with working_dir(cpan_dir):\n"
+"             perl = spec[\"perl\"].command\n"
+"             perl(\"Makefile.PL\")\n"
+"             maker()\n"
+"             maker(\"install\")"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:147
+msgid ""
+"This extra step automatically installs ``cpanm`` in addition to the base "
+"Perl installation."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:152
+msgid "on_package_attributes"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:154
+msgid ""
+"The ``run_before``/``run_after`` logic discussed above becomes particularly "
+"powerful when combined with the ``@on_package_attributes`` decorator. This "
+"decorator allows you to conditionally run certain functions depending on the "
+"attributes of that package. The most common example is conditional testing. "
+"Many unit tests are prone to failure, even when there is nothing wrong with "
+"the installation. Unfortunately, non-portable unit tests and tests that are "
+"\"supposed to fail\" are more common than we would like. Instead of always "
+"running unit tests on installation, Spack lets users conditionally run tests "
+"with the ``--test=root`` flag."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:165
+msgid ""
+"If we wanted to define a function that would conditionally run if and only "
+"if this flag is set, we would use the following line:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:168
+msgid "@on_package_attributes(run_tests=True)"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:174
+msgid "Testing"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:176
+msgid ""
+"Let's put everything together and add unit tests to be optionally run during "
+"the installation of our package. In the ``perl`` package, we can see:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:180
+msgid ""
+"@run_after(\"build\")\n"
+"@on_package_attributes(run_tests=True)\n"
+"def build_test(self):\n"
+"     if sys.platform == \"win32\":\n"
+"         win32_dir = os.path.join(self.stage.source_path, \"win32\")\n"
+"         win32_dir = windows_sfn(win32_dir)\n"
+"         with working_dir(win32_dir):\n"
+"             nmake(\"test\", ignore_quotes=True)\n"
+"     else:\n"
+"         make(\"test\")"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:193
+msgid ""
+"As you can guess, this runs ``make test`` *after* building the package, if "
+"and only if testing is requested. Again, this is not specific to custom "
+"build systems, it can be added to existing build systems as well."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:199
+msgid "The order of decorators matters. The following ordering:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:201
+msgid ""
+"@run_after(\"install\")\n"
+"@on_package_attributes(run_tests=True)"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:206
+msgid "works as expected. However, if you reverse the ordering:"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:208
+msgid ""
+"@on_package_attributes(run_tests=True)\n"
+"@run_after(\"install\")"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:213
+msgid ""
+"the tests will always be run regardless of whether or not ``--test=root`` is "
+"requested. See https://github.com/spack/spack/issues/3833 for more "
+"information"
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:217
+msgid ""
+"Ideally, every package in Spack will have some sort of test to ensure that "
+"it was built correctly. It is up to the package authors to make sure this "
+"happens. If you are adding a package for some software and the developers "
+"list commands to test the installation, please add these tests to your "
+"``package.py``."
+msgstr ""
+
+#: ../../../build_systems/custompackage.rst:223
+msgid ""
+"For more information on other forms of package testing, refer to :ref:"
+"`Checking an installation <checking_an_installation>`."
+msgstr ""
