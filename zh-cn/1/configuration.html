@@ -1,0 +1,1051 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Learn how to configure Spack using its flexible YAML-based system. This guide covers the different configuration scopes and provides links to detailed documentation for each configuration file, helping you customize Spack to your specific needs." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-11-03T19:44:28+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜索" href="search.html"><link rel="next" title="Spack Settings (config.yaml)" href="config_yaml.html"><link rel="prev" title="Getting Help" href="getting_help.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/configuration.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>Configuration Files - Spack 1.1.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_review_guide.html">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack Builtin Repo</a><input aria-label="Toggle navigation of Spack Builtin Repo" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API Docs</a><input aria-label="Toggle navigation of Spack API Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/configuration.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="configuration-files">
+<span id="configuration"></span><h1>Configuration Files<a class="headerlink" href="#configuration-files" title="Link to this heading">¶</a></h1>
+<p>Spack has many configuration files.
+Here is a quick list of them, in case you want to skip directly to specific docs:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="build_settings.html#concretizer-options"><span class="std std-ref">concretizer.yaml</span></a></p></li>
+<li><p><a class="reference internal" href="config_yaml.html#config-yaml"><span class="std std-ref">config.yaml</span></a></p></li>
+<li><p><a class="reference internal" href="include_yaml.html#include-yaml"><span class="std std-ref">include.yaml</span></a></p></li>
+<li><p><a class="reference internal" href="mirrors.html#mirrors"><span class="std std-ref">mirrors.yaml</span></a></p></li>
+<li><p><a class="reference internal" href="module_file_support.html#modules"><span class="std std-ref">modules.yaml</span></a></p></li>
+<li><p><a class="reference internal" href="packages_yaml.html#packages-config"><span class="std std-ref">packages.yaml</span></a> (including <a class="reference internal" href="configuring_compilers.html#compiler-config"><span class="std std-ref">compiler configuration</span></a>)</p></li>
+<li><p><a class="reference internal" href="repositories.html#repositories"><span class="std std-ref">repos.yaml</span></a></p></li>
+<li><p><a class="reference internal" href="toolchains_yaml.html#toolchains"><span class="std std-ref">toolchains.yaml</span></a></p></li>
+</ul>
+<p>You can also add any of these as inline configuration in the YAML manifest file (<code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code>) describing an <a class="reference internal" href="environments.html#environment-configuration"><span class="std std-ref">environment</span></a>.</p>
+<section id="yaml-format">
+<h2>YAML Format<a class="headerlink" href="#yaml-format" title="Link to this heading">¶</a></h2>
+<p>Spack configuration files are written in YAML.
+We chose YAML because it's human-readable but also versatile in that it supports dictionaries, lists, and nested sections.
+For more details on the format, see <a class="reference external" href="https://yaml.org">yaml.org</a>.
+Here is an example <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$spack/opt/spack</span>
+  <span class="nt">build_stage</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$tempdir/$user/spack-stage</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/.spack/stage</span>
+</pre></div>
+</div>
+<p>Each Spack configuration file is nested under a top-level section corresponding to its name.
+So, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> starts with <code class="docutils literal notranslate"><span class="pre">config:</span></code>, <code class="docutils literal notranslate"><span class="pre">mirrors.yaml</span></code> starts with <code class="docutils literal notranslate"><span class="pre">mirrors:</span></code>, etc.</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>Validation and autocompletion of Spack config files can be enabled in your editor using <a class="reference external" href="https://www.schemastore.org/">JSON Schema Store</a>.</p>
+</div>
+</section>
+<section id="configuration-scopes">
+<span id="id1"></span><h2>Configuration Scopes<a class="headerlink" href="#configuration-scopes" title="Link to this heading">¶</a></h2>
+<p>Spack pulls configuration data from files in several directories.
+There are multiple configuration scopes.
+From lowest to highest precedence:</p>
+<ol class="arabic simple">
+<li><p><strong>defaults</strong>: Stored in <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/</span></code>.
+These are the &quot;factory&quot; settings.
+Users should generally not modify the settings here, but should override them in other configuration scopes.
+The defaults here will change from version to version of Spack.</p></li>
+<li><p><strong>system</strong>: Stored in <code class="docutils literal notranslate"><span class="pre">/etc/spack/</span></code>.
+These are settings for this machine or for all machines on which this file system is mounted.
+The systm scope overrides the defaults scope.
+It can be used for settings idiosyncratic to a particular machine, such as the locations of compilers or external packages.
+Be careful when modifying this scope, as changes here affect all Spack users on a machine.
+Before putting configuration here, instead consider using the <code class="docutils literal notranslate"><span class="pre">site</span></code> scope, which only affects the spack instance it's part of.</p></li>
+<li><p><strong>site</strong>: Stored in <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/site/</span></code>.
+Settings here affect only <em>this instance</em> of Spack, and they override the defaults and system scopes.
+The site scope is intended for site-wide settings on multi-user machines (e.g., for a common Spack instance).</p></li>
+<li><p><strong>plugin</strong>: Read from a Python package's entry points.
+Settings here affect all instances of Spack running with the same Python installation.
+This scope takes higher precedence than site, system, and default scopes.</p></li>
+<li><p><strong>user</strong>: Stored in the home directory: <code class="docutils literal notranslate"><span class="pre">~/.spack/</span></code>.
+These settings affect all instances of Spack and take higher precedence than site, system, plugin, or defaults scopes.</p></li>
+<li><p><strong>spack</strong>: Stored in <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/</span></code>.
+Settings here affect only <em>this instance</em> of Spack, and they override <code class="docutils literal notranslate"><span class="pre">user</span></code> and lower configuration scopes.
+This is intended for project-specific or single-user spack installations.
+This is the the topmost built-in spack scope, and modifying it gives you full control over configuration scopes.
+For example, it defines the <code class="docutils literal notranslate"><span class="pre">user</span></code>, <code class="docutils literal notranslate"><span class="pre">site</span></code>, and <code class="docutils literal notranslate"><span class="pre">system</span></code> scopes, so you can use it to remove them completely if you want.</p></li>
+<li><p><strong>environment</strong>: When using Spack <a class="reference internal" href="environments.html#environments"><span class="std std-ref">Environments (spack.yaml, spack.lock)</span></a>, Spack reads additional configuration from the environment file.
+See <a class="reference internal" href="environments.html#environment-configuration"><span class="std std-ref">Configuring Environments</span></a> for further details on these scopes.
+Environment scopes can be referenced from the command line as <code class="docutils literal notranslate"><span class="pre">env:name</span></code> (e.g., to reference environment <code class="docutils literal notranslate"><span class="pre">foo</span></code>, use <code class="docutils literal notranslate"><span class="pre">env:foo</span></code>).</p></li>
+<li><p><strong>custom</strong>: Stored in a custom directory specified by <code class="docutils literal notranslate"><span class="pre">--config-scope</span></code>.
+If multiple scopes are listed on the command line, they are ordered from lowest to highest precedence.</p></li>
+<li><p><strong>command line</strong>: Build settings specified on the command line take precedence over all other scopes.</p></li>
+</ol>
+<p>Each configuration directory may contain several configuration files, such as <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>, or <code class="docutils literal notranslate"><span class="pre">mirrors.yaml</span></code>.
+When configurations conflict, settings from higher-precedence scopes override lower-precedence settings.</p>
+<p>All of these except <code class="docutils literal notranslate"><span class="pre">spack</span></code> and <code class="docutils literal notranslate"><span class="pre">defaults</span></code> are initially empty, so you don't have to think about the others unless you need them.
+The most commonly used scopes are <code class="docutils literal notranslate"><span class="pre">environment</span></code>, <code class="docutils literal notranslate"><span class="pre">user</span></code>, and <code class="docutils literal notranslate"><span class="pre">spack</span></code>.
+If you forget, you can always see the available configuration scopes in order of precedece wiht the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">scopes</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">spack</span> <span class="n">config</span> <span class="n">scopes</span> <span class="o">-</span><span class="n">p</span>
+<span class="n">Scope</span>            <span class="n">Path</span>
+<span class="n">command_line</span>
+<span class="n">spack</span>            <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">spack</span>
+<span class="n">user</span>             <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/.</span><span class="n">spack</span><span class="o">/</span>
+<span class="n">site</span>             <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">site</span><span class="o">/</span>
+<span class="n">defaults</span>         <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">defaults</span><span class="o">/</span>
+<span class="n">defaults</span><span class="p">:</span><span class="n">darwin</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">defaults</span><span class="o">/</span><span class="n">darwin</span><span class="o">/</span>
+<span class="n">defaults</span><span class="p">:</span><span class="n">base</span>    <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">spack</span><span class="o">/</span><span class="n">defaults</span><span class="o">/</span><span class="n">base</span><span class="o">/</span>
+<span class="n">_builtin</span>
+</pre></div>
+</div>
+<p>Commands that modify scopes (e.g., <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">compilers</span></code>, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">repo</span></code>, <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">external</span> <span class="pre">find</span></code>, etc.) take a <code class="docutils literal notranslate"><span class="pre">--scope=&lt;name&gt;</span></code> parameter that you can use to control which scope is modified.
+By default, they modify the highest-precedence available scope that is not read-only (like <cite>defaults</cite>).</p>
+<section id="custom-scopes">
+<span id="id2"></span><h3>Custom scopes<a class="headerlink" href="#custom-scopes" title="Link to this heading">¶</a></h3>
+<p>You may add configuration scopes directly on the command line with the <code class="docutils literal notranslate"><span class="pre">--config-scope</span></code> argument, or <code class="docutils literal notranslate"><span class="pre">-C</span></code> for short.
+Custom command-line scopes override any active environments, as well as the <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">site</span></code>, <code class="docutils literal notranslate"><span class="pre">user</span></code>, and <code class="docutils literal notranslate"><span class="pre">spack</span></code> scopes,</p>
+<p>For example, the following adds two configuration scopes, named <code class="docutils literal notranslate"><span class="pre">scope-a</span></code> and <code class="docutils literal notranslate"><span class="pre">scope-b</span></code>, to a <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">spec</span></code> command:</p>
+<div class="highlight-spec notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack -C ~/myscopes/scope-a -C ~/myscopes/scope-b spec <span class="nc">ncurses</span>
+</pre></div>
+</div>
+<p>Custom scopes come <em>after</em> the <code class="docutils literal notranslate"><span class="pre">spack</span></code> command and <em>before</em> the subcommand, and they specify a single path to a directory containing configuration files.
+You can add the same configuration files to that directory that you can add to any other scope (e.g., <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>, etc.).</p>
+<p>If multiple scopes are provided:</p>
+<ol class="arabic simple">
+<li><p>Each must be preceded with the <code class="docutils literal notranslate"><span class="pre">--config-scope</span></code> or <code class="docutils literal notranslate"><span class="pre">-C</span></code> flag.</p></li>
+<li><p>They must be ordered from lowest to highest precedence.</p></li>
+</ol>
+<section id="example-scopes-for-release-and-development">
+<h4>Example: scopes for release and development<a class="headerlink" href="#example-scopes-for-release-and-development" title="Link to this heading">¶</a></h4>
+<p>Suppose that you need to support simultaneous building of release and development versions of <code class="docutils literal notranslate"><span class="pre">mypackage</span></code>, where <code class="docutils literal notranslate"><span class="pre">mypackage</span></code> depends on <code class="docutils literal notranslate"><span class="pre">pkg-a</span></code>, which in turn depends on <code class="docutils literal notranslate"><span class="pre">pkg-b</span></code>.
+You could create the following files:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-release-packages-yaml">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/myscopes/release/packages.yaml</span></code></span><a class="headerlink" href="#code-example-release-packages-yaml" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mypackage</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@1.7&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">pkg-a</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@2.3&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">pkg-b</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@0.8&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="code-example-develop-packages-yaml">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/myscopes/develop/packages.yaml</span></code></span><a class="headerlink" href="#code-example-develop-packages-yaml" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">mypackage</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@develop&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">pkg-a</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@develop&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">pkg-b</span><span class="p">:</span>
+    <span class="nt">prefer</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@develop&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<p>You can switch between <code class="docutils literal notranslate"><span class="pre">release</span></code> and <code class="docutils literal notranslate"><span class="pre">develop</span></code> configurations using configuration arguments.
+You would type <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">-C</span> <span class="pre">~/myscopes/release</span></code> when you want to build the designated release versions of <code class="docutils literal notranslate"><span class="pre">mypackage</span></code>, <code class="docutils literal notranslate"><span class="pre">pkg-a</span></code>, and <code class="docutils literal notranslate"><span class="pre">pkg-b</span></code>, and you would type <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">-C</span> <span class="pre">~/myscopes/develop</span></code> when you want to build all of these packages at the <code class="docutils literal notranslate"><span class="pre">develop</span></code> version.</p>
+</section>
+<section id="example-swapping-mpi-providers">
+<h4>Example: swapping MPI providers<a class="headerlink" href="#example-swapping-mpi-providers" title="Link to this heading">¶</a></h4>
+<p>Suppose that you need to build two software packages, <code class="docutils literal notranslate"><span class="pre">pkg-a</span></code> and <code class="docutils literal notranslate"><span class="pre">pkg-b</span></code>.
+For <code class="docutils literal notranslate"><span class="pre">pkg-b</span></code> you want a newer Python version and a different MPI implementation than for <code class="docutils literal notranslate"><span class="pre">pkg-a</span></code>.
+You can create different configuration scopes for use with <code class="docutils literal notranslate"><span class="pre">pkg-a</span></code> and <code class="docutils literal notranslate"><span class="pre">pkg-b</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-pkg-a-packages-yaml">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/myscopes/pkg-a/packages.yaml</span></code></span><a class="headerlink" href="#code-example-pkg-a-packages-yaml" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">python</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@3.11&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">mpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">openmpi</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="code-example-pkg-b-packages-yaml">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/myscopes/pkg-b/packages.yaml</span></code></span><a class="headerlink" href="#code-example-pkg-b-packages-yaml" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">packages</span><span class="p">:</span>
+  <span class="nt">python</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;@3.13&quot;</span><span class="p p-Indicator">]</span>
+  <span class="nt">mpi</span><span class="p">:</span>
+    <span class="nt">require</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">mpich</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="plugin-scopes">
+<span id="id3"></span><h3>Plugin scopes<a class="headerlink" href="#plugin-scopes" title="Link to this heading">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Python version &gt;= 3.8 is required to enable plugin configuration.</p>
+</div>
+<p>Spack can be made aware of configuration scopes that are installed as part of a Python package.
+To do so, register a function that returns the scope's path to the <code class="docutils literal notranslate"><span class="pre">&quot;spack.config&quot;</span></code> entry point.
+Consider the Python package <code class="docutils literal notranslate"><span class="pre">my_package</span></code> that includes Spack configurations:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">my-package/</span>
+<span class="go">├── src</span>
+<span class="go">│   ├── my_package</span>
+<span class="go">│   │   ├── __init__.py</span>
+<span class="go">│   │   └── spack/</span>
+<span class="go">│   │   │   └── config.yaml</span>
+<span class="go">└── pyproject.toml</span>
+</pre></div>
+</div>
+<p>Adding the following to <code class="docutils literal notranslate"><span class="pre">my_package</span></code>'s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> will make <code class="docutils literal notranslate"><span class="pre">my_package</span></code>'s <code class="docutils literal notranslate"><span class="pre">spack/</span></code> configurations visible to Spack when <code class="docutils literal notranslate"><span class="pre">my_package</span></code> is installed:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[project.entry_points.</span><span class="s2">&quot;spack.config&quot;</span><span class="k">]</span>
+<span class="n">my_package</span> <span class="o">=</span> <span class="s2">&quot;my_package:get_config_path&quot;</span>
+</pre></div>
+</div>
+<p>The function <code class="docutils literal notranslate"><span class="pre">my_package.get_config_path</span></code> (matching the entry point definition) in <code class="docutils literal notranslate"><span class="pre">my_package/__init__.py</span></code> might look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">importlib.resources</span>
+
+
+<span class="k">def</span> <span class="nf">get_config_path</span><span class="p">():</span>
+    <span class="n">dirname</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;my_package&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;spack&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dirname</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="platform-specific-configuration">
+<span id="platform-scopes"></span><h2>Platform-specific Configuration<a class="headerlink" href="#platform-specific-configuration" title="Link to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Prior to v1.0, each scope above -- except environment scopes -- had a corresponding platform-specific scope (e.g., <code class="docutils literal notranslate"><span class="pre">defaults/linux</span></code>, <code class="docutils literal notranslate"><span class="pre">system/windows</span></code>).
+This can now be accomplished through a suitably placed <a class="reference internal" href="include_yaml.html#include-yaml"><span class="std std-ref">include.yaml</span></a> file.</p>
+</div>
+<p>There is often a need for platform-specific configuration settings.
+For example, on most platforms, GCC is the preferred compiler.
+However, on macOS (darwin), Clang often works for more packages, and is set as the default compiler.
+This configuration is set in <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/darwin/packages.yaml</span></code>, which is included by <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/include.yaml</span></code>.
+Since it is an included configuration of the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> scope, settings in the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> scope will take precedence.</p>
+<p>For example, if <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/include.yaml</span></code> contains:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">include</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;${platform}&quot;</span>
+  <span class="nt">optional</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="p p-Indicator">-</span> <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">base</span>
+</pre></div>
+</div>
+<p>then, on macOS (<code class="docutils literal notranslate"><span class="pre">darwin</span></code>), configuration settings for files under the <code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/darwin</span></code> directory would be picked up if they are present.
+Because <code class="docutils literal notranslate"><span class="pre">${platform}</span></code> is above the <code class="docutils literal notranslate"><span class="pre">base</span></code> include in the list, <code class="docutils literal notranslate"><span class="pre">${platform}</span></code> settings will override anything in <code class="docutils literal notranslate"><span class="pre">base</span></code> if there are conflicts.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>You can get the name to use for <code class="docutils literal notranslate"><span class="pre">&lt;platform&gt;</span></code> by running <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">arch</span> <span class="pre">--platform</span></code>.</p>
+</div>
+<p>Platform-specific configuration files can similarly be set up for any other scope by creating an <code class="docutils literal notranslate"><span class="pre">include.yaml</span></code> similar to the one above for <code class="docutils literal notranslate"><span class="pre">defaults</span></code> -- under the appropriate configuration paths (see <a class="reference internal" href="#config-overrides"><span class="std std-ref">Overriding entire sections</span></a>) and creating a subdirectory with the platform name that contains the configurations.</p>
+</section>
+<section id="scope-precedence">
+<span id="config-scope-precedence"></span><h2>Scope Precedence<a class="headerlink" href="#scope-precedence" title="Link to this heading">¶</a></h2>
+<p>When Spack queries for configuration parameters, it searches in higher-precedence scopes first.
+So, settings in a higher-precedence file can override those with the same key in a lower-precedence one.
+For list-valued settings, Spack merges lists by <em>prepending</em> items from higher-precedence configurations to items from lower-precedence configurations by default.
+Completely ignoring lower-precedence configuration options is supported with the <code class="docutils literal notranslate"><span class="pre">::</span></code> notation for keys (see <a class="reference internal" href="#config-overrides"><span class="std std-ref">Overriding entire sections</span></a> below).</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Settings in a scope take precedence over those provided in any included configuration files (i.e., files listed in <a class="reference internal" href="include_yaml.html#include-yaml"><span class="std std-ref">include.yaml</span></a> or an <code class="docutils literal notranslate"><span class="pre">include:</span></code> section in <code class="docutils literal notranslate"><span class="pre">spack.yaml</span></code>).</p>
+</div>
+<p>There are also special notations for string concatenation and precedence override:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">+:</span></code> will force <em>prepending</em> strings or lists.
+For lists, this is the default behavior.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-:</span></code> works similarly, but for <em>appending</em> values.</p></li>
+</ul>
+<p>See <a class="reference internal" href="#config-prepend-append"><span class="std std-ref">String Concatenation</span></a> for more details.</p>
+<section id="simple-keys">
+<h3>Simple keys<a class="headerlink" href="#simple-keys" title="Link to this heading">¶</a></h3>
+<p>Let's look at an example of overriding a single key in a Spack configuration file.
+If your configurations look like this:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-defaults-config-yaml">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/config.yaml</span></code></span><a class="headerlink" href="#code-example-defaults-config-yaml" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$spack/opt/spack</span>
+  <span class="nt">build_stage</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$tempdir/$user/spack-stage</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/.spack/stage</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="code-example-user-config-yaml">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code></span><a class="headerlink" href="#code-example-user-config-yaml" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/some/other/directory</span>
+</pre></div>
+</div>
+</div>
+<p>Spack will only override <code class="docutils literal notranslate"><span class="pre">install_tree</span></code> in the <code class="docutils literal notranslate"><span class="pre">config</span></code> section, and will take the site preferences for other settings.
+You can see the final, combined configuration with the <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span> <span class="pre">&lt;configtype&gt;</span></code> command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get config
+<span class="go">config:</span>
+<span class="hll"><span class="go">  install_tree:</span>
+</span><span class="go">    root: /some/other/directory</span>
+<span class="go">  build_stage:</span>
+<span class="go">  - $tempdir/$user/spack-stage</span>
+<span class="go">  - ~/.spack/stage</span>
+</pre></div>
+</div>
+</section>
+<section id="string-concatenation">
+<span id="config-prepend-append"></span><h3>String Concatenation<a class="headerlink" href="#string-concatenation" title="Link to this heading">¶</a></h3>
+<p>Above, the user <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> <em>completely</em> overrides specific settings in the default <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.
+Sometimes, it is useful to add a suffix/prefix to a path or name.
+To do this, you can use the <code class="docutils literal notranslate"><span class="pre">-:</span></code> notation for <em>append</em> string concatenation at the end of a key in a configuration file.
+For example:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-append-install-tree">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code></span><a class="headerlink" href="#code-example-append-install-tree" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="nt">config</span><span class="p">:</span>
+</span>  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root-</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/my/custom/suffix/</span>
+</pre></div>
+</div>
+</div>
+<p>Spack will then append to the lower-precedence configuration under the <code class="docutils literal notranslate"><span class="pre">root</span></code> key:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get config
+<span class="go">config:</span>
+<span class="go">  install_tree:</span>
+<span class="go">    root: /some/other/directory/my/custom/suffix</span>
+<span class="go">  build_stage:</span>
+<span class="go">  - $tempdir/$user/spack-stage</span>
+<span class="go">  - ~/.spack/stage</span>
+</pre></div>
+</div>
+<p>Similarly, <code class="docutils literal notranslate"><span class="pre">+:</span></code> can be used to <em>prepend</em> to a path or name:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-prepend-install-tree">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code></span><a class="headerlink" href="#code-example-prepend-install-tree" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="nt">config</span><span class="p">:</span>
+</span>  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root+</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/my/custom/suffix/</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="overriding-entire-sections">
+<span id="config-overrides"></span><h3>Overriding entire sections<a class="headerlink" href="#overriding-entire-sections" title="Link to this heading">¶</a></h3>
+<p>Above, the user <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> only overrides specific settings in the default <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.
+Sometimes, it is useful to <em>completely</em> override lower-precedence settings.
+To do this, you can use <em>two</em> colons at the end of a key in a configuration file.
+For example:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-override-config-section">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code></span><a class="headerlink" href="#code-example-override-config-section" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="nt">config:</span><span class="p">:</span>
+</span>  <span class="nt">install_tree</span><span class="p">:</span>
+    <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/some/other/directory</span>
+</pre></div>
+</div>
+</div>
+<p>Spack will ignore all lower-precedence configuration under the <code class="docutils literal notranslate"><span class="pre">config::</span></code> section:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get config
+<span class="go">config:</span>
+<span class="go">  install_tree:</span>
+<span class="go">    root: /some/other/directory</span>
+</pre></div>
+</div>
+</section>
+<section id="list-valued-settings">
+<h3>List-valued settings<a class="headerlink" href="#list-valued-settings" title="Link to this heading">¶</a></h3>
+<p>Let's revisit the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> example one more time.
+The <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> setting's value is an ordered list of directories:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-defaults-build-stage">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">$(prefix)/etc/spack/defaults/config.yaml</span></code></span><a class="headerlink" href="#code-example-defaults-build-stage" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">build_stage</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$tempdir/$user/spack-stage</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/.spack/stage</span>
+</pre></div>
+</div>
+</div>
+<p>Suppose the user configuration adds its <em>own</em> list of <code class="docutils literal notranslate"><span class="pre">build_stage</span></code> paths:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-user-build-stage">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code></span><a class="headerlink" href="#code-example-user-build-stage" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">build_stage</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/lustre-scratch/$user/spack</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/mystage</span>
+</pre></div>
+</div>
+</div>
+<p>Spack will first look at the paths in the defaults <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, then the paths in the user's <code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code>.
+The list in the higher-precedence scope is <em>prepended</em> to the defaults.
+<code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span> <span class="pre">config</span></code> shows the result:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get config
+<span class="go">config:</span>
+<span class="go">  install_tree:</span>
+<span class="go">    root: /some/other/directory</span>
+<span class="hll"><span class="go">  build_stage:</span>
+</span><span class="hll"><span class="go">  - /lustre-scratch/$user/spack</span>
+</span><span class="hll"><span class="go">  - ~/mystage</span>
+</span><span class="hll"><span class="go">  - $tempdir/$user/spack-stage</span>
+</span><span class="go">  - ~/.spack/stage</span>
+</pre></div>
+</div>
+<p>As in <a class="reference internal" href="#config-overrides"><span class="std std-ref">Overriding entire sections</span></a>, the higher-precedence scope can <em>completely</em> override the lower-precedence scope using <code class="docutils literal notranslate"><span class="pre">::</span></code>.
+So if the user config looked like this:</p>
+<div class="literal-block-wrapper docutils container" id="code-example-override-build-stage">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">~/.spack/config.yaml</span></code></span><a class="headerlink" href="#code-example-override-build-stage" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="nt">config</span><span class="p">:</span>
+</span>  <span class="nt">build_stage:</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/lustre-scratch/$user/spack</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/mystage</span>
+</pre></div>
+</div>
+</div>
+<p>The merged configuration would look like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get config
+<span class="go">config:</span>
+<span class="go">  install_tree:</span>
+<span class="go">    root: /some/other/directory</span>
+<span class="hll"><span class="go">  build_stage:</span>
+</span><span class="hll"><span class="go">    - /lustre-scratch/$user/spack</span>
+</span><span class="go">    - ~/mystage</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="config-file-variables">
+<span id="id4"></span><h2>Config File Variables<a class="headerlink" href="#config-file-variables" title="Link to this heading">¶</a></h2>
+<p>Spack understands several variables which can be used in config file paths wherever they appear.
+There are three sets of these variables: Spack-specific variables, environment variables, and user path variables.
+Spack-specific variables and environment variables are both indicated by prefixing the variable name with <code class="docutils literal notranslate"><span class="pre">$</span></code>.
+User path variables are indicated at the start of the path with <code class="docutils literal notranslate"><span class="pre">~</span></code> or <code class="docutils literal notranslate"><span class="pre">~user</span></code>.</p>
+<section id="spack-specific-variables">
+<h3>Spack-specific variables<a class="headerlink" href="#spack-specific-variables" title="Link to this heading">¶</a></h3>
+<p>Spack understands over a dozen special variables.
+These are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$env</span></code>: name of the currently active <a class="reference internal" href="environments.html#environments"><span class="std std-ref">environment</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$spack</span></code>: path to the prefix of this Spack installation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$tempdir</span></code>: default system temporary directory (as specified in Python's <a class="reference external" href="https://docs.python.org/2/library/tempfile.html#tempfile.tempdir">tempfile.tempdir</a> variable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$user</span></code>: name of the current user</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$user_cache_path</span></code>: user cache directory (<code class="docutils literal notranslate"><span class="pre">~/.spack</span></code> unless <a class="reference internal" href="#local-config-overrides"><span class="std std-ref">overridden</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$architecture</span></code>: the architecture triple of the current host, as detected by Spack.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$arch</span></code>: alias for <code class="docutils literal notranslate"><span class="pre">$architecture</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$platform</span></code>: the platform of the current host, as detected by Spack.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$operating_system</span></code>: the operating system of the current host, as detected by the <code class="docutils literal notranslate"><span class="pre">distro</span></code> Python module.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$os</span></code>: alias for <code class="docutils literal notranslate"><span class="pre">$operating_system</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$target</span></code>: the ISA target for the current host, as detected by ArchSpec.
+E.g.
+<code class="docutils literal notranslate"><span class="pre">skylake</span></code> or <code class="docutils literal notranslate"><span class="pre">neoverse-n1</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$target_family</span></code>.
+The target family for the current host, as detected by ArchSpec.
+E.g.
+<code class="docutils literal notranslate"><span class="pre">x86_64</span></code> or <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$date</span></code>: the current date in the format YYYY-MM-DD</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$spack_short_version</span></code>: the Spack version truncated to the first components.</p></li>
+</ul>
+<p>Note that, as with shell variables, you can write these as <code class="docutils literal notranslate"><span class="pre">$varname</span></code> or with braces to distinguish the variable from surrounding characters: <code class="docutils literal notranslate"><span class="pre">${varname}</span></code>.
+Their names are also case insensitive, meaning that <code class="docutils literal notranslate"><span class="pre">$SPACK</span></code> works just as well as <code class="docutils literal notranslate"><span class="pre">$spack</span></code>.
+These special variables are substituted first, so any environment variables with the same name will not be used.</p>
+</section>
+<section id="environment-variables">
+<h3>Environment variables<a class="headerlink" href="#environment-variables" title="Link to this heading">¶</a></h3>
+<p>After Spack-specific variables are evaluated, environment variables are expanded.
+These are formatted like Spack-specific variables, e.g., <code class="docutils literal notranslate"><span class="pre">${varname}</span></code>.
+You can use this to insert environment variables in your Spack configuration.</p>
+</section>
+<section id="user-home-directories">
+<h3>User home directories<a class="headerlink" href="#user-home-directories" title="Link to this heading">¶</a></h3>
+<p>Spack performs Unix-style tilde expansion on paths in configuration files.
+This means that tilde (<code class="docutils literal notranslate"><span class="pre">~</span></code>) will expand to the current user's home directory, and <code class="docutils literal notranslate"><span class="pre">~user</span></code> will expand to a specified user's home directory.
+The <code class="docutils literal notranslate"><span class="pre">~</span></code> must appear at the beginning of the path, or Spack will not expand it.</p>
+</section>
+</section>
+<section id="environment-modifications">
+<span id="configuration-environment-variables"></span><h2>Environment Modifications<a class="headerlink" href="#environment-modifications" title="Link to this heading">¶</a></h2>
+<p>Spack allows users to prescribe custom environment modifications in a few places within its configuration files.
+Every time these modifications are allowed, they are specified as a dictionary, like in the following example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span>
+  <span class="nt">set</span><span class="p">:</span>
+    <span class="nt">LICENSE_FILE</span><span class="p">:</span> <span class="s">&quot;/path/to/license&quot;</span>
+  <span class="nt">unset</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">CPATH</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LIBRARY_PATH</span>
+  <span class="nt">append_path</span><span class="p">:</span>
+    <span class="nt">PATH</span><span class="p">:</span> <span class="s">&quot;/new/bin/dir&quot;</span>
+</pre></div>
+</div>
+<p>The possible actions that are permitted are <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">unset</span></code>, <code class="docutils literal notranslate"><span class="pre">append_path</span></code>, <code class="docutils literal notranslate"><span class="pre">prepend_path</span></code>, and finally <code class="docutils literal notranslate"><span class="pre">remove_path</span></code>.
+They all require a dictionary of variable names mapped to the values used for the modification, with the exception of <code class="docutils literal notranslate"><span class="pre">unset</span></code>, which requires just a list of variable names.
+No particular order is ensured for the execution of each of these modifications.</p>
+</section>
+<section id="seeing-spack-s-configuration">
+<h2>Seeing Spack's Configuration<a class="headerlink" href="#seeing-spack-s-configuration" title="Link to this heading">¶</a></h2>
+<p>With so many scopes overriding each other, it can sometimes be difficult to understand what Spack's final configuration looks like.</p>
+<p>Spack provides two useful ways to view the final &quot;merged&quot; version of any configuration file: <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span></code> and <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">blame</span></code>.</p>
+<section id="spack-config-get">
+<span id="cmd-spack-config-get"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span></code><a class="headerlink" href="#spack-config-get" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span></code> shows a fully merged configuration file, taking into account all scopes.
+For example, to see the fully merged <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, you can type:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get config
+<span class="go">config:</span>
+<span class="go">  debug: false</span>
+<span class="go">  checksum: true</span>
+<span class="go">  verify_ssl: true</span>
+<span class="go">  dirty: false</span>
+<span class="go">  build_jobs: 8</span>
+<span class="go">  install_tree:</span>
+<span class="go">    root: $spack/opt/spack</span>
+<span class="go">  template_dirs:</span>
+<span class="go">  - $spack/templates</span>
+<span class="go">  directory_layout: {architecture}/{compiler.name}-{compiler.version}/{name}-{version}-{hash}</span>
+<span class="go">  build_stage:</span>
+<span class="go">  - $tempdir/$user/spack-stage</span>
+<span class="go">  - ~/.spack/stage</span>
+<span class="go">  - $spack/var/spack/stage</span>
+<span class="go">  source_cache: $spack/var/spack/cache</span>
+<span class="go">  misc_cache: ~/.spack/cache</span>
+<span class="go">  locks: true</span>
+</pre></div>
+</div>
+<p>Likewise, this will show the fully merged <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack config get packages
+</pre></div>
+</div>
+<p>You can use this in conjunction with the <code class="docutils literal notranslate"><span class="pre">-C</span></code> / <code class="docutils literal notranslate"><span class="pre">--config-scope</span></code> argument to see how your scope will affect Spack's configuration:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack -C /path/to/my/scope config get packages
+</pre></div>
+</div>
+</section>
+<section id="spack-config-blame">
+<span id="cmd-spack-config-blame"></span><h3><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">blame</span></code><a class="headerlink" href="#spack-config-blame" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">blame</span></code> functions much like <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span></code>, but it shows exactly which configuration file each setting came from.
+If you do not know why Spack is behaving a certain way, this command can help you track down the source of the configuration:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>spack --insecure -C ./my-scope -C ./my-scope-2 config blame config
+<span class="go">==&gt; Warning: You asked for --insecure. Will NOT check SSL certificates.</span>
+<span class="go">---                                                   config:</span>
+<span class="go">_builtin                                                debug: False</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:72    checksum: True</span>
+<span class="go">command_line                                            verify_ssl: False</span>
+<span class="go">./my-scope-2/config.yaml:2                              dirty: False</span>
+<span class="go">_builtin                                                build_jobs: 8</span>
+<span class="go">./my-scope/config.yaml:2                                install_tree: /path/to/some/tree</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:23    template_dirs:</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:24    - $spack/templates</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:28    directory_layout: {architecture}/{compiler.name}-{compiler.version}/{name}-{version}-{hash}</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:49    build_stage:</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:50    - $tempdir/$user/spack-stage</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:51    - ~/.spack/stage</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:52    - $spack/var/spack/stage</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:57    source_cache: $spack/var/spack/cache</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:62    misc_cache: ~/.spack/cache</span>
+<span class="go">/home/myuser/spack/etc/spack/defaults/config.yaml:86    locks: True</span>
+</pre></div>
+</div>
+<p>You can see above that the <code class="docutils literal notranslate"><span class="pre">build_jobs</span></code> and <code class="docutils literal notranslate"><span class="pre">debug</span></code> settings are built-in and are not overridden by a configuration file.
+The <code class="docutils literal notranslate"><span class="pre">verify_ssl</span></code> setting comes from the <code class="docutils literal notranslate"><span class="pre">--insecure</span></code> option on the command line.
+The <code class="docutils literal notranslate"><span class="pre">dirty</span></code> and <code class="docutils literal notranslate"><span class="pre">install_tree</span></code> settings come from the custom scopes <code class="docutils literal notranslate"><span class="pre">./my-scope</span></code> and <code class="docutils literal notranslate"><span class="pre">./my-scope-2</span></code>, and all other configuration options come from the default configuration files that ship with Spack.</p>
+</section>
+</section>
+<section id="overriding-local-configuration">
+<span id="local-config-overrides"></span><h2>Overriding Local Configuration<a class="headerlink" href="#overriding-local-configuration" title="Link to this heading">¶</a></h2>
+<p>Spack's <code class="docutils literal notranslate"><span class="pre">system</span></code> and <code class="docutils literal notranslate"><span class="pre">user</span></code> scopes provide ways for administrators and users to set global defaults for all Spack instances, but for use cases where one wants a clean Spack installation, these scopes can be undesirable.
+For example, users may want to opt out of global system configuration, or they may want to ignore their own home directory settings when running in a continuous integration environment.</p>
+<p>Spack also, by default, keeps various caches and user data in <code class="docutils literal notranslate"><span class="pre">~/.spack</span></code>, but users may want to override these locations.</p>
+<p>Spack provides three environment variables that allow you to override or opt out of configuration locations:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SPACK_USER_CONFIG_PATH</span></code>: Override the path to use for the <code class="docutils literal notranslate"><span class="pre">user</span></code> scope (<code class="docutils literal notranslate"><span class="pre">~/.spack</span></code> by default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SPACK_SYSTEM_CONFIG_PATH</span></code>: Override the path to use for the <code class="docutils literal notranslate"><span class="pre">system</span></code> scope (<code class="docutils literal notranslate"><span class="pre">/etc/spack</span></code> by default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SPACK_DISABLE_LOCAL_CONFIG</span></code>: Set this environment variable to completely disable <strong>both</strong> the system and user configuration directories.
+Spack will then only consider its own defaults and <code class="docutils literal notranslate"><span class="pre">site</span></code> configuration locations.</p></li>
+</ul>
+<p>And one that allows you to move the default cache location:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SPACK_USER_CACHE_PATH</span></code>: Override the default path to use for user data (misc_cache, tests, reports, etc.)</p></li>
+</ul>
+<p>With these settings, if you want to isolate Spack in a CI environment, you can do this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span> <span class="nv">SPACK_DISABLE_LOCAL_CONFIG</span><span class="o">=</span><span class="nb">true</span>
+<span class="gp">$ </span><span class="nb">export</span> <span class="nv">SPACK_USER_CACHE_PATH</span><span class="o">=</span>/tmp/spack
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="config_yaml.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Spack Settings (config.yaml)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="getting_help.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Getting Help</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on 11月 03, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Configuration Files</a><ul>
+<li><a class="reference internal" href="#yaml-format">YAML Format</a></li>
+<li><a class="reference internal" href="#configuration-scopes">Configuration Scopes</a><ul>
+<li><a class="reference internal" href="#custom-scopes">Custom scopes</a><ul>
+<li><a class="reference internal" href="#example-scopes-for-release-and-development">Example: scopes for release and development</a></li>
+<li><a class="reference internal" href="#example-swapping-mpi-providers">Example: swapping MPI providers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-scopes">Plugin scopes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#platform-specific-configuration">Platform-specific Configuration</a></li>
+<li><a class="reference internal" href="#scope-precedence">Scope Precedence</a><ul>
+<li><a class="reference internal" href="#simple-keys">Simple keys</a></li>
+<li><a class="reference internal" href="#string-concatenation">String Concatenation</a></li>
+<li><a class="reference internal" href="#overriding-entire-sections">Overriding entire sections</a></li>
+<li><a class="reference internal" href="#list-valued-settings">List-valued settings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#config-file-variables">Config File Variables</a><ul>
+<li><a class="reference internal" href="#spack-specific-variables">Spack-specific variables</a></li>
+<li><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li><a class="reference internal" href="#user-home-directories">User home directories</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-modifications">Environment Modifications</a></li>
+<li><a class="reference internal" href="#seeing-spack-s-configuration">Seeing Spack's Configuration</a><ul>
+<li><a class="reference internal" href="#spack-config-get"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">get</span></code></a></li>
+<li><a class="reference internal" href="#spack-config-blame"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">config</span> <span class="pre">blame</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#overriding-local-configuration">Overriding Local Configuration</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=b98c2dc9"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    </body>
+</html>

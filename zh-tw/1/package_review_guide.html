@@ -1,0 +1,807 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This is a guide for people who review package pull requests and includes criteria for them to be merged into the develop branch." lang="en" name="description" translated="False" xml:lang="en" />
+
+    <meta property="article:modified_time" content="2025-11-06T23:14:30+00:00" /><link rel="index" title="索引" href="genindex.html"><link rel="search" title="搜尋" href="search.html"><link rel="next" title="Auditing Packages and Configuration" href="advanced_topics.html"><link rel="prev" title="開發者指南" href="developer_guide.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/spack-docs-l10n/package_review_guide.html">
+        <link rel="prefetch" href="_static/spack-logo-text.svg" as="image">
+        <link rel="prefetch" href="_static/spack-logo-white-text.svg" as="image">
+
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19.dev1 -->
+        <title>Package Review Guide - Spack 1.1.1 說明文件</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=9a9e847c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+ 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0PQ7WV75K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0PQ7WV75K');
+  </script>
+
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Spack 1.1.1 說明文件</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" width="850" height="256" src="_static/spack-logo-text.svg" alt="Spack Logo"/>
+    <img class="sidebar-logo only-dark" width="850" height="256" src="_static/spack-logo-white-text.svg" alt="Spack Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Feature Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spec_syntax.html">Spec Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_prerequisites.html">Spack Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">Spack On Windows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_fundamentals.html">Package Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_compilers.html">Configuring Compilers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environments_basics.html">Spack Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently_asked_questions.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_help.html">Getting Help</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">連結</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://spack-tutorial.readthedocs.io">Tutorial (spack-tutorial.rtfd.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://packages.spack.io">Packages (packages.spack.io)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://cache.spack.io">Binaries (binaries.spack.io)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_yaml.html">Spack Settings (config.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages_yaml.html">Package Settings (packages.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchains_yaml.html">Toolchains (toolchains.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_settings.html">Concretization Settings (concretizer.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repositories.html">Package Repositories (repos.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirrors.html">Mirrors (mirrors.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chain.html">Chaining Spack Installations (upstreams.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_file_support.html">Modules (modules.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="include_yaml.html">Include Settings (include.yaml)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_vars_yaml.html">Environment Variable Settings (env_vars.yaml)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environments.html">Environments (spack.yaml, spack.lock)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_caches.html">Build Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrapping.html">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_index.html">Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">CI Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signing.html">Spack Package Signing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_configuration.html">Using External GPU Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_creation.html">Packaging Guide: defining a package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_build.html">Packaging Guide: customizing the build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_testing.html">Packaging Guide: testing installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packaging_guide_advanced.html">Packaging Guide: advanced topics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="build_systems.html">Build Systems</a><input aria-label="Toggle navigation of Build Systems" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/makefilepackage.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mavenpackage.html">Maven</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sconspackage.html">SCons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/wafpackage.html">Waf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/autotoolspackage.html">Autotools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cmakepackage.html">CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cachedcmakepackage.html">CachedCMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/mesonpackage.html">Meson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/qmakepackage.html">QMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sippackage.html">SIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/luapackage.html">Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/octavepackage.html">Octave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/perlpackage.html">Perl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/pythonpackage.html">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rpackage.html">R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/racketpackage.html">Racket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rubypackage.html">Ruby</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/bundlepackage.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/cudapackage.html">Cuda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/custompackage.html">Custom Build Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/inteloneapipackage.html">IntelOneapi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/rocmpackage.html">ROCm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_systems/sourceforgepackage.html">SourceForge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles_and_responsibilities.html">Packaging Roles and Responsibilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">開發者指南</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Package Review Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">進階話題</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html">Auditing Packages and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#verifying-installations">Verifying Installations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_topics.html#filesystem-requirements">Filesystem Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API 文件</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="package_api.html">Spack Package API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack_repo.html">Spack 內建儲存庫</a><input aria-label="Toggle navigation of Spack 內建儲存庫" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack_repo.builtin.html">spack_repo.builtin package</a><input aria-label="Toggle navigation of spack_repo.builtin package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack_repo.builtin.build_systems.html">spack_repo.builtin.build_systems package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spack.html">Spack API 文件</a><input aria-label="Toggle navigation of Spack API 文件" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spack.bootstrap.html">spack.bootstrap package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.ci.html">spack.ci package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.cmd.html">spack.cmd package</a><input aria-label="Toggle navigation of spack.cmd package" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.common.html">spack.cmd.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.cmd.modules.html">spack.cmd.modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.compilers.html">spack.compilers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.container.html">spack.container package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.detection.html">spack.detection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.environment.html">spack.environment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.hooks.html">spack.hooks package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.llnl.html">spack.llnl package</a><input aria-label="Toggle navigation of spack.llnl package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="spack.llnl.util.html">spack.llnl.util package</a><input aria-label="Toggle navigation of spack.llnl.util package" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="spack.llnl.util.tty.html">spack.llnl.util.tty package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.mirrors.html">spack.mirrors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.modules.html">spack.modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.oci.html">spack.oci package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.operating_systems.html">spack.operating_systems package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.platforms.html">spack.platforms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.reporters.html">spack.reporters package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.schema.html">spack.schema package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.solver.html">spack.solver package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="spack.util.html">spack.util package</a><input aria-label="Toggle navigation of spack.util package" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="spack.util.unparse.html">spack.util.unparse package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spack.version.html">spack.version package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/package_review_guide.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="package-review-guide">
+<span id="id1"></span><h1>Package Review Guide<a class="headerlink" href="#package-review-guide" title="連結到這個標頭">¶</a></h1>
+<p>Package reviews are performed with the goals of minimizing build errors and making packages as <strong>uniform and stable</strong> as possible.</p>
+<p>This section establishes guidelines to help assess Spack community <a class="reference external" href="https://github.com/spack/spack-packages">package repository</a> pull requests (PRs).
+It describes the considerations and actions to be taken when reviewing new and updated <a class="reference external" href="https://spack.readthedocs.io/en/latest/packaging_guide_creation.html#structure-of-a-package">Spack packages</a>.
+In some cases, there are possible solutions to common issues.</p>
+<section id="how-to-use-this-guide">
+<h2>How to use this guide<a class="headerlink" href="#how-to-use-this-guide" title="連結到這個標頭">¶</a></h2>
+<p>Whether you are a <a class="reference internal" href="roles_and_responsibilities.html#package-reviewers"><span class="std std-ref">Package Reviewer</span></a>, <a class="reference internal" href="roles_and_responsibilities.html#package-maintainers"><span class="std std-ref">Maintainer</span></a>, or <a class="reference internal" href="roles_and_responsibilities.html#committers"><span class="std std-ref">Committer</span></a>, this guide highlights relevant aspects to consider when reviewing package pull requests.
+If you are a <a class="reference internal" href="roles_and_responsibilities.html#package-contributors"><span class="std std-ref">Package Contributor</span></a> (or simply <code class="docutils literal notranslate"><span class="pre">Contributor</span></code>), you may also find the information and solutions useful in your work.
+While we provide information on what to look for, the changes themselves should drive the actual review process.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p><a class="reference internal" href="#build-success-reviews"><span class="std std-ref">Confirmation of successful package builds</span></a> of <strong>all</strong> affected versions can reduce the amount of effort needed to review a PR.
+However, packaging conventions and the combinatorial nature of versions and directives mean each change should still be checked.</p>
+</div>
+<section id="reviewing-a-new-package">
+<h3>Reviewing a new package<a class="headerlink" href="#reviewing-a-new-package" title="連結到這個標頭">¶</a></h3>
+<p>If the pull request includes a new package, then focus on answering the following questions:</p>
+<ul class="simple">
+<li><p>Should the <a class="reference internal" href="#suitable-package"><span class="std std-ref">package</span></a> be added to the repository?</p></li>
+<li><p>Does the package <a class="reference internal" href="#structure-reviews"><span class="std std-ref">structure</span></a> conform to conventions?</p></li>
+<li><p>Are the directives and their options correct?</p></li>
+<li><p>Do all <a class="reference internal" href="#automated-checks-reviews"><span class="std std-ref">automated checks</span></a> pass?
+If not, are there easy-to-resolve CI and/or test issues that can be addressed or does the submitter need to investigate the failures?</p></li>
+<li><p>Is there <a class="reference internal" href="#build-success-reviews"><span class="std std-ref">confirmation</span></a> that every version builds successfully on at least one platform?</p></li>
+</ul>
+<p>Refer to the relevant sections below for more guidance.</p>
+</section>
+<section id="reviewing-changes-to-an-existing-package">
+<h3>Reviewing changes to an existing package<a class="headerlink" href="#reviewing-changes-to-an-existing-package" title="連結到這個標頭">¶</a></h3>
+<p>If the pull request includes changes to an existing package, then focus on answering the following questions:</p>
+<ul class="simple">
+<li><p>Are there any changes to the package <a class="reference internal" href="#structure-reviews"><span class="std std-ref">structure</span></a> and, if so, do they conform to conventions?</p></li>
+<li><p>If there are new or updated directives, then are they and their options correct?</p></li>
+<li><p>If there are changes to the <a class="reference internal" href="#url-equivalent-reviews"><span class="std std-ref">url or its equivalent</span></a>, are the older versions still correct?</p></li>
+<li><p>If there are changes to the <a class="reference internal" href="#vcs-url-reviews"><span class="std std-ref">git or equivalent URL</span></a>, do older branches exist in the new location?</p></li>
+<li><p>Do all <a class="reference internal" href="#automated-checks-reviews"><span class="std std-ref">automated checks</span></a> pass?
+If not, are there easy-to-resolve CI and/or test issues that can be addressed or does the submitter need to investigate the failures?</p></li>
+<li><p>Is there <a class="reference internal" href="#build-success-reviews"><span class="std std-ref">confirmation</span></a> that every new version builds successfully on at least one platform?</p></li>
+</ul>
+<p>Refer to the relevant sections below for more guidance.</p>
+</section>
+</section>
+<section id="package-suitability">
+<span id="suitable-package"></span><h2>Package suitability<a class="headerlink" href="#package-suitability" title="連結到這個標頭">¶</a></h2>
+<p>It is rare that a package would be considered inappropriate for inclusion in the public <a class="reference external" href="https://github.com/spack/spack-packages">Spack package</a> repository.
+One exception is making packages for standard Perl modules.</p>
+<p><strong>Action.</strong>
+Should you find the software is not appropriate, ask that the package be removed from the PR if it is one of multiple affected files or suggest the PR be closed.
+In either case, explain the reason for the request.</p>
+<section id="core-perl-modules">
+<h3>CORE Perl modules<a class="headerlink" href="#core-perl-modules" title="連結到這個標頭">¶</a></h3>
+<p>In general, modules that are part of the standard installation for all listed Perl versions (i.e., <code class="docutils literal notranslate"><span class="pre">CORE</span></code>) should <strong>not be implemented or contributed</strong>.
+Details on the exceptions and process for checking Perl modules can be found in the <a class="reference internal" href="build_systems/perlpackage.html#suitable-perl-modules"><span class="std std-ref">Perl build system</span></a> documentation.</p>
+</section>
+</section>
+<section id="package-structure">
+<span id="structure-reviews"></span><h2>Package structure<a class="headerlink" href="#package-structure" title="連結到這個標頭">¶</a></h2>
+<p>The <a class="reference external" href="https://spack.readthedocs.io/en/latest/packaging_guide_creation.html#structure-of-a-package">convention</a> for structuring Spack packages has metadata (key properties) listed first followed by directives then methods:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#url-equivalent-reviews"><span class="std std-ref">url, url_for_version, or URL equivalent</span></a>;</p></li>
+<li><p><a class="reference internal" href="#vcs-url-reviews"><span class="std std-ref">git, hg, svn, or cvs</span></a>;</p></li>
+<li><p><a class="reference internal" href="#maintainers-reviews"><span class="std std-ref">maintainers directive</span></a>;</p></li>
+<li><p><a class="reference internal" href="#license-reviews"><span class="std std-ref">license directive</span></a>;</p></li>
+<li><p><a class="reference internal" href="#version-reviews"><span class="std std-ref">version directives</span></a>;</p></li>
+<li><p><a class="reference internal" href="#variant-reviews"><span class="std std-ref">variant directives</span></a>;</p></li>
+<li><p><a class="reference internal" href="#depends-on-reviews"><span class="std std-ref">depends_on directives</span></a>;</p></li>
+<li><p><a class="reference internal" href="packaging_guide_creation.html#packaging-conflicts"><span class="std std-ref">Conflicts</span></a> and <a class="reference internal" href="packaging_guide_creation.html#packaging-requires"><span class="std std-ref">Requires</span></a> directives; then</p></li>
+<li><p>methods.</p></li>
+</ul>
+<p><a class="reference external" href="https://spack.readthedocs.io/en/latest/packaging_guide_creation.html#grouping-directives">Groupings</a> using <code class="docutils literal notranslate"><span class="pre">with</span></code> context managers can affect the order of dependency, conflict, and requires directives to some degree.
+However, they do cut down on visual clutter and make packages more readable.</p>
+<p><strong>Action.</strong>
+If you see clear deviations from the convention, request that they be addressed.
+When in doubt, ask others with merge privileges for advice.</p>
+</section>
+<section id="url-url-for-version-or-url-equivalent">
+<span id="url-equivalent-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">url</span></code>, <code class="docutils literal notranslate"><span class="pre">url_for_version</span></code>, or URL equivalent<a class="headerlink" href="#url-url-for-version-or-url-equivalent" title="連結到這個標頭">¶</a></h2>
+<p>Changes to URLs may invalidate existing versions, which should be checked when there is a URL-related modification.
+All packages have a URL, though for some <a class="reference internal" href="build_systems.html#build-systems"><span class="std std-ref">Build Systems</span></a> it is derived automatically and not visible in the package.</p>
+<p>Reasons <a class="reference internal" href="packaging_guide_creation.html#versions-and-fetching"><span class="std std-ref">versions</span></a> may become invalid include:</p>
+<ul class="simple">
+<li><p>the new URL does not support Spack version extrapolation;</p></li>
+<li><p>the addition of or changes to <code class="docutils literal notranslate"><span class="pre">url_for_version</span></code> involve checks of the <code class="docutils literal notranslate"><span class="pre">spec</span></code>'s version instead of the <code class="docutils literal notranslate"><span class="pre">version</span></code> argument or the (usually older) versions are not covered;</p></li>
+<li><p>extrapolation of the derived URL no longer matches that of older versions; and</p></li>
+<li><p>the older versions are no longer available.</p></li>
+</ul>
+<p><strong>Action.</strong>
+Checking existing version directives with checksums can usually be done manually with the modified package using <a class="reference external" href="https://spack.readthedocs.io/en/latest/command_index.html#spack-checksum">spack checksum</a>.</p>
+<p><strong>Solutions.</strong>
+Options for resolving the problem that can be suggested for investigation depend on the source.</p>
+<p>In simpler cases involving <code class="docutils literal notranslate"><span class="pre">url</span></code> or <code class="docutils literal notranslate"><span class="pre">url_for_version</span></code>, invalid versions can sometimes be corrected by ensuring all versions are covered by <code class="docutils literal notranslate"><span class="pre">url_for_version</span></code>.
+Alternatively, especially for older versions, the version-specific URL can be added as an argument to the <code class="docutils literal notranslate"><span class="pre">version</span></code> directive.</p>
+<p>Sometimes the derived URLs of versions on the hosting system can vary.
+This commonly happens with Python packages.
+For example, the case of one or more letters in the package name may change at some point (e.g., <a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/py_sphinx/package.py">py-sphinx</a>).
+Also, dashes may be replaced with underscores (e.g., <a class="reference external" href="https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/py_scikit_build/package.py">py-scikit-build</a>).
+In some cases, both changes can occur for the same package.
+As these examples illlustrate, it is sometimes possible to add a <code class="docutils literal notranslate"><span class="pre">url_for_version</span></code> method to override the default derived URL to ensure the correct one is returned.</p>
+<p>If older versions are no longer available and there is a chance someone has the package in a build cache, the usual approach is to first suggest <a class="reference internal" href="packaging_guide_creation.html#deprecate"><span class="std std-ref">deprecating</span></a> them in the package.</p>
+</section>
+<section id="git-hg-svn-or-cvs">
+<span id="vcs-url-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">hg</span></code>, <code class="docutils literal notranslate"><span class="pre">svn</span></code>, or <code class="docutils literal notranslate"><span class="pre">cvs</span></code><a class="headerlink" href="#git-hg-svn-or-cvs" title="連結到這個標頭">¶</a></h2>
+<p>If the <a class="reference internal" href="packaging_guide_creation.html#vcs-fetch"><span class="std std-ref">repository-specific URL</span></a> for fetching branches or the version control system (VCS) equivalent changes, there is a risk that the listed versions are no longer accessible.</p>
+<p><strong>Action.</strong>
+You may need to check the new source repository to confirm the presence of all of the listed versions.</p>
+</section>
+<section id="maintainers-directive">
+<span id="maintainers-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">maintainers</span></code> directive<a class="headerlink" href="#maintainers-directive" title="連結到這個標頭">¶</a></h2>
+<p><strong>Action.</strong>
+If the new package does not have a <a class="reference internal" href="packaging_guide_creation.html#maintainers"><span class="std std-ref">maintainers</span></a> directive, ask the Contributor to add one.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>This request is optional for existing packages.</p>
+<p>Be prepared for them to refuse.</p>
+</div>
+</section>
+<section id="license-directive">
+<span id="license-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">license</span></code> directive<a class="headerlink" href="#license-directive" title="連結到這個標頭">¶</a></h2>
+<p><strong>Action.</strong>
+If the new package does not have a <a class="reference internal" href="packaging_guide_creation.html#package-license"><span class="std std-ref">license</span></a> directive, ask the Contributor to investigate and add it.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>This request is optional for existing packages.</p>
+<p>Be prepared for them to refuse.</p>
+</div>
+</section>
+<section id="version-directives">
+<span id="version-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">version</span></code> directives<a class="headerlink" href="#version-directives" title="連結到這個標頭">¶</a></h2>
+<p>In general, Spack packages are expected to be built from source code.
+There are a few exceptions (e.g., <a class="reference internal" href="build_systems/bundlepackage.html#bundlepackage"><span class="std std-ref">BundlePackage</span></a>).
+Typically every package will have at least one <a class="reference internal" href="packaging_guide_creation.html#versions-and-fetching"><span class="std std-ref">version</span></a> directive.</p>
+<p>The goals of reviewing version directives are to confirm that versions are listed in the proper order <strong>and</strong> that the arguments for new and updated versions are correct.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Additions and removals of version directives should generally trigger a review of <a class="reference internal" href="#depends-on-reviews"><span class="std std-ref">dependencies</span></a>.</p>
+</div>
+<section id="version-directive-order">
+<h3><code class="docutils literal notranslate"><span class="pre">version</span></code> directive order<a class="headerlink" href="#version-directive-order" title="連結到這個標頭">¶</a></h3>
+<p>By <a class="reference internal" href="packaging_guide_creation.html#versions-and-fetching"><span class="std std-ref">convention</span></a> version directives should be listed in descending order, from newest to oldest.
+If branch versions are included, then they should be listed first.</p>
+<p><strong>Action.</strong>
+When versions are being added, check the ordering of the directives.
+Request that the directives be  re-ordered if any of the directives do not conform to the convention.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>Edge cases, such as manually downloaded software, may be difficult to confirm.</p>
+</div>
+</section>
+<section id="checksums-commits-tags-and-branches">
+<h3>Checksums, commits, tags, and branches<a class="headerlink" href="#checksums-commits-tags-and-branches" title="連結到這個標頭">¶</a></h3>
+<dl>
+<dt><strong>Checksums, commits, and tags</strong></dt><dd><p>Normally these version arguments are automatically validated by GitHub Actions using <a class="reference external" href="https://spack.readthedocs.io/en/latest/command_index.html#spack-ci-verify-versions">spack ci verify-versions</a>.</p>
+<p><strong>Action.</strong>
+Review the PR's <code class="docutils literal notranslate"><span class="pre">verify-checksums</span></code> precheck to confirm.
+If necessary, checksums can usually be manually confirmed using <a class="reference external" href="https://spack.readthedocs.io/en/latest/command_index.html#spack-checksum">spack checksum</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>From a security and reproducibility standpoint, it is important that Spack be able to verify downloaded source.
+This is accomplished using a hash (e.g., checksum or commit).
+See <a class="reference internal" href="packaging_guide_creation.html#checksum-verification"><span class="std std-ref">checksum verification</span></a> for more information.</p>
+<p>Exceptions are allowed in rare cases, such as software supplied from reputable vendors.
+When in doubt, ask others with merge privileges for advice.</p>
+</div>
+</dd>
+<dt><strong>Tags</strong></dt><dd><p>If a <code class="docutils literal notranslate"><span class="pre">tag</span></code> is provided without a <code class="docutils literal notranslate"><span class="pre">commit</span></code>, the downloaded software will not be trusted.</p>
+<p><strong>Action.</strong>
+Suggest that the <code class="docutils literal notranslate"><span class="pre">commit</span></code> argument be included in the <code class="docutils literal notranslate"><span class="pre">version</span></code> directive.</p>
+</dd>
+<dt><strong>Branches</strong></dt><dd><p>Confirming new branch versions involves checking that the branches exist in the repository <em>and</em> that the version and branch names are consistent.
+Let's take each in turn.</p>
+<p><strong>Action.</strong>
+Confirming branch existence often involves checking the source repository though is not necessary if there is confirmation that the branch was built successfully from the package.</p>
+<p>In general, the version and branch names should match.
+When they do not, it is sometimes the result of people not being aware of how Spack handles <a class="reference internal" href="packaging_guide_creation.html#version-comparison"><span class="std std-ref">Version ordering</span></a>.</p>
+<p><strong>Action.</strong>
+If there is a name mismatch, especially for the most common branch names (e.g., <code class="docutils literal notranslate"><span class="pre">develop</span></code>, <code class="docutils literal notranslate"><span class="pre">main</span></code>, and <code class="docutils literal notranslate"><span class="pre">master</span></code>), ask why and suggest the arguments be changed such that they match the actual branch name.</p>
+</dd>
+</dl>
+<p><strong>Manual downloads</strong></p>
+<blockquote>
+<div><p><strong>Action.</strong>
+Since these can be difficult to confirm, it is acceptable to rely on the package's Maintainers, if any.</p>
+</div></blockquote>
+</section>
+<section id="deprecating-versions">
+<h3>Deprecating versions<a class="headerlink" href="#deprecating-versions" title="連結到這個標頭">¶</a></h3>
+<p>If someone is deprecating versions, it is good to find out why.
+Sometimes there are concerns, such as security or lack of availability.</p>
+<p><strong>Action.</strong>
+Suggest the Contributor review the <a class="reference internal" href="packaging_guide_creation.html#deprecate"><span class="std std-ref">deprecation guidelines</span></a> before finalizing the changes if they haven't already explained why they made the choice in the PR description or comments.</p>
+</section>
+</section>
+<section id="variant-directives">
+<span id="variant-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">variant</span></code> directives<a class="headerlink" href="#variant-directives" title="連結到這個標頭">¶</a></h2>
+<p><a class="reference internal" href="packaging_guide_creation.html#variants"><span class="std std-ref">Variants</span></a> represent build options so any changes involving these directives should be reflected elsewhere in the package.</p>
+<section id="adding-or-modifying-variants">
+<h3>Adding or modifying variants<a class="headerlink" href="#adding-or-modifying-variants" title="連結到這個標頭">¶</a></h3>
+<p><strong>Action.</strong>
+Confirm that new or modified variants are actually used in the package.
+The most common uses are additions and changes to:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#depends-on-reviews"><span class="std std-ref">dependencies</span></a>;</p></li>
+<li><p>configure options; and/or</p></li>
+<li><p>build arguments.</p></li>
+</ul>
+</section>
+<section id="removing-or-disabling-variants">
+<h3>Removing or disabling variants<a class="headerlink" href="#removing-or-disabling-variants" title="連結到這個標頭">¶</a></h3>
+<p>If the variant is still relevant to listed version directives, it may be preferable to adjust or add <a class="reference external" href="https://spack.readthedocs.io/en/latest/packaging_guide.html#conditional-variants">conditions</a>.</p>
+<p><strong>Action.</strong>
+Consider asking why the variant (or build option) is being removed and suggest making it conditional when it is still relevant.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>If the default value of a variant is changed in the PR, then there is a risk that other packages relying on that value will no longer build as others expect.
+This may be worth noting in the review.</p>
+</div>
+</section>
+</section>
+<section id="depends-on-directives">
+<span id="depends-on-reviews"></span><h2><code class="docutils literal notranslate"><span class="pre">depends_on</span></code> directives<a class="headerlink" href="#depends-on-directives" title="連結到這個標頭">¶</a></h2>
+<p><a class="reference internal" href="packaging_guide_creation.html#dependencies"><span class="std std-ref">Dependencies</span></a> represent software that must be installed before the package builds or is able to work correctly.</p>
+<section id="updating-dependencies">
+<h3>Updating dependencies<a class="headerlink" href="#updating-dependencies" title="連結到這個標頭">¶</a></h3>
+<p>It is important that dependencies reflect the requirements of listed versions.
+They only need to be checked in a review when versions are being added or removed or the dependencies are being changed.</p>
+<p><strong>Action.</strong>
+Dependencies affected by such changes should be confirmed, when possible, and <em>at least</em> when the Contributor is not a Maintainer of the package.</p>
+<p><strong>Solutions.</strong>
+In some cases, the needed change may be as simple as ensuring the version range and or variant options in the dependency are accurate.
+In others, one or more of the dependencies needed by new versions are missing and need to be added.
+Or there may be dependencies that are no longer relevant when versions requiring them are removed, meaning the dependencies should be removed as well.</p>
+<p>For example, it is not uncommon for Python package dependencies to be out of date when new versions are added.
+In this case, check Python package dependencies by following the build system <a class="reference external" href="https://spack.readthedocs.io/en/latest/build_systems/pythonpackage.html#dependencies">guidelines</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">小訣竅</p>
+<p>In general, refer to the relevant dependencies section, if any, for the package’s <a class="reference internal" href="build_systems.html#build-systems"><span class="std std-ref">Build Systems</span></a> for guidance.</p>
+</div>
+</section>
+<section id="updating-language-and-compiler-dependencies">
+<h3>Updating language and compiler dependencies<a class="headerlink" href="#updating-language-and-compiler-dependencies" title="連結到這個標頭">¶</a></h3>
+<p>When <a class="reference internal" href="packaging_guide_creation.html#language-dependencies"><span class="std std-ref">language and compiler dependencies</span></a> were introduced, their <code class="docutils literal notranslate"><span class="pre">depends_on</span></code> directives were derived from the source for existing packages.
+These dependencies are flagged with <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">generated</span></code> comments when they have not been confirmed.
+Unfortunately, the generated dependencies are not always complete or necessarily required.</p>
+<p><strong>Action.</strong>
+If these dependencies are being updated, ask that the <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">generated</span></code> comments be removed if the Contributor can confirm they are relevant.
+Definitely make sure Contributors do <strong>not</strong> include <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">generated</span></code> on the dependencies they are adding to the package.</p>
+</section>
+</section>
+<section id="failed-automated-checks">
+<span id="automated-checks-reviews"></span><h2>Failed automated checks<a class="headerlink" href="#failed-automated-checks" title="連結到這個標頭">¶</a></h2>
+<p>All PRs are expected to pass <strong>at least the required</strong> automated checks.</p>
+<section id="style-failures">
+<h3>Style failures<a class="headerlink" href="#style-failures" title="連結到這個標頭">¶</a></h3>
+<p>The PR may fail one or more style checks.</p>
+<p><strong>Action.</strong>
+If the failure is due to issues raised by the <code class="docutils literal notranslate"><span class="pre">black</span></code> style checker <em>and</em> the PR is otherwise ready to be merged, you can add <code class="docutils literal notranslate"><span class="pre">&#64;spackbot</span> <span class="pre">fix</span> <span class="pre">style</span></code> in a comment to see if Spack will fix the errors.
+Otherwise, inform the Contributor that the style failures need to be addressed.</p>
+</section>
+<section id="ci-stack-failures">
+<h3>CI stack failures<a class="headerlink" href="#ci-stack-failures" title="連結到這個標頭">¶</a></h3>
+<p>Existing packages <strong>may</strong> be included in GitLab CI pipelines through inclusion in one or more <a class="reference external" href="https://github.com/spack/spack-packages/tree/develop/stacks">stacks</a>.</p>
+<p><strong>Action.</strong>
+It is worth checking <strong>at least a sampling</strong> of the failed job logs, if present, to determine the possible cause and take or suggest an action accordingly.</p>
+<dl>
+<dt><strong>CI Runner Failures</strong></dt><dd><p>Sometimes CI runners time out or the pods become unavailable.</p>
+<p><strong>Action.</strong>
+If that is the case, the resolution may be as simple as restarting the pipeline by adding a <code class="docutils literal notranslate"><span class="pre">&#64;spackbot</span> <span class="pre">run</span> <span class="pre">pipeline</span></code> comment.
+Otherwise, the Contributor will need to investigate and resolve the problem.</p>
+</dd>
+<dt><strong>Stand-alone Test Failures</strong></dt><dd><p>Sometimes <a class="reference internal" href="packaging_guide_testing.html#cmd-spack-test"><span class="std std-ref">stand-alone tests</span></a> could be causing the build job to time out.
+If the tests take too long, the issue could be that the package is running too many and/or long running tests.
+Or the tests may be trying to use resources (e.g., a batch scheduler) that are not available on runners.</p>
+<p><strong>Action.</strong>
+If the tests for a package are hanging, at a minimum create a <a class="reference external" href="https://github.com/spack/spack-packages/issues">new issue</a> if there is not one already, to flag the package.</p>
+<p><strong>(Temporary) Solution.</strong>
+Look at the package implementation to see if the tests are using a batch scheduler or there appear to be too many or long running tests.
+If that is the case, then a pull request should be created in the <code class="docutils literal notranslate"><span class="pre">spack/spack-packages</span></code> repository that adds the package to the <code class="docutils literal notranslate"><span class="pre">broken-tests-packages</span></code> list in the <a class="reference external" href="https://spack.readthedocs.io/en/latest/pipelines.html#ci-yaml">ci configuration</a>.
+Once the fix PR is merged, then the affected PR can be rebased to pick up the change.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="successful-builds">
+<span id="build-success-reviews"></span><h2>Successful builds<a class="headerlink" href="#successful-builds" title="連結到這個標頭">¶</a></h2>
+<p>Is there evidence that the package builds successfully on at least one platform?
+For a new package, we would ideally have confirmation for every version; whereas, we would want confirmation of only the affected versions for changes to an existing package.</p>
+<p>Acceptable forms of confirmation are <strong>one or more of</strong>:</p>
+<ul class="simple">
+<li><p>the Contributor or another reviewer explicitly confirms that a successful build of <strong>each new version on at least one platform</strong>;</p></li>
+<li><p>the software is built successfully by Spack CI by <strong>at least one of the CI stacks</strong>; and</p></li>
+<li><p><strong>at least one Maintainer</strong> explicitly confirms they are able to successfully build the software.</p></li>
+</ul>
+<p>Individuals are expected to update the PR description or add a comment to explicitly confirm the builds.
+You may need to check the CI stacks and/or outputs to confirm that there is a stack that builds the new version.</p>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>When builds are confirmed by individuals, we would prefer the output of <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">debug</span> <span class="pre">report</span></code> be included in either the PR description or a comment.</p>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="advanced_topics.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Auditing Packages and Configuration</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="developer_guide.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">開發者指南</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Spack Project Developers
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo" rel="nofollow">Furo</a>
+            <div class="last-updated">
+              Last updated on 11月 06, 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Package Review Guide</a><ul>
+<li><a class="reference internal" href="#how-to-use-this-guide">How to use this guide</a><ul>
+<li><a class="reference internal" href="#reviewing-a-new-package">Reviewing a new package</a></li>
+<li><a class="reference internal" href="#reviewing-changes-to-an-existing-package">Reviewing changes to an existing package</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#package-suitability">Package suitability</a><ul>
+<li><a class="reference internal" href="#core-perl-modules">CORE Perl modules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#package-structure">Package structure</a></li>
+<li><a class="reference internal" href="#url-url-for-version-or-url-equivalent"><code class="docutils literal notranslate"><span class="pre">url</span></code>, <code class="docutils literal notranslate"><span class="pre">url_for_version</span></code>, or URL equivalent</a></li>
+<li><a class="reference internal" href="#git-hg-svn-or-cvs"><code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">hg</span></code>, <code class="docutils literal notranslate"><span class="pre">svn</span></code>, or <code class="docutils literal notranslate"><span class="pre">cvs</span></code></a></li>
+<li><a class="reference internal" href="#maintainers-directive"><code class="docutils literal notranslate"><span class="pre">maintainers</span></code> directive</a></li>
+<li><a class="reference internal" href="#license-directive"><code class="docutils literal notranslate"><span class="pre">license</span></code> directive</a></li>
+<li><a class="reference internal" href="#version-directives"><code class="docutils literal notranslate"><span class="pre">version</span></code> directives</a><ul>
+<li><a class="reference internal" href="#version-directive-order"><code class="docutils literal notranslate"><span class="pre">version</span></code> directive order</a></li>
+<li><a class="reference internal" href="#checksums-commits-tags-and-branches">Checksums, commits, tags, and branches</a></li>
+<li><a class="reference internal" href="#deprecating-versions">Deprecating versions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#variant-directives"><code class="docutils literal notranslate"><span class="pre">variant</span></code> directives</a><ul>
+<li><a class="reference internal" href="#adding-or-modifying-variants">Adding or modifying variants</a></li>
+<li><a class="reference internal" href="#removing-or-disabling-variants">Removing or disabling variants</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#depends-on-directives"><code class="docutils literal notranslate"><span class="pre">depends_on</span></code> directives</a><ul>
+<li><a class="reference internal" href="#updating-dependencies">Updating dependencies</a></li>
+<li><a class="reference internal" href="#updating-language-and-compiler-dependencies">Updating language and compiler dependencies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#failed-automated-checks">Failed automated checks</a><ul>
+<li><a class="reference internal" href="#style-failures">Style failures</a></li>
+<li><a class="reference internal" href="#ci-stack-failures">CI stack failures</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#successful-builds">Successful builds</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=c9930d3e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    </body>
+</html>
