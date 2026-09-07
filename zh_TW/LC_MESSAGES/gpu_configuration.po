@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../gpu_configuration.rst:-1
+msgid ""
+"A guide to configuring Spack to use external GPU support, including ROCm and "
+"CUDA installations, as well as the OpenGL API."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:11
+msgid "Using External GPU Support"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:13
+msgid ""
+"Many packages come with a ``+cuda`` or ``+rocm`` variant. With no added "
+"configuration, Spack will download and install the needed components. It may "
+"be preferable to use existing system support: the following sections help "
+"with using a system installation of GPU libraries."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:18
+msgid "Using an External ROCm Installation"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:20
+msgid ""
+"Spack breaks down ROCm into many separate component packages. The following "
+"is an example ``packages.yaml`` that organizes a consistent set of ROCm "
+"components for use by dependent packages:"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:23
+msgid ""
+"packages:\n"
+"  all:\n"
+"    variants: amdgpu_target=gfx90a\n"
+"  hip:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: hip@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/hip\n"
+"  hsa-rocr-dev:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: hsa-rocr-dev@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/\n"
+"  comgr:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: comgr@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/\n"
+"  hipsparse:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: hipsparse@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/\n"
+"  hipblas:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: hipblas@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/\n"
+"  rocblas:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: rocblas@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/\n"
+"  rocprim:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: rocprim@5.3.0\n"
+"      prefix: /opt/rocm-5.3.0/rocprim/"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:64
+msgid "This is in combination with the following compiler definition:"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:66
+msgid ""
+"packages:\n"
+"  llvm-amdgpu:\n"
+"    externals:\n"
+"    - spec: llvm-amdgpu@=5.3.0\n"
+"      prefix: /opt/rocm-5.3.0\n"
+"      extra_attributes:\n"
+"        compilers:\n"
+"          c: /opt/rocm-5.3.0/bin/amdclang\n"
+"          cxx: /opt/rocm-5.3.0/bin/amdclang++"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:78
+msgid "This includes the following considerations:"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:80
+msgid ""
+"Each of the listed externals specifies ``buildable: false`` to force Spack "
+"to use only the externals we defined."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:81
+msgid ""
+"``spack external find`` can automatically locate some of the ``hip``/"
+"``rocm`` packages, but not all of them, and furthermore not in a manner that "
+"guarantees a complementary set if multiple ROCm installations are available."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:82
+msgid ""
+"The ``prefix`` is the same for several components, but note that others "
+"require listing one of the subdirectories as a prefix."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:85
+msgid "Using an External CUDA Installation"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:87
+msgid "CUDA is split into fewer components and is simpler to specify:"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:89
+msgid ""
+"packages:\n"
+"  all:\n"
+"    variants:\n"
+"    - cuda_arch=70\n"
+"  cuda:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - spec: cuda@11.0.2\n"
+"      prefix: /opt/cuda/cuda-11.0.2/"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:101
+msgid "where ``/opt/cuda/cuda-11.0.2/lib/`` contains ``libcudart.so``."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:106
+msgid "Using an External OpenGL API"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:107
+msgid ""
+"Depending on whether we have a graphics card or not, we may choose to use "
+"OSMesa or GLX to implement the OpenGL API."
+msgstr ""
+
+#: ../../../gpu_configuration.rst:109
+msgid ""
+"If a graphics card is unavailable, OSMesa is recommended and can typically "
+"be built with Spack. However, if we prefer to utilize the system GLX "
+"tailored to our graphics card, we need to declare it as an external. Here's "
+"how to do it:"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:114
+msgid ""
+"packages:\n"
+"  libglx:\n"
+"    require: [opengl]\n"
+"  opengl:\n"
+"    buildable: false\n"
+"    externals:\n"
+"    - prefix: /usr/\n"
+"      spec: opengl@4.6"
+msgstr ""
+
+#: ../../../gpu_configuration.rst:125
+msgid ""
+"Note that the prefix has to be the root of both the libraries and the "
+"headers (e.g., ``/usr``), not the path to the ``lib`` directory. To know "
+"which spec for OpenGL is available, use ``cd /usr/include/GL && grep -Ri "
+"gl_version``."
+msgstr ""

@@ -1,0 +1,299 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../frequently_asked_questions.rst:-1
+msgid ""
+"Answers to common Spack questions, including version and variant selection, "
+"package preferences, compiler configuration, and concretizer behavior, with "
+"practical YAML and command-line examples."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:11
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:13
+msgid ""
+"This page contains answers to frequently asked questions about Spack. If you "
+"have questions that are not answered here, feel free to ask on `Slack "
+"<https://slack.spack.io>`_ or `GitHub Discussions <https://github.com/spack/"
+"spack/discussions>`_. If you've learned the answer to a question that you "
+"think should be here, please consider contributing to this page."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:20
+msgid "Why does Spack pick particular versions and variants?"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:22
+msgid "This question comes up in a variety of forms:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:24
+msgid ""
+"Why does Spack seem to ignore my package preferences from ``packages.yaml`` "
+"configuration?"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:25
+msgid ""
+"Why does Spack toggle a variant instead of using the default from the "
+"``package.py`` file?"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:27
+msgid ""
+"The short answer is that Spack always picks an optimal configuration based "
+"on a complex set of criteria\\ [#f1]_. These criteria are more nuanced than "
+"always choosing the latest versions or default variants."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:32
+msgid ""
+"As a rule of thumb: requirements + constraints > strong preferences > reuse "
+"> preferences > defaults."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:34
+msgid ""
+"The following set of criteria (from lowest to highest precedence) explains "
+"common cases where concretization output may seem surprising at first."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:36
+msgid ""
+":ref:`Package preferences <package-preferences>` configured in ``packages."
+"yaml`` override variant defaults from ``package.py`` files, and influence "
+"the optimal ordering of versions. Preferences are specified as follows:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:39
+msgid ""
+"packages:\n"
+"  foo:\n"
+"    version: [1.0, 1.1]\n"
+"    variants: ~mpi"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:46
+msgid ""
+":ref:`Reuse concretization <concretizer-options>` configured in "
+"``concretizer.yaml`` overrides preferences, since it's typically faster to "
+"reuse an existing spec than to build a preferred one from sources. When "
+"build caches are enabled, specs may be reused from a remote location too. "
+"Reuse concretization is configured as follows:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:50
+msgid ""
+"concretizer:\n"
+"  reuse: dependencies  # other options are 'true' and 'false'"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:55
+msgid ""
+":ref:`Strong preferences <package-strong-preferences>` configured in "
+"``packages.yaml`` are higher priority than reuse, and can be used to "
+"strongly prefer a specific version or variant, without erroring out if it's "
+"not possible. Strong preferences are specified as follows:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:58
+msgid ""
+"packages:\n"
+"  foo:\n"
+"    prefer:\n"
+"    - \"@1.1: ~mpi\""
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:65
+msgid ""
+":ref:`Package requirements <package-requirements>` configured in ``packages."
+"yaml``, and constraints from the command line as well as ``package.py`` "
+"files override all of the above. Requirements are specified as follows:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:68
+msgid ""
+"packages:\n"
+"  foo:\n"
+"    require:\n"
+"    - \"@1.2: +mpi\"\n"
+"    conflict:\n"
+"    - \"@1.4\""
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:77
+msgid ""
+"Requirements and constraints restrict the set of possible solutions, while "
+"reuse behavior and preferences influence what an optimal solution looks like."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:80
+msgid "How do I use a specific compiler?"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:82
+msgid ""
+"When you have multiple compilers available in :ref:`spack-compiler-list`, "
+"and want to build your packages with a specific one, you have the following "
+"options:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:84
+msgid ""
+"Specify your compiler preferences globally for all packages in configuration "
+"files."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:85
+msgid ""
+"Specify them on the level of individual specs, like ``pkg %gcc@15`` or ``pkg "
+"%c,cxx=gcc@15``."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:87
+msgid "We'll explore both options in more detail."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:90
+msgid "Specific compiler for all packages"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:92
+msgid ""
+"If you want to use a specific compiler for all packages, it's best to use :"
+"ref:`strong preferences in packages.yaml config <setting-requirements-on-"
+"virtual-specs>`. The following example prefers GCC 15 for all languages "
+"``c``, ``cxx``, and ``fortran``:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:95
+msgid "Recommended: *prefer* a specific compiler"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:95
+msgid ""
+"packages:\n"
+"  c:\n"
+"    prefer:\n"
+"    - gcc@15\n"
+"  cxx:\n"
+"    prefer:\n"
+"    - gcc@15\n"
+"  fortran:\n"
+"    prefer:\n"
+"    - gcc@15"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:110
+msgid ""
+"You can also replace ``prefer:`` with ``require:`` if you want Spack to "
+"produce an error if the preferred compiler cannot be used. See also :ref:"
+"`the previous FAQ entry <faq-concretizer-precedence>`."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:113
+msgid ""
+"In Spack, the languages ``c``, ``cxx`` and ``fortran`` are :ref:`virtual "
+"packages <language-dependencies>`, on which packages depend if they need a "
+"compiler for that language. Compiler packages provide these language "
+"virtuals. When you specify these strong preferences, Spack determines "
+"whether the package depends on any of the language virtuals, and if so, it "
+"applies the associated compiler spec when possible."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:117
+msgid ""
+"What is **not recommended** is to define ``%gcc`` as a required dependency "
+"of all packages:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:119
+msgid "Incorrect: requiring a dependency on a compiler for all packages"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:119
+msgid ""
+"packages:\n"
+"  all:\n"
+"    require:\n"
+"    - \"%gcc@15\""
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:128
+msgid ""
+"This is *incorrect*, because some packages do not need a compiler at all (e."
+"g. pure Python packages)."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:131
+msgid "Specific compiler for individual specs"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:133
+msgid ""
+"If different parts of your software stack need to be built with different "
+"compilers, it's best to specify compilers as dependencies of the relevant "
+"specs (whether on the command line or in Spack environments)."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:135
+msgid "Example of specifying different compilers for different specs"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:135
+msgid "$ spack install foo %gcc@15 ^bar %intel-oneapi-compilers"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:141
+msgid ""
+"What this means is that ``foo`` will depend on GCC 15, while ``bar`` will "
+"depend on ``intel-oneapi-compilers``."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:143
+msgid ""
+"You can also be more specific about what compiler to use for a particular "
+"language:"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:145
+msgid "Example of specifying different compilers for different languages"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:145
+msgid "$ spack install foo %c,cxx=gcc@15 %fortran=intel-oneapi-compilers"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:151
+msgid ""
+"These input specs can be simplified using :doc:`toolchains_yaml`. See also :"
+"ref:`pitfalls-without-toolchains` for common mistakes to avoid."
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:155
+msgid "Footnotes"
+msgstr ""
+
+#: ../../../frequently_asked_questions.rst:156
+msgid ""
+"The exact list of criteria can be retrieved with the :ref:`spack-solve` "
+"command."
+msgstr ""

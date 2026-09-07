@@ -1,0 +1,1739 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../developer_guide.rst:-1
+msgid ""
+"A comprehensive guide for developers working on Spack itself, covering the "
+"directory structure, code organization, and key concepts like specs and "
+"packages."
+msgstr ""
+
+#: ../../../developer_guide.rst:13
+msgid "Developer Guide"
+msgstr ""
+
+#: ../../../developer_guide.rst:15
+msgid ""
+"This guide is intended for people who want to work on Spack itself. If you "
+"just want to develop packages, see the :doc:`Packaging Guide "
+"<packaging_guide_creation>`."
+msgstr ""
+
+#: ../../../developer_guide.rst:18
+msgid ""
+"It is assumed that you have read the :ref:`basic-usage` and :doc:`packaging "
+"guide <packaging_guide_creation>` sections and that you are familiar with "
+"the concepts discussed there."
+msgstr ""
+
+#: ../../../developer_guide.rst:21
+msgid "Overview"
+msgstr ""
+
+#: ../../../developer_guide.rst:23
+msgid "Spack is designed with three separate roles in mind:"
+msgstr ""
+
+#: ../../../developer_guide.rst:25
+msgid ""
+"**Users**, who need to install software *without* knowing all the details "
+"about how it is built."
+msgstr ""
+
+#: ../../../developer_guide.rst:26
+msgid ""
+"**Packagers**, who know how a particular software package is built and "
+"encode this information in package files."
+msgstr ""
+
+#: ../../../developer_guide.rst:27
+msgid ""
+"**Developers**, who work on Spack, add new features, and try to make the "
+"jobs of packagers and users easier."
+msgstr ""
+
+#: ../../../developer_guide.rst:29
+msgid ""
+"Users could be end-users installing software in their home directory or "
+"administrators installing software to a shared directory on a shared "
+"machine. Packagers could be administrators who want to automate software "
+"builds or application developers who want to make their software more "
+"accessible to users."
+msgstr ""
+
+#: ../../../developer_guide.rst:32
+msgid ""
+"As you might expect, there are many types of users with different levels of "
+"sophistication, and Spack is designed to accommodate both simple and complex "
+"use cases for packages. A user who only knows that they need a certain "
+"package should be able to type something simple, like ``spack install "
+"<package name>``, and get the package that they want. If a user wants to ask "
+"for a specific version, use particular compilers, or build several versions "
+"with different configurations, then that should be possible with a minimal "
+"amount of additional specification."
+msgstr ""
+
+#: ../../../developer_guide.rst:36
+msgid "This gets us to the two key concepts in Spack's software design:"
+msgstr ""
+
+#: ../../../developer_guide.rst:38
+msgid "**Specs**: expressions for describing builds of software, and"
+msgstr ""
+
+#: ../../../developer_guide.rst:39
+msgid "**Packages**: Python modules that build software according to a spec."
+msgstr ""
+
+#: ../../../developer_guide.rst:41
+msgid ""
+"A package is a template for building particular software, and a spec is a "
+"descriptor for one or more instances of that template. Users express the "
+"configuration they want using a spec, and a package turns the spec into a "
+"complete build."
+msgstr ""
+
+#: ../../../developer_guide.rst:44
+msgid ""
+"The obvious difficulty with this design is that users underspecify what they "
+"want. To build a software package, the package object needs a *complete* "
+"specification. In Spack, if a spec describes only one instance of a package, "
+"then we say it is **concrete**. If a spec could describe many instances (i."
+"e., it is underspecified in one way or another), then we say it is "
+"**abstract**."
+msgstr ""
+
+#: ../../../developer_guide.rst:49
+msgid ""
+"Spack's job is to take an *abstract* spec from the user, find a *concrete* "
+"spec that satisfies the constraints, and hand the task of building the "
+"software off to the package object."
+msgstr ""
+
+#: ../../../developer_guide.rst:51
+msgid ""
+"Packages are managed through Spack's **package repositories**, which allow "
+"packages to be stored in multiple repositories with different namespaces. "
+"The built-in packages are hosted in a separate Git repository and "
+"automatically managed by Spack, while custom repositories can be added for "
+"organization-specific or experimental packages."
+msgstr ""
+
+#: ../../../developer_guide.rst:54
+msgid ""
+"The rest of this document describes all the pieces that come together to "
+"make that happen."
+msgstr ""
+
+#: ../../../developer_guide.rst:57
+msgid "Directory Structure"
+msgstr ""
+
+#: ../../../developer_guide.rst:59
+msgid ""
+"So that you can familiarize yourself with the project, we will start with a "
+"high-level view of Spack's directory structure:"
+msgstr ""
+
+#: ../../../developer_guide.rst:61
+msgid ""
+"spack/                  <- installation root\n"
+"   bin/\n"
+"      spack             <- main spack executable\n"
+"\n"
+"   etc/\n"
+"      spack/            <- Spack config files.\n"
+"                           Can be overridden by files in ~/.spack.\n"
+"\n"
+"   var/\n"
+"      spack/\n"
+"          test_repos/   <- contains package repositories for tests\n"
+"          cache/        <- saves resources downloaded during installs\n"
+"\n"
+"   opt/\n"
+"      spack/            <- packages are installed here\n"
+"\n"
+"   lib/\n"
+"      spack/\n"
+"         docs/          <- source for this documentation\n"
+"\n"
+"         external/      <- external libs included in Spack distribution\n"
+"\n"
+"         spack/                <- spack module; contains Python code\n"
+"            build_systems/     <- modules for different build systems\n"
+"            cmd/               <- each file in here is a Spack subcommand\n"
+"            compilers/         <- compiler description files\n"
+"            container/         <- module for spack containerize\n"
+"            hooks/             <- hook modules to run at different points\n"
+"            modules/           <- modules for Lmod, Tcl, etc.\n"
+"            operating_systems/ <- operating system modules\n"
+"            platforms/         <- different Spack platforms\n"
+"            reporters/         <- reporters like CDash, JUnit\n"
+"            schema/            <- schemas to validate data structures\n"
+"            solver/            <- the Spack solver\n"
+"            test/              <- unit test modules\n"
+"            util/              <- common code"
+msgstr ""
+
+#: ../../../developer_guide.rst:100
+msgid ""
+"Spack is designed so that it could live within a `standard UNIX directory "
+"hierarchy <http://linux.die.net/man/7/hier>`_, so ``lib``, ``var``, and "
+"``opt`` all contain a ``spack`` subdirectory in case Spack is installed "
+"alongside other software. Most of the interesting parts of Spack live in "
+"``lib/spack``."
+msgstr ""
+
+#: ../../../developer_guide.rst:105
+msgid ""
+"**Package Repositories**: Built-in packages are hosted in a separate Git "
+"repository at `spack/spack-packages <https://github.com/spack/spack-"
+"packages>`_ and are automatically cloned to ``~/.spack/package_repos/`` when "
+"needed. The ``var/spack/test_repos/`` directory is used for unit tests only. "
+"See :ref:`repositories` for details on package repositories."
+msgstr ""
+
+#: ../../../developer_guide.rst:109
+msgid ""
+"Spack has *one* directory layout, and there is no installation process. Most "
+"Python programs do not look like this (they use ``distutils``, ``setup.py``, "
+"etc.), but we wanted to make Spack *very* easy to use. The simple layout "
+"spares users from the need to install Spack into a Python environment. Many "
+"users do not have write access to a Python installation, and installing an "
+"entire new instance of Python to bootstrap Spack would be very complicated. "
+"Users should not have to install a big, complicated package to use the thing "
+"that is supposed to spare them from the details of big, complicated "
+"packages. The end result is that Spack works out of the box: clone it and "
+"add ``bin`` to your ``PATH``, and you are ready to go."
+msgstr ""
+
+#: ../../../developer_guide.rst:117
+msgid "Code Structure"
+msgstr ""
+
+#: ../../../developer_guide.rst:119
+msgid ""
+"This section gives an overview of the various Python modules in Spack, "
+"grouped by functionality."
+msgstr ""
+
+#: ../../../developer_guide.rst:122
+msgid "Package-related modules"
+msgstr ""
+
+#: ../../../developer_guide.rst:124
+msgid ":mod:`spack.package_base`"
+msgstr ""
+
+#: ../../../developer_guide.rst:125
+msgid ""
+"Contains the :class:`~spack.package_base.PackageBase` class, which is the "
+"superclass for all packages in Spack."
+msgstr ""
+
+#: ../../../developer_guide.rst:127
+msgid ":mod:`spack.util.naming`"
+msgstr ""
+
+#: ../../../developer_guide.rst:128
+msgid ""
+"Contains functions for mapping between Spack package names, Python module "
+"names, and Python class names."
+msgstr ""
+
+#: ../../../developer_guide.rst:130
+msgid ":mod:`spack.directives`"
+msgstr ""
+
+#: ../../../developer_guide.rst:131
+msgid ""
+"*Directives* are functions that can be called inside a package definition to "
+"modify the package, like :func:`~spack.directives.depends_on` and :func:"
+"`~spack.directives.provides`. See :ref:`dependencies` and :ref:`virtual-"
+"dependencies`."
+msgstr ""
+
+#: ../../../developer_guide.rst:134
+msgid ":mod:`spack.multimethod`"
+msgstr ""
+
+#: ../../../developer_guide.rst:135
+msgid ""
+"Implementation of the :func:`@when <spack.multimethod.when>` decorator, "
+"which allows :ref:`multimethods <multimethods>` in packages."
+msgstr ""
+
+#: ../../../developer_guide.rst:138
+msgid "Spec-related modules"
+msgstr ""
+
+#: ../../../developer_guide.rst:140
+msgid ":mod:`spack.spec`"
+msgstr ""
+
+#: ../../../developer_guide.rst:141
+msgid ""
+"Contains :class:`~spack.spec.Spec`. Also implements most of the logic for "
+"concretization of specs."
+msgstr ""
+
+#: ../../../developer_guide.rst:144
+msgid ":mod:`spack.spec_parser`"
+msgstr ""
+
+#: ../../../developer_guide.rst:145
+msgid ""
+"Contains :class:`~spack.spec_parser.SpecParser` and functions related to "
+"parsing specs."
+msgstr ""
+
+#: ../../../developer_guide.rst:147
+msgid ":mod:`spack.version`"
+msgstr ""
+
+#: ../../../developer_guide.rst:148
+msgid ""
+"Implements a simple :class:`~spack.version.Version` class with simple "
+"comparison semantics. It also implements :class:`~spack.version."
+"VersionRange` and :class:`~spack.version.VersionList`. All three are "
+"comparable with each other and offer union and intersection operations. "
+"Spack uses these classes to compare versions and to manage version "
+"constraints on specs. Comparison semantics are similar to the "
+"``LooseVersion`` class in ``distutils`` and to the way RPM compares version "
+"strings."
+msgstr ""
+
+#: ../../../developer_guide.rst:154
+msgid ":mod:`spack.compilers`"
+msgstr ""
+
+#: ../../../developer_guide.rst:155
+msgid ""
+"Submodules contains descriptors for all valid compilers in Spack. This is "
+"used by the build system to set up the build environment."
+msgstr ""
+
+#: ../../../developer_guide.rst:160
+msgid ""
+"Not yet implemented. Currently has two compiler descriptions, but compilers "
+"aren't fully integrated with the build process yet."
+msgstr ""
+
+#: ../../../developer_guide.rst:164
+msgid "Build environment"
+msgstr ""
+
+#: ../../../developer_guide.rst:166
+msgid ":mod:`spack.stage`"
+msgstr ""
+
+#: ../../../developer_guide.rst:167
+msgid "Handles creating temporary directories for builds."
+msgstr ""
+
+#: ../../../developer_guide.rst:169
+msgid ":mod:`spack.build_environment`"
+msgstr ""
+
+#: ../../../developer_guide.rst:170
+msgid ""
+"This contains utility functions used by the compiler wrapper script, ``cc``."
+msgstr ""
+
+#: ../../../developer_guide.rst:172
+msgid ":mod:`spack.directory_layout`"
+msgstr ""
+
+#: ../../../developer_guide.rst:173
+msgid ""
+"Classes that control the way an installation directory is laid out. Create "
+"more implementations of this to change the hierarchy and naming scheme in "
+"``$spack_prefix/opt``"
+msgstr ""
+
+#: ../../../developer_guide.rst:177
+msgid "Spack Subcommands"
+msgstr ""
+
+#: ../../../developer_guide.rst:179
+msgid ":mod:`spack.cmd`"
+msgstr ""
+
+#: ../../../developer_guide.rst:180
+msgid ""
+"Each module in this package implements a Spack subcommand. See :ref:`writing "
+"commands <writing-commands>` for details."
+msgstr ""
+
+#: ../../../developer_guide.rst:184 ../../../developer_guide.rst:399
+msgid "Unit tests"
+msgstr ""
+
+#: ../../../developer_guide.rst:186
+msgid "``spack.test``"
+msgstr ""
+
+#: ../../../developer_guide.rst:187
+msgid ""
+"Implements Spack's test suite. Add a module and put its name in the test "
+"suite in ``__init__.py`` to add more unit tests."
+msgstr ""
+
+#: ../../../developer_guide.rst:192
+msgid "Other Modules"
+msgstr ""
+
+#: ../../../developer_guide.rst:194
+msgid ":mod:`spack.url`"
+msgstr ""
+
+#: ../../../developer_guide.rst:195
+msgid ""
+"URL parsing, for deducing names and versions of packages from tarball URLs."
+msgstr ""
+
+#: ../../../developer_guide.rst:197
+msgid ":mod:`spack.error`"
+msgstr ""
+
+#: ../../../developer_guide.rst:198
+msgid ""
+":class:`~spack.error.SpackError`, the base class for Spack's exception "
+"hierarchy."
+msgstr ""
+
+#: ../../../developer_guide.rst:200
+msgid ":mod:`spack.llnl.util.tty`"
+msgstr ""
+
+#: ../../../developer_guide.rst:201
+msgid ""
+"Basic output functions for all of the messages Spack writes to the terminal."
+msgstr ""
+
+#: ../../../developer_guide.rst:203
+msgid ":mod:`spack.llnl.util.tty.color`"
+msgstr ""
+
+#: ../../../developer_guide.rst:204
+msgid "Implements a color formatting syntax used by ``spack.tty``."
+msgstr ""
+
+#: ../../../developer_guide.rst:206
+msgid ":mod:`spack.llnl.util`"
+msgstr ""
+
+#: ../../../developer_guide.rst:207
+msgid "In this package are a number of utility modules for the rest of Spack."
+msgstr ""
+
+#: ../../../developer_guide.rst:212
+msgid "Package Repositories"
+msgstr ""
+
+#: ../../../developer_guide.rst:214
+msgid ""
+"Spack's package repositories allow developers to manage packages from "
+"multiple sources. Understanding this system is important for developing "
+"Spack itself."
+msgstr ""
+
+#: ../../../developer_guide.rst:217
+msgid ":mod:`spack.repo`"
+msgstr ""
+
+#: ../../../developer_guide.rst:218
+msgid ""
+"The core module for managing package repositories. Contains the ``Repo`` and "
+"``RepoPath`` classes that handle loading and searching packages from "
+"multiple repositories."
+msgstr ""
+
+#: ../../../developer_guide.rst:221
+msgid ""
+"Built-in packages are stored in a separate Git repository (`spack/spack-"
+"packages <https://github.com/spack/spack-packages>`_) rather than being "
+"included directly in the Spack source tree. This repository is automatically "
+"cloned to ``~/.spack/package_repos/`` when needed."
+msgstr ""
+
+#: ../../../developer_guide.rst:224
+msgid "Key concepts:"
+msgstr ""
+
+#: ../../../developer_guide.rst:226
+msgid ""
+"**Repository namespaces**: Each repository has a unique namespace (e.g., "
+"``builtin``)"
+msgstr ""
+
+#: ../../../developer_guide.rst:227
+msgid ""
+"**Repository search order**: Packages are found by searching repositories in "
+"order"
+msgstr ""
+
+#: ../../../developer_guide.rst:228
+msgid ""
+"**Git-based repositories**: Remote repositories can be automatically cloned "
+"and managed"
+msgstr ""
+
+#: ../../../developer_guide.rst:229
+msgid ""
+"**Repository configuration**: Managed through ``repos.yaml`` configuration "
+"files"
+msgstr ""
+
+#: ../../../developer_guide.rst:231
+msgid ""
+"See :ref:`repositories` for complete details on configuring and managing "
+"package repositories."
+msgstr ""
+
+#: ../../../developer_guide.rst:236
+msgid "Package class architecture"
+msgstr ""
+
+#: ../../../developer_guide.rst:240
+msgid ""
+"This section aims to provide a high-level knowledge of how the package class "
+"architecture evolved in Spack, and provides some insights on the current "
+"design."
+msgstr ""
+
+#: ../../../developer_guide.rst:242
+msgid ""
+"Packages in Spack were originally designed to support only a single build "
+"system. The overall class structure for a package looked like:"
+msgstr ""
+
+#: ../../../developer_guide.rst:249
+msgid ""
+"In this architecture the base class ``AutotoolsPackage`` was responsible for "
+"both the metadata related to the ``autotools`` build system (e.g. "
+"dependencies or variants common to all packages using it), and for encoding "
+"the default installation procedure."
+msgstr ""
+
+#: ../../../developer_guide.rst:251
+msgid ""
+"In reality, a non-negligible number of packages are either changing their "
+"build system during the evolution of the project, or using different build "
+"systems for different platforms. An architecture based on a single class "
+"requires hacks or other workarounds to deal with these cases."
+msgstr ""
+
+#: ../../../developer_guide.rst:254
+msgid ""
+"To support a model more adherent to reality, Spack v0.19 changed its "
+"internal design by extracting the attributes and methods related to building "
+"a software into a separate hierarchy:"
+msgstr ""
+
+#: ../../../developer_guide.rst:260
+msgid ""
+"In this new format each ``package.py`` contains one ``*Package`` class that "
+"gathers all the metadata, and one or more ``*Builder`` classes that encode "
+"the installation procedure. A specific builder object is created just before "
+"the software is built, so at a time where Spack knows which build system "
+"needs to be used for the current installation, and receives a ``package`` "
+"object during initialization."
+msgstr ""
+
+#: ../../../developer_guide.rst:264
+msgid "Compatibility with single-class format"
+msgstr ""
+
+#: ../../../developer_guide.rst:266
+msgid ""
+"Internally, Spack always uses builders to perform operations related to the "
+"installation of a specific software. The builders are created in the ``spack."
+"builder.create`` function."
+msgstr ""
+
+#: ../../../developer_guide.rst:269
+msgid ""
+"def create(pkg: spack.package_base.PackageBase) -> \"Builder\":\n"
+"    \"\"\"Given a package object with an associated concrete spec, return "
+"the builder object that can\n"
+"    install it.\"\"\"\n"
+"    if id(pkg) not in _BUILDERS:\n"
+"        _BUILDERS[id(pkg)] = _create(pkg)\n"
+"    return _BUILDERS[id(pkg)]\n"
+msgstr ""
+
+#: ../../../developer_guide.rst:272
+msgid ""
+"To achieve backward compatibility with the single-class format Spack creates "
+"in this function a special \"adapter builder\", if no custom builder is "
+"detected in the recipe:"
+msgstr ""
+
+#: ../../../developer_guide.rst:278
+msgid ""
+"Overall the role of the adapter is to route access to attributes of methods "
+"first through the ``*Package`` hierarchy, and then back to the base class "
+"builder. This is schematically shown in the diagram above, where the adapter "
+"role is to \"emulate\" a method resolution order like the one represented by "
+"the red arrows."
+msgstr ""
+
+#: ../../../developer_guide.rst:285
+msgid "Writing commands"
+msgstr ""
+
+#: ../../../developer_guide.rst:287
+msgid ""
+"Adding a new command to Spack is easy. Simply add a ``<name>.py`` file to "
+"``lib/spack/spack/cmd/``, where ``<name>`` is the name of the subcommand. At "
+"a bare minimum, two functions are required in this file:"
+msgstr ""
+
+#: ../../../developer_guide.rst:292
+msgid "``setup_parser()``"
+msgstr ""
+
+#: ../../../developer_guide.rst:294
+msgid ""
+"Unless your command does not accept any arguments, a ``setup_parser()`` "
+"function is required to define what arguments and flags your command takes. "
+"See the `Argparse documentation <https://docs.python.org/3/library/argparse."
+"html>`_ for more details on how to add arguments."
+msgstr ""
+
+#: ../../../developer_guide.rst:297
+msgid ""
+"Some commands have a set of subcommands, like ``spack compiler find`` or "
+"``spack module lmod refresh``. You can add subparsers to your parser to "
+"handle this. Check out ``spack edit --command compiler`` for an example of "
+"this."
+msgstr ""
+
+#: ../../../developer_guide.rst:301
+msgid ""
+"Many commands take the same arguments and flags. These arguments should be "
+"defined in ``lib/spack/spack/cmd/common/arguments.py`` so that they do not "
+"need to be redefined in multiple commands."
+msgstr ""
+
+#: ../../../developer_guide.rst:305
+msgid "``<name>()``"
+msgstr ""
+
+#: ../../../developer_guide.rst:307
+msgid ""
+"In order to run your command, Spack searches for a function with the same "
+"name as your command in ``<name>.py``. This is the main method for your "
+"command and can call other helper methods to handle common tasks."
+msgstr ""
+
+#: ../../../developer_guide.rst:310
+msgid ""
+"Remember, before adding a new command, think to yourself whether or not this "
+"new command is actually necessary. Sometimes, the functionality you desire "
+"can be added to an existing command. Also, remember to add unit tests for "
+"your command. If it is not used very frequently, changes to the rest of "
+"Spack can cause your command to break without sufficient unit tests to "
+"prevent this from happening."
+msgstr ""
+
+#: ../../../developer_guide.rst:315
+msgid ""
+"Whenever you add/remove/rename a command or flags for an existing command, "
+"make sure to update Spack's `Bash tab completion script <https://github.com/"
+"spack/spack/blob/develop/share/spack/spack-completion.bash>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:319
+msgid "Writing Hooks"
+msgstr ""
+
+#: ../../../developer_guide.rst:321
+msgid ""
+"A hook is a callback that makes it easy to design functions that run for "
+"different events. We do this by defining hook types and then inserting them "
+"at different places in the Spack codebase. Whenever a hook type triggers by "
+"way of a function call, we find all the hooks of that type and run them."
+msgstr ""
+
+#: ../../../developer_guide.rst:325
+msgid ""
+"Spack defines hooks by way of a module in the ``lib/spack/spack/hooks`` "
+"directory. This module has to be registered in ``lib/spack/spack/hooks/"
+"__init__.py`` so that Spack is aware of it. This section will cover the "
+"basic kind of hooks and how to write them."
+msgstr ""
+
+#: ../../../developer_guide.rst:330
+msgid "Types of Hooks"
+msgstr ""
+
+#: ../../../developer_guide.rst:332
+msgid ""
+"The following hooks are currently implemented to make it easy for you, the "
+"developer, to add hooks at different stages of a Spack install or similar. "
+"If there is a hook that you would like and it is missing, you can propose to "
+"add a new one."
+msgstr ""
+
+#: ../../../developer_guide.rst:336
+msgid "``pre_install(spec)``"
+msgstr ""
+
+#: ../../../developer_guide.rst:338
+msgid ""
+"A ``pre_install`` hook is run within the install subprocess, directly before "
+"the installation starts. It expects a single argument of a spec."
+msgstr ""
+
+#: ../../../developer_guide.rst:343
+msgid "``post_install(spec, explicit=None)``"
+msgstr ""
+
+#: ../../../developer_guide.rst:345
+msgid ""
+"A ``post_install`` hook is run within the install subprocess, directly after "
+"the installation finishes, but before the build stage is removed and the "
+"spec is registered in the database. It expects two arguments: the spec and "
+"an optional boolean indicating whether this spec is being installed "
+"explicitly."
+msgstr ""
+
+#: ../../../developer_guide.rst:349
+msgid "``pre_uninstall(spec)`` and ``post_uninstall(spec)``"
+msgstr ""
+
+#: ../../../developer_guide.rst:351
+msgid ""
+"These hooks are currently used for cleaning up module files after uninstall."
+msgstr ""
+
+#: ../../../developer_guide.rst:355
+msgid "Adding a New Hook Type"
+msgstr ""
+
+#: ../../../developer_guide.rst:357
+msgid ""
+"Adding a new hook type is very simple! In ``lib/spack/spack/hooks/__init__."
+"py``, you can simply create a new ``HookRunner`` that is named to match your "
+"new hook. For example, let's say you want to add a new hook called "
+"``post_log_write`` to trigger after anything is written to a logger. You "
+"would add it as follows:"
+msgstr ""
+
+#: ../../../developer_guide.rst:362
+msgid ""
+"# pre/post install and run by the install subprocess\n"
+"pre_install = HookRunner(\"pre_install\")\n"
+"post_install = HookRunner(\"post_install\")\n"
+"\n"
+"# hooks related to logging\n"
+"post_log_write = HookRunner(\"post_log_write\")  # <- here is my new hook!"
+msgstr ""
+
+#: ../../../developer_guide.rst:372
+msgid ""
+"You then need to decide what arguments your hook would expect. Since this is "
+"related to logging, let's say that you want a message and level. That means "
+"that when you add a Python file to the ``lib/spack/spack/hooks`` folder with "
+"one or more callbacks intended to be triggered by this hook, you might use "
+"your new hook as follows:"
+msgstr ""
+
+#: ../../../developer_guide.rst:376
+msgid ""
+"def post_log_write(message, level):\n"
+"    \"\"\"Do something custom with the message and level every time we "
+"write\n"
+"    to the log\n"
+"    \"\"\"\n"
+"    print(\"running post_log_write!\")"
+msgstr ""
+
+#: ../../../developer_guide.rst:385
+msgid ""
+"To use the hook, we would call it as follows somewhere in the logic to do "
+"logging. In this example, we use it outside of a logger that is already "
+"defined:"
+msgstr ""
+
+#: ../../../developer_guide.rst:388
+msgid ""
+"import spack.hooks\n"
+"\n"
+"# We do something here to generate a logger and message\n"
+"spack.hooks.post_log_write(message, logger.level)"
+msgstr ""
+
+#: ../../../developer_guide.rst:396
+msgid ""
+"This is not to say that this would be the best way to implement an "
+"integration with the logger (you would probably want to write a custom "
+"logger, or you could have the hook defined within the logger), but it serves "
+"as an example of writing a hook."
+msgstr ""
+
+#: ../../../developer_guide.rst:402
+msgid "Unit testing"
+msgstr ""
+
+#: ../../../developer_guide.rst:405
+msgid "Developer environment"
+msgstr ""
+
+#: ../../../developer_guide.rst:409
+msgid ""
+"This is an experimental feature. It is expected to change and you should not "
+"use it in a production environment."
+msgstr ""
+
+#: ../../../developer_guide.rst:413
+msgid ""
+"When installing a package, we currently have support to export environment "
+"variables to specify adding debug flags to the build. By default, a package "
+"installation will build without any debug flags. However, if you want to add "
+"them, you can export:"
+msgstr ""
+
+#: ../../../developer_guide.rst:417
+msgid ""
+"export SPACK_ADD_DEBUG_FLAGS=true\n"
+"spack install zlib"
+msgstr ""
+
+#: ../../../developer_guide.rst:423
+msgid ""
+"If you want to add custom flags, you should export an additional variable:"
+msgstr ""
+
+#: ../../../developer_guide.rst:425
+msgid ""
+"export SPACK_ADD_DEBUG_FLAGS=true\n"
+"export SPACK_DEBUG_FLAGS=\"-g\"\n"
+"spack install zlib"
+msgstr ""
+
+#: ../../../developer_guide.rst:431
+msgid ""
+"These environment variables will eventually be integrated into Spack so they "
+"are set from the command line."
+msgstr ""
+
+#: ../../../developer_guide.rst:434
+msgid "Developer commands"
+msgstr ""
+
+#: ../../../developer_guide.rst:439
+msgid "``spack doc``"
+msgstr ""
+
+#: ../../../developer_guide.rst:444
+msgid "``spack style``"
+msgstr ""
+
+#: ../../../developer_guide.rst:446
+msgid ""
+"``spack style`` exists to help the developer check imports and style with "
+"mypy, Flake8, isort, and (soon) Black. To run all style checks, simply do:"
+msgstr ""
+
+#: ../../../developer_guide.rst:449
+msgid "$ spack style"
+msgstr ""
+
+#: ../../../developer_guide.rst:453
+msgid "To run automatic fixes for isort, you can do:"
+msgstr ""
+
+#: ../../../developer_guide.rst:455
+msgid "$ spack style --fix"
+msgstr ""
+
+#: ../../../developer_guide.rst:459
+msgid ""
+"You do not need any of these Python packages installed on your system for "
+"the checks to work! Spack will bootstrap install them from packages for your "
+"use."
+msgstr ""
+
+#: ../../../developer_guide.rst:463
+msgid "``spack unit-test``"
+msgstr ""
+
+#: ../../../developer_guide.rst:465
+msgid ""
+"See the :ref:`contributor guide section <cmd-spack-unit-test>` on ``spack "
+"unit-test``."
+msgstr ""
+
+#: ../../../developer_guide.rst:470
+msgid "``spack python``"
+msgstr ""
+
+#: ../../../developer_guide.rst:472
+msgid ""
+"``spack python`` is a command that lets you import and debug things as if "
+"you were in a Spack interactive shell. Without any arguments, it is similar "
+"to a normal interactive Python shell, except you can import ``spack`` and "
+"any other Spack modules:"
+msgstr ""
+
+#: ../../../developer_guide.rst:475
+msgid ""
+"$ spack python\n"
+">>> from spack.version import Version\n"
+">>> a = Version(\"1.2.3\")\n"
+">>> b = Version(\"1_2_3\")\n"
+">>> a == b\n"
+"True\n"
+">>> c = Version(\"1.2.3b\")\n"
+">>> c > a\n"
+"True\n"
+">>>"
+msgstr ""
+
+#: ../../../developer_guide.rst:488
+msgid ""
+"If you prefer using an IPython interpreter, given that IPython is installed, "
+"you can specify the interpreter with ``-i``:"
+msgstr ""
+
+#: ../../../developer_guide.rst:490
+msgid ""
+"$ spack python -i ipython\n"
+"In [1]:"
+msgstr ""
+
+#: ../../../developer_guide.rst:496
+msgid "With either interpreter you can run a single command:"
+msgstr ""
+
+#: ../../../developer_guide.rst:498
+msgid ""
+"$ spack python -c 'from spack.concretize import concretize_one; "
+"concretize_one(\"python\")'\n"
+"...\n"
+"\n"
+"$ spack python -i ipython -c 'from spack.concretize import concretize_one; "
+"concretize_one(\"python\")'\n"
+"Out[1]: ..."
+msgstr ""
+
+#: ../../../developer_guide.rst:506
+msgid "or a file:"
+msgstr ""
+
+#: ../../../developer_guide.rst:508
+msgid ""
+"$ spack python ~/test_fetching.py\n"
+"$ spack python -i ipython ~/test_fetching.py"
+msgstr ""
+
+#: ../../../developer_guide.rst:513
+msgid "just like you would with the normal Python command."
+msgstr ""
+
+#: ../../../developer_guide.rst:519
+msgid "``spack blame``"
+msgstr ""
+
+#: ../../../developer_guide.rst:521
+msgid ""
+"``spack blame`` is a way to quickly see contributors to packages or files in "
+"Spack's source tree. For built-in packages, this shows contributors to the "
+"package files in the separate ``spack/spack-packages`` repository. You "
+"should provide a target package name or file name to the command. Here is an "
+"example asking to see contributions for the package \"python\":"
+msgstr ""
+
+#: ../../../developer_guide.rst:526
+msgid ""
+"$ spack blame python\n"
+"LAST_COMMIT  LINES  %      AUTHOR            EMAIL\n"
+"2 weeks ago  3      0.3    Mickey Mouse   <cheddar@gmouse.org>\n"
+"a month ago  927    99.7   Minnie Mouse   <swiss@mouse.org>\n"
+"\n"
+"2 weeks ago  930    100.0"
+msgstr ""
+
+#: ../../../developer_guide.rst:536
+msgid ""
+"By default, you will get a table view (shown above) sorted by date of "
+"contribution, with the most recent contribution at the top. If you want to "
+"sort instead by percentage of code contribution, then add ``-p``:"
+msgstr ""
+
+#: ../../../developer_guide.rst:539
+msgid "$ spack blame -p python"
+msgstr ""
+
+#: ../../../developer_guide.rst:544
+msgid "And to see the Git blame view, add ``-g`` instead:"
+msgstr ""
+
+#: ../../../developer_guide.rst:547
+msgid "$ spack blame -g python"
+msgstr ""
+
+#: ../../../developer_guide.rst:552
+msgid "Finally, to get a JSON export of the data, add ``--json``:"
+msgstr ""
+
+#: ../../../developer_guide.rst:554
+msgid "$ spack blame --json python"
+msgstr ""
+
+#: ../../../developer_guide.rst:562
+msgid "``spack url``"
+msgstr ""
+
+#: ../../../developer_guide.rst:564
+msgid ""
+"A package containing a single URL can be used to download several different "
+"versions of the package. If you have ever wondered how this works, all of "
+"the magic is in :mod:`spack.url`. This module contains methods for "
+"extracting the name and version of a package from its URL. The name is used "
+"by ``spack create`` to guess the name of the package. By determining the "
+"version from the URL, Spack can replace it with other versions to determine "
+"where to download them from."
+msgstr ""
+
+#: ../../../developer_guide.rst:570
+msgid ""
+"The regular expressions in ``parse_name_offset`` and "
+"``parse_version_offset`` are used to extract the name and version, but they "
+"are not perfect. In order to debug Spack's URL parsing support, the ``spack "
+"url`` command can be used."
+msgstr ""
+
+#: ../../../developer_guide.rst:577
+msgid "``spack url parse``"
+msgstr ""
+
+#: ../../../developer_guide.rst:579
+msgid "If you need to debug a single URL, you can use the following command:"
+msgstr ""
+
+#: ../../../developer_guide.rst:583
+msgid ""
+"You will notice that the name and version of this URL are correctly "
+"detected, and you can even see which regular expressions it was matched to. "
+"However, you will notice that when it substitutes the version number in, it "
+"does not replace the ``2.2`` with ``9.9`` where we would expect ``9.9.9b`` "
+"to live. This particular package may require a ``list_url`` or "
+"``url_for_version`` function."
+msgstr ""
+
+#: ../../../developer_guide.rst:587
+msgid ""
+"This command also accepts a ``--spider`` flag. If provided, Spack searches "
+"for other versions of the package and prints the matching URLs."
+msgstr ""
+
+#: ../../../developer_guide.rst:594
+msgid "``spack url list``"
+msgstr ""
+
+#: ../../../developer_guide.rst:596
+msgid ""
+"This command lists every URL in every package in Spack. If given the ``--"
+"color`` and ``--extrapolation`` flags, it also colors the part of the string "
+"that it detected to be the name and version. The ``--incorrect-name`` and "
+"``--incorrect-version`` flags can be used to print URLs that were not being "
+"parsed correctly."
+msgstr ""
+
+#: ../../../developer_guide.rst:604
+msgid "``spack url summary``"
+msgstr ""
+
+#: ../../../developer_guide.rst:606
+msgid ""
+"This command attempts to parse every URL for every package in Spack and "
+"prints a summary of how many of them are being correctly parsed. It also "
+"prints a histogram showing which regular expressions are being matched and "
+"how frequently:"
+msgstr ""
+
+#: ../../../developer_guide.rst:611
+msgid ""
+"This command is essential for anyone adding or changing the regular "
+"expressions that parse names and versions. By running this command before "
+"and after the change, you can make sure that your regular expression fixes "
+"more packages than it breaks."
+msgstr ""
+
+#: ../../../developer_guide.rst:615
+msgid "Profiling"
+msgstr ""
+
+#: ../../../developer_guide.rst:617
+msgid ""
+"Spack has some limited built-in support for profiling, and can report "
+"statistics using standard Python timing tools. To use this feature, supply "
+"``--profile`` to Spack on the command line, before any subcommands."
+msgstr ""
+
+#: ../../../developer_guide.rst:623
+msgid "``spack --profile``"
+msgstr ""
+
+#: ../../../developer_guide.rst:625
+msgid "``spack --profile`` output looks like this:"
+msgstr ""
+
+#: ../../../developer_guide.rst:630
+msgid ""
+"The bottom of the output shows the most time-consuming functions, slowest on "
+"top. The profiling support is from Python's built-in tool, `cProfile "
+"<https://docs.python.org/3/library/profile.html#module-cProfile>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:636
+msgid "Releases"
+msgstr ""
+
+#: ../../../developer_guide.rst:638
+msgid ""
+"This section documents Spack's release process. It is intended for project "
+"maintainers, as the tasks described here require maintainer privileges on "
+"the Spack repository. For others, we hope this section at least provides "
+"some insight into how the Spack project works."
+msgstr ""
+
+#: ../../../developer_guide.rst:645
+msgid "Release branches"
+msgstr ""
+
+#: ../../../developer_guide.rst:647
+msgid ""
+"There are currently two types of Spack releases: :ref:`minor releases <minor-"
+"releases>` (``1.1.0``, ``1.2.0``, etc.) and :ref:`patch releases <patch-"
+"releases>` (``1.1.1``, ``1.1.2``, ``1.1.3``, etc.). Here is a diagram of how "
+"Spack release branches work:"
+msgstr ""
+
+#: ../../../developer_guide.rst:650
+msgid ""
+"o    branch: develop  (latest version, v1.2.0.dev0)\n"
+"|\n"
+"o\n"
+"| o  branch: releases/v1.1, tag: v1.1.1\n"
+"o |\n"
+"| o  tag: v1.1.0\n"
+"o |\n"
+"| o\n"
+"|/\n"
+"o\n"
+"|\n"
+"o\n"
+"| o  branch: releases/v1.0, tag: v1.0.2\n"
+"o |\n"
+"| o  tag: v1.0.1\n"
+"o |\n"
+"| o  tag: v1.0.0\n"
+"o |\n"
+"| o\n"
+"|/\n"
+"o"
+msgstr ""
+
+#: ../../../developer_guide.rst:674
+msgid ""
+"The ``develop`` branch has the latest contributions, and nearly all pull "
+"requests target ``develop``. The ``develop`` branch will report that its "
+"version is that of the next **minor** release with a ``.dev0`` suffix."
+msgstr ""
+
+#: ../../../developer_guide.rst:677
+msgid ""
+"Each Spack release series also has a corresponding branch, e.g., ``releases/"
+"v1.1`` has ``v1.1.x`` versions of Spack, and ``releases/v1.0`` has ``v1.0."
+"x`` versions. A minor release is the first tagged version on a release "
+"branch. Patch releases are back-ported from develop onto release branches. "
+"This is typically done by cherry-picking bugfix commits off of ``develop``."
+msgstr ""
+
+#: ../../../developer_guide.rst:682
+msgid ""
+"To avoid version churn for users of a release series, patch releases "
+"**should not** make changes that would change the concretization of "
+"packages. They should generally only contain fixes to the Spack core. "
+"However, sometimes priorities are such that new functionality needs to be "
+"added to a patch release."
+msgstr ""
+
+#: ../../../developer_guide.rst:686
+msgid ""
+"Both minor and patch releases are tagged. As a convenience, we also tag the "
+"latest release as ``releases/latest``, so that users can easily check it out "
+"to get the latest stable version. See :ref:`updating-latest-release` for "
+"more details."
+msgstr ""
+
+#: ../../../developer_guide.rst:690
+msgid "PEP 440 compliance"
+msgstr ""
+
+#: ../../../developer_guide.rst:693
+msgid ""
+"Spack releases up to ``v0.17`` were merged back into the ``develop`` branch "
+"to ensure that release tags would appear among its ancestors. Since "
+"``v0.18`` we opted to have a linear history of the ``develop`` branch, for "
+"reasons explained `here <https://github.com/spack/spack/pull/25267>`_. At "
+"the same time, we converted to using `PEP 440 <https://peps.python.org/"
+"pep-0440/>`_ compliant versions."
+msgstr ""
+
+#: ../../../developer_guide.rst:698
+msgid "Scheduling work for releases"
+msgstr ""
+
+#: ../../../developer_guide.rst:700
+msgid ""
+"We schedule work for **minor releases** through `milestones <https://github."
+"com/spack/spack/milestones>`_ and `GitHub Projects <https://github.com/spack/"
+"spack/projects>`_, while **patch releases** use `labels <https://github.com/"
+"spack/spack/labels>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:702
+msgid ""
+"While there can be multiple milestones open at a given time, only one is "
+"usually active. Its name corresponds to the next major/minor version, for "
+"example ``v1.1.0``. Important issues and pull requests should be assigned to "
+"this milestone by core developers, so that they are not forgotten at the "
+"time of release. The milestone is closed when the release is made, and a new "
+"milestone is created for the next major/minor release, if not already there."
+msgstr ""
+
+#: ../../../developer_guide.rst:707
+msgid ""
+"Bug reports in GitHub issues are automatically labelled ``bug`` and "
+"``triage``. Spack developers assign one of the labels ``impact-low``, "
+"``impact-medium`` or ``impact-high``. This will make the issue appear in the "
+"`Triaged bugs <https://github.com/orgs/spack/projects/6>`_ project board. "
+"Important issues should be assigned to the next milestone as well, so they "
+"appear at the top of the project board."
+msgstr ""
+
+#: ../../../developer_guide.rst:712
+msgid ""
+"Spack's milestones are not firm commitments so we move work between releases "
+"frequently. If we need to make a release and some tasks are not yet done, we "
+"will simply move them to the next minor release milestone, rather than "
+"delaying the release to complete them."
+msgstr ""
+
+#: ../../../developer_guide.rst:716
+msgid "Backporting bug fixes"
+msgstr ""
+
+#: ../../../developer_guide.rst:718
+msgid ""
+"When a bug is fixed in the ``develop`` branch, it is often necessary to "
+"backport the fix to one (or more) of the ``releases/vX.Y`` branches. Only "
+"the release manager is responsible for doing backports, but Spack "
+"maintainers are responsible for labelling pull requests (and issues if no "
+"bug fix is available yet) with ``vX.Y.Z`` labels. The labels should "
+"correspond to the future patch versions that the bug fix should be "
+"backported to."
+msgstr ""
+
+#: ../../../developer_guide.rst:722
+msgid ""
+"Backports are done publicly by the release manager using a pull request "
+"named ``Backports vX.Y.Z``. This pull request is opened from the ``backports/"
+"vX.Y.Z`` branch, targets the ``releases/vX.Y`` branch and contains a "
+"(growing) list of cherry-picked commits from the ``develop`` branch. "
+"Typically there are one or two backport pull requests open at any given time."
+msgstr ""
+
+#: ../../../developer_guide.rst:729
+msgid "Making minor releases"
+msgstr ""
+
+#: ../../../developer_guide.rst:731
+msgid ""
+"Assuming all required work from the milestone is completed, the steps to "
+"make the minor release are:"
+msgstr ""
+
+#: ../../../developer_guide.rst:733
+msgid ""
+"`Create a new milestone <https://github.com/spack/spack/milestones>`_ for "
+"the next major/minor release."
+msgstr ""
+
+#: ../../../developer_guide.rst:735
+msgid ""
+"`Create a new label <https://github.com/spack/spack/labels>`_ for the next "
+"patch release."
+msgstr ""
+
+#: ../../../developer_guide.rst:737
+msgid "Move any optional tasks that are not done to the next milestone."
+msgstr ""
+
+#: ../../../developer_guide.rst:739
+msgid "Create a branch for the release, based on ``develop``:"
+msgstr ""
+
+#: ../../../developer_guide.rst:741
+msgid "$ git checkout -b releases/v1.1 develop"
+msgstr ""
+
+#: ../../../developer_guide.rst:745
+msgid ""
+"For a version ``vX.Y.Z``, the branch's name should be ``releases/vX.Y``. "
+"That is, you should create a ``releases/vX.Y`` branch if you are preparing "
+"the ``X.Y.0`` release."
+msgstr ""
+
+#: ../../../developer_guide.rst:748
+msgid ""
+"Remove the ``dev0`` development release segment from the version tuple in "
+"``lib/spack/spack/__init__.py``."
+msgstr ""
+
+#: ../../../developer_guide.rst:750
+msgid ""
+"The version number itself should already be correct and should not be "
+"modified."
+msgstr ""
+
+#: ../../../developer_guide.rst:752
+msgid "Update ``CHANGELOG.md`` with major highlights in bullet form."
+msgstr ""
+
+#: ../../../developer_guide.rst:754
+msgid ""
+"Use proper Markdown formatting, like `this example from v1.0.0 <https://"
+"github.com/spack/spack/commit/b187f8758227abdfc9eb349a48f8b725aa27a162>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:756
+msgid "Push the release branch to GitHub."
+msgstr ""
+
+#: ../../../developer_guide.rst:758
+msgid "Make sure CI passes on the release branch, including:"
+msgstr ""
+
+#: ../../../developer_guide.rst:760 ../../../developer_guide.rst:824
+msgid "Regular unit tests"
+msgstr ""
+
+#: ../../../developer_guide.rst:761 ../../../developer_guide.rst:825
+msgid "Build tests"
+msgstr ""
+
+#: ../../../developer_guide.rst:762 ../../../developer_guide.rst:826
+msgid "The E4S pipeline at `gitlab.spack.io <https://gitlab.spack.io>`_"
+msgstr ""
+
+#: ../../../developer_guide.rst:764
+msgid ""
+"If CI is not passing, submit pull requests to ``develop`` as normal and keep "
+"rebasing the release branch on ``develop`` until CI passes."
+msgstr ""
+
+#: ../../../developer_guide.rst:766
+msgid ""
+"Make sure the entire documentation is up to date. If documentation is "
+"outdated, submit pull requests to ``develop`` as normal and keep rebasing "
+"the release branch on ``develop``."
+msgstr ""
+
+#: ../../../developer_guide.rst:769
+msgid "Bump the minor version in the ``develop`` branch."
+msgstr ""
+
+#: ../../../developer_guide.rst:771
+msgid ""
+"Create a pull request targeting the ``develop`` branch, bumping the minor "
+"version in ``lib/spack/spack/__init__.py`` with a ``dev0`` release segment. "
+"For instance, when you have just released ``v1.1.0``, set the version to "
+"``(1, 2, 0, 'dev0')`` on ``develop``."
+msgstr ""
+
+#: ../../../developer_guide.rst:774 ../../../developer_guide.rst:836
+msgid "Follow the steps in :ref:`publishing-releases`."
+msgstr ""
+
+#: ../../../developer_guide.rst:776 ../../../developer_guide.rst:838
+msgid "Follow the steps in :ref:`updating-latest-release`."
+msgstr ""
+
+#: ../../../developer_guide.rst:778 ../../../developer_guide.rst:840
+msgid "Follow the steps in :ref:`announcing-releases`."
+msgstr ""
+
+#: ../../../developer_guide.rst:784
+msgid "Making patch releases"
+msgstr ""
+
+#: ../../../developer_guide.rst:786
+msgid ""
+"To make the patch release process both efficient and transparent, we use a "
+"*backports pull request* which contains cherry-picked commits from the "
+"``develop`` branch. The majority of the work is to cherry-pick the bug "
+"fixes, which ideally should be done as soon as they land on ``develop``; "
+"this ensures cherry-picking happens in order and makes conflicts easier to "
+"resolve since the changes are fresh in the mind of the developer."
+msgstr ""
+
+#: ../../../developer_guide.rst:789
+msgid ""
+"The backports pull request is always titled ``Backports vX.Y.Z`` and is "
+"labelled ``backports``. It is opened from a branch named ``backports/vX.Y."
+"Z`` and targets the ``releases/vX.Y`` branch."
+msgstr ""
+
+#: ../../../developer_guide.rst:792
+msgid ""
+"Whenever a pull request labelled ``vX.Y.Z`` is merged, cherry-pick the "
+"associated squashed commit on ``develop`` to the ``backports/vX.Y.Z`` "
+"branch. For pull requests that were rebased (or not squashed), cherry-pick "
+"each associated commit individually. Never force-push to the ``backports/vX."
+"Y.Z`` branch."
+msgstr ""
+
+#: ../../../developer_guide.rst:798
+msgid ""
+"Sometimes you may **still** get merge conflicts even if you have cherry-"
+"picked all the commits in order. This generally means there is some other "
+"intervening pull request that the one you are trying to pick depends on. In "
+"these cases, you will need to make a judgment call regarding those pull "
+"requests. Consider the number of affected files and/or the resulting "
+"differences."
+msgstr ""
+
+#: ../../../developer_guide.rst:803
+msgid "If the changes are small, you might just cherry-pick it."
+msgstr ""
+
+#: ../../../developer_guide.rst:805
+msgid ""
+"If the changes are large, then you may decide that this fix is not worth "
+"including in a patch release, in which case you should remove the label from "
+"the pull request. Remember that large, manual backports are seldom the right "
+"choice for a patch release."
+msgstr ""
+
+#: ../../../developer_guide.rst:808
+msgid ""
+"When all commits are cherry-picked in the ``backports/vX.Y.Z`` branch, make "
+"the patch release as follows:"
+msgstr ""
+
+#: ../../../developer_guide.rst:810
+msgid ""
+"`Create a new label <https://github.com/spack/spack/labels>`_ ``vX.Y.{Z+1}`` "
+"for the next patch release."
+msgstr ""
+
+#: ../../../developer_guide.rst:812
+msgid ""
+"Replace the label ``vX.Y.Z`` with ``vX.Y.{Z+1}`` for all PRs and issues that "
+"are not yet done."
+msgstr ""
+
+#: ../../../developer_guide.rst:814
+msgid ""
+"Manually push a single commit with commit message ``Set version to vX.Y.Z`` "
+"to the ``backports/vX.Y.Z`` branch, that both bumps the Spack version number "
+"and updates the changelog:"
+msgstr ""
+
+#: ../../../developer_guide.rst:816
+msgid "Bump the version in ``lib/spack/spack/__init__.py``."
+msgstr ""
+
+#: ../../../developer_guide.rst:817
+msgid "Update ``CHANGELOG.md`` with a list of the changes."
+msgstr ""
+
+#: ../../../developer_guide.rst:819
+msgid ""
+"This is typically a summary of the commits you cherry-picked onto the "
+"release branch. See `the changelog from v1.0.2 <https://github.com/spack/"
+"spack/commit/734c5db2121b01c373eed6538e452f18887e9e44>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:822
+msgid "Make sure CI passes on the **backports pull request**, including:"
+msgstr ""
+
+#: ../../../developer_guide.rst:828
+msgid ""
+"Merge the ``Backports vX.Y.Z`` PR with the **Rebase and merge** strategy. "
+"This is needed to keep track in the release branch of all the commits that "
+"were cherry-picked."
+msgstr ""
+
+#: ../../../developer_guide.rst:831
+msgid "Make sure CI passes on the last commit of the **release branch**."
+msgstr ""
+
+#: ../../../developer_guide.rst:833
+msgid ""
+"In the rare case you need to include additional commits in the patch release "
+"after the backports PR is merged, it is best to delete the last commit ``Set "
+"version to vX.Y.Z`` from the release branch with a single force-push, open a "
+"new backports PR named ``Backports vX.Y.Z (2)``, and repeat the process. "
+"Avoid repeated force-pushes to the release branch."
+msgstr ""
+
+#: ../../../developer_guide.rst:842
+msgid ""
+"Submit a PR to update the ``CHANGELOG.md`` in the ``develop`` branch with "
+"the addition of this patch release."
+msgstr ""
+
+#: ../../../developer_guide.rst:847
+msgid "Publishing a release on GitHub"
+msgstr ""
+
+#: ../../../developer_guide.rst:849
+msgid "Create the release in GitHub."
+msgstr ""
+
+#: ../../../developer_guide.rst:851
+msgid ""
+"Go to `github.com/spack/spack/releases <https://github.com/spack/spack/"
+"releases>`_ and click ``Draft a new release``."
+msgstr ""
+
+#: ../../../developer_guide.rst:853
+msgid "Set ``Tag version`` to the name of the tag that will be created."
+msgstr ""
+
+#: ../../../developer_guide.rst:855
+msgid ""
+"The name should start with ``v`` and contain *all three* parts of the "
+"version (e.g., ``v1.1.0`` or ``v1.1.1``)."
+msgstr ""
+
+#: ../../../developer_guide.rst:857
+msgid ""
+"Set ``Target`` to the ``releases/vX.Y`` branch (e.g., ``releases/v1.0``)."
+msgstr ""
+
+#: ../../../developer_guide.rst:859
+msgid ""
+"Set ``Release title`` to ``vX.Y.Z`` to match the tag (e.g., ``v1.0.1``)."
+msgstr ""
+
+#: ../../../developer_guide.rst:861
+msgid ""
+"Paste the latest release Markdown from your ``CHANGELOG.md`` file as the "
+"text."
+msgstr ""
+
+#: ../../../developer_guide.rst:863
+msgid ""
+"Save the draft so you can keep coming back to it as you prepare the release."
+msgstr ""
+
+#: ../../../developer_guide.rst:865
+msgid "When you are ready to finalize the release, click ``Publish release``."
+msgstr ""
+
+#: ../../../developer_guide.rst:867
+msgid ""
+"Immediately after publishing, go back to `github.com/spack/spack/releases "
+"<https://github.com/spack/spack/releases>`_ and download the auto-generated "
+"``.tar.gz`` file for the release. It is the ``Source code (tar.gz)`` link."
+msgstr ""
+
+#: ../../../developer_guide.rst:870
+msgid ""
+"Click ``Edit`` on the release you just made and attach the downloaded "
+"release tarball as a binary. This does two things:"
+msgstr ""
+
+#: ../../../developer_guide.rst:873
+msgid "Makes sure that the hash of our releases does not change over time."
+msgstr ""
+
+#: ../../../developer_guide.rst:875
+msgid ""
+"GitHub sometimes annoyingly changes the way they generate tarballs that can "
+"result in the hashes changing if you rely on the auto-generated tarball "
+"links."
+msgstr ""
+
+#: ../../../developer_guide.rst:877
+msgid "Gets download counts on releases visible through the GitHub API."
+msgstr ""
+
+#: ../../../developer_guide.rst:879
+msgid ""
+"GitHub tracks downloads of artifacts, but *not* the source links. See the "
+"`releases page <https://api.github.com/repos/spack/spack/releases>`_ and "
+"search for ``download_count`` to see this."
+msgstr ""
+
+#: ../../../developer_guide.rst:882
+msgid ""
+"Go to `readthedocs.org <https://readthedocs.org/projects/spack>`_ and "
+"activate the release tag."
+msgstr ""
+
+#: ../../../developer_guide.rst:884
+msgid ""
+"This builds the documentation and makes the released version selectable in "
+"the versions menu."
+msgstr ""
+
+#: ../../../developer_guide.rst:890
+msgid "Updating `releases/latest`"
+msgstr ""
+
+#: ../../../developer_guide.rst:892
+msgid ""
+"If the new release is the **highest** Spack release yet, you should also tag "
+"it as ``releases/latest``. For example, suppose the highest release is "
+"currently ``v1.1.3``:"
+msgstr ""
+
+#: ../../../developer_guide.rst:895
+msgid ""
+"If you are releasing ``v1.1.4`` or ``v1.2.0``, then you should tag it with "
+"``releases/latest``, as these are higher than ``v1.1.3``."
+msgstr ""
+
+#: ../../../developer_guide.rst:897
+msgid ""
+"If you are making a new release of an **older** minor version of Spack, e."
+"g., ``v1.0.5``, then you should not tag it as ``releases/latest`` (as there "
+"are newer major/minor versions)."
+msgstr ""
+
+#: ../../../developer_guide.rst:899
+msgid ""
+"To do so, first fetch the latest tag created on GitHub, since you may not "
+"have it locally:"
+msgstr ""
+
+#: ../../../developer_guide.rst:901
+msgid "$ git fetch --force git@github.com:spack/spack tag vX.Y.Z"
+msgstr ""
+
+#: ../../../developer_guide.rst:905
+msgid ""
+"Then tag ``vX.Y.Z`` as ``releases/latest`` and push the individual tag to "
+"GitHub."
+msgstr ""
+
+#: ../../../developer_guide.rst:907
+msgid ""
+"$ git tag --force releases/latest vX.Y.Z\n"
+"$ git push --force git@github.com:spack/spack releases/latest"
+msgstr ""
+
+#: ../../../developer_guide.rst:912
+msgid ""
+"The ``--force`` argument to ``git tag`` makes Git overwrite the existing "
+"``releases/latest`` tag with the new one. Do **not** use the ``--tags`` flag "
+"when pushing, as this will push *all* local tags."
+msgstr ""
+
+#: ../../../developer_guide.rst:919
+msgid "Announcing a release"
+msgstr ""
+
+#: ../../../developer_guide.rst:921
+msgid ""
+"We announce releases in all of the major Spack communication channels. "
+"Publishing the release takes care of GitHub. The remaining channels are X, "
+"Slack, and the mailing list. Here are the steps:"
+msgstr ""
+
+#: ../../../developer_guide.rst:926
+msgid "Announce the release on X."
+msgstr ""
+
+#: ../../../developer_guide.rst:928
+msgid ""
+"Compose the tweet on the ``@spackpm`` account per the ``spack-twitter`` "
+"slack channel."
+msgstr ""
+
+#: ../../../developer_guide.rst:930 ../../../developer_guide.rst:948
+msgid "Be sure to include a link to the release's page on GitHub."
+msgstr ""
+
+#: ../../../developer_guide.rst:932
+msgid ""
+"You can base the tweet on `this example <https://twitter.com/spackpm/"
+"status/1231761858182307840>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:934
+msgid "Announce the release on Slack."
+msgstr ""
+
+#: ../../../developer_guide.rst:936
+msgid ""
+"Compose a message in the ``#announcements`` Slack channel (`spackpm.slack."
+"com <https://spackpm.slack.com>`_)."
+msgstr ""
+
+#: ../../../developer_guide.rst:938
+msgid ""
+"Preface the message with ``@channel`` to notify even those people not "
+"currently logged in."
+msgstr ""
+
+#: ../../../developer_guide.rst:940
+msgid "Be sure to include a link to the tweet above."
+msgstr ""
+
+#: ../../../developer_guide.rst:942
+msgid ""
+"The tweet will be shown inline so that you do not have to retype your "
+"release announcement."
+msgstr ""
+
+#: ../../../developer_guide.rst:944
+msgid "Announce the release on the Spack mailing list."
+msgstr ""
+
+#: ../../../developer_guide.rst:946
+msgid "Compose an email to the Spack mailing list."
+msgstr ""
+
+#: ../../../developer_guide.rst:950
+msgid "It is also helpful to include some information directly in the email."
+msgstr ""
+
+#: ../../../developer_guide.rst:952
+msgid ""
+"You can base your announcement on this `example email <https://groups.google."
+"com/forum/#!topic/spack/WT4CT9i_X4s>`_."
+msgstr ""
+
+#: ../../../developer_guide.rst:954
+msgid ""
+"Once you have completed the above steps, congratulations, you are done! You "
+"have finished making the release!"
+msgstr ""
