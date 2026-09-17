@@ -1,5 +1,13 @@
 <div align="center">
-<h1 id="localization-of-the-spack-documentation">Spack 文件的在地化</h1>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/localizethedocs/static/logo/spack-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://cdn.jsdelivr.net/gh/localizethedocs/static/logo/spack-light.svg">
+  <img height="100" src="https://cdn.jsdelivr.net/gh/localizethedocs/static/logo/spack-light.svg">
+</picture>
+</div>
+
+<div align="center">
+<h1 id="localization-of-the-spack-documentation">Localization of The Spack Documentation</h1>
 </div>
 
 <details><summary><strong>切換語言</strong></summary>
@@ -411,7 +419,7 @@ This project is currently maintained by:
 <ul>
   <li>在 GitHub 或其他鏡像儲存庫上收藏這個專案。</li>
   <li>Submit issues on <a href="https://github.com/localizethedocs/spack-docs-l10n/issues">GitHub</a> if you found any bug.</li>
-  <li>如果您知道如何修正臭蟲，請在 <a href="https://github.com/localizethedocs/spack-docs-l10n/pulls">GitHub</a> 上提交拉取請求。</li>
+  <li>Submit pull requests on <a href="https://github.com/localizethedocs/spack-docs-l10n/pulls">GitHub</a> if you know how to fix the bug.</li>
   <li>Contribute your translations on <a href="https://localizethedocs.crowdin.com/spack-docs-l10n">Crowdin</a>.</li>
   <li>如果您喜歡這種在地化專案，請考慮成為<a href="#financial-sponsors">贊助者</a>。</li>
 </ul>

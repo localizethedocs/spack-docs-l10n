@@ -1,5 +1,13 @@
 <div align="center">
-<h1 id="localization-of-the-spack-documentation">Spack 文档的本地化</h1>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/localizethedocs/static/logo/spack-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://cdn.jsdelivr.net/gh/localizethedocs/static/logo/spack-light.svg">
+  <img height="100" src="https://cdn.jsdelivr.net/gh/localizethedocs/static/logo/spack-light.svg">
+</picture>
+</div>
+
+<div align="center">
+<h1 id="localization-of-the-spack-documentation">Localization of The Spack Documentation</h1>
 </div>
 
 <details><summary><strong>切换语言</strong></summary>
@@ -157,7 +165,7 @@ The goal of this project is to translate The Spack Documentation into multiple l
     </tr>
     <tr>
       <th rowspan="1" colspan="1" align="center" style="text-align: center;"><div>状态</div></th>
-      <th rowspan="1" colspan="1" align="center" style="text-align: center;"><div>描述</div></th>
+      <th rowspan="1" colspan="1" align="center" style="text-align: center;"><div>Description</div></th>
     </tr>
   </thead>
   <tbody>
@@ -332,7 +340,7 @@ The goal of this project is to translate The Spack Documentation into multiple l
 
 <h2 id="preview-translations"><a href="#table-of-contents">预览翻译</a></h2>
 
-您可以在 <a href="https://projects.localizethedocs.org/spack-docs-l10n">GitHub Pages</a> 中预览翻译：
+You can preview translations in <a href="https://projects.localizethedocs.org/spack-docs-l10n">GitHub Pages</a>:
 
 <div align="center">
 <table>
@@ -428,7 +436,7 @@ You can sponsor the projects through the following platforms:
     <!-- Row 1 -->
     <tr>
       <th rowspan="1" colspan="1" align="center" style="text-align: center; width: 50%;"><div>Patreon</div></th>
-      <th rowspan="1" colspan="1" align="center" style="text-align: center; width: 50%;"><div>爱发电</div></th>
+      <th rowspan="1" colspan="1" align="center" style="text-align: center; width: 50%;"><div>Afdian</div></th>
     </tr>
     <!-- Row 2 -->
     <tr>
