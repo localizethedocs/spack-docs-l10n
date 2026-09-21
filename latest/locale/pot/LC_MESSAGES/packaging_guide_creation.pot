@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack latest\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 14:01+0000\n"
+"POT-Creation-Date: 2026-09-21 14:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1323,34 +1323,178 @@ msgstr ""
 #: ../../../packaging_guide_creation.rst:773
 msgid ""
 "In general, you should not remove old versions from a ``package.py`` "
-"directly. Instead, you should first deprecate them using the following "
-"syntax:"
+"directly. Instead, you should first deprecate them using the "
+"``deprecated()`` directive. For example, to flag a version that has a known "
+"CVE:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:776
-msgid "version(\"1.2.3\", sha256=\"...\", deprecated=True)"
-msgstr ""
-
-#: ../../../packaging_guide_creation.rst:781
+#: ../../../packaging_guide_creation.rst:777
 msgid ""
-"This has two effects. First, ``spack info`` will no longer advertise that "
-"version. Second, commands like ``spack install`` that fetch the package will "
-"require user approval:"
+"class Openssl(Package):\n"
+"    version(\"3.0.7\", sha256=\"...\")\n"
+"    version(\"1.1.1t\", sha256=\"...\")\n"
+"\n"
+"    deprecated(\"@1.1.1t\", reason=\"vuln\", severity=\"high\")"
 msgstr ""
 
 #: ../../../packaging_guide_creation.rst:785
 msgid ""
-"$ spack install openssl@1.0.1e\n"
-"==> Warning: openssl@1.0.1e is deprecated and may be removed in a future "
-"Spack release.\n"
-"==>   Fetch anyway? [y/N]"
+"The first positional argument is an optional spec constraint, in this case "
+"the version ``\"@1.1.1t\"``. If omitted, the whole package is deprecated."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:792
-msgid "If you use ``spack install --deprecated``, this check can be skipped."
+#: ../../../packaging_guide_creation.rst:790
+msgid ""
+"The constraint is an ordinary spec, so ``@1.0`` is a range and also matches "
+"``1.0.1`` and ``1.0.2``. State the intent explicitly instead:"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:793
+msgid "``@=1.0`` deprecates exactly that version;"
 msgstr ""
 
 #: ../../../packaging_guide_creation.rst:794
+msgid "``@1.0:1.2`` deprecates an explicit range;"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:795
+msgid ""
+"``@1.0.0``, written with three or more components, deprecates that release "
+"and anything extending it, such as ``1.0.0-custom`` or ``1.0.0.1``."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:797
+msgid ""
+"The advice under :ref:`version_constraints` prefers ranges over ``@=`` so "
+"that dependencies and conflicts are not over-constrained. It does not apply "
+"to deprecations, where a constraint that matches more than intended refuses "
+"versions users still need."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:800
+msgid ""
+"The ``reason`` keyword is required, and states which category the "
+"deprecation falls into. Users set their tolerance per category, so the "
+"reason decides whether a site that accepts unmaintained versions still "
+"refuses this one. It must be one of:"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:804
+msgid "``vuln``"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:805
+msgid ""
+"A known vulnerability affects the spec. Use it for any advisory, whether it "
+"is a CVE, a GHSA or a PYSEC entry, and list the identifiers in ``labels`` so "
+"users can allow the ones they have assessed. Take ``severity`` from the "
+"advisory's own rating."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:809
+msgid "``rename``"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:810
+msgid ""
+"The spec was renamed upstream or in the repository, and users should move to "
+"the new name. A package that changed name is the usual case, and ``msg`` is "
+"the place to name the replacement. Renamed variants are not covered: "
+"deprecating a variant gives users an error, with no way to map the old value "
+"onto the new one."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:814
+msgid "``retired``"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:815
+msgid ""
+"The spec is going away. The release reached its end of life, upstream "
+"removed the source archive, or the package is about to be dropped from the "
+"repository."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:818
+msgid "``unspecified``"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:819
+msgid ""
+"None of the categories above applies. A spec its maintainers no longer "
+"support, although nothing is known to be wrong with it, belongs here. These "
+"usually take a low severity, since users who need the spec can still build "
+"it. ``msg`` is required with this reason, since the category alone does not "
+"say why the spec is deprecated."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:824
+msgid ""
+"The optional ``severity`` keyword ranks the urgency: ``\"low\"`` (default), "
+"``\"medium\"``, ``\"high\"``, or ``\"critical\"`` in increasing order."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:826
+msgid ""
+"The ``msg`` keyword adds guidance, shown after the reason and severity when "
+"Spack refuses the spec. It is optional for every reason but "
+"``\"unspecified\"``. Use it to say what to install instead, which the reason "
+"alone cannot express:"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:830
+msgid ""
+"deprecated(\"@1.1.1t\", reason=\"retired\", severity=\"high\", msg=\"use "
+"@3.0, which is maintained\")"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:834
+msgid "Keep it to a single line, since it is appended to a one-line error."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:836
+msgid ""
+"The optional ``labels`` keyword lists the advisories a deprecation refers "
+"to. Any identifier works, so a GHSA or PYSEC id is as good as a CVE one:"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:839
+msgid ""
+"deprecated(\"@1.1.1t\", reason=\"vuln\", severity=\"high\", "
+"labels=[\"CVE-2023-0286\"])"
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:843
+msgid ""
+"A directive can list several advisories, and users allow each of them "
+"separately. The advisories listed together share the reason and severity of "
+"the directive, so advisories with different severities go in separate "
+"directives. See :ref:`package-deprecations-config` for how users allow them."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:847
+msgid ""
+"Whether a deprecated version can be selected depends on the user's "
+"configuration. Users list the deprecations they allow, by severity, reason "
+"and labels, and Spack refuses the ones no entry in that list matches. This "
+"is a hard error both at concretization time and before the spec is "
+"installed. An allowed deprecation is used like any other version, with no "
+"warning and no penalty. The list is empty by default, so Spack will not "
+"select a deprecated version unless the user explicitly allows it. See :ref:"
+"`package-deprecations-config` for how to write that list."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:854
+msgid ""
+"The older ``version(\"X.Y\", deprecated=True)`` syntax is still supported. "
+"Spack records it as a deprecation of ``@=X.Y`` with reason "
+"``\"unspecified\"``, severity ``\"critical\"``, and the reserved label "
+"``version_deprecated``. That label is what tells these deprecations apart "
+"from a recipe that passes ``reason=\"unspecified\"`` itself, so users can "
+"allow one set without the other."
+msgstr ""
+
+#: ../../../packaging_guide_creation.rst:858
 msgid ""
 "This also applies to package recipes that are renamed or removed. You should "
 "first deprecate all versions before removing a package. If you need to "
@@ -1358,23 +1502,24 @@ msgid ""
 "same time."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:798
+#: ../../../packaging_guide_creation.rst:862
 msgid ""
 "Version deprecations should always last at least one release cycle of the "
 "builtin package repository before the version is completely removed. No "
 "version should be removed without such a deprecation process. This gives "
 "users a chance to complain about the deprecation in case the old version is "
 "needed for some application. If you require a deprecated version of a "
-"package, simply submit a PR to remove ``deprecated=True`` from the package. "
-"However, you may be asked to help maintain this version of the package if "
-"the current maintainers are unwilling to support this older version."
+"package, simply submit a PR to remove the ``deprecated()`` directive from "
+"the package. However, you may be asked to help maintain this version of the "
+"package if the current maintainers are unwilling to support this older "
+"version."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:808
+#: ../../../packaging_guide_creation.rst:872
 msgid "Version ordering"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:810
+#: ../../../packaging_guide_creation.rst:874
 msgid ""
 "Without :ref:`version constraints <version_constraints>`, :ref:`preferences "
 "<preferred_versions>` and :ref:`deprecations <deprecate>`, Spack will always "
@@ -1383,26 +1528,26 @@ msgid ""
 "in which versions are listed in the package file."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:813
+#: ../../../packaging_guide_creation.rst:877
 msgid ""
 "Spack imposes a generic total ordering on the set of versions, independently "
 "from the package they are associated with."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:815
+#: ../../../packaging_guide_creation.rst:879
 msgid ""
 "Most Spack versions are numeric, a tuple of integers; for example, ``0.1``, "
 "``6.96``, or ``1.2.3.1``. In this very basic case, version comparison is "
 "lexicographical on the numeric components: ``1.2 < 1.2.1 < 1.2.2 < 1.10``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:818
+#: ../../../packaging_guide_creation.rst:882
 msgid ""
 "Other separators for components are also possible, for example ``2025-03-01 "
 "< 2025-06``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:820
+#: ../../../packaging_guide_creation.rst:884
 msgid ""
 "Spack can also support string components such as ``1.1.1a`` and ``1.y.0``. "
 "String components are considered less than numeric components, so ``1.y.0 < "
@@ -1412,7 +1557,7 @@ msgid ""
 "to ``1.y.0``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:826
+#: ../../../packaging_guide_creation.rst:890
 msgid ""
 "Pre-release suffixes also contain string parts, but they are handled in a "
 "special way. For example ``1.2.3alpha1`` is parsed as a pre-release of the "
@@ -1423,7 +1568,7 @@ msgid ""
 "mysuffix``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:832
+#: ../../../packaging_guide_creation.rst:896
 msgid ""
 "Finally, there are a few special string components that are considered "
 "\"infinity versions\". They include ``develop``, ``main``, ``master``, "
@@ -1435,7 +1580,7 @@ msgid ""
 "required by another package or user."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:838
+#: ../../../packaging_guide_creation.rst:902
 msgid ""
 "More formally, the order on versions is defined as follows. A version string "
 "is split into a list of components based on delimiters such as ``.``, ``-``, "
@@ -1446,36 +1591,36 @@ msgid ""
 "types of components as follows:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:843
+#: ../../../packaging_guide_creation.rst:907
 msgid ""
 "The following special strings are considered larger than any other numeric "
 "or non-numeric version component, and satisfy the following order between "
 "themselves: ``develop > main > master > head > trunk > stable``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:845
+#: ../../../packaging_guide_creation.rst:909
 msgid ""
 "Numbers are ordered numerically, are less than special strings, and larger "
 "than other non-numeric components."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:847
+#: ../../../packaging_guide_creation.rst:911
 msgid ""
 "All other non-numeric components are less than numeric components, and are "
 "ordered alphabetically."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:849
+#: ../../../packaging_guide_creation.rst:913
 msgid ""
 "Finally, if the release components are equal, the pre-release components are "
 "used to break the tie."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:851
+#: ../../../packaging_guide_creation.rst:915
 msgid "The logic behind this sort order is two-fold:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:853
+#: ../../../packaging_guide_creation.rst:917
 msgid ""
 "Non-numeric versions are usually used for special cases while developing or "
 "debugging a piece of software. Keeping most of them less than numeric "
@@ -1483,18 +1628,18 @@ msgid ""
 "possible."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:856
+#: ../../../packaging_guide_creation.rst:920
 msgid ""
 "The most-recent development version of a package will usually be newer than "
 "any released numeric versions. This allows the ``@develop`` version to "
 "satisfy dependencies like ``depends_on(abc, when=\"@x.y.z:\")``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:866
+#: ../../../packaging_guide_creation.rst:930
 msgid "Fetching from code repositories"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:868
+#: ../../../packaging_guide_creation.rst:932
 msgid ""
 "For some packages, source code is provided in a Version Control System (VCS) "
 "repository rather than in a tarball. Spack can fetch packages from VCS "
@@ -1504,7 +1649,7 @@ msgid ""
 "the standard stage source path."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:873
+#: ../../../packaging_guide_creation.rst:937
 msgid ""
 "To fetch a package from a source repository, Spack needs to know which VCS "
 "to use and where to download from. Much like with ``url``, package authors "
@@ -1512,14 +1657,14 @@ msgid ""
 "containing the correct download location."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:876
+#: ../../../packaging_guide_creation.rst:940
 msgid ""
 "Many packages developed with Git have both a Git repository as well as "
 "release tarballs available for download. Packages can define both a class-"
 "level tarball URL and VCS. For example:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:880
+#: ../../../packaging_guide_creation.rst:944
 msgid ""
 "class Trilinos(CMakePackage):\n"
 "\n"
@@ -1538,7 +1683,7 @@ msgid ""
 "sha256=\"a3a5e715f0cc574a73c3f9bebb6bc24f32ffd5b67b387244c2c909da779a1478\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:894
+#: ../../../packaging_guide_creation.rst:958
 msgid ""
 "If a package contains both a ``url`` and ``git`` class-level attribute, "
 "Spack decides which to use based on the arguments to the ``version()`` "
@@ -1547,13 +1692,13 @@ msgid ""
 "checksum are assumed to be for URL download methods."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:897
+#: ../../../packaging_guide_creation.rst:961
 msgid ""
 "Like ``url``, if a specific version downloads from a different repository "
 "than the default repo, it can be overridden with a version-specific argument."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:901
+#: ../../../packaging_guide_creation.rst:965
 msgid ""
 "In order to reduce ambiguity, each package can only have a single VCS top-"
 "level attribute in addition to ``url``. In the rare case that a package uses "
@@ -1561,7 +1706,7 @@ msgid ""
 "example, the ``rockstar`` package contains:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:905
+#: ../../../packaging_guide_creation.rst:969
 msgid ""
 "class Rockstar(MakefilePackage):\n"
 "\n"
@@ -1572,48 +1717,48 @@ msgid ""
 "    version(\"yt\", hg=\"https://bitbucket.org/MatthewTurk/rockstar\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:918
+#: ../../../packaging_guide_creation.rst:982
 msgid "Git"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:920
+#: ../../../packaging_guide_creation.rst:984
 msgid ""
 "Git fetching supports the following parameters to the ``version`` directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:922
+#: ../../../packaging_guide_creation.rst:986
 msgid ""
 "``git``: URL of the git repository, if different than the class-level "
 "``git``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:923
+#: ../../../packaging_guide_creation.rst:987
 msgid "``branch``: Name of a :ref:`branch <git-branches>` to fetch."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:924
+#: ../../../packaging_guide_creation.rst:988
 msgid "``tag``: Name of a :ref:`tag <git-tags>` to fetch."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:925
+#: ../../../packaging_guide_creation.rst:989
 msgid ""
 "``commit``: SHA hash (or prefix) of a :ref:`commit <git-commits>` to fetch."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:926
+#: ../../../packaging_guide_creation.rst:990
 msgid ""
 "``submodules``: Also fetch :ref:`submodules <git-submodules>` recursively "
 "when checking out this repository."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:927
+#: ../../../packaging_guide_creation.rst:991
 msgid ""
 "``submodules_delete``: A list of submodules to forcibly delete from the "
 "repository after fetching. Useful if a version in the repository has "
 "submodules that have disappeared/are no longer accessible."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:929
+#: ../../../packaging_guide_creation.rst:993
 msgid ""
 "``get_full_repo``: Ensure the full git history is checked out with all "
 "remote branch information. Normally (``get_full_repo=False``, the default), "
@@ -1622,34 +1767,34 @@ msgid ""
 "used if the version of git supports it."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:931
+#: ../../../packaging_guide_creation.rst:995
 msgid ""
 "``git_sparse_paths``: Only clone the provided :ref:`relative paths <git-"
 "sparse-checkout>`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:933
+#: ../../../packaging_guide_creation.rst:997
 msgid ""
 "The destination directory for the clone is the standard stage source path."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:937
+#: ../../../packaging_guide_creation.rst:1001
 msgid ""
 "``tag`` and ``branch`` should not be combined in the version parameters."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:939
+#: ../../../packaging_guide_creation.rst:1003
 msgid ""
 "We strongly recommend that all ``tag`` entries be paired with ``commit``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:944
+#: ../../../packaging_guide_creation.rst:1008
 msgid ""
 "**Trusted Downloads.** It is critical from a security and reproducibility "
 "standpoint that Spack be able to verify the downloaded source."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:947
+#: ../../../packaging_guide_creation.rst:1011
 msgid ""
 "Providing the full ``commit`` SHA hash allows for Spack to preserve "
 "provenance for all binaries since git commits are guaranteed to be unique "
@@ -1657,24 +1802,24 @@ msgid ""
 "cannot provide such a guarantee."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:950
+#: ../../../packaging_guide_creation.rst:1014
 msgid ""
 "A git download *is trusted* only if the full commit SHA is specified. "
 "Therefore, it is *the* recommended way to securely download from a Git "
 "repository."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:956
-#: ../../../packaging_guide_creation.rst:1165
+#: ../../../packaging_guide_creation.rst:1020
+#: ../../../packaging_guide_creation.rst:1229
 msgid "Default branch"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:957
+#: ../../../packaging_guide_creation.rst:1021
 msgid ""
 "A version with only a name results in fetching a repository's default branch:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:959
+#: ../../../packaging_guide_creation.rst:1023
 msgid ""
 "class Example(Package):\n"
 "\n"
@@ -1683,7 +1828,7 @@ msgid ""
 "    version(\"develop\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:967
+#: ../../../packaging_guide_creation.rst:1031
 msgid ""
 "Aside from use of HTTPS, there is no way to verify that the repository has "
 "not been compromised. Furthermore, the commit you get when you install the "
@@ -1691,87 +1836,87 @@ msgid ""
 "first written. There is also the risk that the default branch may change."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:973
-#: ../../../packaging_guide_creation.rst:1015
-#: ../../../packaging_guide_creation.rst:1180
-#: ../../../packaging_guide_creation.rst:1239
+#: ../../../packaging_guide_creation.rst:1037
+#: ../../../packaging_guide_creation.rst:1079
+#: ../../../packaging_guide_creation.rst:1244
+#: ../../../packaging_guide_creation.rst:1303
 msgid "This download method is **untrusted**, and is **not recommended**."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:975
+#: ../../../packaging_guide_creation.rst:1039
 msgid ""
 "It is better to specify a branch name (see :ref:`below <git-branches>`)."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:980
+#: ../../../packaging_guide_creation.rst:1044
 msgid "Branches"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:981
+#: ../../../packaging_guide_creation.rst:1045
 msgid ""
 "To fetch a particular branch, use the ``branch`` parameter, preferably with "
 "the same name as the version. For example,"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:984
+#: ../../../packaging_guide_creation.rst:1048
 msgid ""
 "version(\"main\", branch=\"main\")\n"
 "version(\"experimental\", branch=\"experimental\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:989
+#: ../../../packaging_guide_creation.rst:1053
 msgid ""
 "Branches are moving targets, which means the commit you get when you install "
 "the package likely won't be the one used when the package was first written."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:993
+#: ../../../packaging_guide_creation.rst:1057
 msgid ""
 "Common branch names are special in terms of how Spack determines the latest "
 "version of a package. See \"infinity versions\" in :ref:`version ordering "
 "<version-comparison>` for more information."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:998
+#: ../../../packaging_guide_creation.rst:1062
 msgid ""
 "This download method is **untrusted**, and is **not recommended** for "
 "production installations."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1003
+#: ../../../packaging_guide_creation.rst:1067
 msgid "Tags"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1004
+#: ../../../packaging_guide_creation.rst:1068
 msgid "To fetch from a particular tag, use ``tag`` instead:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1006
+#: ../../../packaging_guide_creation.rst:1070
 msgid "version(\"1.0.1\", tag=\"v1.0.1\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1010
+#: ../../../packaging_guide_creation.rst:1074
 msgid ""
 "While tags are generally more stable than branches, Git allows tags to be "
 "moved. Many developers use tags to denote rolling releases, and may move the "
 "tag when a bug is fixed."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1017
+#: ../../../packaging_guide_creation.rst:1081
 msgid ""
 "If you must use a ``tag``, it is recommended to combine it with the "
 "``commit`` option (see :ref:`below <git-commits>`)."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1022
+#: ../../../packaging_guide_creation.rst:1086
 msgid "Commits"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1023
+#: ../../../packaging_guide_creation.rst:1087
 msgid "To fetch a particular commit, use the ``commit`` argument:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1025
+#: ../../../packaging_guide_creation.rst:1089
 msgid ""
 "version(\"2014-10-08\", "
 "commit=\"1e6ef73d93a28240f954513bc4c2ed46178fa32b\")\n"
@@ -1779,7 +1924,7 @@ msgid ""
 "commit=\"420136f6f1f26050d95138e27cf8bc905bc5e7f52\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1030
+#: ../../../packaging_guide_creation.rst:1094
 msgid ""
 "It may be useful to provide a saner version for commits like this, e.g., you "
 "might use the date as the version, as done in the first example above. Or, "
@@ -1788,35 +1933,35 @@ msgid ""
 "makes the most sense."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1036
+#: ../../../packaging_guide_creation.rst:1100
 msgid ""
 "A git download is *trusted only if* the **full commit sha** is specified."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1041
+#: ../../../packaging_guide_creation.rst:1105
 msgid ""
 "**Avoid using the commit hash as the version.** It is not recommended to use "
 "the commit hash as the version itself, since it won't sort properly for :ref:"
 "`version ordering <version-comparison>` purposes."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1047
+#: ../../../packaging_guide_creation.rst:1111
 msgid "Submodules"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1048
+#: ../../../packaging_guide_creation.rst:1112
 msgid ""
 "You can supply ``submodules=True`` to cause Spack to fetch submodules "
 "recursively along with the repository."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1050
+#: ../../../packaging_guide_creation.rst:1114
 msgid ""
 "version(\"1.1.0\", commit=\"907d5f40d653a73955387067799913397807adf3\", "
 "submodules=True)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1054
+#: ../../../packaging_guide_creation.rst:1118
 msgid ""
 "If a package needs more fine-grained control over submodules, define "
 "``submodules`` to be a callable function that takes the package instance as "
@@ -1824,7 +1969,7 @@ msgid ""
 "fetched."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1057
+#: ../../../packaging_guide_creation.rst:1121
 msgid ""
 "def submodules(package):\n"
 "    submodules = []\n"
@@ -1840,17 +1985,17 @@ msgid ""
 "submodules=submodules)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1071
+#: ../../../packaging_guide_creation.rst:1135
 msgid ""
 "For more information about git submodules see the man page of git: ``man git-"
 "submodule``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1076
+#: ../../../packaging_guide_creation.rst:1140
 msgid "Sparse-Checkout"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1077
+#: ../../../packaging_guide_creation.rst:1141
 msgid ""
 "If you only want to clone a subset of the contents of a git repository, you "
 "can supply ``git_sparse_paths`` at the package or version level to utilize "
@@ -1859,25 +2004,25 @@ msgid ""
 "repositories containing separate features that can be built independently."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1083
+#: ../../../packaging_guide_creation.rst:1147
 msgid ""
 "This leverages a newer feature in git that requires version ``2.25.0`` or "
 "greater."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1085
+#: ../../../packaging_guide_creation.rst:1149
 msgid ""
 "If ``git_sparse_paths`` is supplied to a git version that is too old then a "
 "warning will be issued before standard cloning operations are performed."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1089
+#: ../../../packaging_guide_creation.rst:1153
 msgid ""
 "Paths to directories result in the cloning of *all* of their contents, "
 "including the contents of their subdirectories."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1091
+#: ../../../packaging_guide_creation.rst:1155
 msgid ""
 "The ``git_sparse_paths`` attribute needs to provide a list of relative paths "
 "within the repository. If using a property -- a function decorated with "
@@ -1885,11 +2030,11 @@ msgid ""
 "needs to return a list of paths."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1094
+#: ../../../packaging_guide_creation.rst:1158
 msgid "For example, using the attribute approach:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1096
+#: ../../../packaging_guide_creation.rst:1160
 msgid ""
 "class MyPackage(package):\n"
 "    # using an attribute\n"
@@ -1899,21 +2044,21 @@ msgid ""
 "    version(\"1.1.0\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1105
+#: ../../../packaging_guide_creation.rst:1169
 msgid ""
 "results in the files from the top level directory of the repository and the "
 "contents of the ``doe`` and ``rae`` relative paths within the repository to "
 "be cloned."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1107
+#: ../../../packaging_guide_creation.rst:1171
 msgid ""
 "Alternatively, you can provide the paths to the version directive argument "
 "using a callable function whose return value is a list for paths. For "
 "example:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1110
+#: ../../../packaging_guide_creation.rst:1174
 msgid ""
 "def sparse_path_function(package):\n"
 "    paths = [\"doe\", \"rae\", \"me/file.cpp\"]\n"
@@ -1929,7 +2074,7 @@ msgid ""
 "    version(\"1.1.5\", git_sparse_paths=sparse_path_function)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1125
+#: ../../../packaging_guide_creation.rst:1189
 msgid ""
 "results in the cloning of the files from the top level directory of the "
 "repository, the contents of the ``doe`` and ``rae`` relative paths, *and* "
@@ -1937,18 +2082,18 @@ msgid ""
 "then the contents of the ``fae`` relative path will also be cloned."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1130
+#: ../../../packaging_guide_creation.rst:1194
 msgid ""
 "The version directives in the examples above are simplified to emphasize use "
 "of this feature. Trusted downloads require a hash, such as a :ref:`sha256 "
 "<github-fetch>` or :ref:`commit <git-commits>`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1137
+#: ../../../packaging_guide_creation.rst:1201
 msgid "GitHub"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1139
+#: ../../../packaging_guide_creation.rst:1203
 msgid ""
 "If a project is hosted on GitHub, *any* valid Git branch, tag, or hash may "
 "be downloaded as a tarball. This is accomplished simply by constructing an "
@@ -1957,7 +2102,7 @@ msgid ""
 "particular hash, and then applies a checksum."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1144
+#: ../../../packaging_guide_creation.rst:1208
 msgid ""
 "version(\n"
 "    \"1.9.5.1.1\",\n"
@@ -1967,29 +2112,29 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1152
+#: ../../../packaging_guide_creation.rst:1216
 msgid ""
 "Alternatively, you could provide the GitHub ``url`` for one version as a "
 "property and Spack will extrapolate the URL for other versions as described "
 "in :ref:`Versions and URLs <versions-and-fetching>`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1158
+#: ../../../packaging_guide_creation.rst:1222
 msgid "Mercurial"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1160
+#: ../../../packaging_guide_creation.rst:1224
 msgid ""
 "Fetching with Mercurial works much like :ref:`Git <git-fetch>`, but you use "
 "the ``hg`` parameter. The destination directory is still the standard stage "
 "source path."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1166
+#: ../../../packaging_guide_creation.rst:1230
 msgid "Add the ``hg`` attribute with no ``revision`` passed to ``version``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1168
+#: ../../../packaging_guide_creation.rst:1232
 msgid ""
 "class Example(Package):\n"
 "\n"
@@ -1998,63 +2143,63 @@ msgid ""
 "    version(\"develop\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1176
+#: ../../../packaging_guide_creation.rst:1240
 msgid ""
 "As with Git's default fetching strategy, there is no way to verify the "
 "integrity of the download."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1185
+#: ../../../packaging_guide_creation.rst:1249
 msgid "Revisions"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1186
+#: ../../../packaging_guide_creation.rst:1250
 msgid "To fetch a particular revision, use the ``revision`` parameter:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1188
+#: ../../../packaging_guide_creation.rst:1252
 msgid "version(\"1.0\", revision=\"v1.0\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1192
+#: ../../../packaging_guide_creation.rst:1256
 msgid ""
 "Unlike ``git``, which has special parameters for different types of "
 "revisions, you can use ``revision`` for branches, tags, and **commits** when "
 "you fetch with Mercurial."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1196
+#: ../../../packaging_guide_creation.rst:1260
 msgid ""
 "Like Git, fetching specific branches or tags is an **untrusted** download "
 "method, and is **not recommended**."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1198
+#: ../../../packaging_guide_creation.rst:1262
 msgid ""
 "The recommended fetch strategy is to specify a particular commit hash as the "
 "revision."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1204
+#: ../../../packaging_guide_creation.rst:1268
 msgid "Subversion"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1206
+#: ../../../packaging_guide_creation.rst:1270
 msgid ""
 "To fetch with subversion, use the ``svn`` and ``revision`` parameters. The "
 "destination directory will be the standard stage source path."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1209
-#: ../../../packaging_guide_creation.rst:1259
+#: ../../../packaging_guide_creation.rst:1273
+#: ../../../packaging_guide_creation.rst:1323
 msgid "Fetching the head"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1210
+#: ../../../packaging_guide_creation.rst:1274
 msgid "Simply add an ``svn`` parameter to the package:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1212
+#: ../../../packaging_guide_creation.rst:1276
 msgid ""
 "class Example(Package):\n"
 "\n"
@@ -2063,27 +2208,27 @@ msgid ""
 "    version(\"develop\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1222
+#: ../../../packaging_guide_creation.rst:1286
 msgid ""
 "This download method is **untrusted**, and is **not recommended** for the "
 "same reasons as mentioned above."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1227
+#: ../../../packaging_guide_creation.rst:1291
 msgid "Fetching a revision"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1228
+#: ../../../packaging_guide_creation.rst:1292
 msgid ""
 "To fetch a particular revision, add a ``revision`` argument to the version "
 "directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1230
+#: ../../../packaging_guide_creation.rst:1294
 msgid "version(\"develop\", revision=128)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1234
+#: ../../../packaging_guide_creation.rst:1298
 msgid ""
 "Unfortunately, Subversion has no commit hashing scheme like Git and "
 "Mercurial do, so there is no way to guarantee that the download you get is "
@@ -2091,34 +2236,34 @@ msgid ""
 "risk."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1242
+#: ../../../packaging_guide_creation.rst:1306
 msgid ""
 "Subversion branches are handled as part of the directory structure, so you "
 "can check out a branch or tag by changing the URL. If you want to package "
 "multiple branches, simply add a ``svn`` argument to each version directive."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1249
+#: ../../../packaging_guide_creation.rst:1313
 msgid "CVS"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1251
+#: ../../../packaging_guide_creation.rst:1315
 msgid ""
 "CVS (Concurrent Versions System) is an old centralized version control "
 "system. It is a predecessor of Subversion."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1254
+#: ../../../packaging_guide_creation.rst:1318
 msgid ""
 "To fetch with CVS, use the ``cvs``, branch, and ``date`` parameters. The "
 "destination directory will be the standard stage source path."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1260
+#: ../../../packaging_guide_creation.rst:1324
 msgid "Simply add a ``cvs`` parameter to the package:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1262
+#: ../../../packaging_guide_creation.rst:1326
 msgid ""
 "class Example(Package):\n"
 "\n"
@@ -2127,7 +2272,7 @@ msgid ""
 "    version(\"1.1.2.4\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1270
+#: ../../../packaging_guide_creation.rst:1334
 msgid ""
 "CVS repository locations are described using an older syntax that is "
 "different from today's ubiquitous URL syntax. ``:pserver:`` denotes the "
@@ -2137,43 +2282,43 @@ msgid ""
 "using the ``%module=modulename`` suffix shown above."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1277
-#: ../../../packaging_guide_creation.rst:1295
+#: ../../../packaging_guide_creation.rst:1341
+#: ../../../packaging_guide_creation.rst:1359
 msgid "This download method is **untrusted**."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1282
+#: ../../../packaging_guide_creation.rst:1346
 msgid "Fetching a date"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1283
+#: ../../../packaging_guide_creation.rst:1347
 msgid ""
 "Versions in CVS are commonly specified by date. To fetch a particular branch "
 "or date, add a ``branch`` and/or ``date`` argument to the version directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1286
+#: ../../../packaging_guide_creation.rst:1350
 msgid "version(\"2021.4.22\", branch=\"branchname\", date=\"2021-04-22\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1290
+#: ../../../packaging_guide_creation.rst:1354
 msgid ""
 "Unfortunately, CVS does not identify repository-wide commits via a revision "
 "or hash like Subversion, Git, or Mercurial do. This makes it impossible to "
 "specify an exact commit to check out."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1298
+#: ../../../packaging_guide_creation.rst:1362
 msgid ""
 "CVS has more features, but since CVS is rarely used these days, Spack does "
 "not support all of them."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1301
+#: ../../../packaging_guide_creation.rst:1365
 msgid "Sources that are not archives"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1303
+#: ../../../packaging_guide_creation.rst:1367
 msgid ""
 "Spack normally expands archives (e.g., ``*.tar.gz`` and ``*.zip``) "
 "automatically into a standard stage source directory (``self.stage."
@@ -2182,7 +2327,7 @@ msgid ""
 "``expand=False`` to a ``version`` directive."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1306
+#: ../../../packaging_guide_creation.rst:1370
 msgid ""
 "version(\n"
 "    \"8.2.1\",\n"
@@ -2192,7 +2337,7 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1315
+#: ../../../packaging_guide_creation.rst:1379
 msgid ""
 "When ``expand`` is set to ``False``, Spack sets the current working "
 "directory to the directory containing the downloaded archive before it calls "
@@ -2200,14 +2345,14 @@ msgid ""
 "archive is available as ``self.stage.archive_file``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1318
+#: ../../../packaging_guide_creation.rst:1382
 msgid ""
 "Here is an example snippet for packages distributed as self-extracting "
 "archives. The example sets permissions on the downloaded file to make it "
 "executable, then runs it with some arguments."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1321
+#: ../../../packaging_guide_creation.rst:1385
 msgid ""
 "def install(self, spec, prefix):\n"
 "    set_executable(self.stage.archive_file)\n"
@@ -2215,11 +2360,11 @@ msgid ""
 "    installer(\"--prefix=%s\" % prefix, \"arg1\", \"arg2\", \"etc.\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1334
+#: ../../../packaging_guide_creation.rst:1398
 msgid "Extra Resources"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1336
+#: ../../../packaging_guide_creation.rst:1400
 msgid ""
 "Some packages (most notably compilers) provide optional features if "
 "additional resources are expanded within their source tree before building. "
@@ -2227,7 +2372,7 @@ msgid ""
 "directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1339
+#: ../../../packaging_guide_creation.rst:1403
 msgid ""
 "resource(\n"
 "    name=\"cargo\",\n"
@@ -2237,18 +2382,18 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1348
+#: ../../../packaging_guide_creation.rst:1412
 msgid ""
 "The arguments are similar to those of the ``versions`` directive. The "
 "keyword ``destination`` is relative to the source root of the package and "
 "should point to where the resource is to be expanded."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1352
+#: ../../../packaging_guide_creation.rst:1416
 msgid "Download caching"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1354
+#: ../../../packaging_guide_creation.rst:1418
 msgid ""
 "Spack maintains a cache (described :ref:`here <caching>`) which saves files "
 "retrieved during package installations to avoid re-downloading in the case "
@@ -2261,11 +2406,11 @@ msgid ""
 "regularly updated snapshot tarball."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1362
+#: ../../../packaging_guide_creation.rst:1426
 msgid "Specifying version constraints"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1364
+#: ../../../packaging_guide_creation.rst:1428
 msgid ""
 "Many Spack directives allow limiting versions to support features such as :"
 "ref:`backward and forward compatibility <version_compatibility>`. These "
@@ -2273,11 +2418,11 @@ msgid ""
 "``@<specifier>`` syntax. (See :ref:`version-specifier` for more information.)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1368
+#: ../../../packaging_guide_creation.rst:1432
 msgid "For example, the following:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1370
+#: ../../../packaging_guide_creation.rst:1434
 msgid ""
 "depends_on(\"foo\")\n"
 "depends_on(\"python@3\")\n"
@@ -2285,14 +2430,14 @@ msgid ""
 "conflicts(\"^foo@1.2.3:\", when=\"@:4.5\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1377
+#: ../../../packaging_guide_creation.rst:1441
 msgid ""
 "illustrates, in order, three of four forms of version range constraints: "
 "implicit, lower bound and upper bound. The fourth form provides lower *and* "
 "upper bounds on the version."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1380
+#: ../../../packaging_guide_creation.rst:1444
 msgid ""
 "In this example, the implicit range is used to indicate that the package :"
 "ref:`depends on <dependencies>` *any* ``python`` *with* ``3`` *as the major "
@@ -2306,7 +2451,7 @@ msgid ""
 "long as the major version number is* ``3``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1386
+#: ../../../packaging_guide_creation.rst:1450
 msgid ""
 "While you can constrain the spec to a single version -- using the "
 "``@=<version>`` form of ``specifier`` -- **ranges are preferred** even if "
@@ -2319,7 +2464,7 @@ msgid ""
 "version constraint ``@1.2.3``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1393
+#: ../../../packaging_guide_creation.rst:1457
 msgid ""
 "Specific ``@=`` versions should only be used in **exceptional cases**, such "
 "as when the package has a versioning scheme that omits the zero in the first "
@@ -2329,11 +2474,11 @@ msgid ""
 "versions."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1404
+#: ../../../packaging_guide_creation.rst:1468
 msgid "Variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1406
+#: ../../../packaging_guide_creation.rst:1470
 msgid ""
 "Many software packages can be configured to enable optional features, which "
 "often come at the expense of additional dependencies or longer build times. "
@@ -2343,17 +2488,17 @@ msgid ""
 "employed is the :py:func:`~spack.package.variant` directive."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1411
+#: ../../../packaging_guide_creation.rst:1475
 msgid "Boolean variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1413
+#: ../../../packaging_guide_creation.rst:1477
 msgid ""
 "In their simplest form, variants are boolean options specified at the "
 "package level:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1415
+#: ../../../packaging_guide_creation.rst:1479
 msgid ""
 "class Hdf5(AutotoolsPackage):\n"
 "    ...\n"
@@ -2361,11 +2506,11 @@ msgid ""
 "of the library\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1421
+#: ../../../packaging_guide_creation.rst:1485
 msgid "with a default value and a description of their meaning in the package."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1423
+#: ../../../packaging_guide_creation.rst:1487
 msgid ""
 "With this variant defined, users can now run ``spack install hdf5 +shared`` "
 "and ``spack install hdf5 ~shared`` to enable or disable the ``shared`` "
@@ -2373,7 +2518,7 @@ msgid ""
 "syntax of variants."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1426
+#: ../../../packaging_guide_creation.rst:1490
 msgid ""
 "Of course, merely defining a variant in a package does not automatically "
 "enable or disable any features in the build system. As a packager, you are "
@@ -2383,14 +2528,14 @@ msgid ""
 "build with spec objects <spec-objects>`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1430
+#: ../../../packaging_guide_creation.rst:1494
 msgid ""
 "Other than influencing the build process, variants are often used to specify "
 "optional :ref:`dependencies of a package <dependencies>`. For example, a "
 "package may depend on another package only if a certain variant is enabled:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1433
+#: ../../../packaging_guide_creation.rst:1497
 msgid ""
 "class Hdf5(AutotoolsPackage):\n"
 "    ...\n"
@@ -2398,29 +2543,29 @@ msgid ""
 "    depends_on(\"szip\", when=\"+szip\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1440
+#: ../../../packaging_guide_creation.rst:1504
 msgid ""
 "In this case, ``szip`` is modeled as an optional dependency of ``hdf5``, and "
 "users can run ``spack install hdf5 +szip`` to enable it."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1443
+#: ../../../packaging_guide_creation.rst:1507
 msgid "Single-valued variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1445
+#: ../../../packaging_guide_creation.rst:1509
 msgid ""
 "Other than boolean variants, Spack supports single- and multi-valued "
 "variants that can take one or more *string* values."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1447
+#: ../../../packaging_guide_creation.rst:1511
 msgid ""
 "To define a *single-valued* variant, simply pass a tuple of possible values "
 "to the ``variant`` directive, together with ``multi=False``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1449
+#: ../../../packaging_guide_creation.rst:1513
 msgid ""
 "class Blis(Package):\n"
 "    ...\n"
@@ -2433,11 +2578,11 @@ msgid ""
 "    )"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1461
+#: ../../../packaging_guide_creation.rst:1525
 msgid "This allows users to ``spack install blis threads=openmp``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1463
+#: ../../../packaging_guide_creation.rst:1527
 msgid ""
 "In the example above the argument ``multi=False`` indicates that only a "
 "**single value** can be selected at a time. This constraint is enforced by "
@@ -2445,7 +2590,7 @@ msgid ""
 "at the same time:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1466
+#: ../../../packaging_guide_creation.rst:1530
 msgid ""
 "$ spack spec blis threads=openmp,pthreads\n"
 "Input spec\n"
@@ -2457,7 +2602,7 @@ msgid ""
 "==> Error: multiple values are not allowed for variant \"threads\""
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1479
+#: ../../../packaging_guide_creation.rst:1543
 msgid ""
 "In the example above, the value ``threads=none`` is a variant value like any "
 "other, and means that *no value is selected*. In Spack, all variants have to "
@@ -2465,21 +2610,21 @@ msgid ""
 "value is selected."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1483
+#: ../../../packaging_guide_creation.rst:1547
 msgid "Multi-valued variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1485
+#: ../../../packaging_guide_creation.rst:1549
 msgid ""
 "Like single-valued variants, multi-valued variants take one or more *string* "
 "values, but allow users to select multiple values at the same time."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1487
+#: ../../../packaging_guide_creation.rst:1551
 msgid "To define a *multi-valued* variant, simply pass ``multi=True`` instead:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1489
+#: ../../../packaging_guide_creation.rst:1553
 msgid ""
 "class Gcc(AutotoolsPackage):\n"
 "    ...\n"
@@ -2492,17 +2637,17 @@ msgid ""
 "    )"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1501
+#: ../../../packaging_guide_creation.rst:1565
 msgid ""
 "This allows users to run ``spack install languages=c,c++``, where the values "
 "are separated by commas."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1505
+#: ../../../packaging_guide_creation.rst:1569
 msgid "Advanced validation of multi-valued variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1507
+#: ../../../packaging_guide_creation.rst:1571
 msgid ""
 "As noted above, the value ``none`` is a value like any other, which raises "
 "the question: what if a variant allows multiple values to be selected, *or* "
@@ -2510,7 +2655,7 @@ msgid ""
 "creating a multi-valued variant that includes the value ``none``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1510
+#: ../../../packaging_guide_creation.rst:1574
 msgid ""
 "class Adios(AutotoolsPackage):\n"
 "    ...\n"
@@ -2523,13 +2668,13 @@ msgid ""
 "    )"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1521
+#: ../../../packaging_guide_creation.rst:1585
 msgid ""
 "but this does not prevent users from selecting the nonsensical option "
 "``staging=dataspaces,none``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1523
+#: ../../../packaging_guide_creation.rst:1587
 msgid ""
 "In these cases, more advanced validation logic is required to prevent "
 "``none`` from being selected along with any other value. Spack provides two "
@@ -2537,13 +2682,13 @@ msgid ""
 "``values=`` argument of the ``variant`` directive."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1526
+#: ../../../packaging_guide_creation.rst:1590
 msgid ""
 "The first validator function is :py:func:`~spack.package."
 "any_combination_of`, which can be used as follows:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1528
+#: ../../../packaging_guide_creation.rst:1592
 msgid ""
 "class Adios(AutotoolsPackage):\n"
 "    ...\n"
@@ -2555,7 +2700,7 @@ msgid ""
 "    )"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1538
+#: ../../../packaging_guide_creation.rst:1602
 msgid ""
 "This solves the issue by allowing the user to select either any combination "
 "of the values ``flexpath`` and ``dataspaces``, or ``none``. In other words, "
@@ -2564,13 +2709,13 @@ msgid ""
 "flexpath``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1541
+#: ../../../packaging_guide_creation.rst:1605
 msgid ""
 "The second validator function :py:func:`~spack.package.disjoint_sets` "
 "generalizes this idea further:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1543
+#: ../../../packaging_guide_creation.rst:1607
 msgid ""
 "class Mvapich2(AutotoolsPackage):\n"
 "    ...\n"
@@ -2587,7 +2732,7 @@ msgid ""
 "    )"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1557
+#: ../../../packaging_guide_creation.rst:1621
 msgid ""
 "In this case, examples of valid options are ``process_managers=auto``, "
 "``process_managers=slurm``, and ``process_managers=hydra,remshell``, whereas "
@@ -2595,18 +2740,18 @@ msgid ""
 "different sets."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1559
+#: ../../../packaging_guide_creation.rst:1623
 msgid ""
 "Both validator functions return a :py:class:`~spack.variant."
 "DisjointSetsOfValues` object, which defines chaining methods to further "
 "customize the behavior of the variant."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1566
+#: ../../../packaging_guide_creation.rst:1630
 msgid "Conditional Possible Values"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1568
+#: ../../../packaging_guide_creation.rst:1632
 msgid ""
 "There are cases where a variant may take multiple values, and the list of "
 "allowed values expands over time. Consider, for instance, the C++ standard "
@@ -2614,13 +2759,13 @@ msgid ""
 "values with the latest standards only available for more recent versions."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1571
+#: ../../../packaging_guide_creation.rst:1635
 msgid ""
 "To model a similar situation we can use *conditional possible values* in the "
 "variant declaration:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1573
+#: ../../../packaging_guide_creation.rst:1637
 msgid ""
 "variant(\n"
 "    \"cxxstd\",\n"
@@ -2639,7 +2784,7 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1592
+#: ../../../packaging_guide_creation.rst:1656
 msgid ""
 "The snippet above allows ``98``, ``11`` and ``14`` as unconditional possible "
 "values for the ``cxxstd`` variant, while ``17`` requires a version greater "
@@ -2647,32 +2792,32 @@ msgid ""
 "greater than or equal to ``1.73.0``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1596
+#: ../../../packaging_guide_creation.rst:1660
 msgid "Conditional Variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1598
+#: ../../../packaging_guide_creation.rst:1662
 msgid ""
 "As new versions of packages are released, optional features may be added and "
 "removed. Sometimes, features are only available for a particular platform or "
 "architecture."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1601
+#: ../../../packaging_guide_creation.rst:1665
 msgid ""
 "To reduce the visual clutter in specs, packages can define variants "
 "*conditionally* using a ``when`` clause. The variant will only be present on "
 "specs that satisfy this condition."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1604
+#: ../../../packaging_guide_creation.rst:1668
 msgid ""
 "For example, the following package defines a variant ``bar`` that exists "
 "only when it is at version 2.0 or higher, and a variant ``baz`` that exists "
 "only on the Darwin platform:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1606
+#: ../../../packaging_guide_creation.rst:1670
 msgid ""
 "class Foo(Package):\n"
 "    ...\n"
@@ -2680,7 +2825,7 @@ msgid ""
 "    variant(\"baz\", default=True, when=\"platform=darwin\", ...)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1613
+#: ../../../packaging_guide_creation.rst:1677
 msgid ""
 "Do note that conditional variants can also be a source of confusion. In "
 "Spack, the absence of a variant is different from it being disabled. For "
@@ -2691,35 +2836,35 @@ msgid ""
 "version 2.0 or higher, where the variant is defined."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1620
+#: ../../../packaging_guide_creation.rst:1684
 msgid "Sticky Variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1622
+#: ../../../packaging_guide_creation.rst:1686
 msgid ""
 "The variant directive can be marked as ``sticky`` by setting the "
 "corresponding argument to ``True``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1624
+#: ../../../packaging_guide_creation.rst:1688
 msgid "variant(\"bar\", default=False, sticky=True)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1628
+#: ../../../packaging_guide_creation.rst:1692
 msgid ""
 "A ``sticky`` variant differs from a regular one in that it is always set to "
 "either:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1630
+#: ../../../packaging_guide_creation.rst:1694
 msgid "An explicit value appearing in a spec literal or"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1631
+#: ../../../packaging_guide_creation.rst:1695
 msgid "Its default value"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1633
+#: ../../../packaging_guide_creation.rst:1697
 msgid ""
 "The concretizer thus is not free to pick an alternate value to work around "
 "conflicts, but will error out instead. Setting this property on a variant is "
@@ -2729,18 +2874,18 @@ msgid ""
 "by the user, rather than automatically by the solver."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1638
+#: ../../../packaging_guide_creation.rst:1702
 msgid "Overriding Variants"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1640
+#: ../../../packaging_guide_creation.rst:1704
 msgid ""
 "Packages may override variants for several reasons, most often to change the "
 "default from a variant defined in a parent class or to change the conditions "
 "under which a variant is present on the spec."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1642
+#: ../../../packaging_guide_creation.rst:1706
 msgid ""
 "When a variant is defined multiple times, whether in the same package file "
 "or in a subclass and a superclass, the last definition is used for all "
@@ -2749,11 +2894,11 @@ msgid ""
 "if any of the accumulated conditions are satisfied."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1645
+#: ../../../packaging_guide_creation.rst:1709
 msgid "For example, consider the following package:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1647
+#: ../../../packaging_guide_creation.rst:1711
 msgid ""
 "class Foo(Package):\n"
 "    ...\n"
@@ -2763,7 +2908,7 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1655
+#: ../../../packaging_guide_creation.rst:1719
 msgid ""
 "This package ``foo`` has a variant ``bar`` when the spec satisfies either "
 "``@1.0`` or ``platform=darwin``, but not for other platforms at other "
@@ -2775,11 +2920,11 @@ msgid ""
 "for a variant ``when`` clause by duplicating the variant definition."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1666
+#: ../../../packaging_guide_creation.rst:1730
 msgid "Dependencies"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1668
+#: ../../../packaging_guide_creation.rst:1732
 msgid ""
 "We've covered how to build a simple package, but what if one package relies "
 "on another package to build? How do you express that in a package file? And "
@@ -2787,13 +2932,13 @@ msgid ""
 "package?"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1672
+#: ../../../packaging_guide_creation.rst:1736
 msgid ""
 "Spack makes this relatively easy. Let's take a look at the ``libdwarf`` "
 "package to see how it's done:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1675
+#: ../../../packaging_guide_creation.rst:1739
 msgid ""
 "class Libdwarf(Package):\n"
 "    homepage = \"http://www.prevanders.net/dwarf.html\"\n"
@@ -2809,11 +2954,11 @@ msgid ""
 "    def install(self, spec, prefix): ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1692
+#: ../../../packaging_guide_creation.rst:1756
 msgid "``depends_on()``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1694
+#: ../../../packaging_guide_creation.rst:1758
 msgid ""
 "The highlighted ``depends_on(\"libelf\")`` call tells Spack that it needs to "
 "build and install the ``libelf`` package before it builds ``libdwarf``. This "
@@ -2822,11 +2967,11 @@ msgid ""
 "``libdwarf`` build."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1700
+#: ../../../packaging_guide_creation.rst:1764
 msgid "Dependency specs"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1702
+#: ../../../packaging_guide_creation.rst:1766
 msgid ""
 "``depends_on`` doesn't just take the name of another package. It can take a "
 "full spec as well. This means that you can restrict the versions or other "
@@ -2834,11 +2979,11 @@ msgid ""
 "example, suppose that in the ``libdwarf`` package you write:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1707
+#: ../../../packaging_guide_creation.rst:1771
 msgid "depends_on(\"libelf@0.8\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1711
+#: ../../../packaging_guide_creation.rst:1775
 msgid ""
 "Now ``libdwarf`` will require ``libelf`` in the range ``0.8``, which "
 "includes patch versions ``0.8.1``, ``0.8.2``, etc. Apart from version "
@@ -2846,11 +2991,11 @@ msgid ""
 "optional features of the dependency."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1714
+#: ../../../packaging_guide_creation.rst:1778
 msgid "depends_on(\"libelf@0.8 +parser +pic\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1718
+#: ../../../packaging_guide_creation.rst:1782
 msgid ""
 "Both users *and* package authors use the same spec syntax to refer to "
 "different package configurations. Users use the spec syntax on the command "
@@ -2859,11 +3004,11 @@ msgid ""
 "between packages."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1724
+#: ../../../packaging_guide_creation.rst:1788
 msgid "Specifying backward and forward compatibility"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1726
+#: ../../../packaging_guide_creation.rst:1790
 msgid ""
 "Packages are often compatible with a range of versions of their "
 "dependencies. This is typically referred to as backward and forward "
@@ -2871,30 +3016,30 @@ msgid ""
 "directive using version ranges."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1730
+#: ../../../packaging_guide_creation.rst:1794
 msgid ""
 "**Backward compatibility** means that the package requires at least a "
 "certain version of its dependency:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1732
+#: ../../../packaging_guide_creation.rst:1796
 msgid "depends_on(\"python@3.10:\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1736
+#: ../../../packaging_guide_creation.rst:1800
 msgid ""
 "In this case, the package requires Python 3.10 or newer, as specified in the "
 "project's :file:`pyproject.toml`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1738
+#: ../../../packaging_guide_creation.rst:1802
 msgid ""
 "Commonly, packages drop support for older versions of a dependency as they "
 "release new versions. In Spack you can conveniently add every backward "
 "compatibility rule as a separate line:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1741
+#: ../../../packaging_guide_creation.rst:1805
 msgid ""
 "# backward compatibility with Python\n"
 "depends_on(\"python@3.8:\")\n"
@@ -2902,7 +3047,7 @@ msgid ""
 "depends_on(\"python@3.10:\", when=\"@1.4:\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1748
+#: ../../../packaging_guide_creation.rst:1812
 msgid ""
 "This means that in general we need Python 3.8 or newer; from version 1.2 "
 "onwards we need Python 3.9 or newer; from version 1.4 onwards we need Python "
@@ -2910,7 +3055,7 @@ msgid ""
 "``when`` clauses."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1751
+#: ../../../packaging_guide_creation.rst:1815
 msgid ""
 "**Forward compatibility** means that the package requires at most a certain "
 "version of its dependency. Forward compatibility rules are necessary when "
@@ -2921,14 +3066,14 @@ msgid ""
 "in a package file as separate lines:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1756
+#: ../../../packaging_guide_creation.rst:1820
 msgid ""
 "# forward compatibility with Python\n"
 "depends_on(\"python@:3.12\", when=\"@:1.10\")\n"
 "depends_on(\"python@:3.13\", when=\"@:1.12\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1762
+#: ../../../packaging_guide_creation.rst:1826
 msgid ""
 "Notice how the ``:`` now appears before the version number both in the "
 "dependency and in the ``when`` clause. This tells Spack that in general we "
@@ -2938,99 +3083,99 @@ msgid ""
 "compatibility with Python 3.14."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1766
+#: ../../../packaging_guide_creation.rst:1830
 msgid ""
 "Notice that a version range ``@:3.12`` includes *any* patch version number "
 "``3.12.x``, which is often useful when specifying forward compatibility "
 "bounds."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1768
+#: ../../../packaging_guide_creation.rst:1832
 msgid ""
 "So far we have seen open-ended version ranges, which is by far the most "
 "common use case. It is also possible to specify both a lower and an upper "
 "bound on the version of a dependency, like this:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1771
+#: ../../../packaging_guide_creation.rst:1835
 msgid "depends_on(\"python@3.10:3.12\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1775
+#: ../../../packaging_guide_creation.rst:1839
 msgid ""
 "There is short syntax to specify that a package is compatible with say any "
 "``3.x`` version:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1777
+#: ../../../packaging_guide_creation.rst:1841
 msgid "depends_on(\"python@3\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1781
+#: ../../../packaging_guide_creation.rst:1845
 msgid ""
 "The above is equivalent to ``depends_on(\"python@3:3\")``, which means at "
 "least Python version 3 and at most any ``3.x.y`` version."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1783
+#: ../../../packaging_guide_creation.rst:1847
 msgid ""
 "In very rare cases, you may need to specify an exact version, for example if "
 "you need to distinguish between ``3.2`` and ``3.2.1``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1785
+#: ../../../packaging_guide_creation.rst:1849
 msgid "depends_on(\"pkg@=3.2\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1789
+#: ../../../packaging_guide_creation.rst:1853
 msgid ""
 "But in general, you should try to use version ranges as much as possible, so "
 "that custom suffixes are included too. The above example can be rewritten in "
 "terms of ranges as follows:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1792
+#: ../../../packaging_guide_creation.rst:1856
 msgid "depends_on(\"pkg@3.2:3.2.0\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1796
+#: ../../../packaging_guide_creation.rst:1860
 msgid ""
 "A spec can contain a version list of ranges and individual versions "
 "separated by commas. For example, if you need Boost 1.59.0 or newer, but "
 "there are known issues with 1.64.0, 1.65.0, and 1.66.0, you can say:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1799
+#: ../../../packaging_guide_creation.rst:1863
 msgid "depends_on(\"boost@1.59.0:1.63,1.65.1,1.67.0:\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1803
+#: ../../../packaging_guide_creation.rst:1867
 msgid ""
 "or, if those particular versions are excluded due to bugs rather than "
 "removed and reintroduced features:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1805
+#: ../../../packaging_guide_creation.rst:1869
 msgid ""
 "depends_on(\"boost@1.59.0:\")\n"
 "conflicts(\"^boost@1.64.0,1.65.0,1.66.0\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1810
+#: ../../../packaging_guide_creation.rst:1874
 msgid "Always specify version ranges with an open-world assumption:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1812
+#: ../../../packaging_guide_creation.rst:1876
 msgid ""
 "all \"ground truths\" about exclusions and inclusions (e.g., versions with "
 "features added or removed) must satisfy the range, and"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1813
+#: ../../../packaging_guide_creation.rst:1877
 msgid "no potential but unknown versions are excluded from the range."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1815
+#: ../../../packaging_guide_creation.rst:1879
 msgid ""
 "This practice avoids overconstraining version ranges, which can lead to "
 "concretization errors, and ensures that every version in a package is "
@@ -3044,17 +3189,17 @@ msgid ""
 "with an upper bound."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1828
+#: ../../../packaging_guide_creation.rst:1892
 msgid "Dependency types"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1830
+#: ../../../packaging_guide_creation.rst:1894
 msgid ""
 "Not all dependencies are created equal, and Spack allows you to specify "
 "exactly what kind of a dependency you need. For example:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1833
+#: ../../../packaging_guide_creation.rst:1897
 msgid ""
 "depends_on(\"cmake\", type=\"build\")\n"
 "depends_on(\"py-numpy\", type=(\"build\", \"run\"))\n"
@@ -3062,31 +3207,31 @@ msgid ""
 "depends_on(\"py-pytest\", type=\"test\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1840
+#: ../../../packaging_guide_creation.rst:1904
 msgid "The following dependency types are available:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1842
+#: ../../../packaging_guide_creation.rst:1906
 msgid ""
 "**build**: the dependency will be added to the ``PATH`` and ``PYTHONPATH`` "
 "at build-time."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1843
+#: ../../../packaging_guide_creation.rst:1907
 msgid ""
 "**link**: the dependency will be added to Spack's compiler wrappers, "
 "automatically injecting the appropriate linker flags, including ``-I``, ``-"
 "L``, and RPATH/RUNPATH handling."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1844
+#: ../../../packaging_guide_creation.rst:1908
 msgid ""
 "**run**: the dependency will be added to the ``PATH`` and ``PYTHONPATH`` at "
 "run-time. This is true for both ``spack load`` and the module files Spack "
 "writes."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1846
+#: ../../../packaging_guide_creation.rst:1910
 msgid ""
 "**test**: the dependency will be added to the ``PATH`` and ``PYTHONPATH`` at "
 "build-time. The only difference between \"build\" and \"test\" is that test "
@@ -3094,7 +3239,7 @@ msgid ""
 "install --test``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1849
+#: ../../../packaging_guide_creation.rst:1913
 msgid ""
 "One of the advantages of the ``build`` dependency type is that although the "
 "dependency needs to be installed in order for the package to be built, it "
@@ -3102,7 +3247,7 @@ msgid ""
 "this because uninstalling the dependency would break the package."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1852
+#: ../../../packaging_guide_creation.rst:1916
 msgid ""
 "``build``, ``link``, and ``run`` dependencies all affect the hash of Spack "
 "packages (along with ``sha256`` sums of patches and archives used to build "
@@ -3115,7 +3260,7 @@ msgid ""
 "Spack v0.18|_."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1859
+#: ../../../packaging_guide_creation.rst:1923
 msgid ""
 "If the dependency type is not specified, Spack uses a default of "
 "``(\"build\", \"link\")``. This is the common case for compiler languages. "
@@ -3126,11 +3271,11 @@ msgid ""
 "wants to run the package."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1867
+#: ../../../packaging_guide_creation.rst:1931
 msgid "Conditional dependencies"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1869
+#: ../../../packaging_guide_creation.rst:1933
 msgid ""
 "You may have a package that only requires a dependency under certain "
 "conditions. For example, you may have a package with optional MPI support. "
@@ -3139,14 +3284,14 @@ msgid ""
 "case, you could say something like:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1874
+#: ../../../packaging_guide_creation.rst:1938
 msgid ""
 "variant(\"mpi\", default=False, description=\"Enable MPI support\")\n"
 "\n"
 "depends_on(\"mpi\", when=\"+mpi\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1881
+#: ../../../packaging_guide_creation.rst:1945
 msgid ""
 "Suppose that, starting from version 3, the above package also has optional "
 "`Trilinos` support. Furthermore, you want to ensure that when `Trilinos` "
@@ -3155,7 +3300,7 @@ msgid ""
 "that case, the `trilinos` variant and dependency directives would be:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1886
+#: ../../../packaging_guide_creation.rst:1950
 msgid ""
 "variant(\"trilinos\", default=False, description=\"Enable Trilinos "
 "support\")\n"
@@ -3164,39 +3309,39 @@ msgid ""
 "depends_on(\"trilinos@12.6: +mpi\", when=\"@3: +trilinos +mpi\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1894
+#: ../../../packaging_guide_creation.rst:1958
 msgid ""
 "Alternatively, you could use the `when` context manager to equivalently "
 "specify the `trilinos` variant dependencies as follows:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1896
+#: ../../../packaging_guide_creation.rst:1960
 msgid ""
 "with when(\"@3: +trilinos\"):\n"
 "    depends_on(\"trilinos@12.6:\")\n"
 "    depends_on(\"trilinos +mpi\", when=\"+mpi\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1903
+#: ../../../packaging_guide_creation.rst:1967
 msgid ""
 "The argument to ``when`` in either case can include any Spec constraints "
 "that are supported on the command line using the same :ref:`syntax <sec-"
 "specs>`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1907
+#: ../../../packaging_guide_creation.rst:1971
 msgid ""
 "If a dependency isn't typically used, you can save time by making it "
 "conditional since Spack will not build the dependency unless it is required "
 "for the Spec."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1913
-#: ../../../packaging_guide_creation.rst:2449
+#: ../../../packaging_guide_creation.rst:1977
+#: ../../../packaging_guide_creation.rst:2513
 msgid "Dependency patching"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1915
+#: ../../../packaging_guide_creation.rst:1979
 msgid ""
 "Some packages maintain special patches on their dependencies, either to add "
 "new features or to fix bugs. This typically makes a package harder to "
@@ -3206,13 +3351,13 @@ msgid ""
 "changes, or maybe they just haven't had time to integrate them."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1920
+#: ../../../packaging_guide_creation.rst:1984
 msgid ""
 "For times like these, Spack's ``depends_on`` directive can optionally take a "
 "patch or list of patches:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1922
+#: ../../../packaging_guide_creation.rst:1986
 msgid ""
 "class SpecialTool(Package):\n"
 "    ...\n"
@@ -3220,7 +3365,7 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1929
+#: ../../../packaging_guide_creation.rst:1993
 msgid ""
 "Here, the ``special-tool`` package requires a special feature in "
 "``binutils``, so it provides an extra ``patches=<filename>`` keyword "
@@ -3230,13 +3375,13 @@ msgid ""
 "the ``binutils`` directory."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1933
+#: ../../../packaging_guide_creation.rst:1997
 msgid ""
 "If you need something more sophisticated, you can nest a ``patch()`` "
 "directive inside ``depends_on``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1935
+#: ../../../packaging_guide_creation.rst:1999
 msgid ""
 "class SpecialTool(Package):\n"
 "    ...\n"
@@ -3251,7 +3396,7 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1948
+#: ../../../packaging_guide_creation.rst:2012
 msgid ""
 "Note that there are two optional ``when`` conditions here -- one on the "
 "``patch`` directive and the other on ``depends_on``. The condition in the "
@@ -3261,13 +3406,13 @@ msgid ""
 "``patch`` directive can take."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1952
+#: ../../../packaging_guide_creation.rst:2016
 msgid ""
 "Finally, if you need *multiple* patches on a dependency, you can provide a "
 "list for ``patches``, e.g.:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1954
+#: ../../../packaging_guide_creation.rst:2018
 msgid ""
 "class SpecialTool(Package):\n"
 "    ...\n"
@@ -3287,19 +3432,19 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1973
+#: ../../../packaging_guide_creation.rst:2037
 msgid ""
 "As with ``patch`` directives, patches are applied in the order they appear "
 "in the package file (or in this case, in the list)."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1977
+#: ../../../packaging_guide_creation.rst:2041
 msgid ""
 "You may wonder whether dependency patching will interfere with other "
 "packages that depend on ``binutils``. It won't."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1980
+#: ../../../packaging_guide_creation.rst:2044
 msgid ""
 "As described in :ref:`patching`, Patching a package adds the ``sha256`` of "
 "the patch to the package's spec, which means it will have a *different* "
@@ -3310,11 +3455,11 @@ msgid ""
 "use a single installation of ``binutils``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1990
+#: ../../../packaging_guide_creation.rst:2054
 msgid "Virtual dependencies"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1992
+#: ../../../packaging_guide_creation.rst:2056
 msgid ""
 "In some cases, more than one package can satisfy another package's "
 "dependency. One way this can happen is if a package depends on a particular "
@@ -3324,7 +3469,7 @@ msgid ""
 "projects/mpi/>`_, which is used in many large-scale parallel applications."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1996
+#: ../../../packaging_guide_creation.rst:2060
 msgid ""
 "MPI has several different implementations (e.g., `MPICH <http://www.mpich."
 "org>`_, `OpenMPI <http://www.open-mpi.org>`_, and `MVAPICH <http://mvapich."
@@ -3336,18 +3481,18 @@ msgid ""
 "through *virtual dependencies*."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2001
+#: ../../../packaging_guide_creation.rst:2065
 msgid "``provides``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2003
+#: ../../../packaging_guide_creation.rst:2067
 msgid ""
 "In Spack, ``mpi`` is handled as a *virtual package*. A package like "
 "``mpileaks`` can depend on the virtual ``mpi`` just like any other package, "
 "by supplying a ``depends_on`` call in the package definition. For example:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2007
+#: ../../../packaging_guide_creation.rst:2071
 msgid ""
 "class Mpileaks(Package):\n"
 "    homepage = \"https://github.com/hpc/mpileaks\"\n"
@@ -3362,7 +3507,7 @@ msgid ""
 "    depends_on(\"callpath\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2021
+#: ../../../packaging_guide_creation.rst:2085
 msgid ""
 "Here, ``callpath`` and ``adept-utils`` are concrete packages, but there is "
 "no actual package for ``mpi``, so we say it is a *virtual* package. The "
@@ -3370,31 +3515,31 @@ msgid ""
 "file of an MPI implementation, say MPICH, we'll see something like this:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2025
+#: ../../../packaging_guide_creation.rst:2089
 msgid ""
 "class Mpich(Package):\n"
 "    provides(\"mpi\")\n"
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2031
+#: ../../../packaging_guide_creation.rst:2095
 msgid ""
 "The ``provides(\"mpi\")`` call tells Spack that the ``mpich`` package can be "
 "used to satisfy the dependency of any package that ``depends_on(\"mpi\")``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2034
+#: ../../../packaging_guide_creation.rst:2098
 msgid "Providing multiple virtuals simultaneously"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2036
+#: ../../../packaging_guide_creation.rst:2100
 msgid ""
 "Packages can provide more than one virtual dependency. Sometimes, due to "
 "implementation details, there are subsets of those virtuals that need to be "
 "provided together by the same package."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2039
+#: ../../../packaging_guide_creation.rst:2103
 msgid ""
 "A well-known example is ``openblas``, which provides both the ``lapack`` and "
 "``blas`` API in a single ``libopenblas`` library. A package that needs "
@@ -3402,24 +3547,24 @@ msgid ""
 "use ``openblas`` at all. It cannot pick one or the other."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2043
+#: ../../../packaging_guide_creation.rst:2107
 msgid ""
 "To express this constraint in a package, the two virtual dependencies must "
 "be listed in the same ``provides`` directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2045
+#: ../../../packaging_guide_creation.rst:2109
 msgid "provides(\"blas\", \"lapack\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2049
+#: ../../../packaging_guide_creation.rst:2113
 msgid ""
 "This makes it impossible to select ``openblas`` as a provider for one of the "
 "two virtual dependencies and not for the other. If you try to, Spack will "
 "report an error:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2052
+#: ../../../packaging_guide_creation.rst:2116
 msgid ""
 "$ spack spec netlib-scalapack  ^[virtuals=lapack] openblas ^[virtuals=blas] "
 "atlas\n"
@@ -3429,11 +3574,11 @@ msgid ""
 "but provides only 'lapack'"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2062
+#: ../../../packaging_guide_creation.rst:2126
 msgid "Versioned Interfaces"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2064
+#: ../../../packaging_guide_creation.rst:2128
 msgid ""
 "Just as you can pass a spec to ``depends_on``, so can you pass a spec to "
 "``provides`` to add constraints. This allows Spack to support the notion of "
@@ -3445,11 +3590,11 @@ msgid ""
 "version constraint to the spec passed to ``provides``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2071
+#: ../../../packaging_guide_creation.rst:2135
 msgid "provides(\"mpi@:2\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2075
+#: ../../../packaging_guide_creation.rst:2139
 msgid ""
 "Suppose that the above ``provides`` call is in the ``mpich2`` package. This "
 "says that ``mpich2`` provides MPI support *up to* version 2, but if a "
@@ -3457,17 +3602,17 @@ msgid ""
 "with ``mpich2``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2078
+#: ../../../packaging_guide_creation.rst:2142
 msgid ""
 "Currently, names and versions are the only spec components supported for "
 "virtual packages."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2081
+#: ../../../packaging_guide_creation.rst:2145
 msgid "``provides when``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2083
+#: ../../../packaging_guide_creation.rst:2147
 msgid ""
 "The same package may provide different versions of an interface depending on "
 "*its* version. Above, we simplified the ``provides`` call in ``mpich`` to "
@@ -3475,13 +3620,13 @@ msgid ""
 "``provides``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2087
+#: ../../../packaging_guide_creation.rst:2151
 msgid ""
 "provides(\"mpi@:3\", when=\"@3:\")\n"
 "provides(\"mpi@:1\", when=\"@1:\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2092
+#: ../../../packaging_guide_creation.rst:2156
 msgid ""
 "The ``when`` argument to ``provides`` allows you to specify optional "
 "constraints on the *providing* package, or the *provider*. The provider only "
@@ -3491,7 +3636,7 @@ msgid ""
 "the MPI virtual package at version 1."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2097
+#: ../../../packaging_guide_creation.rst:2161
 msgid ""
 "The ``when`` qualifier ensures that Spack selects a suitably high version of "
 "``mpich`` to satisfy some other package that ``depends_on`` a particular "
@@ -3499,59 +3644,59 @@ msgid ""
 "version of ``mpich``. For example, suppose the package ``foo`` declares this:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2101
+#: ../../../packaging_guide_creation.rst:2165
 msgid ""
 "class Foo(Package):\n"
 "    ...\n"
 "    depends_on(\"mpi@2\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2107
+#: ../../../packaging_guide_creation.rst:2171
 msgid "Suppose a user invokes ``spack install`` like this:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2109
+#: ../../../packaging_guide_creation.rst:2173
 msgid "$ spack install foo ^mpich@1.0"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2113
+#: ../../../packaging_guide_creation.rst:2177
 msgid ""
 "Spack will fail with a constraint violation, because the version of MPICH "
 "requested is too low for the ``mpi`` requirement in ``foo``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2118
+#: ../../../packaging_guide_creation.rst:2182
 msgid "Language and compiler dependencies"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2120
+#: ../../../packaging_guide_creation.rst:2184
 msgid ""
 "Whenever you use ``spack create`` to create a new package, Spack scans the "
 "package's source code and heuristically adds *language dependencies*, which "
 "look like this:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2122
+#: ../../../packaging_guide_creation.rst:2186
 msgid ""
 "depends_on(\"c\", type=\"build\")\n"
 "depends_on(\"cxx\", type=\"build\")\n"
 "depends_on(\"fortran\", type=\"build\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2128
+#: ../../../packaging_guide_creation.rst:2192
 msgid ""
 "The languages ``c``, ``cxx`` and ``fortran`` are **virtuals provided by "
 "compiler packages**, such as ``gcc``, ``llvm``, or ``intel-oneapi-"
 "compilers``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2130
+#: ../../../packaging_guide_creation.rst:2194
 msgid ""
 "When you concretize a package that depends on ``c``, Spack will select a "
 "compiler for it that provides the ``c`` virtual package."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2132
+#: ../../../packaging_guide_creation.rst:2196
 msgid ""
 "Typically one compiler will be used to provide all languages, but Spack is "
 "allowed to create a mixed toolchain. For example, the ``c`` compiler could "
@@ -3561,11 +3706,11 @@ msgid ""
 "dependencies."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2143
+#: ../../../packaging_guide_creation.rst:2207
 msgid "Conflicts"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2145
+#: ../../../packaging_guide_creation.rst:2209
 msgid ""
 "Sometimes packages have known bugs, or limitations, that would prevent them "
 "from concretizing or building usable software. Spack makes it possible to "
@@ -3574,22 +3719,22 @@ msgid ""
 "arguments."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2148
+#: ../../../packaging_guide_creation.rst:2212
 msgid "The ``when`` argument is a spec that triggers the conflict."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2150
+#: ../../../packaging_guide_creation.rst:2214
 msgid ""
 "The ``msg`` argument allows you to provide a custom error message that Spack "
 "prints when the spec to be installed satisfies the conflict spec and "
 "``when`` trigger."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2152
+#: ../../../packaging_guide_creation.rst:2216
 msgid "Adding the following to a package:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2154
+#: ../../../packaging_guide_creation.rst:2218
 msgid ""
 "conflicts(\n"
 "    \"%intel-oneapi-compilers@:2024\",\n"
@@ -3598,48 +3743,48 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2162
+#: ../../../packaging_guide_creation.rst:2226
 msgid ""
 "expresses that the current package *cannot be built* with Intel oneAPI "
 "compilers *up through any version* ``2024`` *when trying to install the "
 "package with a version up to* ``1.2``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2164
+#: ../../../packaging_guide_creation.rst:2228
 msgid ""
 "If the ``when`` argument is omitted, then the conflict is *always triggered* "
 "for specs satisfying the conflict spec. For example,"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2167
+#: ../../../packaging_guide_creation.rst:2231
 msgid ""
 "conflicts(\"+cuda+rocm\", msg=\"Cannot build with both cuda and rocm "
 "enabled\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2171
+#: ../../../packaging_guide_creation.rst:2235
 msgid "means the package cannot be installed with both variants enabled."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2173
+#: ../../../packaging_guide_creation.rst:2237
 msgid ""
 "Similarly, a conflict can be based on where the build is being performed. "
 "For example,"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2176
+#: ../../../packaging_guide_creation.rst:2240
 msgid ""
 "for os in [\"ventura\", \"monterey\", \"bigsur\"]:\n"
 "    conflicts(f\"platform=darwin os={os}\", msg=f\"{os} is not supported\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2181
+#: ../../../packaging_guide_creation.rst:2245
 msgid ""
 "means the package cannot be built on a Mac running Ventura, Monterey, or Big "
 "Sur."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2185
+#: ../../../packaging_guide_creation.rst:2249
 msgid ""
 "These examples illustrate a few of the types of constraints that can be "
 "specified. Conflict and ``when`` specs can constrain the compiler, :ref:"
@@ -3648,11 +3793,11 @@ msgid ""
 "<dependency_specs>`, and more. See :ref:`sec-specs` for more information."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2196
+#: ../../../packaging_guide_creation.rst:2260
 msgid "Requires"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2198
+#: ../../../packaging_guide_creation.rst:2262
 msgid ""
 "Sometimes packages can be built only with specific options. In those cases "
 "the ``requires`` directive can be used. It allows for complex conditions "
@@ -3665,19 +3810,19 @@ msgid ""
 "described for their equivalents in :ref:`package-requirements`."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2207
+#: ../../../packaging_guide_creation.rst:2271
 msgid ""
 "We recommend that the ``policy`` argument be explicitly specified when "
 "multiple specs are used with the directive."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2209
+#: ../../../packaging_guide_creation.rst:2273
 msgid ""
 "For example, suppose a package can only be built with Apple Clang on Darwin. "
 "This requirement would be specified as:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2212
+#: ../../../packaging_guide_creation.rst:2276
 msgid ""
 "requires(\n"
 "    \"%apple-clang\",\n"
@@ -3686,22 +3831,22 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2220
+#: ../../../packaging_guide_creation.rst:2284
 msgid "Similarly, suppose a package only builds for the ``x86_64`` target:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2222
+#: ../../../packaging_guide_creation.rst:2286
 msgid ""
 "requires(\"target=x86_64:\", msg=\"package is only available on x86_64\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2226
+#: ../../../packaging_guide_creation.rst:2290
 msgid ""
 "Or the package must be built with a GCC or Clang that supports C++ 20, which "
 "you could ensure by adding the following:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2228
+#: ../../../packaging_guide_creation.rst:2292
 msgid ""
 "requires(\n"
 "    \"%gcc@10:\",\n"
@@ -3711,7 +3856,7 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2239
+#: ../../../packaging_guide_creation.rst:2303
 msgid ""
 "These examples show only a few of the constraints that can be specified. "
 "Required and ``when`` specs can constrain the compiler, :ref:`version "
@@ -3720,11 +3865,11 @@ msgid ""
 "more. See :ref:`sec-specs` for more information."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2250
+#: ../../../packaging_guide_creation.rst:2314
 msgid "Patches"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2252
+#: ../../../packaging_guide_creation.rst:2316
 msgid ""
 "Depending on the host architecture, package version, known bugs, or other "
 "issues, you may need to patch your software to get it to build correctly. "
@@ -3732,55 +3877,55 @@ msgid ""
 "your package files and apply them to source code after it's downloaded."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2256
+#: ../../../packaging_guide_creation.rst:2320
 msgid "``patch``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2258
+#: ../../../packaging_guide_creation.rst:2322
 msgid ""
 "You can specify patches in your package file with the ``patch()`` directive. "
 "The first argument can be either the filename or URL of the patch file to be "
 "applied to your source."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2263
+#: ../../../packaging_guide_creation.rst:2327
 msgid ""
 "Use of a URL is preferred over maintaining patch files in the package "
 "repository. This helps reduce the size of the package repository, which can "
 "become an issue for those with limited space (or allocations)."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2267
+#: ../../../packaging_guide_creation.rst:2331
 msgid "Filename patch"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2269
+#: ../../../packaging_guide_creation.rst:2333
 msgid ""
 "You can supply the name of the patch file. For example, a simple conditional "
 "``patch`` based on a file for the ``mvapich2`` package looks like:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2272
+#: ../../../packaging_guide_creation.rst:2336
 msgid ""
 "class Mvapich2(Package):\n"
 "    ...\n"
 "    patch(\"ad_lustre_rwcontig_open_source.patch\", when=\"@1.9:\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2278
+#: ../../../packaging_guide_creation.rst:2342
 msgid ""
 "This patch will only be applied when attempting to install the package at "
 "version ``1.9`` or newer."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2280
+#: ../../../packaging_guide_creation.rst:2344
 msgid ""
 "When a filename is provided, the patch needs to live within the Spack source "
 "tree. The above patch file lives with the package file within the package "
 "repository directory structure in the following location:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2283
+#: ../../../packaging_guide_creation.rst:2347
 msgid ""
 "spack_repo/builtin/packages/\n"
 "    mvapich2/\n"
@@ -3788,11 +3933,11 @@ msgid ""
 "        ad_lustre_rwcontig_open_source.patch"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2291
+#: ../../../packaging_guide_creation.rst:2355
 msgid "URL patch file"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2293
+#: ../../../packaging_guide_creation.rst:2357
 msgid ""
 "If you supply a URL instead of a filename you have two options: patch file "
 "URL or commit patch file URL. In either case, you must supply a checksum. "
@@ -3801,23 +3946,23 @@ msgid ""
 "their URLs, checked, and applied to your source code."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2300
+#: ../../../packaging_guide_creation.rst:2364
 msgid ""
 "To ensure consistency, a ``sha256`` checksum must be provided for the patch."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2302
+#: ../../../packaging_guide_creation.rst:2366
 msgid ""
 "You can use the GNU utils ``sha256sum`` or the macOS ``shasum -a 256`` "
 "commands to generate a checksum for a patch file."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2304
+#: ../../../packaging_guide_creation.rst:2368
 msgid ""
 "Here is an example of specifying the unconditional use of a patch file URL:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2306
+#: ../../../packaging_guide_creation.rst:2370
 msgid ""
 "patch(\n"
 "    \"http://www.nwchem-sw.org/images/Tddft_mxvec20.patch\",\n"
@@ -3825,7 +3970,7 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2313
+#: ../../../packaging_guide_creation.rst:2377
 msgid ""
 "Sometimes you can specify the patch file associated with a repository "
 "commit. For example, GitHub allows you to reference the commit in the name "
@@ -3833,11 +3978,11 @@ msgid ""
 "<repository>/commit/<commit_SHA>.patch``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2316
+#: ../../../packaging_guide_creation.rst:2380
 msgid "Below is an example of specifying a conditional commit patch:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2318
+#: ../../../packaging_guide_creation.rst:2382
 msgid ""
 "patch(\n"
 "    \"https://github.com/ornladios/ADIOS/"
@@ -3847,18 +3992,18 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2326
+#: ../../../packaging_guide_creation.rst:2390
 msgid ""
 "In this case the patch is only processed when attempting to install version "
 "``1.12.0`` or higher of the package when the package's ``mpi`` variant is "
 "enabled."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2335
+#: ../../../packaging_guide_creation.rst:2399
 msgid "Compressed patches"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2337
+#: ../../../packaging_guide_creation.rst:2401
 msgid ""
 "Spack can also handle compressed patches. If you use these, Spack needs a "
 "little more help. Specifically, it needs *two* checksums: the ``sha256`` of "
@@ -3872,7 +4017,7 @@ msgid ""
 "are downloaded."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2345
+#: ../../../packaging_guide_creation.rst:2409
 msgid ""
 "patch(\n"
 "    \"http://www.nwchem-sw.org/images/Tddft_mxvec20.patch.gz\",\n"
@@ -3881,25 +4026,25 @@ msgid ""
 ")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2353
+#: ../../../packaging_guide_creation.rst:2417
 msgid "``patch`` keyword arguments are described below."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2356
+#: ../../../packaging_guide_creation.rst:2420
 msgid "``sha256``, ``archive_sha256``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2358
+#: ../../../packaging_guide_creation.rst:2422
 msgid ""
 "Hashes of downloaded patch and compressed archive, respectively. Only needed "
 "for patches fetched from URLs."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2362
+#: ../../../packaging_guide_creation.rst:2426
 msgid "``when``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2364
+#: ../../../packaging_guide_creation.rst:2428
 msgid ""
 "If supplied, this is a spec that tells Spack when to apply the patch. If the "
 "installed package spec matches this spec, the patch will be applied. In our "
@@ -3907,24 +4052,24 @@ msgid ""
 "or higher."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2369
+#: ../../../packaging_guide_creation.rst:2433
 msgid "``level``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2371
+#: ../../../packaging_guide_creation.rst:2435
 msgid ""
 "This tells Spack how to run the ``patch`` command. By default, the level is "
 "1 and Spack runs ``patch -p 1``. If level is 2, Spack will run ``patch -p "
 "2``, and so on."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2375
+#: ../../../packaging_guide_creation.rst:2439
 msgid ""
 "A lot of people are confused by the level, so here's a primer. If you look "
 "in your patch file, you may see something like this:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2378
+#: ../../../packaging_guide_creation.rst:2442
 msgid ""
 "--- a/src/mpi/romio/adio/ad_lustre/ad_lustre_rwcontig.c 2013-12-10 "
 "12:05:44.806417000 -0800\n"
@@ -3941,7 +4086,7 @@ msgid ""
 " #include \"ad_lustre.h\""
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2393
+#: ../../../packaging_guide_creation.rst:2457
 msgid ""
 "Lines 1-2 show paths with synthetic ``a/`` and ``b/`` prefixes. These are "
 "placeholders for the two ``mvapich2`` source directories that ``diff`` "
@@ -3949,25 +4094,25 @@ msgid ""
 "creating patch files, but other programs may behave differently."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2397
+#: ../../../packaging_guide_creation.rst:2461
 msgid ""
 "``-p1`` strips off the first level of the prefix in both paths, allowing the "
 "patch to be applied from the root of an expanded ``mvapich2`` archive. If "
 "you set level to ``2``, it would strip off ``src``, and so on."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2400
+#: ../../../packaging_guide_creation.rst:2464
 msgid ""
 "It's generally easier to just structure your patch file so that it applies "
 "cleanly with ``-p1``, but if you're using a patch you didn't create "
 "yourself, ``level`` can be handy."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2403
+#: ../../../packaging_guide_creation.rst:2467
 msgid "``working_dir``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2405
+#: ../../../packaging_guide_creation.rst:2469
 msgid ""
 "This tells Spack where to run the ``patch`` command. By default, the working "
 "directory is the source path of the stage (``.``). However, sometimes "
@@ -3977,7 +4122,7 @@ msgid ""
 "and assume for some reason, it can only be downloaded in the following form:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2411
+#: ../../../packaging_guide_creation.rst:2475
 msgid ""
 "--- a/romio/adio/ad_lustre/ad_lustre_rwcontig.c 2013-12-10 "
 "12:05:44.806417000 -0800\n"
@@ -3994,24 +4139,24 @@ msgid ""
 " #include \"ad_lustre.h\""
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2426
+#: ../../../packaging_guide_creation.rst:2490
 msgid ""
 "Hence, the patch needs to be applied in the ``src/mpi`` subdirectory, and "
 "the ``working_dir=\"src/mpi\"`` option would exactly do that."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2429
+#: ../../../packaging_guide_creation.rst:2493
 msgid "Patch functions"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2431
+#: ../../../packaging_guide_creation.rst:2495
 msgid ""
 "In addition to supplying patch files, you can write a custom function to "
 "patch a package's source. For example, the ``py-pyside2`` package contains "
 "some custom code for tweaking the way the PySide build handles include files:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2436
+#: ../../../packaging_guide_creation.rst:2500
 msgid ""
 "    def patch(self):\n"
 "        filter_file(\n"
@@ -4028,13 +4173,13 @@ msgid ""
 "        )\n"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2440
+#: ../../../packaging_guide_creation.rst:2504
 msgid ""
 "A ``patch`` function, if present, will be run after patch files are applied "
 "and before ``install()`` is run."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2442
+#: ../../../packaging_guide_creation.rst:2506
 msgid ""
 "You could put this logic in ``install()``, but putting it in a patch "
 "function gives you some benefits. First, Spack ensures that the ``patch()`` "
@@ -4043,7 +4188,7 @@ msgid ""
 "run once."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2451
+#: ../../../packaging_guide_creation.rst:2515
 msgid ""
 "So far we've covered how the ``patch`` directive can be used by a package to "
 "patch *its own* source code. Packages can *also* specify patches to be "
@@ -4053,11 +4198,11 @@ msgid ""
 "<dependency_dependency_patching_>`_ for more details."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2459
+#: ../../../packaging_guide_creation.rst:2523
 msgid "Inspecting patches"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2461
+#: ../../../packaging_guide_creation.rst:2525
 msgid ""
 "If you want to better understand the patches that Spack applies to your "
 "packages, you can do that using ``spack spec``, ``spack find``, and other "
@@ -4065,7 +4210,7 @@ msgid ""
 "see the patches that would be applied to ``m4``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2465
+#: ../../../packaging_guide_creation.rst:2529
 msgid ""
 "$ spack spec m4\n"
 "Input spec\n"
@@ -4082,13 +4227,13 @@ msgid ""
 "    ^libsigsegv@2.11%apple-clang@9.0.0 arch=darwin-highsierra-x86_64"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2477
+#: ../../../packaging_guide_creation.rst:2541
 msgid ""
 "You can also see patches that have been applied to installed packages with "
 "``spack find -v``:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2479
+#: ../../../packaging_guide_creation.rst:2543
 msgid ""
 "$ spack find -v m4\n"
 "==> 1 installed package\n"
@@ -4099,20 +4244,20 @@ msgid ""
 "fc9b61654a3ba1a8d6cd78ce087e7c96366c290bc8d2c299f09828d793b853c8 +sigsegv"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2488
+#: ../../../packaging_guide_creation.rst:2552
 msgid ""
 "In both cases above, you can see that the patches' sha256 hashes are stored "
 "on the spec as a variant. As mentioned above, this means that you can have "
 "multiple, differently-patched versions of a package installed at once."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2491
+#: ../../../packaging_guide_creation.rst:2555
 msgid ""
 "You can look up a patch by its sha256 hash (or a short version of it) using "
 "the ``spack resource show`` command"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2493
+#: ../../../packaging_guide_creation.rst:2557
 msgid ""
 "$ spack resource show 3877ab54\n"
 "3877ab548f88597ab2327a2230ee048d2d07ace1062efe81fc92e91b7f39cd00\n"
@@ -4120,7 +4265,7 @@ msgid ""
 "    applies to: builtin.m4"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2500
+#: ../../../packaging_guide_creation.rst:2564
 msgid ""
 "``spack resource show`` looks up downloadable resources from package files "
 "by hash and prints out information about them. Above, we see that the "
@@ -4128,7 +4273,7 @@ msgid ""
 "where to find the patch."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2504
+#: ../../../packaging_guide_creation.rst:2568
 msgid ""
 "Things get more interesting if you want to know about dependency patches. "
 "For example, when ``dealii`` is built with ``boost@1.68.0``, it has to patch "
@@ -4136,7 +4281,7 @@ msgid ""
 "extra boost patches are coming from:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2508
+#: ../../../packaging_guide_creation.rst:2572
 msgid ""
 "$ spack spec dealii ^boost@1.68.0 ^hdf5+fortran | grep \"\\^boost\"\n"
 "    ^boost@1.68.0\n"
@@ -4154,31 +4299,31 @@ msgid ""
 "    patched by: builtin.dealii"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2519
+#: ../../../packaging_guide_creation.rst:2583
 msgid ""
 "Here you can see that the patch is applied to ``boost`` by ``dealii``, and "
 "that it lives in ``dealii``'s directory in Spack's ``builtin`` package "
 "repository."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2527
+#: ../../../packaging_guide_creation.rst:2591
 msgid "Extensions"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2529
+#: ../../../packaging_guide_creation.rst:2593
 msgid ""
 "Spack's support for package extensions is documented extensively in :ref:"
 "`extensions`. This section documents how to make your own extendable "
 "packages and extensions."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2532
+#: ../../../packaging_guide_creation.rst:2596
 msgid ""
 "To support extensions, a package needs to set its ``extendable`` property to "
 "``True``, e.g.:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2534
+#: ../../../packaging_guide_creation.rst:2598
 msgid ""
 "class Python(Package):\n"
 "    ...\n"
@@ -4186,13 +4331,13 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2541
+#: ../../../packaging_guide_creation.rst:2605
 msgid ""
 "To make a package into an extension, simply add an ``extends`` call in the "
 "package definition, and pass it the name of an extendable package:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2543
+#: ../../../packaging_guide_creation.rst:2607
 msgid ""
 "class PyNumpy(Package):\n"
 "    ...\n"
@@ -4200,7 +4345,7 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2550
+#: ../../../packaging_guide_creation.rst:2614
 msgid ""
 "This accomplishes a few things. Firstly, the Python package can set special "
 "variables such as ``PYTHONPATH`` for all extensions when the run or build "
@@ -4210,7 +4355,7 @@ msgid ""
 "variables set."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2555
+#: ../../../packaging_guide_creation.rst:2619
 msgid ""
 "A package can only extend one other package at a time. To support packages "
 "that may extend one of a list of other packages, Spack supports multiple "
@@ -4219,7 +4364,7 @@ msgid ""
 "either ``lua`` or ``lua-luajit``, but not both:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2559
+#: ../../../packaging_guide_creation.rst:2623
 msgid ""
 "class LuaLpeg(Package):\n"
 "    ...\n"
@@ -4229,31 +4374,31 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2568
+#: ../../../packaging_guide_creation.rst:2632
 msgid ""
 "Now, a user can install, and activate, the ``lua-lpeg`` package for either "
 "lua or ``lua-luajit``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2571
+#: ../../../packaging_guide_creation.rst:2635
 msgid "Adding additional constraints"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2573
+#: ../../../packaging_guide_creation.rst:2637
 msgid ""
 "Some packages produce a Python extension, but require a minimum version of "
 "Python to work correctly. In those cases, a ``depends_on()`` declaration "
 "should be made in addition to the ``extends()`` declaration:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2576
+#: ../../../packaging_guide_creation.rst:2640
 msgid ""
 "class Icebin(Package):\n"
 "    extends(\"python\", when=\"+python\")\n"
 "    depends_on(\"python@3.12:\", when=\"+python\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2582
+#: ../../../packaging_guide_creation.rst:2646
 msgid ""
 "Many packages produce Python extensions for *some* variants, but not others: "
 "they should extend ``python`` only if the appropriate variant(s) are "
@@ -4261,7 +4406,7 @@ msgid ""
 "declarations:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2585
+#: ../../../packaging_guide_creation.rst:2649
 msgid ""
 "class FooLib(Package):\n"
 "    variant(\"python\", default=True, description=\"Build the Python "
@@ -4270,18 +4415,18 @@ msgid ""
 "    ..."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2593
+#: ../../../packaging_guide_creation.rst:2657
 msgid "Mixins for common metadata"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2595
+#: ../../../packaging_guide_creation.rst:2659
 msgid ""
 "Spack's package repository contains a number of mixin classes that can be "
 "used to simplify package definitions and to share common metadata and "
 "behavior across multiple packages."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2597
+#: ../../../packaging_guide_creation.rst:2661
 msgid ""
 "For instance, packages that depend on ``cuda`` typically need variants such "
 "as ``+cuda`` and ``cuda_arch``, and conflicts to specify compatibility "
@@ -4291,115 +4436,115 @@ msgid ""
 "metadata and behavior."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2600
+#: ../../../packaging_guide_creation.rst:2664
 msgid ""
 "Other mixin classes such as ``GNUMirrorPackage`` do not add variants or "
 "conflicts, but configure the usual GNU mirror URLs for downloading source "
 "code."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2602
+#: ../../../packaging_guide_creation.rst:2666
 msgid ""
 "The following table lists the full list of mixin classes available in "
 "Spack's builtin package repository."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2605
+#: ../../../packaging_guide_creation.rst:2669
 msgid "**API docs**"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2605
+#: ../../../packaging_guide_creation.rst:2669
 msgid "**Description**"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2607
+#: ../../../packaging_guide_creation.rst:2671
 msgid ":class:`~spack_repo.builtin.build_systems.cuda.CudaPackage`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2607
+#: ../../../packaging_guide_creation.rst:2671
 msgid "A helper class for packages that use CUDA"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2610
+#: ../../../packaging_guide_creation.rst:2674
 msgid ":class:`~spack_repo.builtin.build_systems.rocm.ROCmPackage`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2610
+#: ../../../packaging_guide_creation.rst:2674
 msgid "A helper class for packages that use ROCm"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2613
+#: ../../../packaging_guide_creation.rst:2677
 msgid ":class:`~spack_repo.builtin.build_systems.gnu.GNUMirrorPackage`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2613
+#: ../../../packaging_guide_creation.rst:2677
 msgid "A helper class for GNU packages"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2616
+#: ../../../packaging_guide_creation.rst:2680
 msgid ":class:`~spack_repo.builtin.build_systems.python.PythonExtension`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2616
+#: ../../../packaging_guide_creation.rst:2680
 msgid "A helper class for Python extensions"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2619
+#: ../../../packaging_guide_creation.rst:2683
 msgid ""
 ":class:`~spack_repo.builtin.build_systems.sourceforge.SourceforgePackage`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2619
+#: ../../../packaging_guide_creation.rst:2683
 msgid "A helper class for packages from sourceforge.org"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2622
+#: ../../../packaging_guide_creation.rst:2686
 msgid ":class:`~spack_repo.builtin.build_systems.sourceware.SourcewarePackage`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2622
+#: ../../../packaging_guide_creation.rst:2686
 msgid "A helper class for packages from sourceware.org"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2625
+#: ../../../packaging_guide_creation.rst:2689
 msgid ":class:`~spack_repo.builtin.build_systems.xorg.XorgPackage`"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2625
+#: ../../../packaging_guide_creation.rst:2689
 msgid "A helper class for x.org packages"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2629
+#: ../../../packaging_guide_creation.rst:2693
 msgid ""
 "These mixins should be used as additional base classes for your package, in "
 "addition to the base class that you would normally use (e.g. "
 "``MakefilePackage``, ``AutotoolsPackage``, etc.):"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2631
+#: ../../../packaging_guide_creation.rst:2695
 msgid ""
 "class Cp2k(MakefilePackage, CudaPackage):\n"
 "    pass"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2636
+#: ../../../packaging_guide_creation.rst:2700
 msgid ""
 "In the example above ``Cp2k`` inherits the variants and conflicts defined by "
 "``CudaPackage``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2643
+#: ../../../packaging_guide_creation.rst:2707
 msgid "Maintainers"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2645
+#: ../../../packaging_guide_creation.rst:2709
 msgid ""
 "Each package in Spack may have one or more GitHub accounts for people who "
 "want to be notified whenever the package is modified. The list also provides "
 "contacts for people needing help with build errors."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2648
+#: ../../../packaging_guide_creation.rst:2712
 msgid ""
 "Adding maintainers is easy. After familiarizing yourself with the "
 "responsibilities of the :ref:`Package Maintainers <package-maintainers>` "
@@ -4407,25 +4552,25 @@ msgid ""
 "``maintainers`` directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2651
+#: ../../../packaging_guide_creation.rst:2715
 msgid "maintainers(\"github_user1\", \"github_user2\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2657
+#: ../../../packaging_guide_creation.rst:2721
 msgid "Please do not add accounts without consent of the owner."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2659
+#: ../../../packaging_guide_creation.rst:2723
 msgid ""
 "The final list of maintainers includes accounts declared in the package's "
 "base classes."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2664
+#: ../../../packaging_guide_creation.rst:2728
 msgid "License Information"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2666
+#: ../../../packaging_guide_creation.rst:2730
 msgid ""
 "Most of the software in Spack is open source, and most open source software "
 "is released under one or more `common open source licenses <https://"
@@ -4435,32 +4580,32 @@ msgid ""
 "project and then add it using the license directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2670
+#: ../../../packaging_guide_creation.rst:2734
 msgid "license(\"<SPDX Identifier HERE>\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2674
+#: ../../../packaging_guide_creation.rst:2738
 msgid ""
 "For example, the SPDX ID for the Apache Software License, version 2.0 is "
 "``Apache-2.0``, so you'd write:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2676
+#: ../../../packaging_guide_creation.rst:2740
 msgid "license(\"Apache-2.0\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2680
+#: ../../../packaging_guide_creation.rst:2744
 msgid ""
 "Or, for a dual-licensed package like Spack, you would use an `SPDX "
 "Expression <https://spdx.github.io/spdx-spec/v2-draft/SPDX-license-"
 "expressions/>`_ with both of its licenses:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2682
+#: ../../../packaging_guide_creation.rst:2746
 msgid "license(\"Apache-2.0 OR MIT\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2686
+#: ../../../packaging_guide_creation.rst:2750
 msgid ""
 "Note that specifying a license without a ``when=`` clause makes it apply to "
 "all versions and variants of the package, which might not actually be the "
@@ -4470,7 +4615,7 @@ msgid ""
 "it was relicensed in version ``0.12`` in 2018."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2690
+#: ../../../packaging_guide_creation.rst:2754
 msgid ""
 "You can specify when a ``license()`` directive applies using a ``when=`` "
 "clause, just like other directives. For example, to specify that a specific "
@@ -4478,13 +4623,13 @@ msgid ""
 "license should apply for later versions, you could write:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2693
+#: ../../../packaging_guide_creation.rst:2757
 msgid ""
 "license(\"LGPL-2.1\", when=\"@:0.11\")\n"
 "license(\"Apache-2.0 OR MIT\", when=\"@0.12:\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2698
+#: ../../../packaging_guide_creation.rst:2762
 msgid ""
 "Note that unlike for most other directives, the ``when=`` constraints in the "
 "``license()`` directive can't intersect. Spack needs to be able to resolve "
@@ -4493,22 +4638,22 @@ msgid ""
 "operators you probably care most about are:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2703
+#: ../../../packaging_guide_creation.rst:2767
 msgid "``OR``: user chooses one license to adhere to; and"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2704
+#: ../../../packaging_guide_creation.rst:2768
 msgid "``AND``: user has to adhere to all the licenses."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2706
+#: ../../../packaging_guide_creation.rst:2770
 msgid ""
 "You may also care about `license exceptions <https://spdx.org/licenses/"
 "exceptions-index.html>`_ that use the ``WITH`` operator, e.g. ``Apache-2.0 "
 "WITH LLVM-exception``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2708
+#: ../../../packaging_guide_creation.rst:2772
 msgid ""
 "Many of the licenses that are currently in the spack repositories have been "
 "automatically determined. While this is great for bulk adding license "
@@ -4518,12 +4663,12 @@ msgid ""
 "directive:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2712
+#: ../../../packaging_guide_creation.rst:2776
 msgid ""
 "license(\"<license>\", when=\"<when>\", checked_by=\"<github username>\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2716
+#: ../../../packaging_guide_creation.rst:2780
 msgid ""
 "When you have validated a package license, either when doing so explicitly "
 "or as part of packaging a new package, please set the ``checked_by`` "
@@ -4531,42 +4676,42 @@ msgid ""
 "manually verified."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2723
+#: ../../../packaging_guide_creation.rst:2787
 msgid "Proprietary software"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2725
+#: ../../../packaging_guide_creation.rst:2789
 msgid ""
 "In order to install proprietary software, Spack needs to know a few more "
 "details about a package. The following class attributes should be defined."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2729
+#: ../../../packaging_guide_creation.rst:2793
 msgid "``license_required``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2731
+#: ../../../packaging_guide_creation.rst:2795
 msgid ""
 "Boolean. If set to ``True``, this software requires a license. If set to "
 "``False``, all of the following attributes will be ignored. Defaults to "
 "``False``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2737
+#: ../../../packaging_guide_creation.rst:2801
 msgid "``license_comment``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2739
+#: ../../../packaging_guide_creation.rst:2803
 msgid ""
 "String. Contains the symbol used by the license manager to denote a comment. "
 "Defaults to ``#``."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2744
+#: ../../../packaging_guide_creation.rst:2808
 msgid "``license_files``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2746
+#: ../../../packaging_guide_creation.rst:2810
 msgid ""
 "List of strings. These are files that the software searches for when looking "
 "for a license. All file paths must be relative to the installation "
@@ -4574,32 +4719,32 @@ msgid ""
 "for individual components. Defaults to the empty list."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2753
+#: ../../../packaging_guide_creation.rst:2817
 msgid "``license_vars``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2755
+#: ../../../packaging_guide_creation.rst:2819
 msgid ""
 "List of strings. Environment variables that can be set to tell the software "
 "where to look for a license if it is not in the usual location. Defaults to "
 "the empty list."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2760
+#: ../../../packaging_guide_creation.rst:2824
 msgid "``license_url``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2762
+#: ../../../packaging_guide_creation.rst:2826
 msgid ""
 "String. A URL pointing to license setup instructions for the software. "
 "Defaults to the empty string."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2766
+#: ../../../packaging_guide_creation.rst:2830
 msgid "For example, let's take a look at the Arm Forge package."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2768
+#: ../../../packaging_guide_creation.rst:2832
 msgid ""
 "# Licensing\n"
 "license_required = True\n"
@@ -4615,14 +4760,14 @@ msgid ""
 "Arm-Licence-Server\""
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2782
+#: ../../../packaging_guide_creation.rst:2846
 msgid ""
 "Arm Forge requires a license. Its license manager uses the ``#`` symbol to "
 "denote a comment. It expects the license file to be named ``License`` and to "
 "be located in a ``licenses`` directory in the installation prefix."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2786
+#: ../../../packaging_guide_creation.rst:2850
 msgid ""
 "If you would like the installation file to be located elsewhere, simply set "
 "``ALLINEA_LICENSE_DIR`` or one of the other license variables after "
@@ -4630,7 +4775,7 @@ msgid ""
 "the URL provided."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2789
+#: ../../../packaging_guide_creation.rst:2853
 msgid ""
 "If your package requires the license to install, you can reference the "
 "location of this global license using ``self.global_license_file``. After "
@@ -4640,35 +4785,35 @@ msgid ""
 "the already existing global license."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2793
+#: ../../../packaging_guide_creation.rst:2857
 msgid ""
 "If the software you are trying to package doesn't rely on license files, "
 "Spack will print a warning message, letting the user know that they need to "
 "set an environment variable or pointing them to installation documentation."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2797
+#: ../../../packaging_guide_creation.rst:2861
 msgid "Grouping directives"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2799
+#: ../../../packaging_guide_creation.rst:2863
 msgid ""
 "We have seen various directives such as ``depends_on``, ``conflicts``, and "
 "``requires``. Very often, these directives share a common argument, which "
 "you becomes repetitive and verbose to write."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2805
+#: ../../../packaging_guide_creation.rst:2869
 msgid "Grouping with ``when()``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2807
+#: ../../../packaging_guide_creation.rst:2871
 msgid ""
 "Spack provides a context manager called ``when()`` that allows you to group "
 "directives by a common constraint or condition."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2809
+#: ../../../packaging_guide_creation.rst:2873
 msgid ""
 "class Gcc(AutotoolsPackage):\n"
 "\n"
@@ -4680,11 +4825,11 @@ msgid ""
 "        conflicts(\"languages=go\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2820
+#: ../../../packaging_guide_creation.rst:2884
 msgid "The snippet above is equivalent to the more verbose:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2822
+#: ../../../packaging_guide_creation.rst:2886
 msgid ""
 "class Gcc(AutotoolsPackage):\n"
 "\n"
@@ -4696,44 +4841,44 @@ msgid ""
 "    conflicts(\"languages=go\", when=\"+nvptx\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2832
+#: ../../../packaging_guide_creation.rst:2896
 msgid ""
 "Constraints from the ``when`` block are composable with ``when`` arguments "
 "in directives inside the block. For instance,"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2835
+#: ../../../packaging_guide_creation.rst:2899
 msgid ""
 "with when(\"+elpa\"):\n"
 "    depends_on(\"elpa+openmp\", when=\"+openmp\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2840
-#: ../../../packaging_guide_creation.rst:2888
+#: ../../../packaging_guide_creation.rst:2904
+#: ../../../packaging_guide_creation.rst:2952
 msgid "is equivalent to:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2842
+#: ../../../packaging_guide_creation.rst:2906
 msgid "depends_on(\"elpa+openmp\", when=\"+openmp+elpa\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2846
+#: ../../../packaging_guide_creation.rst:2910
 msgid ""
 "Constraints from nested context managers are also combined together, but "
 "they are rarely needed, and are not recommended."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2851
+#: ../../../packaging_guide_creation.rst:2915
 msgid "Grouping with ``default_args()``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2853
+#: ../../../packaging_guide_creation.rst:2917
 msgid ""
 "More generally, if directives have a common set of default arguments, you "
 "can group them together in a ``with default_args()`` block:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2855
+#: ../../../packaging_guide_creation.rst:2919
 msgid ""
 "class PyExample(PythonPackage):\n"
 "\n"
@@ -4744,11 +4889,11 @@ msgid ""
 "        depends_on(\"py-bz\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2865
+#: ../../../packaging_guide_creation.rst:2929
 msgid "The above is short for:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2867
+#: ../../../packaging_guide_creation.rst:2931
 msgid ""
 "class PyExample(PythonPackage):\n"
 "\n"
@@ -4758,13 +4903,13 @@ msgid ""
 "    depends_on(\"py-bz\", type=(\"build\", \"run\"))"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2878
+#: ../../../packaging_guide_creation.rst:2942
 msgid ""
 "The ``with when()`` context manager is composable, while ``with "
 "default_args()`` merely overrides the default. For example:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2881
+#: ../../../packaging_guide_creation.rst:2945
 msgid ""
 "with default_args(when=\"+feature\"):\n"
 "    depends_on(\"foo\")\n"
@@ -4772,18 +4917,18 @@ msgid ""
 "    depends_on(\"baz\", when=\"+baz\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2890
+#: ../../../packaging_guide_creation.rst:2954
 msgid ""
 "depends_on(\"foo\", when=\"+feature\")\n"
 "depends_on(\"bar\", when=\"+feature\")\n"
 "depends_on(\"baz\", when=\"+baz\")  # Note: not when=\"+feature+baz\""
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2901
+#: ../../../packaging_guide_creation.rst:2965
 msgid "``home``, ``command``, ``headers``, and ``libs``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2903
+#: ../../../packaging_guide_creation.rst:2967
 msgid ""
 "Often a package will need to provide attributes for dependents to query "
 "various details about what it provides. While any number of custom defined "
@@ -4793,95 +4938,95 @@ msgid ""
 "in the case of virtual packages provided:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2907
+#: ../../../packaging_guide_creation.rst:2971
 msgid "Attribute"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2907
+#: ../../../packaging_guide_creation.rst:2971
 msgid "Purpose"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2907
-#: ../../../packaging_guide_creation.rst:2944
-#: ../../../packaging_guide_creation.rst:3146
+#: ../../../packaging_guide_creation.rst:2971
+#: ../../../packaging_guide_creation.rst:3008
+#: ../../../packaging_guide_creation.rst:3210
 msgid "Default"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2909
+#: ../../../packaging_guide_creation.rst:2973
 msgid "``home``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2909
+#: ../../../packaging_guide_creation.rst:2973
 msgid "The installation path for the package"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2909
+#: ../../../packaging_guide_creation.rst:2973
 msgid "``spec.prefix``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2910
+#: ../../../packaging_guide_creation.rst:2974
 msgid "``command``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2910
+#: ../../../packaging_guide_creation.rst:2974
 msgid "An executable command for the package"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2910
+#: ../../../packaging_guide_creation.rst:2974
 msgid "``spec.name`` found in"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2912
+#: ../../../packaging_guide_creation.rst:2976
 msgid "``.home.bin``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2913
+#: ../../../packaging_guide_creation.rst:2977
 msgid "``headers``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2913
+#: ../../../packaging_guide_creation.rst:2977
 msgid "A list of headers provided by the package"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2913
+#: ../../../packaging_guide_creation.rst:2977
 msgid "All headers searched"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2915
+#: ../../../packaging_guide_creation.rst:2979
 msgid "recursively in ``.home.include``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2917
+#: ../../../packaging_guide_creation.rst:2981
 msgid "``libs``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2917
+#: ../../../packaging_guide_creation.rst:2981
 msgid "A list of libraries provided by the package"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2917
+#: ../../../packaging_guide_creation.rst:2981
 msgid "``lib{spec.name}`` searched"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2919
+#: ../../../packaging_guide_creation.rst:2983
 msgid "recursively in ``.home`` starting"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2921
+#: ../../../packaging_guide_creation.rst:2985
 msgid "with ``lib``, ``lib64``, then the"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2923
+#: ../../../packaging_guide_creation.rst:2987
 msgid "rest of ``.home``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2926
+#: ../../../packaging_guide_creation.rst:2990
 msgid ""
 "Each of these can be customized by implementing the relevant attribute as a "
 "``@property`` in the package's class:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2928
+#: ../../../packaging_guide_creation.rst:2992
 msgid ""
 "class Foo(Package):\n"
 "    ...\n"
@@ -4892,7 +5037,7 @@ msgid ""
 "        return find_libraries(\"libMyFoo\", root=self.home, recursive=True)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2939
+#: ../../../packaging_guide_creation.rst:3003
 msgid ""
 "A package may also provide custom implementations of each attribute for the "
 "virtual packages it provides, by implementing the ``<virtual>_<attribute>`` "
@@ -4900,30 +5045,30 @@ msgid ""
 "found from:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2942
+#: ../../../packaging_guide_creation.rst:3006
 msgid "Specialized virtual: ``Package.<virtual>_<attribute>``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2943
+#: ../../../packaging_guide_creation.rst:3007
 msgid "Generic package: ``Package.<attribute>``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2946
+#: ../../../packaging_guide_creation.rst:3010
 msgid "The use of customized attributes is demonstrated in the next example."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2949
+#: ../../../packaging_guide_creation.rst:3013
 msgid "Example: Customized attributes for virtual packages"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2951
+#: ../../../packaging_guide_creation.rst:3015
 msgid ""
 "Consider a package ``foo`` that can optionally provide two virtual packages "
 "``bar`` and ``baz``. When both are enabled, the installation tree appears as "
 "follows:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2954
+#: ../../../packaging_guide_creation.rst:3018
 msgid ""
 "include/foo.h\n"
 "include/bar/bar.h\n"
@@ -4933,7 +5078,7 @@ msgid ""
 "baz/lib/libFooBaz.so"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2963
+#: ../../../packaging_guide_creation.rst:3027
 msgid ""
 "The install tree shows that ``foo`` provides the header ``include/foo.h`` "
 "and library ``lib64/libFoo.so`` in its install prefix. The virtual package "
@@ -4944,7 +5089,7 @@ msgid ""
 "package could implement the optional attributes as follows:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2968
+#: ../../../packaging_guide_creation.rst:3032
 msgid ""
 "class Foo(Package):\n"
 "    ...\n"
@@ -4998,11 +5143,11 @@ msgid ""
 "recursive=True)"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3015
+#: ../../../packaging_guide_creation.rst:3079
 msgid "Now consider another package, ``foo-app``, depending on all three:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3017
+#: ../../../packaging_guide_creation.rst:3081
 msgid ""
 "class FooApp(CMakePackage):\n"
 "    ...\n"
@@ -5011,13 +5156,13 @@ msgid ""
 "    depends_on(\"baz\")"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3026
+#: ../../../packaging_guide_creation.rst:3090
 msgid ""
 "The resulting spec objects for its dependencies shows the result of the "
 "above attribute implementations:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3028
+#: ../../../packaging_guide_creation.rst:3092
 msgid ""
 "# The core headers and libraries of the foo package\n"
 "\n"
@@ -5058,7 +5203,7 @@ msgid ""
 "ca3rczp5omy7dfzoqw4p7oc2yh3u7lt6/lib64\"]"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3061
+#: ../../../packaging_guide_creation.rst:3125
 msgid ""
 "# The virtual bar package in the same prefix as foo\n"
 "\n"
@@ -5100,7 +5245,7 @@ msgid ""
 "ca3rczp5omy7dfzoqw4p7oc2yh3u7lt6/lib64\"]"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3096
+#: ../../../packaging_guide_creation.rst:3160
 msgid ""
 "# The virtual baz package in a subdirectory of foo's prefix\n"
 "\n"
@@ -5145,72 +5290,72 @@ msgid ""
 "]"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3135
+#: ../../../packaging_guide_creation.rst:3199
 msgid "Style guidelines for packages"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3137
+#: ../../../packaging_guide_creation.rst:3201
 msgid ""
 "The following guidelines are provided, in the interests of making Spack "
 "packages work in a consistent manner:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3140
+#: ../../../packaging_guide_creation.rst:3204
 msgid "Variant Names"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3142
+#: ../../../packaging_guide_creation.rst:3206
 msgid ""
 "Spack packages with variants similar to already-existing Spack packages "
 "should use the same name for their variants. Standard variant names are:"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3146
+#: ../../../packaging_guide_creation.rst:3210
 msgid "Name"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3146
+#: ../../../packaging_guide_creation.rst:3210
 msgid "Description"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3148
+#: ../../../packaging_guide_creation.rst:3212
 msgid "shared"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3148
-#: ../../../packaging_guide_creation.rst:3149
+#: ../../../packaging_guide_creation.rst:3212
+#: ../../../packaging_guide_creation.rst:3213
 msgid "True"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3148
+#: ../../../packaging_guide_creation.rst:3212
 msgid "Build shared libraries"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3149
+#: ../../../packaging_guide_creation.rst:3213
 msgid "mpi"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3149
+#: ../../../packaging_guide_creation.rst:3213
 msgid "Use MPI"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3150
+#: ../../../packaging_guide_creation.rst:3214
 msgid "python"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3150
+#: ../../../packaging_guide_creation.rst:3214
 msgid "False"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3150
+#: ../../../packaging_guide_creation.rst:3214
 msgid "Build Python extension"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3153
+#: ../../../packaging_guide_creation.rst:3217
 msgid "If specified in this table, the corresponding default is recommended."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3155
+#: ../../../packaging_guide_creation.rst:3219
 msgid ""
 "The semantics of the ``shared`` variant are important. When a package is "
 "built ``~shared``, the package guarantees that no shared libraries are "
@@ -5219,19 +5364,19 @@ msgid ""
 "libraries are built."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3160
+#: ../../../packaging_guide_creation.rst:3224
 msgid "Version definitions"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3162
+#: ../../../packaging_guide_creation.rst:3226
 msgid "Spack packages should list supported versions with the newest first."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3165
+#: ../../../packaging_guide_creation.rst:3229
 msgid "Using ``home`` vs ``prefix``"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3167
+#: ../../../packaging_guide_creation.rst:3231
 msgid ""
 "``home`` and ``prefix`` are both attributes that can be queried on a "
 "package's dependencies, often when passing configure arguments pointing to "
@@ -5245,7 +5390,7 @@ msgid ""
 "prefix`` should be noted in their respective documentation."
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:3172
+#: ../../../packaging_guide_creation.rst:3236
 msgid ""
 "See :ref:`custom-attributes` for more details and an example implementing a "
 "custom ``home`` attribute."
@@ -5256,16 +5401,16 @@ msgid "version"
 msgstr ""
 
 #: ../../../packaging_guide_creation.rst:432
-#: ../../../packaging_guide_creation.rst:1329
-#: ../../../packaging_guide_creation.rst:1398
-#: ../../../packaging_guide_creation.rst:1660
-#: ../../../packaging_guide_creation.rst:1984
-#: ../../../packaging_guide_creation.rst:2137
-#: ../../../packaging_guide_creation.rst:2190
-#: ../../../packaging_guide_creation.rst:2244
-#: ../../../packaging_guide_creation.rst:2523
-#: ../../../packaging_guide_creation.rst:2638
-#: ../../../packaging_guide_creation.rst:2718
+#: ../../../packaging_guide_creation.rst:1393
+#: ../../../packaging_guide_creation.rst:1462
+#: ../../../packaging_guide_creation.rst:1724
+#: ../../../packaging_guide_creation.rst:2048
+#: ../../../packaging_guide_creation.rst:2201
+#: ../../../packaging_guide_creation.rst:2254
+#: ../../../packaging_guide_creation.rst:2308
+#: ../../../packaging_guide_creation.rst:2587
+#: ../../../packaging_guide_creation.rst:2702
+#: ../../../packaging_guide_creation.rst:2782
 msgid "directive"
 msgstr ""
 
@@ -5277,120 +5422,120 @@ msgstr ""
 msgid "of package versions"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:860
+#: ../../../packaging_guide_creation.rst:924
 msgid "fetch strategy"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:860
+#: ../../../packaging_guide_creation.rst:924
 msgid "version control"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1329
+#: ../../../packaging_guide_creation.rst:1393
 msgid "resource"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1329
+#: ../../../packaging_guide_creation.rst:1393
 msgid "adding extra archives"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1398
+#: ../../../packaging_guide_creation.rst:1462
 msgid "variant"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1561
+#: ../../../packaging_guide_creation.rst:1625
 msgid "conditional variant"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1660
+#: ../../../packaging_guide_creation.rst:1724
 msgid "dependency"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1660
-#: ../../../packaging_guide_creation.rst:2137
-#: ../../../packaging_guide_creation.rst:2190
+#: ../../../packaging_guide_creation.rst:1724
+#: ../../../packaging_guide_creation.rst:2201
+#: ../../../packaging_guide_creation.rst:2254
 msgid "in package.py"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1660
+#: ../../../packaging_guide_creation.rst:1724
 msgid "depends_on"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1820
+#: ../../../packaging_guide_creation.rst:1884
 msgid "dependency type"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1820
+#: ../../../packaging_guide_creation.rst:1884
 msgid "build"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1820
+#: ../../../packaging_guide_creation.rst:1884
 msgid "link"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1820
+#: ../../../packaging_guide_creation.rst:1884
 msgid "run"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1820
+#: ../../../packaging_guide_creation.rst:1884
 msgid "test"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1864
+#: ../../../packaging_guide_creation.rst:1928
 msgid "conditional dependency"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1984
+#: ../../../packaging_guide_creation.rst:2048
 msgid "virtual package"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1984
+#: ../../../packaging_guide_creation.rst:2048
 msgid "defining"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:1984
+#: ../../../packaging_guide_creation.rst:2048
 msgid "provides"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2059
+#: ../../../packaging_guide_creation.rst:2123
 msgid "versioned interface"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2137
+#: ../../../packaging_guide_creation.rst:2201
 msgid "conflict"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2137
+#: ../../../packaging_guide_creation.rst:2201
 msgid "conflicts"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2190
+#: ../../../packaging_guide_creation.rst:2254
 msgid "requirement"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2190
+#: ../../../packaging_guide_creation.rst:2254
 msgid "requires"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2244
+#: ../../../packaging_guide_creation.rst:2308
 msgid "patch"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2244
+#: ../../../packaging_guide_creation.rst:2308
 msgid "applying"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2523
+#: ../../../packaging_guide_creation.rst:2587
 msgid "extends"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2638
+#: ../../../packaging_guide_creation.rst:2702
 msgid "maintainers"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2718
+#: ../../../packaging_guide_creation.rst:2782
 msgid "license"
 msgstr ""
 
-#: ../../../packaging_guide_creation.rst:2896
+#: ../../../packaging_guide_creation.rst:2960
 msgid "custom attributes"
 msgstr ""

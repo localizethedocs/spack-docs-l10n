@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack latest\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-07 14:01+0000\n"
+"POT-Creation-Date: 2026-09-21 14:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1149,16 +1149,280 @@ msgid ""
 msgstr ""
 
 #: ../../../packages_yaml.rst:710
-msgid "Package Permissions"
+msgid "Allowing Deprecated Versions"
 msgstr ""
 
 #: ../../../packages_yaml.rst:712
+msgid ""
+"When a package uses the ``deprecated()`` directive (see :ref:`deprecate`), "
+"Spack refuses the deprecated spec unless the configuration allows it. A "
+"refusal is a concretization error, and also an install-time error for specs "
+"concretized earlier (for example from a lockfile). An allowed deprecation is "
+"skipped entirely: the deprecated version is treated like any other, with no "
+"warning and no penalty in the solve."
+msgstr ""
+
+#: ../../../packages_yaml.rst:716
+msgid ""
+"The install-time check is static and does not depend on local install "
+"status: a spec is refused if a disallowed deprecation is found in the "
+"checked closure of the requested packages, even when the deprecated "
+"dependency is already installed. The check runs once, upfront, so an install "
+"never fails halfway because a deprecated spec was discovered late."
+msgstr ""
+
+#: ../../../packages_yaml.rst:719
+msgid ""
+"All deprecation settings live under a ``deprecation:`` block, which can be "
+"given globally under ``all:`` or for a specific package. Which deprecations "
+"are allowed is set with ``allow:``, a list of selectors:"
+msgstr ""
+
+#: ../../../packages_yaml.rst:722
+msgid ""
+"packages:\n"
+"  all:\n"
+"    deprecation:\n"
+"      allow:\n"
+"      - severity: low\n"
+"  openssl:\n"
+"    deprecation:\n"
+"      allow: []"
+msgstr ""
+
+#: ../../../packages_yaml.rst:733
+msgid ""
+"A ``deprecated()`` directive is skipped when at least one selector matches "
+"it, or, for a directive with labels, when each of its labels is matched by a "
+"selector. The default is an empty list, which allows none of them, so Spack "
+"will not select a deprecated version unless the configuration says so."
+msgstr ""
+
+#: ../../../packages_yaml.rst:736
+msgid ""
+"In this example, deprecations of severity ``low`` on any package are allowed "
+"silently, while ``medium`` and above remain errors. The list for ``openssl`` "
+"replaces the one under ``all:``, so every deprecation on that package is an "
+"error regardless of the global setting."
+msgstr ""
+
+#: ../../../packages_yaml.rst:739
+msgid ""
+"A selector may constrain the ``severity``, the ``reason``, and the "
+"``labels`` of a deprecation. Attributes given in the same selector all have "
+"to match, and an attribute that is omitted matches anything."
+msgstr ""
+
+#: ../../../packages_yaml.rst:742
+msgid ""
+"``severity`` is a maximum, so ``medium`` also matches ``low``. The values "
+"are ``\"none\"``, ``\"low\"``, ``\"medium\"``, ``\"high\"`` and "
+"``\"critical\"``, in increasing order of urgency. They are named after the "
+"qualitative severity ratings of `CVSS <https://www.first.org/cvss/"
+"specification-document>`_. For a deprecation with reason ``vuln`` the level "
+"roughly corresponds to the rating of the advisory it refers to, so an "
+"advisory scored between 7.0 and 8.9 is declared ``\"high\"``. Spack neither "
+"computes nor verifies a score, so the level a recipe declares is the "
+"packager's judgement. The correspondence is a convention, and it exists so "
+"that a site can write these selectors from the same policy it already "
+"applies to advisories elsewhere. The other reasons have no score to "
+"correspond to, and there the level ranks how urgently users should move off "
+"the deprecated spec."
+msgstr ""
+
+#: ../../../packages_yaml.rst:750
+msgid ""
+"``reason`` is the category a deprecation falls into, either a single value "
+"or a list of them. Reasons exist so that a selector can discriminate between "
+"them: a site may accept a version whose maintainers stopped supporting it, "
+"while refusing anything with a known vulnerability whatever its severity. "
+"The four reasons are:"
+msgstr ""
+
+#: ../../../packages_yaml.rst:754
+msgid "``vuln``"
+msgstr ""
+
+#: ../../../packages_yaml.rst:755
+msgid "A known vulnerability affects the spec."
+msgstr ""
+
+#: ../../../packages_yaml.rst:757
+msgid "``rename``"
+msgstr ""
+
+#: ../../../packages_yaml.rst:758
+msgid "The package was renamed, and users should move to the new name."
+msgstr ""
+
+#: ../../../packages_yaml.rst:760
+msgid "``retired``"
+msgstr ""
+
+#: ../../../packages_yaml.rst:761
+msgid ""
+"The spec is going away, because the release reached its end of life or "
+"upstream removed it."
+msgstr ""
+
+#: ../../../packages_yaml.rst:763
+msgid "``unspecified``"
+msgstr ""
+
+#: ../../../packages_yaml.rst:764
+msgid ""
+"None of the reasons above applies, for instance a spec its maintainers no "
+"longer support although nothing is known to be wrong with it. A recipe "
+"stating this reason has to explain itself with a message, so the error still "
+"says what is wrong and what to use instead. Spack also records this reason "
+"for versions declared with the legacy ``version(..., deprecated=True)`` "
+"keyword, which carries no message."
+msgstr ""
+
+#: ../../../packages_yaml.rst:768
+msgid ""
+"See :ref:`deprecate` for what a packager is expected to put in each one."
+msgstr ""
+
+#: ../../../packages_yaml.rst:770
+msgid ""
+"Because selectors are matched independently, a list can hold some reasons to "
+"a stricter standard than others:"
+msgstr ""
+
+#: ../../../packages_yaml.rst:772
+msgid ""
+"packages:\n"
+"  all:\n"
+"    deprecation:\n"
+"      allow:\n"
+"      - reason: [rename, retired, unspecified]\n"
+"        severity: low\n"
+"      - reason: vuln\n"
+"        severity: none"
+msgstr ""
+
+#: ../../../packages_yaml.rst:783
+msgid ""
+"Here a ``low``-severity rename, retirement or unspecified deprecation is "
+"allowed, while a vulnerability is allowed only if it was assessed to have no "
+"consequence. A reason that appears in no selector is refused whatever its "
+"severity, so a reason added in a later Spack version stays refused until the "
+"configuration names it."
+msgstr ""
+
+#: ../../../packages_yaml.rst:786
+msgid ""
+"For a single command, the ``--deprecated`` flag allows every deprecation, "
+"whatever the configuration files say. It adds a selector allowing any "
+"severity under ``all:``, and to the ``allow:`` list of every package that "
+"has one."
+msgstr ""
+
+#: ../../../packages_yaml.rst:789
+msgid ""
+"Since ``allow:`` is a list, configuration scopes merge it by concatenation, "
+"like every other list in ``packages.yaml``. Two scopes that both set it "
+"therefore allow the union of what each one allows. Write ``allow::`` in a "
+"scope that has to replace what the lower ones set, rather than add to it."
+msgstr ""
+
+#: ../../../packages_yaml.rst:793
+msgid ""
+"Which dependencies are checked is controlled by the ``scope`` setting, which "
+"is global and can only be given under ``all:``:"
+msgstr ""
+
+#: ../../../packages_yaml.rst:795
+msgid ""
+"packages:\n"
+"  all:\n"
+"    deprecation:\n"
+"      scope: runtime"
+msgstr ""
+
+#: ../../../packages_yaml.rst:802
+msgid ""
+"With the default ``\"runtime\"``, two sets of nodes are checked: the link "
+"and run closure of the requested packages, which is the set of dependencies "
+"that end up in their runtime environment, and any node Spack would build "
+"from sources. The second set means a deprecated build tool is not silently "
+"compiled and run: when a version that is not deprecated exists the "
+"concretizer selects it instead, and when the request leaves no alternative "
+"it is an error. Nodes that come from reuse are exempt, so an artifact that "
+"was built with a tool since deprecated is still reused as is. With "
+"``\"all\"``, every node in the DAG is checked instead, including the build "
+"dependencies recorded in reused artifacts. The stricter ``\"all\"`` scope is "
+"technically more correct, since a compromised build tool can in principle "
+"affect its dependents, but it is also more likely to reject an install over "
+"a deprecation that has no effect on the produced binaries."
+msgstr ""
+
+#: ../../../packages_yaml.rst:808
+msgid ""
+"Individual advisories can be allowed without allowing a whole severity, by "
+"listing them under ``labels``:"
+msgstr ""
+
+#: ../../../packages_yaml.rst:810
+msgid ""
+"packages:\n"
+"  all:\n"
+"    deprecation:\n"
+"      allow:\n"
+"      - labels: [CVE-2023-0286]\n"
+"  openssl:\n"
+"    deprecation:\n"
+"      allow:\n"
+"      - labels: [GHSA-xxxx-yyyy-zzzz]"
+msgstr ""
+
+#: ../../../packages_yaml.rst:822
+msgid ""
+"A deprecation that declares ``labels`` (see :ref:`deprecate`) is skipped "
+"when each of its labels is listed in a selector whose other attributes match "
+"the deprecation too. The labels do not need to be in the same selector, nor "
+"in the same configuration scope: a directive citing two advisories is "
+"skipped when a site scope allows one and a user scope allows the other. A "
+"deprecation with no labels is never matched by a selector that lists some. A "
+"selector that constrains only the labels matches whatever the severity, "
+"which is what lets a site accept one advisory it assessed without accepting "
+"anything else."
+msgstr ""
+
+#: ../../../packages_yaml.rst:827
+msgid ""
+"Spack attaches the reserved label ``version_deprecated`` to the deprecations "
+"that come from the legacy ``version(..., deprecated=True)`` keyword, which "
+"is how they can be allowed on their own:"
+msgstr ""
+
+#: ../../../packages_yaml.rst:829
+msgid ""
+"packages:\n"
+"  all:\n"
+"    deprecation:\n"
+"      allow:\n"
+"      - labels: [version_deprecated]"
+msgstr ""
+
+#: ../../../packages_yaml.rst:837
+msgid ""
+"The directive refuses that label, so this selector matches no deprecation a "
+"recipe declares, including one with reason ``unspecified``."
+msgstr ""
+
+#: ../../../packages_yaml.rst:842
+msgid "Package Permissions"
+msgstr ""
+
+#: ../../../packages_yaml.rst:844
 msgid ""
 "Spack can be configured to assign permissions to the files installed by a "
 "package."
 msgstr ""
 
-#: ../../../packages_yaml.rst:714
+#: ../../../packages_yaml.rst:846
 msgid ""
 "In the ``packages.yaml`` file under ``permissions``, the attributes "
 "``read``, ``write``, and ``group`` control the package permissions. These "
@@ -1167,13 +1431,13 @@ msgid ""
 "specific settings take precedence."
 msgstr ""
 
-#: ../../../packages_yaml.rst:718
+#: ../../../packages_yaml.rst:850
 msgid ""
 "The ``read`` and ``write`` attributes take one of ``user``, ``group``, and "
 "``world``."
 msgstr ""
 
-#: ../../../packages_yaml.rst:720
+#: ../../../packages_yaml.rst:852
 msgid ""
 "packages:\n"
 "  all:\n"
@@ -1186,7 +1450,7 @@ msgid ""
 "      group: my_team"
 msgstr ""
 
-#: ../../../packages_yaml.rst:732
+#: ../../../packages_yaml.rst:864
 msgid ""
 "The permissions settings describe the broadest level of access to "
 "installations of the specified packages. The execute permissions of the file "
@@ -1199,7 +1463,7 @@ msgid ""
 "will be owned by the group ``spack``."
 msgstr ""
 
-#: ../../../packages_yaml.rst:739
+#: ../../../packages_yaml.rst:871
 msgid ""
 "The ``group`` attribute assigns a Unix-style group to a package. All files "
 "installed by the package will be owned by the assigned group, and the sticky "
@@ -1209,15 +1473,15 @@ msgid ""
 "Spack will allow the OS default behavior to go as expected."
 msgstr ""
 
-#: ../../../packages_yaml.rst:747
+#: ../../../packages_yaml.rst:879
 msgid "Assigning Package Attributes"
 msgstr ""
 
-#: ../../../packages_yaml.rst:749
+#: ../../../packages_yaml.rst:881
 msgid "You can assign class-level attributes in the configuration:"
 msgstr ""
 
-#: ../../../packages_yaml.rst:751
+#: ../../../packages_yaml.rst:883
 msgid ""
 "packages:\n"
 "  mpileaks:\n"
@@ -1228,18 +1492,18 @@ msgid ""
 "      x: 1"
 msgstr ""
 
-#: ../../../packages_yaml.rst:761
+#: ../../../packages_yaml.rst:893
 msgid ""
 "Attributes set this way will be accessible to any method executed in the "
 "package.py file (e.g. the ``install()`` method). Values for these attributes "
 "may be any value parseable by yaml."
 msgstr ""
 
-#: ../../../packages_yaml.rst:765
+#: ../../../packages_yaml.rst:897
 msgid "Variable substitution in package attributes"
 msgstr ""
 
-#: ../../../packages_yaml.rst:767
+#: ../../../packages_yaml.rst:899
 msgid ""
 "Package attribute values support variable substitution, allowing you to use "
 "Spack-specific variables, environment variables, and user path expansion in "
@@ -1247,12 +1511,12 @@ msgid ""
 "relative to your Spack installation, environment, or home directory."
 msgstr ""
 
-#: ../../../packages_yaml.rst:770
+#: ../../../packages_yaml.rst:902
 msgid ""
 "For example, you can reference local source archives or build artifacts:"
 msgstr ""
 
-#: ../../../packages_yaml.rst:772
+#: ../../../packages_yaml.rst:904
 msgid ""
 "packages:\n"
 "  mypackage:\n"
@@ -1267,40 +1531,40 @@ msgid ""
 "      license_file: ~/licenses/mypackage.lic"
 msgstr ""
 
-#: ../../../packages_yaml.rst:786
+#: ../../../packages_yaml.rst:918
 msgid ""
 "All the variables documented in :ref:`config-file-variables` are supported, "
 "including:"
 msgstr ""
 
-#: ../../../packages_yaml.rst:788
+#: ../../../packages_yaml.rst:920
 msgid "``$spack``: path to the Spack installation"
 msgstr ""
 
-#: ../../../packages_yaml.rst:789
+#: ../../../packages_yaml.rst:921
 msgid "``$env``: path to the currently active environment"
 msgstr ""
 
-#: ../../../packages_yaml.rst:790
+#: ../../../packages_yaml.rst:922
 msgid "``$user``: current user name"
 msgstr ""
 
-#: ../../../packages_yaml.rst:791
+#: ../../../packages_yaml.rst:923
 msgid "``${VARNAME}``: environment variables"
 msgstr ""
 
-#: ../../../packages_yaml.rst:792
+#: ../../../packages_yaml.rst:924
 msgid "``~`` or ``~user``: user home directory expansion"
 msgstr ""
 
-#: ../../../packages_yaml.rst:794
+#: ../../../packages_yaml.rst:926
 msgid ""
 "Variable substitution is applied to string values in ``package_attributes``. "
 "This allows you to create portable configurations that adapt to different "
 "environments and user contexts."
 msgstr ""
 
-#: ../../../packages_yaml.rst:799
+#: ../../../packages_yaml.rst:931
 msgid ""
 "These can only be applied to specific packages, not \"all\" or virtual "
 "packages."
