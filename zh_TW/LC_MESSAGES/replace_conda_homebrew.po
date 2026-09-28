@@ -1,0 +1,358 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2013-2023, Lawrence Livermore National Laboratory.
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../replace_conda_homebrew.rst:8
+msgid "Spack for Homebrew/Conda Users"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:10
+msgid ""
+"Spack is an incredibly powerful package manager, designed for supercomputers "
+"where users have diverse installation needs. But Spack can also be used to "
+"handle simple single-user installations on your laptop. Most macOS users are "
+"already familiar with package managers like Homebrew and Conda, where all "
+"installed packages are symlinked to a single central location like ``/usr/"
+"local``. In this section, we will show you how to emulate the behavior of "
+"Homebrew/Conda using :ref:`environments`!"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:20
+msgid "Setup"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:22
+msgid ""
+"First, let's create a new environment. We'll assume that Spack is already "
+"set up correctly, and that you've already sourced the setup script for your "
+"shell. To create a new environment, simply run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:26
+msgid "$ spack env create myenv"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:30
+msgid ""
+"Here, *myenv* can be anything you want to name your environment. Next, we "
+"can add a list of packages we would like to install into our environment. "
+"Let's say we want a newer version of Bash than the one that comes with "
+"macOS, and we want a few Python libraries. We can run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:35
+msgid "$ spack -e myenv add bash@5 python py-numpy py-scipy py-matplotlib"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:39
+msgid ""
+"Each package can be listed on a separate line, or combined into a single "
+"line like we did above. Notice that we're explicitly asking for Bash 5 here. "
+"You can use any spec you would normally use on the command line with other "
+"Spack commands."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:43
+msgid "Next, we want to manually configure a couple of things:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:45
+msgid "$ spack -e myenv config edit"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:49
+msgid ""
+"# This is a Spack Environment file.\n"
+"#\n"
+"# It describes a set of packages to be installed, along with\n"
+"# configuration settings.\n"
+"spack:\n"
+"  # add package specs to the `specs` list\n"
+"  specs: [bash@5, python, py-numpy, py-scipy, py-matplotlib]\n"
+"  view: true"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:60
+msgid ""
+"You can see the packages we added earlier in the ``specs:`` section. If you "
+"ever want to add more packages, you can either use ``spack add`` or manually "
+"edit this file."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:64
+msgid ""
+"We also need to change the ``concretizer:unify`` option. By default, Spack "
+"concretizes each spec *separately*, allowing multiple versions of the same "
+"package to coexist. Since we want a single consistent environment, we want "
+"to concretize all of the specs *together*."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:69
+msgid "Here is what your ``spack.yaml`` looks like with this new setting:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:71
+msgid ""
+"# This is a Spack Environment file.\n"
+"#\n"
+"# It describes a set of packages to be installed, along with\n"
+"# configuration settings.\n"
+"spack:\n"
+"  # add package specs to the `specs` list\n"
+"  specs: [bash@5, python, py-numpy, py-scipy, py-matplotlib]\n"
+"  view: true\n"
+"  concretizer:\n"
+"    unify: true"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:86
+msgid "Symlink location"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:88
+msgid ""
+"Spack symlinks all installations to ``/Users/me/spack/var/spack/environments/"
+"myenv/.spack-env/view``, which is the default when ``view: true``. You can "
+"actually change this to any directory you want. For example, Homebrew uses "
+"``/usr/local``, while Conda uses ``/Users/me/anaconda``. In order to access "
+"files in these locations, you need to update ``PATH`` and other environment "
+"variables to point to them. Activating the Spack environment does this "
+"automatically, but you can also manually set them in your ``.bashrc``."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:98
+msgid "There are several reasons why you shouldn't use ``/usr/local``:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:100
+msgid ""
+"If you are on macOS 10.11+ (El Capitan and newer), Apple makes it hard for "
+"you. You may notice permissions issues on ``/usr/local`` due to their "
+"`System Integrity Protection <https://support.apple.com/en-us/HT204899>`_. "
+"By default, users don't have permissions to install anything in ``/usr/"
+"local``, and you can't even change this using ``sudo chown`` or ``sudo "
+"chmod``."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:105
+msgid ""
+"Other package managers like Homebrew will try to install things to the same "
+"directory. If you plan on using Homebrew in conjunction with Spack, don't "
+"symlink things to ``/usr/local``."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:108
+msgid ""
+"If you are on a shared workstation, or don't have sudo privileges, you can't "
+"do this."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:111
+msgid ""
+"If you still want to do this anyway, there are several ways around SIP. You "
+"could disable SIP by booting into recovery mode and running ``csrutil "
+"disable``, but this is not recommended, as it can open up your OS to "
+"security vulnerabilities. Another technique is to run ``spack concretize`` "
+"and ``spack install`` using ``sudo``. This is also not recommended."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:117
+msgid ""
+"The safest way I've found is to create your installation directories using "
+"sudo, then change ownership back to the user like so:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:120
+msgid ""
+"for directory in .spack bin contrib include lib man share\n"
+"do\n"
+"    sudo mkdir -p /usr/local/$directory\n"
+"    sudo chown $(id -un):$(id -gn) /usr/local/$directory\n"
+"done"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:128
+msgid ""
+"Depending on the packages you install in your environment, the exact list of "
+"directories you need to create may vary. You may also find some packages "
+"like Java libraries that install a single file to the installation prefix "
+"instead of in a subdirectory. In this case, the action is the same, just "
+"replace ``mkdir -p`` with ``touch`` in the for-loop above."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:134
+msgid "But again, it's safer just to use the default symlink location."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:139
+msgid "Installation"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:141
+msgid "To actually concretize the environment, run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:143
+msgid "$ spack -e myenv concretize"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:147
+msgid ""
+"This will tell you which if any packages are already installed, and alert "
+"you to any conflicting specs."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:150
+msgid ""
+"To actually install these packages and symlink them to your ``view:`` "
+"directory, simply run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:153
+msgid ""
+"$ spack -e myenv install\n"
+"$ spack env activate myenv"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:158
+msgid ""
+"Now, when you type ``which python3``, it should find the one you just "
+"installed."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:160
+msgid ""
+"In order to change the default shell to our newer Bash installation, we "
+"first need to add it to this list of acceptable shells. Run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:163
+msgid "$ sudo vim /etc/shells"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:167
+msgid "and add the absolute path to your bash executable. Then run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:169
+msgid "$ chsh -s /path/to/bash"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:173
+msgid ""
+"Now, when you log out and log back in, ``echo $SHELL`` should point to the "
+"newer version of Bash."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:178
+msgid "Updating Installed Packages"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:180
+msgid ""
+"Let's say you upgraded to a new version of macOS, or a new version of Python "
+"was released, and you want to rebuild your entire software stack. To do "
+"this, simply run the following commands:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:184
+msgid ""
+"$ spack env activate myenv\n"
+"$ spack concretize --fresh --force\n"
+"$ spack install"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:190
+msgid ""
+"The ``--fresh`` flag tells Spack to use the latest version of every package "
+"where possible instead of trying to optimize for reuse of existing installed "
+"packages."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:194
+msgid ""
+"The ``--force`` flag in addition tells Spack to overwrite its previous "
+"concretization decisions, allowing you to choose a new version of Python. If "
+"any of the new packages like Bash are already installed, ``spack install`` "
+"won't re-install them, it will keep the symlinks in place."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:201
+msgid "Updating & Cleaning Up Old Packages"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:203
+msgid ""
+"If you're looking to mimic the behavior of Homebrew, you may also want to "
+"clean up out-of-date packages from your environment after an upgrade. To "
+"upgrade your entire software stack within an environment and clean up old "
+"package versions, simply run the following commands:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:208
+msgid ""
+"$ spack env activate myenv\n"
+"$ spack mark -i --all\n"
+"$ spack concretize --fresh --force\n"
+"$ spack install\n"
+"$ spack gc"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:216
+msgid ""
+"Running ``spack mark -i --all`` tells Spack to mark all of the existing "
+"packages within an environment as \"implicitly\" installed. This tells "
+"spack's garbage collection system that these packages should be cleaned up."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:220
+msgid ""
+"Don't worry however, this will not remove your entire environment. Running "
+"``spack install`` will reexamine your spack environment after a fresh "
+"concretization and will re-mark any packages that should remain installed as "
+"\"explicitly\" installed."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:225
+msgid ""
+"**Note:** if you use multiple spack environments you should re-run ``spack "
+"install`` in each of your environments prior to running ``spack gc`` to "
+"prevent spack from uninstalling any shared packages that are no longer "
+"required by the environment you just upgraded."
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:232
+msgid "Uninstallation"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:234
+msgid ""
+"If you decide that Spack isn't right for you, uninstallation is simple. Just "
+"run:"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:237
+msgid ""
+"$ spack env activate myenv\n"
+"$ spack uninstall --all"
+msgstr ""
+
+#: ../../../replace_conda_homebrew.rst:242
+msgid ""
+"This will uninstall all packages in your environment and remove the symlinks."
+msgstr ""
