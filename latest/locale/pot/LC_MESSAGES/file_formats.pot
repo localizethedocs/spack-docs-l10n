@@ -1,0 +1,574 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 17:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../file_formats.rst:-1
+msgid ""
+"A developer reference for the versioned file formats used by Spack, "
+"describing how the formats relate to each other, how their versions are "
+"checked, and how they have evolved across releases."
+msgstr ""
+
+#: ../../../file_formats.rst:13
+msgid "Versioned File Formats"
+msgstr ""
+
+#: ../../../file_formats.rst:15
+msgid ""
+"This document describes the versioned file formats that Spack uses to store "
+"concrete specs, installation records, and the state of environments. It is "
+"intended for developers who modify the data that Spack writes to disk or to "
+"a build cache."
+msgstr ""
+
+#: ../../../file_formats.rst:18
+msgid "Each format is documented in detail on a dedicated page:"
+msgstr ""
+
+#: ../../../file_formats.rst:28
+msgid "The figure below shows how the formats depend on each other:"
+msgstr ""
+
+#: ../../../file_formats.rst:30
+msgid "Dependencies among the versioned file formats of Spack"
+msgstr ""
+
+#: ../../../file_formats.rst:35
+msgid "An arrow from A to B means that A stores data in the format of B."
+msgstr ""
+
+#: ../../../file_formats.rst:37
+msgid ""
+"The following table lists the formats, the files in which they are stored, "
+"and the constant that defines the current version of each."
+msgstr ""
+
+#: ../../../file_formats.rst:39
+msgid "Versioned formats"
+msgstr ""
+
+#: ../../../file_formats.rst:42 ../../../file_formats.rst:124
+msgid "Format"
+msgstr ""
+
+#: ../../../file_formats.rst:43
+msgid "Location"
+msgstr ""
+
+#: ../../../file_formats.rst:44
+msgid "Version constant"
+msgstr ""
+
+#: ../../../file_formats.rst:45
+msgid "Current version"
+msgstr ""
+
+#: ../../../file_formats.rst:46
+msgid ":doc:`Spec file <file_formats/specfile>`"
+msgstr ""
+
+#: ../../../file_formats.rst:47
+msgid "``<prefix>/.spack/spec.json``, build cache spec files"
+msgstr ""
+
+#: ../../../file_formats.rst:48
+msgid ":data:`spack.spec.SPECFILE_FORMAT_VERSION`"
+msgstr ""
+
+#: ../../../file_formats.rst:49
+msgid "|specfile_format_version|"
+msgstr ""
+
+#: ../../../file_formats.rst:50
+msgid ":doc:`Database <file_formats/database>`"
+msgstr ""
+
+#: ../../../file_formats.rst:51
+msgid "``<install_tree:root>/.spack-db/index.json``, build cache indexes"
+msgstr ""
+
+#: ../../../file_formats.rst:52
+msgid "``spack.database._DB_VERSION``"
+msgstr ""
+
+#: ../../../file_formats.rst:53
+msgid "|db_version|"
+msgstr ""
+
+#: ../../../file_formats.rst:54
+msgid ":doc:`Environment lockfile <file_formats/lockfile>`"
+msgstr ""
+
+#: ../../../file_formats.rst:55
+msgid "``<environment>/spack.lock``"
+msgstr ""
+
+#: ../../../file_formats.rst:56
+msgid ":data:`spack.environment.environment.CURRENT_LOCKFILE_VERSION`"
+msgstr ""
+
+#: ../../../file_formats.rst:57
+msgid "|lockfile_version|"
+msgstr ""
+
+#: ../../../file_formats.rst:58
+msgid ":doc:`Build cache layout <file_formats/buildcache>`"
+msgstr ""
+
+#: ../../../file_formats.rst:59
+msgid "``<mirror>/v3/``, ``<mirror>/blobs/``"
+msgstr ""
+
+#: ../../../file_formats.rst:60
+msgid "``spack.url_buildcache.CURRENT_BUILD_CACHE_LAYOUT_VERSION``"
+msgstr ""
+
+#: ../../../file_formats.rst:61
+msgid "|buildcache_layout_version|"
+msgstr ""
+
+#: ../../../file_formats.rst:66
+msgid "How Format Versions Are Coupled"
+msgstr ""
+
+#: ../../../file_formats.rst:68
+msgid ""
+"A spec file version increment requires a Database and a lockfile version "
+"increment"
+msgstr ""
+
+#: ../../../file_formats.rst:71
+msgid ""
+"An increment of the spec file version must be accompanied by an increment of "
+"both the Database version and the lockfile version in the same change. "
+"Otherwise, the nodes of a Database or a lockfile written with the new spec "
+"file format would be interpreted according to the previous one. The converse "
+"does not hold: the Database and the lockfile versions can be incremented on "
+"their own, as was done for lockfile v7."
+msgstr ""
+
+#: ../../../file_formats.rst:75
+msgid ""
+"For example, `#53012 <https://github.com/spack/spack/pull/53012>`_ "
+"introduced spec file v6 together with Database v9, lockfile v8, and the "
+"``spec.v6`` and ``db.v9`` build cache media types."
+msgstr ""
+
+#: ../../../file_formats.rst:77
+msgid ""
+"This requirement follows from the way the formats are layered. They form a "
+"stack, with the spec file at the bottom, and each layer is described below, "
+"starting from the bottom of the stack."
+msgstr ""
+
+#: ../../../file_formats.rst:80
+msgid "**Spec file**"
+msgstr ""
+
+#: ../../../file_formats.rst:81
+msgid ""
+"The spec file is the format on which all the others depend. It stores a spec "
+"as a list of *node dictionaries*, each describing a single node of the DAG: "
+"its name, version, variants, architecture, DAG hash, and the hashes of its "
+"dependencies. The layout of a node dictionary is defined by the spec file "
+"version, which is recorded in ``spec._meta.version``."
+msgstr ""
+
+#: ../../../file_formats.rst:85
+msgid "**Database**"
+msgstr ""
+
+#: ../../../file_formats.rst:86
+msgid ""
+"The Database stores one node dictionary for each installed spec, without the "
+"enclosing ``spec`` and ``_meta`` keys. The spec file version is therefore "
+"not recorded for each node. Instead, each version of the Database is "
+"associated with exactly one spec file version, which is used to read all the "
+"nodes in the index."
+msgstr ""
+
+#: ../../../file_formats.rst:90
+msgid "**Lockfile**"
+msgstr ""
+
+#: ../../../file_formats.rst:91
+msgid ""
+"The lockfile stores one node dictionary for each spec in the environment, in "
+"the same way as the Database. Each version of the lockfile is associated "
+"with exactly one spec file version, which is used to read all the nodes in "
+"the file. The ``_meta.specfile-version`` key, which lockfiles have included "
+"since v0.17, is informational and is not used when reading."
+msgstr ""
+
+#: ../../../file_formats.rst:95
+msgid "**Build cache layout**"
+msgstr ""
+
+#: ../../../file_formats.rst:96
+msgid ""
+"A build cache stores complete spec files, each recording its own version, "
+"and an index in the Database format. Both are labeled with a media type that "
+"includes the version of their format, such as ``spec.v6`` or ``db.v9``."
+msgstr ""
+
+#: ../../../file_formats.rst:100
+msgid "Compatibility"
+msgstr ""
+
+#: ../../../file_formats.rst:102
+msgid ""
+"Using a newer version of Spack does not make existing data unreadable to "
+"older versions"
+msgstr ""
+
+#: ../../../file_formats.rst:105
+msgid ""
+"Using a newer version of Spack on existing data does not, in itself, make "
+"that data unreadable to the version that wrote it. A file is converted to a "
+"newer format only by a command that modifies it, such as ``spack "
+"concretize`` for a lockfile or ``spack reindex`` for the Database."
+msgstr ""
+
+#: ../../../file_formats.rst:108
+msgid ""
+"The compatibility of each format is described in terms of the following "
+"properties:"
+msgstr ""
+
+#: ../../../file_formats.rst:110
+msgid "**Backward compatibility**"
+msgstr ""
+
+#: ../../../file_formats.rst:111
+msgid ""
+"The ability of a newer version of Spack to read files written by an older "
+"version."
+msgstr ""
+
+#: ../../../file_formats.rst:113
+msgid "**Forward compatibility**"
+msgstr ""
+
+#: ../../../file_formats.rst:114
+msgid ""
+"The ability of an older version of Spack to read files written by a newer "
+"version."
+msgstr ""
+
+#: ../../../file_formats.rst:116
+msgid "**Rewrite policy**"
+msgstr ""
+
+#: ../../../file_formats.rst:117
+msgid ""
+"The conditions under which a file in an older format is rewritten in the "
+"current one."
+msgstr ""
+
+#: ../../../file_formats.rst:119
+msgid "The following table summarizes these properties for each format:"
+msgstr ""
+
+#: ../../../file_formats.rst:121
+msgid "Compatibility properties of each format"
+msgstr ""
+
+#: ../../../file_formats.rst:125
+msgid "Backward compatibility"
+msgstr ""
+
+#: ../../../file_formats.rst:126
+msgid "Forward compatibility"
+msgstr ""
+
+#: ../../../file_formats.rst:127
+msgid "Rewrite policy"
+msgstr ""
+
+#: ../../../file_formats.rst:128 ../../../file_formats.rst:160
+msgid "Spec file"
+msgstr ""
+
+#: ../../../file_formats.rst:129 ../../../file_formats.rst:142
+msgid "All previous versions are read."
+msgstr ""
+
+#: ../../../file_formats.rst:130 ../../../file_formats.rst:137
+#: ../../../file_formats.rst:143
+msgid "None. A newer version is an error."
+msgstr ""
+
+#: ../../../file_formats.rst:132
+msgid ""
+"Never rewritten. The ``spec.json`` file of an installation prefix is written "
+"once, at installation time."
+msgstr ""
+
+#: ../../../file_formats.rst:134 ../../../file_formats.rst:160
+msgid "Database"
+msgstr ""
+
+#: ../../../file_formats.rst:135
+msgid ""
+"A limited set of recent versions is read, see :doc:`file_formats/database`. "
+"Older versions are an error that requests ``spack reindex``."
+msgstr ""
+
+#: ../../../file_formats.rst:139
+msgid ""
+"Rewritten only by an explicit ``spack reindex``, which creates a backup. "
+"Writes to an index in an older version are refused."
+msgstr ""
+
+#: ../../../file_formats.rst:141 ../../../file_formats.rst:160
+msgid "Lockfile"
+msgstr ""
+
+#: ../../../file_formats.rst:145
+msgid ""
+"Rewritten when the content of the environment changes. Lockfiles before v4 "
+"are rewritten on the next write, and v1 lockfiles are backed up first."
+msgstr ""
+
+#: ../../../file_formats.rst:147 ../../../file_formats.rst:160
+msgid "Build cache layout"
+msgstr ""
+
+#: ../../../file_formats.rst:148
+msgid "The previous layout version is read, with a deprecation warning."
+msgstr ""
+
+#: ../../../file_formats.rst:149
+msgid "None. Entries with a newer media type are not used."
+msgstr ""
+
+#: ../../../file_formats.rst:151
+msgid ""
+"Never rewritten in place. A build cache in the previous layout is converted "
+"by an explicit ``spack buildcache migrate``."
+msgstr ""
+
+#: ../../../file_formats.rst:154
+msgid ""
+"To determine whether two releases of Spack can share a file, compare the "
+"versions they write:"
+msgstr ""
+
+#: ../../../file_formats.rst:156
+msgid "Format versions written by each release"
+msgstr ""
+
+#: ../../../file_formats.rst:160
+msgid "Spack"
+msgstr ""
+
+#: ../../../file_formats.rst:162
+msgid "v0.12"
+msgstr ""
+
+#: ../../../file_formats.rst:162
+msgid "\\-"
+msgstr ""
+
+#: ../../../file_formats.rst:162
+msgid "0.9.3"
+msgstr ""
+
+#: ../../../file_formats.rst:162 ../../../file_formats.rst:168
+msgid "1"
+msgstr ""
+
+#: ../../../file_formats.rst:164
+msgid "v0.13 to v0.16"
+msgstr ""
+
+#: ../../../file_formats.rst:164 ../../../file_formats.rst:170
+#: ../../../file_formats.rst:174
+msgid "5"
+msgstr ""
+
+#: ../../../file_formats.rst:164 ../../../file_formats.rst:166
+#: ../../../file_formats.rst:172
+msgid "2"
+msgstr ""
+
+#: ../../../file_formats.rst:166
+msgid "v0.17"
+msgstr ""
+
+#: ../../../file_formats.rst:166 ../../../file_formats.rst:174
+#: ../../../file_formats.rst:178
+msgid "6"
+msgstr ""
+
+#: ../../../file_formats.rst:166 ../../../file_formats.rst:168
+#: ../../../file_formats.rst:174
+msgid "3"
+msgstr ""
+
+#: ../../../file_formats.rst:168
+msgid "v0.18 to v0.20"
+msgstr ""
+
+#: ../../../file_formats.rst:168 ../../../file_formats.rst:170
+msgid "4"
+msgstr ""
+
+#: ../../../file_formats.rst:170
+msgid "v0.21"
+msgstr ""
+
+#: ../../../file_formats.rst:170 ../../../file_formats.rst:176
+msgid "7"
+msgstr ""
+
+#: ../../../file_formats.rst:172
+msgid "v0.22 to v0.23"
+msgstr ""
+
+#: ../../../file_formats.rst:174
+msgid "v1.0 to v1.1"
+msgstr ""
+
+#: ../../../file_formats.rst:174 ../../../file_formats.rst:178
+msgid "8"
+msgstr ""
+
+#: ../../../file_formats.rst:176
+msgid "v1.2"
+msgstr ""
+
+#: ../../../file_formats.rst:178
+msgid "v1.3 (in development)"
+msgstr ""
+
+#: ../../../file_formats.rst:178
+msgid "9"
+msgstr ""
+
+#: ../../../file_formats.rst:182
+msgid "Changing a Format"
+msgstr ""
+
+#: ../../../file_formats.rst:184
+msgid ""
+"A change to what Spack writes in one of these formats may require a new "
+"version of that format, and of the formats that depend on it."
+msgstr ""
+
+#: ../../../file_formats.rst:186
+msgid "**When a new version is required**"
+msgstr ""
+
+#: ../../../file_formats.rst:187
+msgid ""
+"A new version of a format is required whenever an older version of Spack "
+"would misinterpret the file:"
+msgstr ""
+
+#: ../../../file_formats.rst:189
+msgid "the meaning of an existing key changes,"
+msgstr ""
+
+#: ../../../file_formats.rst:190
+msgid ""
+"a new key affects the identity of a spec, for instance because it is part of "
+"the DAG hash, or"
+msgstr ""
+
+#: ../../../file_formats.rst:191
+msgid ""
+"an older version of Spack would reconstruct a different spec from the same "
+"data."
+msgstr ""
+
+#: ../../../file_formats.rst:193
+msgid ""
+"An optional key that older versions of Spack can safely ignore does not "
+"require a new version. For example, the ``spack`` and ``include_concrete`` "
+"sections of lockfiles were added in this way (`#32801 <https://github.com/"
+"spack/spack/pull/32801>`_, `#33768 <https://github.com/spack/spack/"
+"pull/33768>`_)."
+msgstr ""
+
+#: ../../../file_formats.rst:196
+msgid "**Which formats are incremented with it**"
+msgstr ""
+
+#: ../../../file_formats.rst:197
+msgid ""
+"A new version of the spec file requires a new version of the Database and of "
+"the lockfile in the same change, as explained in :ref:`file-formats-"
+"coupling`. The build cache media types of spec files and indexes include "
+"these versions, so they change with them."
+msgstr ""
+
+#: ../../../file_formats.rst:199
+msgid ""
+"A new version of the Database does not affect the other formats. It requires "
+"a decision on whether an index in the previous version can still be read in "
+"place, which also applies to upstreams and to the indexes of build caches."
+msgstr ""
+
+#: ../../../file_formats.rst:201
+msgid ""
+"A new version of the lockfile does not affect the other formats. A key added "
+"by the new version needs a default value for lockfiles in older versions."
+msgstr ""
+
+#: ../../../file_formats.rst:203
+msgid ""
+"A new version of the build cache layout does not affect the other formats. "
+"The previous version of the layout remains readable, and Spack provides a "
+"command to convert a build cache to the new one."
+msgstr ""
+
+#: ../../../file_formats.rst:206
+msgid "**What to update in these documents**"
+msgstr ""
+
+#: ../../../file_formats.rst:207
+msgid "The Version History section on the page of the format."
+msgstr ""
+
+#: ../../../file_formats.rst:208
+msgid ""
+"The table of the format versions written by each release, in the section "
+"above."
+msgstr ""
+
+#: ../../../file_formats.rst:209
+msgid "For the lockfile, the table of the versions read by each release."
+msgstr ""
+
+#: ../../../file_formats.rst:210
+msgid "For the Database, the versions that are read in place."
+msgstr ""
+
+#: ../../../file_formats.rst:212
+msgid "**What to test**"
+msgstr ""
+
+#: ../../../file_formats.rst:213
+msgid ""
+"A file written by a released version of Spack is read, and gives the same "
+"specs."
+msgstr ""
+
+#: ../../../file_formats.rst:214
+msgid "A file in a version newer than the current one is refused."
+msgstr ""
