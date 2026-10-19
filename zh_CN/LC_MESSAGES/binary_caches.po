@@ -1,0 +1,648 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2013-2023, Lawrence Livermore National Laboratory.
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack 0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../binary_caches.rst:10
+msgid "Build Caches"
+msgstr ""
+
+#: ../../../binary_caches.rst:12
+msgid ""
+"Some sites may encourage users to set up their own test environments before "
+"carrying out central installations, or some users may prefer to set up these "
+"environments on their own motivation. To reduce the load of recompiling "
+"otherwise identical package specs in different installations, installed "
+"packages can be put into build cache tarballs, pushed to your Spack mirror "
+"and then downloaded and installed by others."
+msgstr ""
+
+#: ../../../binary_caches.rst:19
+msgid ""
+"Whenever a mirror provides prebuilt packages, Spack will take these packages "
+"into account during concretization and installation, making ``spack "
+"install`` significantly faster."
+msgstr ""
+
+#: ../../../binary_caches.rst:26
+msgid ""
+"We use the terms \"build cache\" and \"mirror\" often interchangeably. "
+"Mirrors are used during installation both for sources and prebuilt packages. "
+"Build caches refer to mirrors that provide prebuilt packages."
+msgstr ""
+
+#: ../../../binary_caches.rst:33
+msgid "Creating a build cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:35
+msgid "Build caches are created via:"
+msgstr ""
+
+#: ../../../binary_caches.rst:37
+msgid "$ spack buildcache push <path/url/mirror name> <spec>"
+msgstr ""
+
+#: ../../../binary_caches.rst:41
+msgid ""
+"This command takes the locally installed spec and its dependencies, and "
+"creates tarballs of their install prefixes. It also generates metadata "
+"files, signed with GPG. These tarballs and metadata files are then pushed to "
+"the provided binary cache, which can be a local directory or a remote URL."
+msgstr ""
+
+#: ../../../binary_caches.rst:46
+msgid ""
+"Here is an example where a build cache is created in a local directory named "
+"\"spack-cache\", to which we push the \"ninja\" spec:"
+msgstr ""
+
+#: ../../../binary_caches.rst:49
+msgid ""
+"$ spack buildcache push ./spack-cache ninja\n"
+"==> Pushing binary packages to file:///home/spackuser/spack/spack-cache/"
+"build_cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:54
+msgid "Note that ``ninja`` must be installed locally for this to work."
+msgstr ""
+
+#: ../../../binary_caches.rst:56
+msgid ""
+"Once you have a build cache, you can add it as a mirror, discussed next."
+msgstr ""
+
+#: ../../../binary_caches.rst:60
+msgid "Finding or installing build cache files"
+msgstr ""
+
+#: ../../../binary_caches.rst:62
+msgid ""
+"To find build caches or install build caches, a Spack mirror must be "
+"configured with:"
+msgstr ""
+
+#: ../../../binary_caches.rst:65
+msgid "$ spack mirror add <name> <url or path>"
+msgstr ""
+
+#: ../../../binary_caches.rst:70
+msgid ""
+"Both web URLs and local paths on the filesystem can be specified. In the "
+"previous example, you might add the directory \"spack-cache\" and call it "
+"``mymirror``:"
+msgstr ""
+
+#: ../../../binary_caches.rst:74
+msgid "$ spack mirror add mymirror ./spack-cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:79
+msgid ""
+"You can see that the mirror is added with ``spack mirror list`` as follows:"
+msgstr ""
+
+#: ../../../binary_caches.rst:81
+msgid ""
+"$ spack mirror list\n"
+"mymirror           file:///home/spackuser/spack/spack-cache\n"
+"spack-public       https://spack-llnl-mirror.s3-us-west-2.amazonaws.com/"
+msgstr ""
+
+#: ../../../binary_caches.rst:89
+msgid ""
+"At this point, you've create a buildcache, but spack hasn't indexed it, so "
+"if you run ``spack buildcache list`` you won't see any results. You need to "
+"index this new build cache as follows:"
+msgstr ""
+
+#: ../../../binary_caches.rst:93
+msgid "$ spack buildcache update-index ./spack-cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:97
+msgid "Now you can use list:"
+msgstr ""
+
+#: ../../../binary_caches.rst:99
+msgid ""
+"$  spack buildcache list\n"
+"==> 1 cached build.\n"
+"-- linux-ubuntu20.04-skylake / gcc@9.3.0 ------------------------\n"
+"ninja@1.10.2"
+msgstr ""
+
+#: ../../../binary_caches.rst:106
+msgid ""
+"With ``mymirror`` configured and an index available, Spack will "
+"automatically use it during concretization and installation. That means that "
+"you can expect ``spack install ninja`` to fetch prebuilt packages from the "
+"mirror. Let's verify by re-installing ninja:"
+msgstr ""
+
+#: ../../../binary_caches.rst:111
+msgid ""
+"$ spack uninstall ninja\n"
+"$ spack install ninja\n"
+"==> Installing ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz\n"
+"==> Fetching file:///home/spackuser/spack/spack-cache/build_cache/linux-"
+"ubuntu20.04-skylake-gcc-9.3.0-ninja-1.10.2-yxferyhmrjkosgta5ei6b4lqf6bxbscz."
+"spec.json.sig\n"
+"gpg: Signature made Do 12 Jan 2023 16:01:04 CET\n"
+"gpg:                using RSA key 61B82B2B2350E171BD17A1744E3A689061D57BF6\n"
+"gpg: Good signature from \"example (GPG created for Spack) <example@example."
+"com>\" [ultimate]\n"
+"==> Fetching file:///home/spackuser/spack/spack-cache/build_cache/linux-"
+"ubuntu20.04-skylake/gcc-9.3.0/ninja-1.10.2/linux-ubuntu20.04-skylake-"
+"gcc-9.3.0-ninja-1.10.2-yxferyhmrjkosgta5ei6b4lqf6bxbscz.spack\n"
+"==> Extracting ninja-1.10.2-yxferyhmrjkosgta5ei6b4lqf6bxbscz from binary "
+"cache\n"
+"==> ninja: Successfully installed ninja-1.11.1-"
+"yxferyhmrjkosgta5ei6b4lqf6bxbscz\n"
+"Search: 0.00s.  Fetch: 0.17s.  Install: 0.12s.  Total: 0.29s\n"
+"[+] /home/harmen/spack/opt/spack/linux-ubuntu20.04-skylake/gcc-9.3.0/"
+"ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz"
+msgstr ""
+
+#: ../../../binary_caches.rst:127
+msgid ""
+"It worked! You've just completed a full example of creating a build cache "
+"with a spec of interest, adding it as a mirror, updating its index, listing "
+"the contents, and finally, installing from it."
+msgstr ""
+
+#: ../../../binary_caches.rst:131
+msgid ""
+"By default Spack falls back to building from sources when the mirror is not "
+"available or when the package is simply not already available. To force "
+"Spack to only install prebuilt packages, you can use"
+msgstr ""
+
+#: ../../../binary_caches.rst:135
+msgid "$ spack install --use-buildcache only <package>"
+msgstr ""
+
+#: ../../../binary_caches.rst:139
+msgid ""
+"For example, to combine all of the commands above to add the E4S build cache "
+"and then install from it exclusively, you would do:"
+msgstr ""
+
+#: ../../../binary_caches.rst:142
+msgid ""
+"$ spack mirror add E4S https://cache.e4s.io\n"
+"$ spack buildcache keys --install --trust\n"
+"$ spack install --use-buildcache only <package>"
+msgstr ""
+
+#: ../../../binary_caches.rst:148
+msgid ""
+"We use ``--install`` and ``--trust`` to say that we are installing keys to "
+"our keyring, and trusting all downloaded keys."
+msgstr ""
+
+#: ../../../binary_caches.rst:154
+msgid "List of popular build caches"
+msgstr ""
+
+#: ../../../binary_caches.rst:156
+msgid ""
+"`Extreme-scale Scientific Software Stack (E4S) <https://e4s-project.github."
+"io/>`_: `build cache <https://oaciss.uoregon.edu/e4s/inventory.html>`_'"
+msgstr ""
+
+#: ../../../binary_caches.rst:160
+msgid "Build cache signing"
+msgstr ""
+
+#: ../../../binary_caches.rst:162
+msgid ""
+"By default, Spack will add a cryptographic signature to each package pushed "
+"to a build cache, and verifies the signature when installing from a build "
+"cache."
+msgstr ""
+
+#: ../../../binary_caches.rst:165
+msgid ""
+"Keys for signing can be managed with the :ref:`spack gpg <cmd-spack-gpg>` "
+"command, as well as ``spack buildcache keys`` as mentioned above."
+msgstr ""
+
+#: ../../../binary_caches.rst:168
+msgid ""
+"You can disable signing when pushing with ``spack buildcache push --"
+"unsigned``, and disable verification when installing from any build cache "
+"with ``spack install --no-check-signature``."
+msgstr ""
+
+#: ../../../binary_caches.rst:172
+msgid ""
+"Alternatively, signing and verification can be enabled or disabled on a per "
+"build cache basis:"
+msgstr ""
+
+#: ../../../binary_caches.rst:175
+msgid ""
+"$ spack mirror add --signed <name> <url>  # enable signing and verification\n"
+"$ spack mirror add --unsigned <name> <url>  # disable signing and "
+"verification\n"
+"\n"
+"$ spack mirror set --signed <name>  # enable signing and verification for an "
+"existing mirror\n"
+"$ spack mirror set --unsigned <name>  # disable signing and verification for "
+"an existing mirror"
+msgstr ""
+
+#: ../../../binary_caches.rst:183
+msgid "Or you can directly edit the ``mirrors.yaml`` configuration file:"
+msgstr ""
+
+#: ../../../binary_caches.rst:185
+msgid ""
+"mirrors:\n"
+"  <name>:\n"
+"    url: <url>\n"
+"    signed: false # disable signing and verification"
+msgstr ""
+
+#: ../../../binary_caches.rst:192
+msgid "See also :ref:`mirrors`."
+msgstr ""
+
+#: ../../../binary_caches.rst:196
+msgid "Relocation"
+msgstr ""
+
+#: ../../../binary_caches.rst:198
+msgid ""
+"When using buildcaches across different machines, it is likely that the "
+"install root will be different from the one used to build the binaries."
+msgstr ""
+
+#: ../../../binary_caches.rst:201
+msgid ""
+"To address this issue, Spack automatically relocates all paths encoded in "
+"binaries and scripts to their new location upon install."
+msgstr ""
+
+#: ../../../binary_caches.rst:204
+msgid ""
+"Note that there are some cases where this is not possible: if binaries are "
+"built in a relatively short path, and then installed to a longer path, there "
+"may not be enough space in the binary to encode the new path. In this case, "
+"Spack will fail to install the package from the build cache, and a source "
+"build is required."
+msgstr ""
+
+#: ../../../binary_caches.rst:209
+msgid ""
+"To reduce the likelihood of this happening, it is highly recommended to add "
+"padding to the install root during the build, as specified in the :ref:"
+"`config <config-yaml>` section of the configuration:"
+msgstr ""
+
+#: ../../../binary_caches.rst:213
+msgid ""
+"config:\n"
+"  install_tree:\n"
+"    root: /opt/spack\n"
+"    padded_length: 128"
+msgstr ""
+
+#: ../../../binary_caches.rst:225
+msgid "Automatic push to a build cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:227
+msgid ""
+"Sometimes it is convenient to push packages to a build cache as soon as they "
+"are installed. Spack can do this by setting autopush flag when adding a "
+"mirror:"
+msgstr ""
+
+#: ../../../binary_caches.rst:229
+msgid "$ spack mirror add --autopush <name> <url or path>"
+msgstr ""
+
+#: ../../../binary_caches.rst:233
+msgid "Or the autopush flag can be set for an existing mirror:"
+msgstr ""
+
+#: ../../../binary_caches.rst:235
+msgid ""
+"$ spack mirror set --autopush <name>  # enable automatic push for an "
+"existing mirror\n"
+"$ spack mirror set --no-autopush <name>  # disable automatic push for an "
+"existing mirror"
+msgstr ""
+
+#: ../../../binary_caches.rst:240
+msgid ""
+"Then after installing a package it is automatically pushed to all mirrors "
+"with ``autopush: true``. The command"
+msgstr ""
+
+#: ../../../binary_caches.rst:242
+msgid "$ spack install <package>"
+msgstr ""
+
+#: ../../../binary_caches.rst:246
+msgid "will have the same effect as"
+msgstr ""
+
+#: ../../../binary_caches.rst:248
+msgid ""
+"$ spack install <package>\n"
+"$ spack buildcache push <cache> <package>  # for all caches with autopush: "
+"true"
+msgstr ""
+
+#: ../../../binary_caches.rst:255
+msgid ""
+"Packages are automatically pushed to a build cache only if they are built "
+"from source."
+msgstr ""
+
+#: ../../../binary_caches.rst:259
+msgid "OCI / Docker V2 registries as build cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:261
+msgid ""
+"Spack can also use OCI or Docker V2 registries such as Dockerhub, Quay.io, "
+"Github Packages, GitLab Container Registry, JFrog Artifactory, and others as "
+"build caches. This is a convenient way to share binaries using public "
+"infrastructure, or to cache Spack built binaries in Github Actions and "
+"GitLab CI."
+msgstr ""
+
+#: ../../../binary_caches.rst:267
+msgid ""
+"To get started, configure an OCI mirror using ``oci://`` as the scheme, and "
+"optionally specify variables that hold the username and password (or "
+"personal access token) for the registry:"
+msgstr ""
+
+#: ../../../binary_caches.rst:271
+msgid ""
+"$ spack mirror add --oci-username-variable REGISTRY_USER \\\n"
+"                   --oci-password-variable REGISTRY_TOKEN \\\n"
+"                   my_registry oci://example.com/my_image"
+msgstr ""
+
+#: ../../../binary_caches.rst:277
+msgid ""
+"Spack follows the naming conventions of Docker, with Dockerhub as the "
+"default registry. To use Dockerhub, you can omit the registry domain:"
+msgstr ""
+
+#: ../../../binary_caches.rst:280
+msgid "$ spack mirror add ... my_registry oci://username/my_image"
+msgstr ""
+
+#: ../../../binary_caches.rst:284
+msgid "From here, you can use the mirror as any other build cache:"
+msgstr ""
+
+#: ../../../binary_caches.rst:286
+msgid ""
+"$ export REGISTRY_USER=...\n"
+"$ export REGISTRY_TOKEN=...\n"
+"$ spack buildcache push my_registry <specs...>  # push to the registry\n"
+"$ spack install <specs...>  # or install from the registry"
+msgstr ""
+
+#: ../../../binary_caches.rst:293
+msgid ""
+"A unique feature of buildcaches on top of OCI registries is that it's "
+"incredibly easy to generate get a runnable container image with the binaries "
+"installed. This is a great way to make applications available to users "
+"without requiring them to install Spack -- all you need is Docker, Podman or "
+"any other OCI-compatible container runtime."
+msgstr ""
+
+#: ../../../binary_caches.rst:299
+msgid ""
+"To produce container images, all you need to do is add the ``--base-image`` "
+"flag when pushing to the build cache:"
+msgstr ""
+
+#: ../../../binary_caches.rst:302
+msgid ""
+"$ spack buildcache push --base-image ubuntu:20.04 my_registry ninja\n"
+"Pushed to example.com/my_image:ninja-1.11.1-yxferyhmrjkosgta5ei6b4lqf6bxbscz."
+"spack\n"
+"\n"
+"$ docker run -it example.com/my_image:ninja-1.11.1-"
+"yxferyhmrjkosgta5ei6b4lqf6bxbscz.spack\n"
+"root@e4c2b6f6b3f4:/# ninja --version\n"
+"1.11.1"
+msgstr ""
+
+#: ../../../binary_caches.rst:311
+msgid ""
+"If ``--base-image`` is not specified, distroless images are produced. In "
+"practice, you won't be able to run these as containers, since they don't "
+"come with libc and other system dependencies. However, they are still "
+"compatible with tools like ``skopeo``, ``podman``, and ``docker`` for "
+"pulling and pushing."
+msgstr ""
+
+#: ../../../binary_caches.rst:317
+msgid ""
+"The docker ``overlayfs2`` storage driver is limited to 128 layers, above "
+"which a ``max depth exceeded`` error may be produced when pulling the image. "
+"There are `alternative drivers <https://docs.docker.com/storage/"
+"storagedriver/>`_."
+msgstr ""
+
+#: ../../../binary_caches.rst:323
+msgid "Spack build cache for GitHub Actions"
+msgstr ""
+
+#: ../../../binary_caches.rst:325
+msgid ""
+"To significantly speed up Spack in GitHub Actions, binaries can be cached in "
+"GitHub Packages. This service is an OCI registry that can be linked to a "
+"GitHub repository."
+msgstr ""
+
+#: ../../../binary_caches.rst:329
+msgid ""
+"Spack offers a public build cache for GitHub Actions with a set of common "
+"packages, which lets you get started quickly. See the following resources "
+"for more information:"
+msgstr ""
+
+#: ../../../binary_caches.rst:332
+msgid ""
+"`spack/setup-spack <https://github.com/spack/setup-spack>`_ for setting up "
+"Spack in GitHub Actions"
+msgstr ""
+
+#: ../../../binary_caches.rst:334
+msgid ""
+"`spack/github-actions-buildcache <https://github.com/spack/github-actions-"
+"buildcache>`_ for more details on the public build cache"
+msgstr ""
+
+#: ../../../binary_caches.rst:341
+msgid "``spack buildcache``"
+msgstr ""
+
+#: ../../../binary_caches.rst:345
+msgid "``spack buildcache push``"
+msgstr ""
+
+#: ../../../binary_caches.rst:347
+msgid ""
+"Create tarball of installed Spack package and all dependencies. Tarballs are "
+"checksummed and signed if gpg2 is available. Places them in a directory "
+"``build_cache`` that can be copied to a mirror. Commands like ``spack "
+"buildcache install`` will search Spack mirrors for build_cache to get the "
+"list of build caches."
+msgstr ""
+
+#: ../../../binary_caches.rst:353 ../../../binary_caches.rst:370
+#: ../../../binary_caches.rst:385 ../../../binary_caches.rst:399
+msgid "Arguments"
+msgstr ""
+
+#: ../../../binary_caches.rst:353 ../../../binary_caches.rst:370
+#: ../../../binary_caches.rst:385 ../../../binary_caches.rst:399
+msgid "Description"
+msgstr ""
+
+#: ../../../binary_caches.rst:355 ../../../binary_caches.rst:372
+#: ../../../binary_caches.rst:387
+msgid "``<specs>``"
+msgstr ""
+
+#: ../../../binary_caches.rst:355
+msgid ""
+"list of partial specs or hashes with a leading ``/`` to match from installed "
+"packages and used for creating build caches"
+msgstr ""
+
+#: ../../../binary_caches.rst:356
+msgid "``-d <path>``"
+msgstr ""
+
+#: ../../../binary_caches.rst:356
+msgid ""
+"directory in which ``build_cache`` directory is created, defaults to ``.``"
+msgstr ""
+
+#: ../../../binary_caches.rst:357 ../../../binary_caches.rst:388
+msgid "``-f``"
+msgstr ""
+
+#: ../../../binary_caches.rst:357
+msgid "overwrite ``.spack`` file in ``build_cache`` directory if it exists"
+msgstr ""
+
+#: ../../../binary_caches.rst:358
+msgid "``-k <key>``"
+msgstr ""
+
+#: ../../../binary_caches.rst:358
+msgid ""
+"the key to sign package with. In the case where multiple keys exist, the "
+"package will be unsigned unless ``-k`` is used."
+msgstr ""
+
+#: ../../../binary_caches.rst:359
+msgid "``-r``"
+msgstr ""
+
+#: ../../../binary_caches.rst:359
+msgid "make paths in binaries relative before creating tarball"
+msgstr ""
+
+#: ../../../binary_caches.rst:360 ../../../binary_caches.rst:389
+#: ../../../binary_caches.rst:402
+msgid "``-y``"
+msgstr ""
+
+#: ../../../binary_caches.rst:360
+msgid "answer yes to all create unsigned ``build_cache`` questions"
+msgstr ""
+
+#: ../../../binary_caches.rst:365
+msgid "``spack buildcache list``"
+msgstr ""
+
+#: ../../../binary_caches.rst:367
+msgid "Retrieves all specs for build caches available on a Spack mirror."
+msgstr ""
+
+#: ../../../binary_caches.rst:372
+msgid ""
+"list of partial package specs to be matched against specs downloaded for "
+"build caches"
+msgstr ""
+
+#: ../../../binary_caches.rst:375
+msgid ""
+"E.g. ``spack buildcache list gcc`` with print only commands to install "
+"``gcc`` package(s)"
+msgstr ""
+
+#: ../../../binary_caches.rst:379
+msgid "``spack buildcache install``"
+msgstr ""
+
+#: ../../../binary_caches.rst:381
+msgid ""
+"Retrieves all specs for build caches available on a Spack mirror and "
+"installs build caches with specs matching the specs input."
+msgstr ""
+
+#: ../../../binary_caches.rst:387
+msgid ""
+"list of partial package specs or hashes with a leading ``/`` to be installed "
+"from build caches"
+msgstr ""
+
+#: ../../../binary_caches.rst:388
+msgid "remove install directory if it exists before unpacking tarball"
+msgstr ""
+
+#: ../../../binary_caches.rst:389
+msgid "answer yes to all to don't verify package with gpg questions"
+msgstr ""
+
+#: ../../../binary_caches.rst:394
+msgid "``spack buildcache keys``"
+msgstr ""
+
+#: ../../../binary_caches.rst:396
+msgid "List public keys available on Spack mirror."
+msgstr ""
+
+#: ../../../binary_caches.rst:401
+msgid "``-i``"
+msgstr ""
+
+#: ../../../binary_caches.rst:401
+msgid "trust the keys downloaded with prompt for each"
+msgstr ""
+
+#: ../../../binary_caches.rst:402
+msgid "answer yes to all trust all keys downloaded"
+msgstr ""
