@@ -1,0 +1,440 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Spack Project Developers
+# This file is distributed under the same license as the Spack package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Spack latest\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-19 15:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../file_formats/lockfile.rst:-1
+msgid ""
+"A developer reference for the lockfile format of Spack environments, "
+"describing its structure, its compatibility across releases, and its version "
+"history."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:13
+msgid "Lockfile Format"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:15
+msgid ""
+"This document describes the lockfile format, which stores the result of "
+"concretizing an environment as JSON: the roots of the environment, and every "
+"concrete spec they depend on. The current version of the format is |"
+"lockfile_version|, defined by :data:`spack.environment.environment."
+"CURRENT_LOCKFILE_VERSION`."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:18
+msgid ""
+"A lockfile is found in ``<environment>/spack.lock``, next to the ``spack."
+"yaml`` it was concretized from."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:21
+msgid "Structure"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:23
+msgid ""
+"This section describes the current version of the format, |"
+"lockfile_version|. A lockfile holds the version of the format, the roots of "
+"the environment, and one node for each concrete spec:"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:26
+msgid ""
+"{\n"
+"  \"_meta\": {\n"
+"    \"file-type\": \"spack-lockfile\",\n"
+"    \"lockfile-version\": 8,\n"
+"    \"specfile-version\": 6\n"
+"  },\n"
+"  \"spack\": {\n"
+"    \"version\": \"1.3.0.dev0\",\n"
+"    \"type\": \"git\",\n"
+"    \"commit\": \"c7c444853d\"\n"
+"  },\n"
+"  \"roots\": [\n"
+"    {\"hash\": \"nic37xsihlqze3xyg3xd6pthcgqxoy6p\", \"spec\": \"zlib-ng\"}\n"
+"  ],\n"
+"  \"concrete_specs\": {\n"
+"    \"nic37xsihlqze3xyg3xd6pthcgqxoy6p\": {\n"
+"      \"name\": \"zlib-ng\",\n"
+"      \"version\": \"2.3.3\",\n"
+"      \"provided_virtuals\": [\"zlib-api\"],\n"
+"      \"dependencies\": [\n"
+"        {\n"
+"          \"name\": \"gcc\",\n"
+"          \"hash\": \"26zpexhcroz5n23vbzm5ypre7tlfus2b\",\n"
+"          \"parameters\": {\"deptypes\": [\"build\"], \"virtuals\": [\"c\", "
+"\"cxx\"]}\n"
+"        }\n"
+"      ],\n"
+"      \"annotations\": {\"original_specfile_version\": 6},\n"
+"      \"hash\": \"nic37xsihlqze3xyg3xd6pthcgqxoy6p\"\n"
+"    }\n"
+"  }\n"
+"}"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:60
+msgid ""
+"To keep the example short, most keys of the node and the remaining nodes are "
+"not shown."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:62
+msgid ""
+"A lockfile is a dictionary with the following keys. The keys of previous "
+"versions are described in :ref:`lockfile-version-history`."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:65
+msgid "``_meta``"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:66
+msgid ""
+"``file-type`` is always ``spack-lockfile``, and ``lockfile-version`` is the "
+"version of the format. ``specfile-version`` is the version of the spec file "
+"format of the nodes. It is informational, and is not used when the lockfile "
+"is read."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:69
+msgid "``spack``"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:70
+msgid ""
+"The version of Spack that wrote the lockfile. ``type`` is ``git`` when Spack "
+"is run from a git repository, in which case ``commit`` is also present, and "
+"``release`` otherwise."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:72
+msgid "``roots``"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:73
+msgid ""
+"The roots of the environment, in order. Each entry has ``spec``, the "
+"abstract spec that was concretized, and ``hash``, the DAG hash of the "
+"result. It also has ``group``, the group of the root, when the environment "
+"defines groups other than the default one."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:76
+msgid "``concrete_specs``"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:77
+msgid ""
+"One node dictionary for each node of the environment, keyed by DAG hash, as "
+"described in :ref:`specfile-format`. For a spliced spec, the nodes of the "
+"build spec are also included."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:79
+msgid "``include_concrete``"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:80
+msgid ""
+"The ``roots`` and ``concrete_specs`` of each included concrete environment, "
+"keyed by the path of that environment. It is present only when the "
+"environment includes concrete environments, and it is nested when those "
+"include others."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:84
+msgid "Compatibility"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:86
+msgid ""
+"A lockfile in an older version is converted only when the environment changes"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:89
+msgid ""
+"Spack reads a lockfile in an older version without modifying it, and "
+"commands that do not change the roots or the concrete specs of the "
+"environment leave the file as it is. A command that changes them, such as "
+"``spack concretize`` after ``spack add``, or that concretizes the roots "
+"again, writes the lockfile in the current version, after which older "
+"versions of Spack can no longer read it."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:92
+msgid "The properties below are defined in :ref:`file-formats`."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:94
+msgid "**Backward compatibility**"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:95
+msgid ""
+"Every version of Spack reads all the versions of the format up to its own. "
+"Lockfiles before version 4 are keyed by older hashes, and when Spack reads "
+"them it identifies each spec by its current DAG hash."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:98
+msgid "**Forward compatibility**"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:99
+msgid "None. Reading a version newer than the current one is an error."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:102
+msgid "**Rewrite policy**"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:103
+msgid ""
+"A lockfile is rewritten, in the current version, when a root is concretized, "
+"or when the roots, their hashes, their groups, or the included concrete "
+"environments differ from what was read. Lockfiles before version 4 are "
+"always rewritten on the next write, and a version 1 lockfile is copied to "
+"``spack.lock.backup.v1`` when it is read."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:106
+msgid ""
+"The following table lists the lockfile versions that each release of Spack "
+"can read:"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:108
+msgid "Lockfile versions read by each release"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:111
+msgid "Spack"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:112
+msgid "v1"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:113
+msgid "v2"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:114
+msgid "v3"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:115
+msgid "v4"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:116
+msgid "v5"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:117
+msgid "v6"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:118
+msgid "v7"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:119
+msgid "v8"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:120
+msgid "v0.12"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:121
+#: ../../../file_formats/lockfile.rst:130
+#: ../../../file_formats/lockfile.rst:131
+#: ../../../file_formats/lockfile.rst:139
+#: ../../../file_formats/lockfile.rst:140
+#: ../../../file_formats/lockfile.rst:141
+#: ../../../file_formats/lockfile.rst:148
+#: ../../../file_formats/lockfile.rst:149
+#: ../../../file_formats/lockfile.rst:150
+#: ../../../file_formats/lockfile.rst:151
+#: ../../../file_formats/lockfile.rst:157
+#: ../../../file_formats/lockfile.rst:158
+#: ../../../file_formats/lockfile.rst:159
+#: ../../../file_formats/lockfile.rst:160
+#: ../../../file_formats/lockfile.rst:161
+#: ../../../file_formats/lockfile.rst:166
+#: ../../../file_formats/lockfile.rst:167
+#: ../../../file_formats/lockfile.rst:168
+#: ../../../file_formats/lockfile.rst:169
+#: ../../../file_formats/lockfile.rst:170
+#: ../../../file_formats/lockfile.rst:171
+#: ../../../file_formats/lockfile.rst:175
+#: ../../../file_formats/lockfile.rst:176
+#: ../../../file_formats/lockfile.rst:177
+#: ../../../file_formats/lockfile.rst:178
+#: ../../../file_formats/lockfile.rst:179
+#: ../../../file_formats/lockfile.rst:180
+#: ../../../file_formats/lockfile.rst:181
+#: ../../../file_formats/lockfile.rst:184
+#: ../../../file_formats/lockfile.rst:185
+#: ../../../file_formats/lockfile.rst:186
+#: ../../../file_formats/lockfile.rst:187
+#: ../../../file_formats/lockfile.rst:188
+#: ../../../file_formats/lockfile.rst:189
+#: ../../../file_formats/lockfile.rst:190
+#: ../../../file_formats/lockfile.rst:191
+msgid "✅"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:129
+msgid "v0.13 to v0.16"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:138
+msgid "v0.17"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:147
+msgid "v0.18 to v0.20"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:156
+msgid "v0.21 to v0.23"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:165
+msgid "v1.0 to v1.1"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:174
+msgid "v1.2"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:183
+msgid "v1.3 (in development)"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:196
+msgid "Version History"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:198
+msgid ""
+"The version is recorded in ``_meta.lockfile-version``. Each version of the "
+"lockfile is associated with one version of the spec file, which is used to "
+"read every node, including those in ``include_concrete``."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:201
+msgid "**Version 8** *(Spack v1.3)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:202
+msgid ""
+"Nodes are in spec file v6, which includes the virtuals provided by each node "
+"(`#53012 <https://github.com/spack/spack/pull/53012>`_). A lockfile is "
+"rewritten only when its content changes (`#53048 <https://github.com/spack/"
+"spack/pull/53048>`_). Up to Spack v1.2, every write of the environment "
+"rewrote the lockfile in the current version."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:206
+msgid "**Version 7** *(Spack v1.2)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:207
+msgid ""
+"Roots have the ``group`` key (`#51891 <https://github.com/spack/spack/"
+"pull/51891>`_). The roots of a lockfile in an older version are assigned to "
+"the default group when they are read. Nodes are in spec file v5, as in "
+"version 6."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:211
+msgid "**Version 6** *(Spack v1.0)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:212
+msgid ""
+"Nodes are in spec file v5, where compilers are build dependencies (`#45189 "
+"<https://github.com/spack/spack/pull/45189>`_)."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:214
+msgid "**Version 5** *(Spack v0.21)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:215
+msgid ""
+"Nodes are in spec file v4, where virtuals are recorded on the edges of the "
+"DAG (`#34821 <https://github.com/spack/spack/pull/34821>`_). The "
+"``include_concrete`` key was added in Spack v0.22, without a new version "
+"(`#33768 <https://github.com/spack/spack/pull/33768>`_)."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:218
+msgid "**Version 4** *(Spack v0.18)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:219
+msgid ""
+"The build hash is removed (`#28504 <https://github.com/spack/spack/"
+"pull/28504>`_). Nodes are in spec file v3, and are keyed by the DAG hash "
+"that includes build dependencies and the package hash. The ``spack`` key was "
+"added in Spack v0.20, without a new version (`#32801 <https://github.com/"
+"spack/spack/pull/32801>`_)."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:223
+msgid "**Version 3** *(Spack v0.17)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:224
+msgid ""
+"Nodes are in spec file v2 (`#22845 <https://github.com/spack/spack/"
+"pull/22845>`_, `#25879 <https://github.com/spack/spack/pull/25879>`_). They "
+"are keyed by build hash as in version 2, and their dependencies are referred "
+"to by ``build_hash``. The ``_meta.specfile-version`` key is added."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:228
+msgid "**Version 2** *(Spack v0.13)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:229
+msgid ""
+"Nodes are in spec file v1, as in version 1. They are keyed by build hash, "
+"and have a ``hash`` key with their DAG hash. Dependencies are referred to by "
+"DAG hash. Since installations are identified by the DAG hash, which at this "
+"time does not include build dependencies, a lockfile in version 2 or 3 can "
+"have several nodes with the same DAG hash. When Spack reads such a lockfile, "
+"it keeps the first of these nodes that is reached from the roots."
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:235
+msgid "**Version 1** *(Spack v0.12)*"
+msgstr ""
+
+#: ../../../file_formats/lockfile.rst:236
+msgid ""
+"Nodes are in spec file v1, and are keyed by the DAG hash, which includes "
+"only link and run dependencies. The nodes have no ``hash`` key."
+msgstr ""
