@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack latest\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 15:15+0000\n"
+"POT-Creation-Date: 2026-11-02 17:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,9 +89,9 @@ msgstr ""
 #: ../../../environments.rst:40
 msgid ""
 "Other packaging systems also provide environments that are similar in some "
-"ways to Spack environments; for example, `Conda environments <https://conda."
-"io/docs/user-guide/tasks/manage-environments.html>`_ or `Python Virtual "
-"Environments <https://docs.python.org/3/tutorial/venv.html>`_. Spack "
+"ways to Spack environments; for example, `Conda environments <https://"
+"conda.io/docs/user-guide/tasks/manage-environments.html>`_ or `Python "
+"Virtual Environments <https://docs.python.org/3/tutorial/venv.html>`_. Spack "
 "environments provide some distinctive features though:"
 msgstr ""
 
@@ -154,8 +154,8 @@ msgid ""
 "Spack creates the file ``spack.yaml``, hidden directory ``.spack-env``, and "
 "``spack.lock`` file under ``$SPACK_ROOT/var/spack/environments/myenv``. User "
 "interaction occurs through the ``spack.yaml`` file and the Spack commands "
-"that affect it. Metadata and, by default, the view are stored in the ``."
-"spack-env`` directory. When the environment is concretized, Spack creates "
+"that affect it. Metadata and, by default, the view are stored in the "
+"``.spack-env`` directory. When the environment is concretized, Spack creates "
 "the ``spack.lock`` file with the fully configured specs and dependencies for "
 "the environment."
 msgstr ""
@@ -213,8 +213,8 @@ msgstr ""
 
 #: ../../../environments.rst:113
 msgid ""
-"then the created environment will have its own copy of the file ``config."
-"yaml`` copied from the location in the original environment."
+"then the created environment will have its own copy of the file "
+"``config.yaml`` copied from the location in the original environment."
 msgstr ""
 
 #: ../../../environments.rst:115
@@ -281,19 +281,128 @@ msgid ""
 "make a whole group of nested environments available."
 msgstr ""
 
-#: ../../../environments.rst:155
-msgid "Activating an Environment"
+#: ../../../environments.rst:151
+msgid "Creating Filtered Environments"
 msgstr ""
 
-#: ../../../environments.rst:157
-msgid "To activate an environment, use the following command:"
+#: ../../../environments.rst:153
+msgid "Spack can create a filtered environment from another environment using:"
+msgstr ""
+
+#: ../../../environments.rst:155
+msgid "$ spack env create --filter filter.yaml new-env old-env"
 msgstr ""
 
 #: ../../../environments.rst:159
+msgid ""
+"The source environment, ``old-env`` in the example above, must be provided "
+"explicitly. Spack reads the filter configuration from ``filter.yaml`` and "
+"writes a new environment whose specs and selected configuration have been "
+"reduced according to that filter."
+msgstr ""
+
+#: ../../../environments.rst:162
+msgid "The filter file contains a top-level ``filter:`` section:"
+msgstr ""
+
+#: ../../../environments.rst:164
+msgid ""
+"filter:\n"
+"  concrete: true\n"
+"  specs:\n"
+"    allow: [callpath, hdf5]\n"
+"    block: []\n"
+"  packages: externals_only\n"
+"  config:\n"
+"    allow: [packages, concretizer]\n"
+"    block: [mirrors]\n"
+"  projections:\n"
+"    all: \"{name}@{version}/{hash:7}\""
+msgstr ""
+
+#: ../../../environments.rst:178
+msgid ""
+"The ``concrete`` option controls whether the filter is applied to the "
+"concretized lockfile graph or to the abstract specs in ``spack.yaml``. When "
+"``concrete`` is ``true`` (the default), the source must be an environment "
+"directory with a ``spack.lock`` file. Spack filters all concrete specs in "
+"the source lockfile graph, writes matching concrete specs as roots of the "
+"new environment, and writes a new ``spack.lock`` preserving the selected "
+"concrete specs. When ``concrete`` is ``false``, the source may be a manifest "
+"file or environment directory, and Spack filters only the abstract specs "
+"from ``spack.yaml``. In this mode Spack does not write a lockfile for the "
+"new environment."
+msgstr ""
+
+#: ../../../environments.rst:184
+msgid ""
+"The ``specs`` subsection selects which specs are kept. ``specs:allow`` is a "
+"list of spec constraints to keep; an empty list keeps every spec. "
+"``specs:block`` is a list of spec constraints to remove; an empty list "
+"removes nothing. When both are present, a spec must match the allow list and "
+"must not match the block list. In concrete mode, these constraints are "
+"matched against every concrete spec in the source lockfile graph, not only "
+"against the original roots. Projection formats used in concrete mode must "
+"format each selected concrete spec to a valid Spack spec string."
+msgstr ""
+
+#: ../../../environments.rst:191
+msgid ""
+"The ``packages`` setting controls filtering of the copied ``packages:`` "
+"configuration section. Valid values are ``all``, ``externals_only``, or an "
+"allow/block object. If the filtered environment copies ``packages:`` "
+"configuration, ``packages`` defaults to ``all`` and the complete allowed "
+"``packages:`` configuration is copied. Set ``packages`` to "
+"``externals_only`` to copy only package configuration entries that declare "
+"``externals``. This copies each selected package entry as a whole and does "
+"not filter individual entries within a package's ``externals`` list. Set "
+"``packages`` to an allow/block object to copy complete package configuration "
+"entries by name:"
+msgstr ""
+
+#: ../../../environments.rst:198
+msgid ""
+"filter:\n"
+"  packages:\n"
+"    allow: [all, cmake]\n"
+"    block: [libelf]"
+msgstr ""
+
+#: ../../../environments.rst:205
+msgid ""
+"An empty ``packages:allow`` list allows every package configuration entry. "
+"An empty ``packages:block`` list blocks nothing."
+msgstr ""
+
+#: ../../../environments.rst:208
+msgid ""
+"The ``config`` subsection controls which top-level configuration sections "
+"are copied from the source environment. ``config:allow`` is a list of "
+"section names to copy; an empty list allows all sections. ``config:block`` "
+"is a list of section names to omit; an empty list blocks nothing."
+msgstr ""
+
+#: ../../../environments.rst:212
+msgid ""
+"The optional ``projections`` subsection controls how concrete specs are "
+"written as abstract roots in the generated ``spack.yaml``. Keys are spec "
+"constraints and values are spec format strings. The ``all`` key is the "
+"fallback projection and defaults to Spack's standard display format."
+msgstr ""
+
+#: ../../../environments.rst:223
+msgid "Activating an Environment"
+msgstr ""
+
+#: ../../../environments.rst:225
+msgid "To activate an environment, use the following command:"
+msgstr ""
+
+#: ../../../environments.rst:227
 msgid "$ spack env activate myenv"
 msgstr ""
 
-#: ../../../environments.rst:163
+#: ../../../environments.rst:231
 msgid ""
 "By default, the ``spack env activate`` will load the view associated with "
 "the environment into the user environment. The ``-v, --with-view`` argument "
@@ -301,19 +410,19 @@ msgid ""
 "environment without changing the user environment variables."
 msgstr ""
 
-#: ../../../environments.rst:166
+#: ../../../environments.rst:234
 msgid ""
 "The ``-p`` option to the ``spack env activate`` command modifies the user's "
 "prompt to begin with the environment name in brackets."
 msgstr ""
 
-#: ../../../environments.rst:168
+#: ../../../environments.rst:236
 msgid ""
 "$ spack env activate -p myenv\n"
 "[myenv] $ ..."
 msgstr ""
 
-#: ../../../environments.rst:173
+#: ../../../environments.rst:241
 msgid ""
 "The ``activate`` command can also be used to create a new environment, if it "
 "is not already defined, by adding the ``--create`` flag. Managed and "
@@ -322,7 +431,7 @@ msgid ""
 "simply activate it and ignore the create-specific flags."
 msgstr ""
 
-#: ../../../environments.rst:177
+#: ../../../environments.rst:245
 msgid ""
 "$ spack env activate --create -p myenv\n"
 "# ...\n"
@@ -331,80 +440,80 @@ msgid ""
 "[myenv] $ ..."
 msgstr ""
 
-#: ../../../environments.rst:185
+#: ../../../environments.rst:253
 msgid "To deactivate an environment, use the command:"
 msgstr ""
 
-#: ../../../environments.rst:187
+#: ../../../environments.rst:255
 msgid "$ spack env deactivate"
 msgstr ""
 
-#: ../../../environments.rst:191
+#: ../../../environments.rst:259
 msgid "or the shortcut alias"
 msgstr ""
 
-#: ../../../environments.rst:193
+#: ../../../environments.rst:261
 msgid "$ despacktivate"
 msgstr ""
 
-#: ../../../environments.rst:197
+#: ../../../environments.rst:265
 msgid ""
 "If the environment was activated with its view, deactivating the environment "
 "will remove the view from the user environment."
 msgstr ""
 
-#: ../../../environments.rst:205
+#: ../../../environments.rst:273
 msgid "Independent Environments"
 msgstr ""
 
-#: ../../../environments.rst:207
+#: ../../../environments.rst:275
 msgid ""
 "Independent environments can be located in any directory outside of Spack."
 msgstr ""
 
-#: ../../../environments.rst:211
+#: ../../../environments.rst:279
 msgid ""
 "When uninstalling packages, Spack asks the user to confirm the removal of "
 "packages that are still used in a managed environment. This is not the case "
 "for independent environments."
 msgstr ""
 
-#: ../../../environments.rst:214
+#: ../../../environments.rst:282
 msgid ""
 "To create an independent environment, use one of the following commands:"
 msgstr ""
 
-#: ../../../environments.rst:216
+#: ../../../environments.rst:284
 msgid ""
 "$ spack env create --dir my_env\n"
 "$ spack env create ./my_env"
 msgstr ""
 
-#: ../../../environments.rst:221
+#: ../../../environments.rst:289
 msgid ""
 "As a shorthand, you can also create an independent environment upon "
 "activation if it does not already exist:"
 msgstr ""
 
-#: ../../../environments.rst:223
+#: ../../../environments.rst:291
 msgid "$ spack env activate --create ./my_env"
 msgstr ""
 
-#: ../../../environments.rst:227
+#: ../../../environments.rst:295
 msgid ""
 "For convenience, Spack can also place an independent environment in a "
 "temporary directory for you:"
 msgstr ""
 
-#: ../../../environments.rst:229
+#: ../../../environments.rst:297
 msgid "$ spack env activate --temp"
 msgstr ""
 
-#: ../../../environments.rst:235
+#: ../../../environments.rst:303
 msgid "Environment-Aware Commands"
 msgstr ""
 
-#: ../../../environments.rst:237
+#: ../../../environments.rst:305
 msgid ""
 "Spack commands are environment-aware. For example, the ``find`` command "
 "shows only the specs in the active environment if an environment has been "
@@ -412,7 +521,7 @@ msgid ""
 "applies to the ``install`` and ``uninstall`` commands."
 msgstr ""
 
-#: ../../../environments.rst:242
+#: ../../../environments.rst:310
 msgid ""
 "$ spack find\n"
 "==> 0 installed packages\n"
@@ -450,14 +559,14 @@ msgid ""
 "zlib@1.2.8  zlib@1.2.11"
 msgstr ""
 
-#: ../../../environments.rst:278
+#: ../../../environments.rst:346
 msgid ""
 "Note that when we installed the abstract spec ``zlib@1.2.8``, it was "
 "presented as a root of the environment. All explicitly installed packages "
 "will be listed as roots of the environment."
 msgstr ""
 
-#: ../../../environments.rst:281
+#: ../../../environments.rst:349
 msgid ""
 "All of the Spack commands that act on the list of installed specs are "
 "environment-aware in this way, including ``install``, ``uninstall``, "
@@ -465,17 +574,17 @@ msgid ""
 "section we will discuss environment-aware commands further."
 msgstr ""
 
-#: ../../../environments.rst:287
+#: ../../../environments.rst:355
 msgid "Adding Abstract Specs"
 msgstr ""
 
-#: ../../../environments.rst:289
+#: ../../../environments.rst:357
 msgid ""
 "An abstract spec is the user-specified spec before Spack applies defaults or "
 "dependency information."
 msgstr ""
 
-#: ../../../environments.rst:291
+#: ../../../environments.rst:359
 msgid ""
 "You can add abstract specs to an environment using the ``spack add`` "
 "command. This adds the abstract spec as a root of the environment in the "
@@ -483,7 +592,7 @@ msgid ""
 "list of abstract specs."
 msgstr ""
 
-#: ../../../environments.rst:295
+#: ../../../environments.rst:363
 msgid ""
 "Adding abstract specs does not immediately install anything, nor does it "
 "affect the ``spack.lock`` file. To update the lockfile, the environment must "
@@ -492,38 +601,38 @@ msgid ""
 "environment>`."
 msgstr ""
 
-#: ../../../environments.rst:298
+#: ../../../environments.rst:366
 msgid ""
 "The ``spack add`` command is environment-aware. It adds the spec to the "
 "currently active environment. An error is generated if there isn't an active "
 "environment."
 msgstr ""
 
-#: ../../../environments.rst:302
+#: ../../../environments.rst:370
 msgid ""
 "$ spack env activate myenv\n"
 "$ spack add mpileaks"
 msgstr ""
 
-#: ../../../environments.rst:307
+#: ../../../environments.rst:375
 msgid "or"
 msgstr ""
 
-#: ../../../environments.rst:309
+#: ../../../environments.rst:377
 msgid "$ spack -e myenv add python"
 msgstr ""
 
-#: ../../../environments.rst:315
+#: ../../../environments.rst:383
 msgid ""
 "All environment-aware commands can also be called using the ``spack -e`` "
 "flag to specify the environment."
 msgstr ""
 
-#: ../../../environments.rst:320
+#: ../../../environments.rst:388
 msgid "Concretizing"
 msgstr ""
 
-#: ../../../environments.rst:322
+#: ../../../environments.rst:390
 msgid ""
 "Once user specs have been added to an environment, they can be concretized. "
 "There are three different modes of operation to concretize an environment, "
@@ -533,11 +642,11 @@ msgid ""
 "prescribed in the configuration:"
 msgstr ""
 
-#: ../../../environments.rst:326
+#: ../../../environments.rst:394
 msgid "[myenv]$ spack concretize"
 msgstr ""
 
-#: ../../../environments.rst:330
+#: ../../../environments.rst:398
 msgid ""
 "In the case of specs that are not concretized together, the command above "
 "will concretize only the specs that were added and not yet concretized. "
@@ -545,17 +654,17 @@ msgid ""
 "f`` option:"
 msgstr ""
 
-#: ../../../environments.rst:333
+#: ../../../environments.rst:401
 msgid "[myenv]$ spack concretize -f"
 msgstr ""
 
-#: ../../../environments.rst:337
+#: ../../../environments.rst:405
 msgid ""
 "Without the option, Spack guarantees that already concretized specs are "
 "unchanged in the environment."
 msgstr ""
 
-#: ../../../environments.rst:339
+#: ../../../environments.rst:407
 msgid ""
 "The ``concretize`` command does not install any packages. For packages that "
 "have already been installed outside of the environment, the process of "
@@ -564,13 +673,13 @@ msgid ""
 "environment."
 msgstr ""
 
-#: ../../../environments.rst:342
+#: ../../../environments.rst:410
 msgid ""
 "The ``spack find`` command can show concretized specs separately from "
 "installed specs using the ``-c`` (``--concretized``) flag."
 msgstr ""
 
-#: ../../../environments.rst:344
+#: ../../../environments.rst:412
 msgid ""
 "[myenv]$ spack add zlib\n"
 "[myenv]$ spack concretize\n"
@@ -586,28 +695,28 @@ msgid ""
 "==> 0 installed packages"
 msgstr ""
 
-#: ../../../environments.rst:363
+#: ../../../environments.rst:431
 msgid "Installing an Environment"
 msgstr ""
 
-#: ../../../environments.rst:365
+#: ../../../environments.rst:433
 msgid ""
 "In addition to adding individual specs to an environment, one can install "
 "the entire environment at once using the command"
 msgstr ""
 
-#: ../../../environments.rst:367
+#: ../../../environments.rst:435
 msgid "[myenv]$ spack install"
 msgstr ""
 
-#: ../../../environments.rst:371
+#: ../../../environments.rst:439
 msgid ""
 "If the environment has been concretized, Spack will install the concretized "
 "specs. Otherwise, ``spack install`` will concretize the environment before "
 "installing the concretized specs."
 msgstr ""
 
-#: ../../../environments.rst:376
+#: ../../../environments.rst:444
 msgid ""
 "``spack install`` builds multiple packages concurrently by default, bounded "
 "by a single :term:`POSIX jobserver <jobserver>` (``-j``, see :ref:`build-"
@@ -616,7 +725,7 @@ msgid ""
 "picture."
 msgstr ""
 
-#: ../../../environments.rst:381
+#: ../../../environments.rst:449
 msgid ""
 "As it installs, ``spack install`` creates symbolic links in the ``logs/`` "
 "directory in the environment, allowing for easy inspection of build logs "
@@ -625,7 +734,7 @@ msgid ""
 "package in the ``repos/`` directory in the environment."
 msgstr ""
 
-#: ../../../environments.rst:384
+#: ../../../environments.rst:452
 msgid ""
 "The ``--no-add`` option can be used in a concrete environment to tell Spack "
 "to install specs already present in the environment but not to add any new "
@@ -640,11 +749,11 @@ msgid ""
 "no-add`` option."
 msgstr ""
 
-#: ../../../environments.rst:395
+#: ../../../environments.rst:463
 msgid "Developing Packages in a Spack Environment"
 msgstr ""
 
-#: ../../../environments.rst:397
+#: ../../../environments.rst:465
 msgid ""
 "The ``spack develop`` command allows one to develop Spack packages in an "
 "environment. It will configure Spack to install the package from local "
@@ -656,7 +765,7 @@ msgid ""
 "environment manifest, although default values may be left implied."
 msgstr ""
 
-#: ../../../environments.rst:404
+#: ../../../environments.rst:472
 msgid ""
 "$ spack develop --path src/foo foo@develop\n"
 "$ cat `spack location -e`/spack.yaml\n"
@@ -668,7 +777,7 @@ msgid ""
 "      path: src/foo"
 msgstr ""
 
-#: ../../../environments.rst:415
+#: ../../../environments.rst:483
 msgid ""
 "When ``spack develop`` is run in a concretized environment, Spack will "
 "modify the concrete specs in the environment to reflect the modified "
@@ -682,7 +791,7 @@ msgid ""
 "and constraints from the develop spec."
 msgstr ""
 
-#: ../../../environments.rst:420
+#: ../../../environments.rst:488
 msgid ""
 "When concretizing an environment with develop specs, the version, variants, "
 "and other attributes of the spec provided to the ``spack develop`` command "
@@ -698,7 +807,7 @@ msgid ""
 "building from."
 msgstr ""
 
-#: ../../../environments.rst:425
+#: ../../../environments.rst:493
 msgid ""
 "Spack will ensure the package and its dependents are rebuilt any time the "
 "environment is installed if the package's local source code has been "
@@ -709,13 +818,13 @@ msgid ""
 "to optimize performance."
 msgstr ""
 
-#: ../../../environments.rst:430
+#: ../../../environments.rst:498
 msgid ""
 "When ``spack develop`` is run without any arguments, Spack will clone any "
 "develop specs in the environment for which the specified path does not exist."
 msgstr ""
 
-#: ../../../environments.rst:432
+#: ../../../environments.rst:500
 msgid ""
 "When working deep in the graph it is often desirable to have multiple specs "
 "marked as ``develop`` so you don't have to restage and/or do full rebuilds "
@@ -726,7 +835,7 @@ msgid ""
 "supplied spec all the way to the root specs."
 msgstr ""
 
-#: ../../../environments.rst:436
+#: ../../../environments.rst:504
 msgid ""
 "For packages with ``git`` attributes, git branches, tags, and commits can "
 "also be used as valid concrete versions (see :ref:`version-specifier`). This "
@@ -737,21 +846,21 @@ msgid ""
 "committed and pushed to the upstream git repo."
 msgstr ""
 
-#: ../../../environments.rst:440
+#: ../../../environments.rst:508
 msgid ""
 "If the package being developed supports out-of-source builds then users can "
 "use the ``--build_directory`` flag to control the location and name of the "
-"build directory. This is a shortcut to set the ``package_attributes:"
-"build_directory`` in the ``packages`` configuration (see :ref:`assigning-"
-"package-attributes`). The supplied location will become the build-directory "
-"for that package in all future builds."
+"build directory. This is a shortcut to set the "
+"``package_attributes:build_directory`` in the ``packages`` configuration "
+"(see :ref:`assigning-package-attributes`). The supplied location will become "
+"the build-directory for that package in all future builds."
 msgstr ""
 
-#: ../../../environments.rst:444
+#: ../../../environments.rst:512
 msgid "Potential pitfalls of setting the build directory"
 msgstr ""
 
-#: ../../../environments.rst:447
+#: ../../../environments.rst:515
 msgid ""
 "Spack does not check for out-of-source build compatibility with the packages "
 "and so the onus of making sure the package supports out-of-source builds is "
@@ -762,17 +871,17 @@ msgid ""
 "package's build-system."
 msgstr ""
 
-#: ../../../environments.rst:452
+#: ../../../environments.rst:520
 msgid "Modifying Specs in an Environment"
 msgstr ""
 
-#: ../../../environments.rst:454
+#: ../../../environments.rst:522
 msgid ""
 "The ``spack change`` command allows the user to change individual specs in a "
 "Spack environment."
 msgstr ""
 
-#: ../../../environments.rst:456
+#: ../../../environments.rst:524
 msgid ""
 "By default, ``spack change`` operates on the abstract specs of an "
 "environment. The command a list of spec arguments. For each argument, the "
@@ -781,15 +890,15 @@ msgid ""
 "``hdf5+mpi+fortran``, then"
 msgstr ""
 
-#: ../../../environments.rst:461
+#: ../../../environments.rst:529
 msgid "spack change hdf5~mpi+cxx"
 msgstr ""
 
-#: ../../../environments.rst:465
+#: ../../../environments.rst:533
 msgid "will change the root spec to ``hdf5~mpi+cxx+fortran``."
 msgstr ""
 
-#: ../../../environments.rst:467
+#: ../../../environments.rst:535
 msgid ""
 "When more complex matching semantics are necessary, the ``--match-spec`` "
 "argument replaces the spec name as the selection criterion. When using the "
@@ -797,15 +906,15 @@ msgid ""
 "environment,"
 msgstr ""
 
-#: ../../../environments.rst:471
+#: ../../../environments.rst:539
 msgid "spack change --match-spec \"+fortran\" +hl"
 msgstr ""
 
-#: ../../../environments.rst:475
+#: ../../../environments.rst:543
 msgid "will constrain the ``hdf5`` spec to ``+hl``."
 msgstr ""
 
-#: ../../../environments.rst:477
+#: ../../../environments.rst:545
 msgid ""
 "By default, the ``spack change`` command will result in an error and no "
 "change to the environment if it will modify more than one abstract spec. Use "
@@ -813,7 +922,7 @@ msgid ""
 "specs."
 msgstr ""
 
-#: ../../../environments.rst:480
+#: ../../../environments.rst:548
 msgid ""
 "The ``--concrete`` option allows ``spack change`` to modify the concrete "
 "specs of an environment as well as the abstract specs. Multiple concrete "
@@ -822,35 +931,35 @@ msgid ""
 "may be modified."
 msgstr ""
 
-#: ../../../environments.rst:486
+#: ../../../environments.rst:554
 msgid ""
 "Concrete specs are modified without any constraints from the packages. The "
 "``spack change --concrete`` command  may create invalid specs that will not "
 "build properly if applied without caution."
 msgstr ""
 
-#: ../../../environments.rst:489
+#: ../../../environments.rst:557
 msgid ""
 "The ``--concrete-only`` option allows for modifying concrete specs without "
 "modifying abstract specs. It allows changes to be applied to non-root nodes "
 "in the environment, and other changes that do not modify any root specs."
 msgstr ""
 
-#: ../../../environments.rst:493
+#: ../../../environments.rst:561
 msgid "Loading"
 msgstr ""
 
-#: ../../../environments.rst:495
+#: ../../../environments.rst:563
 msgid ""
 "Once an environment has been installed, the following creates a load script "
 "for it:"
 msgstr ""
 
-#: ../../../environments.rst:497
+#: ../../../environments.rst:565
 msgid "$ spack env loads -r"
 msgstr ""
 
-#: ../../../environments.rst:501
+#: ../../../environments.rst:569
 msgid ""
 "This creates a file called ``loads`` in the environment directory. Sourcing "
 "that file in Bash will make the environment available to the user, and can "
@@ -858,26 +967,26 @@ msgid ""
 "out of the environment, renamed, etc."
 msgstr ""
 
-#: ../../../environments.rst:511
+#: ../../../environments.rst:579
 msgid "Including Concrete Environments"
 msgstr ""
 
-#: ../../../environments.rst:513
+#: ../../../environments.rst:581
 msgid ""
 "Spack can create an environment that includes information from already "
 "concretized environments. You can think of the new environment as a "
 "combination of existing environments. It uses information from the existing "
 "environments' ``spack.lock`` files in the creation of the new environment. "
-"When such an environment is concretized it will generate its own ``spack."
-"lock`` file that contains relevant information from the included "
+"When such an environment is concretized it will generate its own "
+"``spack.lock`` file that contains relevant information from the included "
 "environments."
 msgstr ""
 
-#: ../../../environments.rst:520
+#: ../../../environments.rst:588
 msgid "Creating combined concrete environments"
 msgstr ""
 
-#: ../../../environments.rst:521
+#: ../../../environments.rst:589
 msgid ""
 "To create a combined concrete environment, you must have at least one "
 "existing concrete environment. You will use the command ``spack env create`` "
@@ -886,7 +995,7 @@ msgid ""
 "combined environment from the command line::"
 msgstr ""
 
-#: ../../../environments.rst:525
+#: ../../../environments.rst:593
 msgid ""
 "$ spack env create myenv\n"
 "$ spack -e myenv add python\n"
@@ -894,7 +1003,7 @@ msgid ""
 "$ spack env create --include-concrete myenv combined_env"
 msgstr ""
 
-#: ../../../environments.rst:530
+#: ../../../environments.rst:598
 msgid ""
 "You can also include concrete environments directly in the ``spack.yaml`` "
 "file. It involves adding the absolute paths to the concrete environments "
@@ -904,11 +1013,11 @@ msgid ""
 "to an absolute path. (See :ref:`config-file-variables` for more information.)"
 msgstr ""
 
-#: ../../../environments.rst:535
+#: ../../../environments.rst:603
 msgid "For example,"
 msgstr ""
 
-#: ../../../environments.rst:537
+#: ../../../environments.rst:605
 msgid ""
 "spack:\n"
 "  include:\n"
@@ -919,25 +1028,25 @@ msgid ""
 "    unify: true"
 msgstr ""
 
-#: ../../../environments.rst:547
+#: ../../../environments.rst:615
 msgid ""
 "will include the specs from ``environment1`` and ``environment2`` where the "
 "second environment's path is the absolute path of the directory that is "
 "relative to the spack root."
 msgstr ""
 
-#: ../../../environments.rst:551
+#: ../../../environments.rst:619
 msgid ""
 "Once the ``spack.yaml`` file is updated you must concretize the new "
 "environment to get the concrete specs from the included environments. This "
 "will produce the combined ``spack.lock`` file."
 msgstr ""
 
-#: ../../../environments.rst:555
+#: ../../../environments.rst:623
 msgid "Updating a combined environment"
 msgstr ""
 
-#: ../../../environments.rst:556
+#: ../../../environments.rst:624
 msgid ""
 "If you want changes made to one of the included environments reflected in "
 "the combined environment, then you will need to re-concretize the included "
@@ -945,7 +1054,7 @@ msgid ""
 "incorporated. For example::"
 msgstr ""
 
-#: ../../../environments.rst:559
+#: ../../../environments.rst:627
 msgid ""
 "$ spack env create myenv\n"
 "$ spack -e myenv add python\n"
@@ -968,14 +1077,14 @@ msgid ""
 "==> 0 installed packages"
 msgstr ""
 
-#: ../../../environments.rst:579
+#: ../../../environments.rst:647
 msgid ""
 "Here we see that ``combined_env`` contains the python package from ``myenv`` "
 "environment. But if we were to add another spec to ``myenv``, "
 "``combined_env`` will not know about the other spec."
 msgstr ""
 
-#: ../../../environments.rst:582
+#: ../../../environments.rst:650
 msgid ""
 "$ spack -e myenv add perl\n"
 "$ spack -e myenv concretize\n"
@@ -995,14 +1104,14 @@ msgid ""
 "==> 0 installed packages"
 msgstr ""
 
-#: ../../../environments.rst:601
+#: ../../../environments.rst:669
 msgid ""
 "It isn't until you run the ``spack concretize`` command that the combined "
 "environment will get the updated information from the re-concretized "
 "``myenv``."
 msgstr ""
 
-#: ../../../environments.rst:603
+#: ../../../environments.rst:671
 msgid ""
 "$ spack -e combined_env concretize\n"
 "$ spack -e combined_env find\n"
@@ -1014,38 +1123,38 @@ msgid ""
 "==> 0 installed packages"
 msgstr ""
 
-#: ../../../environments.rst:617
+#: ../../../environments.rst:685
 msgid "Configuring Environments"
 msgstr ""
 
-#: ../../../environments.rst:619
+#: ../../../environments.rst:687
 msgid ""
 "A variety of Spack behaviors are changed through Spack configuration files, "
 "covered in more detail in the :ref:`configuration` section."
 msgstr ""
 
-#: ../../../environments.rst:621
+#: ../../../environments.rst:689
 msgid ""
 "Spack Environments provide an additional level of configuration scope "
 "between the custom scope and the user scope discussed in the configuration "
 "documentation."
 msgstr ""
 
-#: ../../../environments.rst:623
+#: ../../../environments.rst:691
 msgid ""
 "There are two ways to include configuration information in a Spack "
 "Environment:"
 msgstr ""
 
-#: ../../../environments.rst:625
+#: ../../../environments.rst:693
 msgid "Inline in the ``spack.yaml`` file"
 msgstr ""
 
-#: ../../../environments.rst:627
+#: ../../../environments.rst:695
 msgid "Included in the ``spack.yaml`` file from another file."
 msgstr ""
 
-#: ../../../environments.rst:629
+#: ../../../environments.rst:697
 msgid ""
 "Many Spack commands also affect configuration information in files "
 "automatically. Those commands take a ``--scope`` argument, and the "
@@ -1054,11 +1163,11 @@ msgid ""
 "configuration inline in the ``spack.yaml`` file."
 msgstr ""
 
-#: ../../../environments.rst:634
+#: ../../../environments.rst:702
 msgid "Inline configurations"
 msgstr ""
 
-#: ../../../environments.rst:636
+#: ../../../environments.rst:704
 msgid ""
 "Inline environment-scope configuration is done using the same yaml format as "
 "standard Spack configuration scopes, covered in the :ref:`configuration` "
@@ -1067,7 +1176,7 @@ msgid ""
 "preference configuration (as in a ``packages.yaml`` file) could contain:"
 msgstr ""
 
-#: ../../../environments.rst:640
+#: ../../../environments.rst:708
 msgid ""
 "spack:\n"
 "  # ...\n"
@@ -1078,22 +1187,22 @@ msgid ""
 "  # ..."
 msgstr ""
 
-#: ../../../environments.rst:650
+#: ../../../environments.rst:718
 msgid "This configuration sets the default ``mpi`` provider to be ``openmpi``."
 msgstr ""
 
-#: ../../../environments.rst:653
+#: ../../../environments.rst:721
 msgid "Included configurations"
 msgstr ""
 
-#: ../../../environments.rst:655
+#: ../../../environments.rst:723
 msgid ""
 "Spack environments allow an ``include`` heading in their yaml schema. This "
 "heading pulls in external configuration files and applies them to the "
 "environment."
 msgstr ""
 
-#: ../../../environments.rst:658
+#: ../../../environments.rst:726
 msgid ""
 "spack:\n"
 "  include:\n"
@@ -1108,7 +1217,7 @@ msgid ""
 "    when: os == \"ventura\""
 msgstr ""
 
-#: ../../../environments.rst:671
+#: ../../../environments.rst:739
 msgid ""
 "Included configuration files are required *unless* they are explicitly "
 "optional or the entry's condition evaluates to ``false``. Optional includes "
@@ -1117,7 +1226,7 @@ msgid ""
 "conditional entries.)"
 msgstr ""
 
-#: ../../../environments.rst:675
+#: ../../../environments.rst:743
 msgid ""
 "Files are listed using paths to individual files or directories containing "
 "them. Path entries may be absolute or relative to the environment or "
@@ -1132,18 +1241,18 @@ msgid ""
 "more information.)"
 msgstr ""
 
-#: ../../../environments.rst:684
+#: ../../../environments.rst:752
 msgid ""
 "Recursive includes are not currently processed in a breadth-first manner so "
 "the value of a configuration option that is altered by multiple included "
 "files may not be what you expect. This will be addressed in a future update."
 msgstr ""
 
-#: ../../../environments.rst:689
+#: ../../../environments.rst:757
 msgid "Configuration precedence"
 msgstr ""
 
-#: ../../../environments.rst:691
+#: ../../../environments.rst:759
 msgid ""
 "Inline configurations take precedence over included configurations, so you "
 "don't have to change shared configuration files to make small changes to an "
@@ -1151,17 +1260,17 @@ msgid ""
 "higher precedence, as the included configs are applied in reverse order."
 msgstr ""
 
-#: ../../../environments.rst:695
+#: ../../../environments.rst:763
 msgid "Manually Editing the Specs List"
 msgstr ""
 
-#: ../../../environments.rst:697
+#: ../../../environments.rst:765
 msgid ""
 "The list of abstract/root specs in the environment is maintained in the "
 "``spack.yaml`` manifest under the heading ``specs``."
 msgstr ""
 
-#: ../../../environments.rst:699
+#: ../../../environments.rst:767
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1171,29 +1280,29 @@ msgid ""
 "  - py-sphinx"
 msgstr ""
 
-#: ../../../environments.rst:708
+#: ../../../environments.rst:776
 msgid ""
 "Appending to this list in the yaml is identical to using the ``spack add`` "
 "command from the command line. However, there is more power available from "
 "the yaml file."
 msgstr ""
 
-#: ../../../environments.rst:714
+#: ../../../environments.rst:782
 msgid "Spec concretization"
 msgstr ""
 
-#: ../../../environments.rst:715
+#: ../../../environments.rst:783
 msgid ""
 "An environment can be concretized in three different modes and the behavior "
 "active under any environment is determined by the ``concretizer:unify`` "
 "configuration option."
 msgstr ""
 
-#: ../../../environments.rst:717
+#: ../../../environments.rst:785
 msgid "The *default* mode is to unify all specs:"
 msgstr ""
 
-#: ../../../environments.rst:719
+#: ../../../environments.rst:787
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1203,7 +1312,7 @@ msgid ""
 "    unify: true"
 msgstr ""
 
-#: ../../../environments.rst:728
+#: ../../../environments.rst:796
 msgid ""
 "This means that any package in the environment corresponds to a single "
 "concrete spec. In the above example, when ``hdf5`` depends down the line of "
@@ -1213,21 +1322,21 @@ msgid ""
 "to merge all install directories into a view."
 msgstr ""
 
-#: ../../../environments.rst:732
+#: ../../../environments.rst:800
 msgid ""
 "A downside of unified concretization is that it can be overly strict. For "
 "example, a concretization error would happen when both ``hdf5+mpi`` and "
 "``hdf5~mpi`` are specified in an environment."
 msgstr ""
 
-#: ../../../environments.rst:735
+#: ../../../environments.rst:803
 msgid ""
 "The second mode is to *unify when possible*: this makes concretization of "
 "root specs more independent. Instead of requiring reuse of dependencies "
 "across different root specs, it is only maximized:"
 msgstr ""
 
-#: ../../../environments.rst:738
+#: ../../../environments.rst:806
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1238,19 +1347,19 @@ msgid ""
 "    unify: when_possible"
 msgstr ""
 
-#: ../../../environments.rst:748
+#: ../../../environments.rst:816
 msgid ""
 "This means that both ``hdf5`` installations will use ``zlib@1.2.8`` as a "
 "dependency even if newer versions of that library are available."
 msgstr ""
 
-#: ../../../environments.rst:750
+#: ../../../environments.rst:818
 msgid ""
 "The third mode of operation is to concretize root specs entirely "
 "independently by disabling unified concretization:"
 msgstr ""
 
-#: ../../../environments.rst:752
+#: ../../../environments.rst:820
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1261,21 +1370,21 @@ msgid ""
 "    unify: false"
 msgstr ""
 
-#: ../../../environments.rst:762
+#: ../../../environments.rst:830
 msgid ""
 "In this example ``hdf5`` is concretized separately, and does not consider "
 "``zlib@1.2.8`` as a constraint or preference. Instead, it will take the "
 "latest possible version."
 msgstr ""
 
-#: ../../../environments.rst:765
+#: ../../../environments.rst:833
 msgid ""
 "The last two concretization options are typically useful for system "
 "administrators and user support groups providing a large software stack for "
 "their HPC center."
 msgstr ""
 
-#: ../../../environments.rst:769
+#: ../../../environments.rst:837
 msgid ""
 "The ``concretizer:unify`` config option was introduced in Spack 0.18 to "
 "replace the ``concretization`` property. For reference, ``concretization: "
@@ -1283,11 +1392,11 @@ msgid ""
 "separately`` is replaced by ``concretizer:unify:false``."
 msgstr ""
 
-#: ../../../environments.rst:772
+#: ../../../environments.rst:840
 msgid "Re-concretization of user specs"
 msgstr ""
 
-#: ../../../environments.rst:774
+#: ../../../environments.rst:842
 msgid ""
 "The ``spack concretize`` command without additional arguments will *not* "
 "change any previously concretized specs. This may prevent it from finding a "
@@ -1296,17 +1405,17 @@ msgid ""
 "ignore the existing concrete environment with ``spack concretize -f``."
 msgstr ""
 
-#: ../../../environments.rst:784
+#: ../../../environments.rst:852
 msgid "Spec Matrices"
 msgstr ""
 
-#: ../../../environments.rst:786
+#: ../../../environments.rst:854
 msgid ""
 "Entries in the ``specs`` list can be individual abstract specs or a spec "
 "matrix."
 msgstr ""
 
-#: ../../../environments.rst:788
+#: ../../../environments.rst:856
 msgid ""
 "A spec matrix is a yaml object containing multiple lists of specs, and "
 "evaluates to the cross-product of those specs. Spec matrices also contain an "
@@ -1314,11 +1423,11 @@ msgid ""
 "evaluated result."
 msgstr ""
 
-#: ../../../environments.rst:791
+#: ../../../environments.rst:859
 msgid "The following two environment manifests are identical:"
 msgstr ""
 
-#: ../../../environments.rst:793
+#: ../../../environments.rst:861
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1330,7 +1439,7 @@ msgid ""
 "  - cmake"
 msgstr ""
 
-#: ../../../environments.rst:804
+#: ../../../environments.rst:872
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1342,21 +1451,21 @@ msgid ""
 "  - cmake"
 msgstr ""
 
-#: ../../../environments.rst:815
+#: ../../../environments.rst:883
 msgid ""
 "Spec matrices can be used to install swaths of software across various "
 "toolchains."
 msgstr ""
 
-#: ../../../environments.rst:820
+#: ../../../environments.rst:888
 msgid "Spec List References"
 msgstr ""
 
-#: ../../../environments.rst:822
+#: ../../../environments.rst:890
 msgid "The last type of possible entry in the specs list is a reference."
 msgstr ""
 
-#: ../../../environments.rst:824
+#: ../../../environments.rst:892
 msgid ""
 "The Spack Environment manifest yaml schema contains an additional heading "
 "``definitions``. Under definitions is an array of yaml objects. Each object "
@@ -1364,7 +1473,7 @@ msgid ""
 "field is a ``when`` clause."
 msgstr ""
 
-#: ../../../environments.rst:829
+#: ../../../environments.rst:897
 msgid ""
 "The named field is a spec list. The spec list uses the same syntax as the "
 "``specs`` entry. Each entry in the spec list can be a spec, a spec matrix, "
@@ -1374,7 +1483,7 @@ msgid ""
 "example, the following two manifest files are identical."
 msgstr ""
 
-#: ../../../environments.rst:835
+#: ../../../environments.rst:903
 msgid ""
 "spack:\n"
 "  definitions:\n"
@@ -1390,7 +1499,7 @@ msgid ""
 "  - cmake"
 msgstr ""
 
-#: ../../../environments.rst:850
+#: ../../../environments.rst:918
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1401,13 +1510,13 @@ msgid ""
 "  - cmake"
 msgstr ""
 
-#: ../../../environments.rst:862
+#: ../../../environments.rst:930
 msgid ""
 "Named spec lists in the definitions section may only refer to a named list "
 "defined above itself. Order matters."
 msgstr ""
 
-#: ../../../environments.rst:865
+#: ../../../environments.rst:933
 msgid ""
 "In short files like the example, it may be easier to simply list the "
 "included specs. However for more complicated examples involving many "
@@ -1415,14 +1524,14 @@ msgid ""
 "substantially more manageable."
 msgstr ""
 
-#: ../../../environments.rst:868
+#: ../../../environments.rst:936
 msgid ""
 "Additionally, the ``-l`` option to the ``spack add`` command allows one to "
 "add to named lists in the definitions section of the manifest file directly "
 "from the command line."
 msgstr ""
 
-#: ../../../environments.rst:870
+#: ../../../environments.rst:938
 msgid ""
 "The ``when`` directive can be used to conditionally add specs to a named "
 "list. The ``when`` directive takes a string of Python code referring to a "
@@ -1433,7 +1542,7 @@ msgid ""
 "\"%clang\"]`` on all other systems."
 msgstr ""
 
-#: ../../../environments.rst:875
+#: ../../../environments.rst:943
 msgid ""
 "spack:\n"
 "  definitions:\n"
@@ -1442,64 +1551,64 @@ msgid ""
 "    compilers: [\"%intel\"]"
 msgstr ""
 
-#: ../../../environments.rst:885
+#: ../../../environments.rst:953
 msgid ""
 "Any definitions with the same named list with true ``when`` clauses (or "
 "absent ``when`` clauses) will be appended together"
 msgstr ""
 
-#: ../../../environments.rst:887
+#: ../../../environments.rst:955
 msgid "The valid variables for a ``when`` clause are:"
 msgstr ""
 
-#: ../../../environments.rst:889
+#: ../../../environments.rst:957
 msgid ""
 "``platform``. The platform string of the default Spack architecture on the "
 "system."
 msgstr ""
 
-#: ../../../environments.rst:892
+#: ../../../environments.rst:960
 msgid "``os``. The OS string of the default Spack architecture on the system."
 msgstr ""
 
-#: ../../../environments.rst:895
+#: ../../../environments.rst:963
 msgid ""
 "``target``. The target string of the default Spack architecture on the "
 "system."
 msgstr ""
 
-#: ../../../environments.rst:898
+#: ../../../environments.rst:966
 msgid ""
 "``architecture`` or ``arch``. A Spack spec satisfying the default Spack "
 "architecture on the system. This supports querying via the ``satisfies`` "
 "method, as shown above."
 msgstr ""
 
-#: ../../../environments.rst:902
+#: ../../../environments.rst:970
 msgid ""
 "``arch_str``. The architecture string of the default Spack architecture on "
 "the system."
 msgstr ""
 
-#: ../../../environments.rst:905
+#: ../../../environments.rst:973
 msgid "``re``. The standard regex module in Python."
 msgstr ""
 
-#: ../../../environments.rst:908
+#: ../../../environments.rst:976
 msgid "``env``. The user environment (usually ``os.environ`` in Python)."
 msgstr ""
 
-#: ../../../environments.rst:911
+#: ../../../environments.rst:979
 msgid ""
 "``hostname``. The hostname of the system (if ``hostname`` is an executable "
 "in the user's PATH)."
 msgstr ""
 
-#: ../../../environments.rst:915
+#: ../../../environments.rst:983
 msgid "SpecLists as Constraints"
 msgstr ""
 
-#: ../../../environments.rst:917
+#: ../../../environments.rst:985
 msgid ""
 "Dependencies and compilers in Spack can be both packages in an environment "
 "and constraints on other packages. References to SpecLists allow a shorthand "
@@ -1507,14 +1616,14 @@ msgid ""
 "``$%`` or ``$^`` syntax respectively."
 msgstr ""
 
-#: ../../../environments.rst:920
+#: ../../../environments.rst:988
 msgid ""
 "For example, the following environment has three root packages: "
 "``gcc@8.1.0``, ``mvapich2@2.3.1 %gcc@8.1.0``, and ``hdf5+mpi %gcc@8.1.0 "
 "^mvapich2@2.3.1``."
 msgstr ""
 
-#: ../../../environments.rst:922
+#: ../../../environments.rst:990
 msgid ""
 "spack:\n"
 "  definitions:\n"
@@ -1533,28 +1642,28 @@ msgid ""
 "    - [$%compilers]"
 msgstr ""
 
-#: ../../../environments.rst:940
+#: ../../../environments.rst:1008
 msgid ""
 "This allows for a much-needed reduction in redundancy between packages and "
 "constraints."
 msgstr ""
 
-#: ../../../environments.rst:947
+#: ../../../environments.rst:1015
 msgid "Spec Groups"
 msgstr ""
 
-#: ../../../environments.rst:951
+#: ../../../environments.rst:1019
 msgid ""
 "Environments can be organized with named spec groups, enabling you to apply "
 "localized configuration overrides and establish concretization dependencies. "
 "This is extremely useful in a couple of common scenarios, as detailed below."
 msgstr ""
 
-#: ../../../environments.rst:957
+#: ../../../environments.rst:1025
 msgid "Building and using a compiler in a single environment"
 msgstr ""
 
-#: ../../../environments.rst:959
+#: ../../../environments.rst:1027
 msgid ""
 "A common use case is to build a recent compiler on top of an existing system "
 "and then compile a stack of software with it. For instance, assume we are "
@@ -1562,7 +1671,7 @@ msgid ""
 "following manifest file would do exactly that:"
 msgstr ""
 
-#: ../../../environments.rst:963
+#: ../../../environments.rst:1031
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1577,14 +1686,14 @@ msgid ""
 "    - libtree %gcc@15.2"
 msgstr ""
 
-#: ../../../environments.rst:977
+#: ../../../environments.rst:1045
 msgid ""
 "The ``group:`` attribute allows to name a group of specs, which are then "
 "listed under the ``specs:`` attribute in the same object. The simplest "
 "example is the ``compiler`` group composed of just the ``gcc@15.2`` spec."
 msgstr ""
 
-#: ../../../environments.rst:980
+#: ../../../environments.rst:1048
 msgid ""
 "To express dependencies among groups of specs the ``needs:`` attribute is "
 "used, which is a list of names corresponding to the groups we depend on. The "
@@ -1593,11 +1702,11 @@ msgid ""
 "current group is concretized."
 msgstr ""
 
-#: ../../../environments.rst:986
+#: ../../../environments.rst:1054
 msgid "Configuring a group of specs"
 msgstr ""
 
-#: ../../../environments.rst:988
+#: ../../../environments.rst:1056
 msgid ""
 "Another common scenario is the deployment of different configurations (e.g. "
 "CUDA enabled vs. ROCm enabled) of the same set of software. As an example, "
@@ -1606,7 +1715,7 @@ msgid ""
 "following manifest file:"
 msgstr ""
 
-#: ../../../environments.rst:993
+#: ../../../environments.rst:1061
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1631,7 +1740,7 @@ msgid ""
 "          - target=x86_64_v4"
 msgstr ""
 
-#: ../../../environments.rst:1017
+#: ../../../environments.rst:1085
 msgid ""
 "The ``override:`` attribute allows us to override the configuration for a "
 "single group of specs. The overridden part is always added as the *topmost* "
@@ -1639,11 +1748,11 @@ msgid ""
 "always takes precedence over other sources of configuration."
 msgstr ""
 
-#: ../../../environments.rst:1024
+#: ../../../environments.rst:1092
 msgid "Controlling garbage collection with ``explicit: false``"
 msgstr ""
 
-#: ../../../environments.rst:1026
+#: ../../../environments.rst:1094
 msgid ""
 "By default every spec group is treated as a set of *explicit* roots. This "
 "means its specs are preserved by ``spack gc`` even when nothing else depends "
@@ -1652,7 +1761,7 @@ msgid ""
 "installed spec depends on them:"
 msgstr ""
 
-#: ../../../environments.rst:1030
+#: ../../../environments.rst:1098
 msgid ""
 "spack:\n"
 "  specs:\n"
@@ -1668,13 +1777,13 @@ msgid ""
 "    - libtree %gcc@15.2"
 msgstr ""
 
-#: ../../../environments.rst:1045
+#: ../../../environments.rst:1113
 msgid ""
 "After the apps are installed, ``spack gc`` will remove the compiler once no "
 "installed spec has a link or run dependency on it."
 msgstr ""
 
-#: ../../../environments.rst:1049
+#: ../../../environments.rst:1117
 msgid ""
 "Flipping ``explicit: false`` on a group that has already been installed does "
 "**not** retroactively update the database record for the already-installed "
@@ -1683,18 +1792,18 @@ msgid ""
 "``spack mark -i <spec>``."
 msgstr ""
 
-#: ../../../environments.rst:1055
+#: ../../../environments.rst:1123
 msgid "Modifying Environment Variables"
 msgstr ""
 
-#: ../../../environments.rst:1057
+#: ../../../environments.rst:1125
 msgid ""
 "Spack Environments can modify the active shell's environment variables when "
 "activated. The environment can be configured to set, unset, prepend, or "
 "append using ``env_vars`` configuration in ``spack.yaml``:"
 msgstr ""
 
-#: ../../../environments.rst:1060
+#: ../../../environments.rst:1128
 msgid ""
 "spack:\n"
 "  env_vars:\n"
@@ -1710,31 +1819,31 @@ msgid ""
 "      PATH_LIST: \"path/to/remove\""
 msgstr ""
 
-#: ../../../environments.rst:1079
+#: ../../../environments.rst:1147
 msgid "Environment Views"
 msgstr ""
 
-#: ../../../environments.rst:1081
+#: ../../../environments.rst:1149
 msgid ""
 "Spack Environments can have an associated filesystem view, which is a "
 "directory with a more traditional structure ``<view>/bin``, ``<view>/lib``, "
 "``<view>/include`` in which all files of the installed packages are linked."
 msgstr ""
 
-#: ../../../environments.rst:1083
+#: ../../../environments.rst:1151
 msgid ""
 "By default a view is created for each environment, thanks to the ``view: "
 "true`` option in the ``spack.yaml`` manifest file:"
 msgstr ""
 
-#: ../../../environments.rst:1085
+#: ../../../environments.rst:1153
 msgid ""
 "spack:\n"
 "  specs: [perl, python]\n"
 "  view: true"
 msgstr ""
 
-#: ../../../environments.rst:1091
+#: ../../../environments.rst:1159
 msgid ""
 "The view is created in a hidden directory ``.spack-env/view`` relative to "
 "the environment. If you've used ``spack env activate``, you may have already "
@@ -1743,55 +1852,55 @@ msgid ""
 "from all installed packages in the environment."
 msgstr ""
 
-#: ../../../environments.rst:1095
+#: ../../../environments.rst:1163
 msgid ""
 "Views are highly customizable: you can control where they are put, modify "
 "their structure, include and exclude specs, change how files are linked, and "
 "you can even generate multiple views for a single environment."
 msgstr ""
 
-#: ../../../environments.rst:1105
+#: ../../../environments.rst:1173
 msgid "Minimal view configuration"
 msgstr ""
 
-#: ../../../environments.rst:1107
+#: ../../../environments.rst:1175
 msgid "The minimal configuration"
 msgstr ""
 
-#: ../../../environments.rst:1109
+#: ../../../environments.rst:1177
 msgid ""
 "spack:\n"
 "  # ...\n"
 "  view: true"
 msgstr ""
 
-#: ../../../environments.rst:1115
+#: ../../../environments.rst:1183
 msgid ""
 "lets Spack generate a single view with default settings under the ``.spack-"
 "env/view`` directory of the environment."
 msgstr ""
 
-#: ../../../environments.rst:1117
+#: ../../../environments.rst:1185
 msgid ""
 "Another short way to configure a view is to specify just where to put it:"
 msgstr ""
 
-#: ../../../environments.rst:1119
+#: ../../../environments.rst:1187
 msgid ""
 "spack:\n"
 "  # ...\n"
 "  view: /path/to/view"
 msgstr ""
 
-#: ../../../environments.rst:1125
+#: ../../../environments.rst:1193
 msgid "Views can also be disabled by setting ``view: false``."
 msgstr ""
 
-#: ../../../environments.rst:1130
+#: ../../../environments.rst:1198
 msgid "Advanced view configuration"
 msgstr ""
 
-#: ../../../environments.rst:1132
+#: ../../../environments.rst:1200
 msgid ""
 "One or more **view descriptors** can be defined under ``view``, keyed by a "
 "name. The example from the previous section with ``view: /path/to/view`` is "
@@ -1799,7 +1908,7 @@ msgid ""
 "attribute:"
 msgstr ""
 
-#: ../../../environments.rst:1135
+#: ../../../environments.rst:1203
 msgid ""
 "spack:\n"
 "  # ...\n"
@@ -1808,21 +1917,21 @@ msgid ""
 "      root: /path/to/view  # view descriptor attribute"
 msgstr ""
 
-#: ../../../environments.rst:1143
+#: ../../../environments.rst:1211
 msgid ""
 "The ``default`` view descriptor name is special: when you ``spack env "
 "activate`` your environment, this view will be used to update (among other "
 "things) your ``PATH`` variable."
 msgstr ""
 
-#: ../../../environments.rst:1145
+#: ../../../environments.rst:1213
 msgid ""
 "View descriptors must contain the root of the view, and optionally "
 "projections, ``select`` and ``exclude`` lists and link information via "
 "``link`` and ``link_type``."
 msgstr ""
 
-#: ../../../environments.rst:1147
+#: ../../../environments.rst:1215
 msgid ""
 "As a more advanced example, in the following manifest file snippet we define "
 "a view named ``mpis``, rooted at ``/path/to/view`` in which all projections "
@@ -1834,7 +1943,7 @@ msgid ""
 "symlinks to the Spack install directories."
 msgstr ""
 
-#: ../../../environments.rst:1151
+#: ../../../environments.rst:1219
 msgid ""
 "spack:\n"
 "  # ...\n"
@@ -1850,35 +1959,35 @@ msgid ""
 "      link_dirs: true"
 msgstr ""
 
-#: ../../../environments.rst:1166
+#: ../../../environments.rst:1234
 msgid ""
 "The default for the ``select`` and ``exclude`` values is to select "
 "everything and exclude nothing. The default projection is the default view "
 "projection (``{}``). The ``link`` attribute allows the following values:"
 msgstr ""
 
-#: ../../../environments.rst:1170
+#: ../../../environments.rst:1238
 msgid ""
 "``link: all`` include root specs with their transitive run and link type "
 "dependencies (default);"
 msgstr ""
 
-#: ../../../environments.rst:1171
+#: ../../../environments.rst:1239
 msgid ""
 "``link: run`` include root specs with their transitive run type dependencies;"
 msgstr ""
 
-#: ../../../environments.rst:1172
+#: ../../../environments.rst:1240
 msgid "``link: roots`` include root specs without their dependencies."
 msgstr ""
 
-#: ../../../environments.rst:1174
+#: ../../../environments.rst:1242
 msgid ""
 "The ``link_type`` defaults to ``symlink`` but can also take the value of "
 "``hardlink`` or ``copy``."
 msgstr ""
 
-#: ../../../environments.rst:1178
+#: ../../../environments.rst:1246
 msgid ""
 "The ``link_dirs`` option controls whether directories are symlinked. This is "
 "the default behavior in Spack v1.2 and later. This is an optimization that "
@@ -1887,7 +1996,7 @@ msgid ""
 "you want to link only non-directory files, set ``link_dirs: false``."
 msgstr ""
 
-#: ../../../environments.rst:1185
+#: ../../../environments.rst:1253
 msgid ""
 "The option ``link: run`` can be used to create small environment views for "
 "Python packages. Python will be able to import packages *inside* of the view "
@@ -1895,7 +2004,7 @@ msgid ""
 "located *outside* of the view thanks to rpaths."
 msgstr ""
 
-#: ../../../environments.rst:1188
+#: ../../../environments.rst:1256
 msgid ""
 "From the command line, the ``spack env create`` command takes an argument "
 "``--with-view [PATH]`` that sets the path for a single, default view. If no "
@@ -1904,7 +2013,7 @@ msgid ""
 "configured."
 msgstr ""
 
-#: ../../../environments.rst:1192
+#: ../../../environments.rst:1260
 msgid ""
 "The ``spack env view`` command can be used to manage views of an "
 "environment. The subcommand ``spack env view enable`` will add a view named "
@@ -1916,11 +2025,11 @@ msgid ""
 "configuration that have not yet been applied."
 msgstr ""
 
-#: ../../../environments.rst:1204
+#: ../../../environments.rst:1272
 msgid "View Projections"
 msgstr ""
 
-#: ../../../environments.rst:1205
+#: ../../../environments.rst:1273
 msgid ""
 "The default projection into a view is to link every package into the root of "
 "the view. The projections attribute is a mapping of partial specs to spec "
@@ -1928,7 +2037,7 @@ msgid ""
 "shown in the example below:"
 msgstr ""
 
-#: ../../../environments.rst:1208
+#: ../../../environments.rst:1276
 msgid ""
 "projections:\n"
 "  zlib: \"{name}-{version}\"\n"
@@ -1937,27 +2046,27 @@ msgid ""
 "  all: \"{name}-{version}/{compiler.name}-{compiler.version}\""
 msgstr ""
 
-#: ../../../environments.rst:1215
+#: ../../../environments.rst:1283
 msgid ""
 "Projections also permit environment and Spack configuration variable "
 "expansions as shown below:"
 msgstr ""
 
-#: ../../../environments.rst:1217
+#: ../../../environments.rst:1285
 msgid ""
 "projections:\n"
 "  all: \"{name}-{version}/{compiler.name}-{compiler.version}/$date/"
 "$SYSTEM_ENV_VARIABLE\""
 msgstr ""
 
-#: ../../../environments.rst:1222
+#: ../../../environments.rst:1290
 msgid ""
 "where ``$date`` is the Spack configuration variable that will expand with "
 "the ``YYYY-MM-DD`` format and ``$SYSTEM_ENV_VARIABLE`` is an environment "
 "variable defined in the shell."
 msgstr ""
 
-#: ../../../environments.rst:1224
+#: ../../../environments.rst:1292
 msgid ""
 "The entries in the projections configuration file must all be either specs "
 "or the keyword ``all``. For each spec, the projection used will be the first "
@@ -1966,7 +2075,7 @@ msgid ""
 "``all`` appears in the file does not matter."
 msgstr ""
 
-#: ../../../environments.rst:1228
+#: ../../../environments.rst:1296
 msgid ""
 "Given the example above, the spec ``zlib@1.2.8`` will be linked into ``/my/"
 "view/zlib-1.2.8/``, the spec ``hdf5@1.8.10+mpi %gcc@4.9.3 ^mvapich2@2.2`` "
@@ -1975,7 +2084,7 @@ msgid ""
 "hdf5-1.8.10/gcc-4.9.3``."
 msgstr ""
 
-#: ../../../environments.rst:1230
+#: ../../../environments.rst:1298
 msgid ""
 "If the keyword ``all`` does not appear in the projections configuration "
 "file, any spec that does not satisfy any entry in the file will be linked "
@@ -1985,11 +2094,11 @@ msgid ""
 "reaching those entries."
 msgstr ""
 
-#: ../../../environments.rst:1234
+#: ../../../environments.rst:1302
 msgid "Group of Specs"
 msgstr ""
 
-#: ../../../environments.rst:1236
+#: ../../../environments.rst:1304
 msgid ""
 "Views can also be applied to a selected list of :ref:`spec groups "
 "<environment-spec-matrices>`. This can be done by specifying the ``group:`` "
@@ -1997,7 +2106,7 @@ msgid ""
 "manifest:"
 msgstr ""
 
-#: ../../../environments.rst:1240
+#: ../../../environments.rst:1308
 msgid ""
 "spack:\n"
 "  concretizer:\n"
@@ -2025,33 +2134,33 @@ msgid ""
 "      group: apps"
 msgstr ""
 
-#: ../../../environments.rst:1267
+#: ../../../environments.rst:1335
 msgid ""
 "The view will only contain entries from the ``apps`` group, and will not "
 "include specs from the ``compiler`` group."
 msgstr ""
 
-#: ../../../environments.rst:1270
+#: ../../../environments.rst:1338
 msgid "Activating environment views"
 msgstr ""
 
-#: ../../../environments.rst:1272
+#: ../../../environments.rst:1340
 msgid "The ``spack env activate <env>`` command has two effects:"
 msgstr ""
 
-#: ../../../environments.rst:1274
+#: ../../../environments.rst:1342
 msgid ""
 "It activates the environment so that further Spack commands such as ``spack "
 "install`` will run in the context of the environment."
 msgstr ""
 
-#: ../../../environments.rst:1275
+#: ../../../environments.rst:1343
 msgid ""
 "It activates the view so that environment variables such as ``PATH`` are "
 "updated to include the view."
 msgstr ""
 
-#: ../../../environments.rst:1277
+#: ../../../environments.rst:1345
 msgid ""
 "Without further arguments, the ``default`` view of the environment is "
 "activated. If a view with a different name has to be activated, ``spack env "
@@ -2060,7 +2169,7 @@ msgid ""
 "using ``--without-view``."
 msgstr ""
 
-#: ../../../environments.rst:1281
+#: ../../../environments.rst:1349
 msgid ""
 "The environment variables affected by the ``spack env activate`` command and "
 "the paths that are used to update them are determined by the :ref:`prefix "
@@ -2068,88 +2177,88 @@ msgid ""
 "configuration; the defaults are summarized in the following table."
 msgstr ""
 
-#: ../../../environments.rst:1284
+#: ../../../environments.rst:1352
 msgid "Variable"
 msgstr ""
 
-#: ../../../environments.rst:1284
+#: ../../../environments.rst:1352
 msgid "Paths"
 msgstr ""
 
-#: ../../../environments.rst:1286
+#: ../../../environments.rst:1354
 msgid "PATH"
 msgstr ""
 
-#: ../../../environments.rst:1286
+#: ../../../environments.rst:1354
 msgid "bin"
 msgstr ""
 
-#: ../../../environments.rst:1287
+#: ../../../environments.rst:1355
 msgid "MANPATH"
 msgstr ""
 
-#: ../../../environments.rst:1287
+#: ../../../environments.rst:1355
 msgid "man, share/man"
 msgstr ""
 
-#: ../../../environments.rst:1288
+#: ../../../environments.rst:1356
 msgid "ACLOCAL_PATH"
 msgstr ""
 
-#: ../../../environments.rst:1288
+#: ../../../environments.rst:1356
 msgid "share/aclocal"
 msgstr ""
 
-#: ../../../environments.rst:1289
+#: ../../../environments.rst:1357
 msgid "PKG_CONFIG_PATH"
 msgstr ""
 
-#: ../../../environments.rst:1289
+#: ../../../environments.rst:1357
 msgid "lib/pkgconfig, lib64/pkgconfig, share/pkgconfig"
 msgstr ""
 
-#: ../../../environments.rst:1290
+#: ../../../environments.rst:1358
 msgid "CMAKE_PREFIX_PATH"
 msgstr ""
 
-#: ../../../environments.rst:1290
+#: ../../../environments.rst:1358
 msgid "."
 msgstr ""
 
-#: ../../../environments.rst:1293
+#: ../../../environments.rst:1361
 msgid ""
 "Each of these paths are appended to the view root, and added to the relevant "
 "variable if the path exists. For this reason, it is not recommended to use "
 "non-default projections with the default view of an environment."
 msgstr ""
 
-#: ../../../environments.rst:1296
+#: ../../../environments.rst:1364
 msgid ""
 "The ``spack env deactivate`` command will remove the active view of the "
 "Spack environment from the user's environment variables."
 msgstr ""
 
-#: ../../../environments.rst:1303
+#: ../../../environments.rst:1371
 msgid "Generating Depfiles from Environments"
 msgstr ""
 
-#: ../../../environments.rst:1307
+#: ../../../environments.rst:1375
 msgid "``spack env depfile`` is deprecated and will be removed in Spack v1.4."
 msgstr ""
 
-#: ../../../environments.rst:1309
+#: ../../../environments.rst:1377
 msgid ""
 "``spack env depfile`` generates a ``Makefile`` that installs a concrete "
 "environment through ``make``, with one target per spec:"
 msgstr ""
 
-#: ../../../environments.rst:1311
+#: ../../../environments.rst:1379
 msgid ""
 "$ spack -e . env depfile -o Makefile\n"
 "$ make -j16"
 msgstr ""
 
-#: ../../../environments.rst:1316
+#: ../../../environments.rst:1384
 msgid ""
 "This is no longer needed: ``spack install`` builds packages concurrently "
 "using a POSIX jobserver (see :ref:`installing`). When ``spack install`` runs "
@@ -2157,14 +2266,14 @@ msgid ""
 "so both share the same ``-j`` budget:"
 msgstr ""
 
-#: ../../../environments.rst:1319
+#: ../../../environments.rst:1387
 msgid ""
 "env:\n"
 "\tspack -e . install"
 msgstr ""
 
 #: ../../../environments.rst:10 ../../../environments.rst:63
-#: ../../../environments.rst:151 ../../../environments.rst:201
+#: ../../../environments.rst:219 ../../../environments.rst:269
 msgid "environment"
 msgstr ""
 
@@ -2192,70 +2301,70 @@ msgstr ""
 msgid "managed"
 msgstr ""
 
-#: ../../../environments.rst:151
+#: ../../../environments.rst:219
 msgid "activating"
 msgstr ""
 
-#: ../../../environments.rst:201
+#: ../../../environments.rst:269
 msgid "independent (anonymous)"
 msgstr ""
 
-#: ../../../environments.rst:389
+#: ../../../environments.rst:457
 msgid "develop spec"
 msgstr ""
 
-#: ../../../environments.rst:389
+#: ../../../environments.rst:457
 msgid "usage"
 msgstr ""
 
-#: ../../../environments.rst:389
+#: ../../../environments.rst:457
 msgid "spack develop"
 msgstr ""
 
-#: ../../../environments.rst:506
+#: ../../../environments.rst:574
 msgid "include concrete"
 msgstr ""
 
-#: ../../../environments.rst:778
+#: ../../../environments.rst:846
 msgid "matrix"
 msgstr ""
 
-#: ../../../environments.rst:778
+#: ../../../environments.rst:846
 msgid "spec matrix"
 msgstr ""
 
-#: ../../../environments.rst:942
+#: ../../../environments.rst:1010
 msgid "spec group"
 msgstr ""
 
-#: ../../../environments.rst:942
+#: ../../../environments.rst:1010
 msgid "defining"
 msgstr ""
 
-#: ../../../environments.rst:1075 ../../../environments.rst:1097
+#: ../../../environments.rst:1143 ../../../environments.rst:1165
 msgid "view"
 msgstr ""
 
-#: ../../../environments.rst:1075
+#: ../../../environments.rst:1143
 msgid "of an environment"
 msgstr ""
 
-#: ../../../environments.rst:1097
+#: ../../../environments.rst:1165
 msgid "configuration"
 msgstr ""
 
-#: ../../../environments.rst:1097
+#: ../../../environments.rst:1165
 msgid "symlink"
 msgstr ""
 
-#: ../../../environments.rst:1097
+#: ../../../environments.rst:1165
 msgid "hardlink"
 msgstr ""
 
-#: ../../../environments.rst:1097
+#: ../../../environments.rst:1165
 msgid "copy"
 msgstr ""
 
-#: ../../../environments.rst:1199
+#: ../../../environments.rst:1267
 msgid "view projection"
 msgstr ""
