@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spack latest\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 15:15+0000\n"
+"POT-Creation-Date: 2026-11-09 18:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,12 +60,13 @@ msgstr ""
 #: ../../../_spack_root/lib/spack/spack/installer/__init__.py:docstring of
 #: spack.installer:18
 msgid ""
-"The parent-side orchestrator :class:`PackageInstaller` lives in :mod:`spack."
-"installer.core`, the build subprocess in :mod:`spack.installer.build`, the "
-"terminal UI in :mod:`spack.installer.ui`, and the build graph/scheduling in :"
-"mod:`spack.installer.schedule`. Shared low-level primitives are in :mod:"
-"`spack.installer.base`, with platform-specific implementations in ``spack."
-"installer.posix`` and ``spack.installer.windows``."
+"The parent-side orchestrator :class:`PackageInstaller` lives "
+"in :mod:`spack.installer.core`, the build subprocess "
+"in :mod:`spack.installer.build`, the terminal UI "
+"in :mod:`spack.installer.ui`, and the build graph/scheduling "
+"in :mod:`spack.installer.schedule`. Shared low-level primitives are "
+"in :mod:`spack.installer.base`, with platform-specific implementations in "
+"``spack.installer.posix`` and ``spack.installer.windows``."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/core.py:docstring of
@@ -100,6 +101,12 @@ msgstr ""
 #: spack.installer.core.PackageInstaller.pending_expansions:1
 msgid ""
 "specs awaiting build-dep expansion (deferred until DB read lock is available)"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/installer/core.py:docstring of
+#: spack.installer.PackageInstaller.recorded_specs:1
+#: spack.installer.core.PackageInstaller.recorded_specs:1
+msgid "Specs added to the database by ``install()``, also when it raises"
 msgstr ""
 
 #: ../../../spack.installer.rst:11
@@ -411,28 +418,8 @@ msgid "Size of the output buffer for child processes"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/base.py:docstring of
-#: spack.installer.base.ProcessExitNotifier:1
-msgid ""
-"Selector-watchable handle that becomes readable when the child process exits."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/installer/base.py:docstring of
-#: spack.installer.base.ProcessExitNotifier.close:1
-msgid "Release any resources. Default: nothing to release."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/installer/base.py:docstring of
-#: spack.installer.base.ProcessExitNotifier.fileobj:1
-#: ../../../_spack_root/lib/spack/spack/installer/posix.py:docstring
-#: spack.installer.posix.PosixExitNotifier.fileobj:1
-msgid "Object/fd to register with the selector to detect process exit."
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/installer/base.py:docstring of
 #: spack.installer.base.STDIN_EVENT:1
-msgid ""
-"Selector data keys registered by the terminal and dispatched by the event "
-"loop"
+msgid "Selector data keys dispatched by the event loop"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/base.py:docstring of
@@ -580,12 +567,18 @@ msgstr ""
 #: spack.installer.build.ChildInfo.close:1
 msgid ""
 "Unregister and close file descriptors, and join the child process. Returns "
-"the exit code of the child process."
+"the exit code the build reported, or ``BUILD_ERROR`` if it exited without "
+"reporting one."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/installer/build.py:docstring of
+#: spack.installer.build.ChildInfo.exit_code:1
+msgid "Exit code reported by the build as its last state message."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/build.py:docstring of
 #: spack.installer.build.ChildInfo.register_with_selector:1
-msgid "Register output, state, and sentinel channels with the selector."
+msgid "Register output and state channels with the selector."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/build.py:docstring of
@@ -642,6 +635,13 @@ msgstr ""
 #: ../../../_spack_root/lib/spack/spack/installer/build.py:docstring of
 #: spack.installer.build.dump_packages:8
 msgid "the path to the build packages directory"
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/installer/build.py:docstring of
+#: spack.installer.build.send_exit:1
+msgid ""
+"Send the exit code: the last message, sent after the build's last write to "
+"its prefix."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/build.py:docstring of
@@ -779,6 +779,27 @@ msgstr ""
 msgid "Data collected for reports during installation."
 msgstr ""
 
+#: ../../../_spack_root/lib/spack/spack/installer/core.py:docstring of
+#: spack.installer.core.SignalEvents:1
+msgid ""
+"Turns signals with the default action into event loop events, so that they "
+"never interrupt its bookkeeping. The wakeup fd receives one byte per signal, "
+"its number, and wakes up select(). Other signals with Python handlers write "
+"to it too."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/installer/core.py:docstring of
+#: spack.installer.core.SignalEvents.read:1
+msgid "Return the numbers of the signals received since the last read."
+msgstr ""
+
+#: ../../../_spack_root/lib/spack/spack/installer/core.py:docstring of
+#: spack.installer.core.SignalEvents.teardown:1
+msgid ""
+"Restore the handlers and close the pipe. Return the first of ``signals`` "
+"received since the last read, or 0."
+msgstr ""
+
 #: ../../../spack.installer.rst:41
 msgid "spack.installer.posix module"
 msgstr ""
@@ -809,14 +830,7 @@ msgstr ""
 #: ../../../_spack_root/lib/spack/spack/installer/posix.py:docstring of
 #: spack.installer.posix.PipeMakeflags:4
 msgid ""
-"\"--jobserver-auth\" (gmake >= 4.0) or \"--jobserver-fds\" (gmake < 4.0)"
-msgstr ""
-
-#: ../../../_spack_root/lib/spack/spack/installer/posix.py:docstring of
-#: spack.installer.posix.PosixExitNotifier:1
-msgid ""
-"Process-exit notifier for POSIX: the multiprocessing sentinel fd is selector-"
-"watchable."
+"\"--jobserver-auth\" (gmake >= 4.2) or \"--jobserver-fds\" (gmake < 4.2)"
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/posix.py:docstring of
@@ -1147,16 +1161,17 @@ msgstr ""
 #: spack.installer.ui:3
 msgid ""
 "Defines the :class:`InstallerUI` frontend contract (a headless no-op base) "
-"and the interactive :class:`TerminalUI` implementation, plus the plain :"
-"class:`BuildInfo` record and the :data:`UiCommand` messages the UI produces "
-"for the event loop. See :mod:`spack.installer` for the overall design."
+"and the interactive :class:`TerminalUI` implementation, plus the "
+"plain :class:`BuildInfo` record and the :data:`UiCommand` messages the UI "
+"produces for the event loop. See :mod:`spack.installer` for the overall "
+"design."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/ui.py:docstring of
 #: spack.installer.ui.BuildInfo:1
 msgid ""
-"Plain data about a package being built: the payload of ``InstallerUI."
-"on_build_added`` and the per-build record of the terminal UI."
+"Plain data about a package being built: the payload of "
+"``InstallerUI.on_build_added`` and the per-build record of the terminal UI."
 msgstr ""
 
 #: ../../../_spack_root/lib/spack/spack/installer/ui.py:docstring of
