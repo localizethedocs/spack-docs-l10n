@@ -386,7 +386,7 @@ VERSION=latest
 git clone --recurse-submodule https://github.com/localizethedocs/spack-docs-l10n.git
 cd spack-docs-l10n
 cmake --preset ${LANGUAGE} -DVERSION=${VERSION}
-cmake --build out/build/${LANGUAGE}
+cmake --build --preset ${LANGUAGE}
 ```
 
 You can switch to other available languages and versions by the flyout navigation menu.
